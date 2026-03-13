@@ -211,9 +211,51 @@ export default function PrivacyPage() {
             <p>Account data is retained until account deletion. Analytics data is retained for 26 months. Medical bill documents are deleted immediately after processing. Server logs (without health content) are retained for 90 days.</p>
           </section>
 
+          {/* Additional U.S. State Privacy Rights */}
+          <section id="state-privacy" aria-labelledby="state-heading">
+            <h2 id="state-heading" className="text-xl font-bold text-slate-800">8. Additional U.S. State Privacy Rights</h2>
+            <p>
+              Residents of the following states have privacy rights similar to California&apos;s CCPA/CPRA.
+              To exercise your rights, contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+              We will respond within the timeframe required by your state&apos;s law.
+            </p>
+            <div className="overflow-x-auto mt-4">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-300">
+                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">State</th>
+                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">Law</th>
+                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">Effective</th>
+                    <th className="text-left py-2 font-semibold text-slate-800">Key Rights</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Colorado</td><td className="py-2 pr-4">CPA</td><td className="py-2 pr-4">Jul 2023</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Connecticut</td><td className="py-2 pr-4">CTDPA</td><td className="py-2 pr-4">Jul 2023</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Virginia</td><td className="py-2 pr-4">VCDPA</td><td className="py-2 pr-4">Jan 2023</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Texas</td><td className="py-2 pr-4">TDPSA</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Florida</td><td className="py-2 pr-4">FDBR</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Montana</td><td className="py-2 pr-4">MTCPA</td><td className="py-2 pr-4">Oct 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Oregon</td><td className="py-2 pr-4">OCPA</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Tennessee</td><td className="py-2 pr-4">TIPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Minnesota</td><td className="py-2 pr-4">MNDPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Maryland</td><td className="py-2 pr-4">MODPA</td><td className="py-2 pr-4">Oct 2025</td><td className="py-2">Access, delete, correct, opt-out; bans sale of sensitive data</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Indiana</td><td className="py-2 pr-4">IDCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Kentucky</td><td className="py-2 pr-4">KYCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Rhode Island</td><td className="py-2 pr-4">RIDPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4">
+              We honor Global Privacy Control (GPC) signals from all states that require it.
+              We do not sell personal information to third parties. We do not engage in targeted
+              advertising using sensitive personal information.
+            </p>
+          </section>
+
           {/* GDPR Article 9 */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">8. Special Category Health Data (GDPR Article 9)</h2>
+            <h2 className="text-xl font-bold text-slate-800">9. Special Category Health Data (GDPR Article 9)</h2>
             <p>
               Under GDPR Article 9, medical and health-related data constitutes &quot;special category&quot; personal data requiring explicit consent and additional safeguards. When you upload a medical bill:
             </p>
@@ -225,21 +267,9 @@ export default function PrivacyPage() {
             </ul>
           </section>
 
-          {/* State Health Privacy Laws */}
+          {/* HIPAA-Adjacent Sensitivity */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">9. State Health Privacy Laws</h2>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Washington My Health My Data Act (MHMDA)</h3>
-            <p>
-              For Washington state residents: We comply with the My Health My Data Act. We do not collect, share, or sell consumer health data except as necessary to provide our bill analysis service. Health data is deleted immediately after processing. You have the right to withdraw consent and request deletion of any health data at any time.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Maryland Online Data Privacy Act (MODPA)</h3>
-            <p>
-              For Maryland residents: Effective October 2025, the Maryland MODPA prohibits the sale of health data. We do not sell health data under any circumstances. Medical bill data is processed solely for the purpose of providing analysis and is never sold, licensed, or otherwise transferred for monetary consideration.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">HIPAA-Adjacent Sensitivity</h3>
+            <h2 className="text-xl font-bold text-slate-800">10. HIPAA-Adjacent Sensitivity</h2>
             <p>
               While MedicalBillReader.com is not a HIPAA-covered entity or business associate, we recognize that medical bills contain the same types of sensitive health information protected under HIPAA. We voluntarily adopt HIPAA-adjacent security and privacy practices, including immediate data deletion, no logging of health data, and access controls on data processing systems.
             </p>
@@ -247,7 +277,7 @@ export default function PrivacyPage() {
 
           {/* Cookies */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">10. Cookies &amp; Tracking</h2>
+            <h2 className="text-xl font-bold text-slate-800">11. Cookies &amp; Tracking</h2>
             <p>
               We use cookies on marketing pages for analytics and advertising. We do not use advertising cookies or trackers on bill analysis pages. For EU/EEA/UK visitors, we obtain consent before setting non-essential cookies.
             </p>
@@ -255,7 +285,7 @@ export default function PrivacyPage() {
 
           {/* Children */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">11. Children&apos;s Privacy</h2>
+            <h2 className="text-xl font-bold text-slate-800">12. Children&apos;s Privacy</h2>
             <p>
               Our service is not directed at children under 16. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us and we will promptly delete it.
             </p>
@@ -263,7 +293,7 @@ export default function PrivacyPage() {
 
           {/* Changes */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">12. Changes to This Policy</h2>
+            <h2 className="text-xl font-bold text-slate-800">13. Changes to This Policy</h2>
             <p>
               We may update this Privacy Policy periodically. Material changes will be posted on this page with an updated &quot;Last Updated&quot; date. Your continued use of the service after changes constitutes acceptance.
             </p>
@@ -271,7 +301,7 @@ export default function PrivacyPage() {
 
           {/* Contact */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">13. Contact Us</h2>
+            <h2 className="text-xl font-bold text-slate-800">14. Contact Us</h2>
             <p>
               For privacy inquiries, data requests, or questions about this policy:
             </p>
