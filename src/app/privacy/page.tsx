@@ -27,7 +27,7 @@ export default function PrivacyPage() {
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
         <p className="text-sm text-slate-500 mb-8">
-          Last Updated: March 11, 2026
+          Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
 
         <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
@@ -112,81 +112,108 @@ export default function PrivacyPage() {
             </ul>
           </section>
 
-          {/* CCPA / Consumer Rights */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">7. Your Privacy Rights</h2>
-            <p>Depending on your jurisdiction, you may have the following rights:</p>
+          {/* California Privacy Rights — CCPA/CPRA Jan 2026 + State Health Laws */}
+          <section id="california-privacy" aria-labelledby="california-heading">
+            <h2 id="california-heading" className="text-xl font-bold text-slate-800">7. California Privacy Rights (CCPA/CPRA)</h2>
 
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">California Residents (CCPA/CPRA)</h3>
+            <p>
+              If you are a California resident, the California Consumer Privacy Act (CCPA) as amended
+              by the California Privacy Rights Act (CPRA) grants you specific rights regarding your
+              personal information. These rights are effective as of January 1, 2026.
+            </p>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Information We Collect</h3>
+            <p>In the past 12 months we have collected the following categories of personal information:</p>
             <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Right to Know:</strong> Request what personal data we have collected about you.</li>
-              <li><strong>Right to Delete:</strong> Request deletion of your personal data.</li>
-              <li><strong>Right to Correct:</strong> Request correction of inaccurate personal data.</li>
-              <li><strong>Right to Opt-Out:</strong> Opt out of the sale or sharing of your personal information.</li>
-              <li><strong>Right to Limit Sensitive Data Use:</strong> Limit how we use sensitive personal information, including health data.</li>
-              <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising your privacy rights.</li>
+              <li><strong>Identifiers:</strong> IP address, email address (if account created), browser type, device identifiers.</li>
+              <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
+              <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis. This data is processed server-side and deleted immediately after analysis is complete. It is never stored, logged beyond the active session, or shared.</li>
+              <li><strong>Inferred data:</strong> Interests inferred from browsing behavior via advertising partners (marketing pages only — not analysis pages).</li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">EU/EEA/UK Residents (GDPR)</h3>
-            <ul className="list-disc ml-6 space-y-1">
-              <li>Right of access, rectification, erasure, restriction, portability, and objection.</li>
-              <li>Right to withdraw consent at any time.</li>
-              <li>Right to lodge a complaint with your supervisory authority.</li>
-            </ul>
-
-            <p className="mt-4">
-              To exercise any of these rights, contact us at <strong>privacy@medicalbillreader.com</strong>. We will respond within 45 days (CCPA) or 30 days (GDPR).
-            </p>
-          </section>
-
-          {/* Do Not Sell or Share */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">8. Do Not Sell or Share My Personal Information</h2>
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Sensitive Personal Information — Medical Bill Data</h3>
             <p>
-              We do not sell your personal information. Under the CCPA, certain advertising-related data sharing (such as cookies used by Google AdSense) may be considered &quot;sharing&quot; of personal information.
+              As of January 1, 2026, California law defines health and medical information as sensitive
+              personal information requiring heightened protections. Medical bills you upload contain
+              sensitive health information including patient names, diagnosis codes (ICD-10), procedure
+              codes (CPT/HCPCS), provider information, and financial data.
             </p>
             <p>
-              You may opt out of this sharing by:
+              <strong>Medical Bill Reader treats all uploaded bill data as sensitive personal
+              information.</strong> Specifically:
             </p>
             <ul className="list-disc ml-6 space-y-1">
-              <li>Adjusting your cookie preferences via our consent banner.</li>
-              <li>Enabling Global Privacy Control (GPC) in your browser — we honor GPC signals as a valid opt-out request.</li>
-              <li>Contacting us at <strong>privacy@medicalbillreader.com</strong>.</li>
+              <li>Bill documents are processed in memory and deleted immediately after analysis is returned to you</li>
+              <li>We do not store, log, index, or retain bill content after your session ends</li>
+              <li>Bill content is never used for advertising targeting, never sold, and never shared with third parties</li>
+              <li>Advertising is served via non-personalized ads on analysis pages to prevent any health data from reaching advertising systems</li>
             </ul>
-            <p>
-              <strong>Medical bill data is never sold, shared, or used for advertising under any circumstances.</strong>
-            </p>
-          </section>
 
-          {/* GPC */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">9. Global Privacy Control (GPC)</h2>
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Washington My Health My Data Act (WA MHMDA)</h3>
             <p>
-              We honor Global Privacy Control (GPC) signals sent by your browser. When we detect a GPC signal, we treat it as a valid opt-out of the sale or sharing of your personal information under applicable state privacy laws, including the CCPA.
+              For Washington State residents, the My Health My Data Act provides additional protections
+              for consumer health data. Medical bill information constitutes consumer health data under
+              this law. We comply with WA MHMDA by: processing health data only to provide the
+              requested service; not selling consumer health data; not sharing health data with
+              third parties for advertising; and deleting health data immediately after processing.
+              Washington residents have the right to access, delete, and withdraw consent for
+              processing of their consumer health data by contacting us via the{' '}
+              <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
             </p>
-          </section>
 
-          {/* Sensitive Data — CCPA Jan 2026 */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">10. Sensitive Personal Information (CCPA January 2026 Categories)</h2>
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Maryland Online Data Privacy Act (MD MODPA)</h3>
             <p>
-              Under the CCPA as amended effective January 2026, certain categories of data receive heightened protections. We address each applicable category:
+              For Maryland residents, the Maryland Online Data Privacy Act (effective October 2025)
+              prohibits the sale of sensitive data including health information. We do not sell
+              medical bill data or any health-related information. Maryland residents have the right
+              to access, delete, correct, and opt out of the processing of their personal data by
+              contacting us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
             </p>
-            <ul className="list-disc ml-6 space-y-2">
-              <li><strong>Mental and Physical Health Information:</strong> Medical bills may contain health-related data (diagnoses, procedure codes). This data is processed solely for bill analysis, deleted immediately after processing, and never used for profiling, advertising, or secondary purposes.</li>
-              <li><strong>Biometric Data:</strong> We do not collect biometric data.</li>
-              <li><strong>Genetic Data:</strong> We do not collect genetic data.</li>
-              <li><strong>Precise Geolocation:</strong> We do not collect precise geolocation data. Approximate location may be inferred from IP address for analytics only.</li>
-              <li><strong>Citizenship and Immigration Status:</strong> We do not collect citizenship or immigration status data.</li>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Minimization</h3>
+            <p>
+              We collect only the minimum personal information necessary to operate this service.
+              Medical bill documents are processed in memory and deleted immediately after analysis.
+              We do not retain document content beyond the active processing session.
+            </p>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">How We Use Your Information</h3>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>To perform medical bill analysis using AI processing</li>
+              <li>To display non-personalized advertising on marketing pages through Google AdSense</li>
+              <li>To analyze aggregate site traffic via analytics (no health data included)</li>
+              <li>To maintain site security and prevent fraud</li>
             </ul>
+            <p>We do not sell your personal information. We do not use health or medical bill content for advertising targeting under any circumstances.</p>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Your Rights as a California Resident</h3>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><strong>Right to Know:</strong> Request disclosure of personal information collected in the past 12 months.</li>
+              <li><strong>Right to Delete:</strong> Request deletion of personal information. Note: medical bill documents are deleted automatically upon processing completion.</li>
+              <li><strong>Right to Correct:</strong> Request correction of inaccurate personal information such as account details.</li>
+              <li><strong>Right to Opt-Out:</strong> Opt out of sharing personal information for advertising. We honor Global Privacy Control (GPC) signals automatically. We use non-personalized ads on analysis pages by default.</li>
+              <li><strong>Right to Limit Use of Sensitive Information:</strong> You have the right to limit our use of your sensitive personal information (including health data) to only what is necessary to provide the service you requested.</li>
+              <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of these rights.</li>
+            </ul>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Do Not Sell or Share My Personal Information</h3>
             <p>
-              You have the right to limit our use of sensitive personal information to what is strictly necessary to provide the service you requested.
+              We do not sell personal information or health data. To opt out of sharing for advertising
+              purposes on non-analysis pages, use a{' '}
+              <a href="https://globalprivacycontrol.org/" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Global Privacy Control (GPC)</a>-enabled
+              browser, or contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
             </p>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">How to Submit a Request</h3>
+            <p>Contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>. We will respond within 45 days. Identity verification may be required.</p>
+
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Retention</h3>
+            <p>Account data is retained until account deletion. Analytics data is retained for 26 months. Medical bill documents are deleted immediately after processing. Server logs (without health content) are retained for 90 days.</p>
           </section>
 
           {/* GDPR Article 9 */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">11. Special Category Health Data (GDPR Article 9)</h2>
+            <h2 className="text-xl font-bold text-slate-800">8. Special Category Health Data (GDPR Article 9)</h2>
             <p>
               Under GDPR Article 9, medical and health-related data constitutes &quot;special category&quot; personal data requiring explicit consent and additional safeguards. When you upload a medical bill:
             </p>
@@ -200,7 +227,7 @@ export default function PrivacyPage() {
 
           {/* State Health Privacy Laws */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">12. State Health Privacy Laws</h2>
+            <h2 className="text-xl font-bold text-slate-800">9. State Health Privacy Laws</h2>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Washington My Health My Data Act (MHMDA)</h3>
             <p>
@@ -220,7 +247,7 @@ export default function PrivacyPage() {
 
           {/* Cookies */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">13. Cookies &amp; Tracking</h2>
+            <h2 className="text-xl font-bold text-slate-800">10. Cookies &amp; Tracking</h2>
             <p>
               We use cookies on marketing pages for analytics and advertising. We do not use advertising cookies or trackers on bill analysis pages. For EU/EEA/UK visitors, we obtain consent before setting non-essential cookies.
             </p>
@@ -228,7 +255,7 @@ export default function PrivacyPage() {
 
           {/* Children */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">14. Children&apos;s Privacy</h2>
+            <h2 className="text-xl font-bold text-slate-800">11. Children&apos;s Privacy</h2>
             <p>
               Our service is not directed at children under 16. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us and we will promptly delete it.
             </p>
@@ -236,7 +263,7 @@ export default function PrivacyPage() {
 
           {/* Changes */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">15. Changes to This Policy</h2>
+            <h2 className="text-xl font-bold text-slate-800">12. Changes to This Policy</h2>
             <p>
               We may update this Privacy Policy periodically. Material changes will be posted on this page with an updated &quot;Last Updated&quot; date. Your continued use of the service after changes constitutes acceptance.
             </p>
@@ -244,7 +271,7 @@ export default function PrivacyPage() {
 
           {/* Contact */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">16. Contact Us</h2>
+            <h2 className="text-xl font-bold text-slate-800">13. Contact Us</h2>
             <p>
               For privacy inquiries, data requests, or questions about this policy:
             </p>
