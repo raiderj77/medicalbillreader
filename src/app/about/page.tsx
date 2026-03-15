@@ -7,11 +7,31 @@ export const metadata: Metadata = {
     "Learn how Medical Bill Reader helps patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
     "about medical bill reader, understand medical bills, EOB explanation, medical billing help, CPT codes, deductible, coinsurance",
+  robots: "index, follow, max-snippet:-1",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Medical Bill Reader",
+  url: "https://medicalbillreader.com",
+  description:
+    "AI-powered medical bill analysis tool that helps patients understand confusing medical bills and insurance EOBs in plain language.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    email: "support@medicalbillreader.com",
+    url: "https://medicalbillreader.com/contact",
+  },
 };
 
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       {/* Nav */}
       <nav className="bg-white border-b border-slate-200">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -204,27 +224,6 @@ export default function AboutPage() {
           </section>
         </div>
 
-        {/* Footer */}
-        <footer className="text-center text-sm text-slate-400 border-t border-slate-200 pt-8 mt-12">
-          <p>
-            &copy; {new Date().getFullYear()} MedicalBillReader.com &middot; For
-            informational purposes only &middot; Not medical or legal advice
-          </p>
-          <div className="mt-2 space-x-4">
-            <Link href="/" className="text-slate-400 hover:text-slate-600">
-              Home
-            </Link>
-            <Link href="/about" className="text-slate-400 hover:text-slate-600">
-              About
-            </Link>
-            <Link href="/privacy" className="text-slate-400 hover:text-slate-600">
-              Privacy
-            </Link>
-            <Link href="/terms" className="text-slate-400 hover:text-slate-600">
-              Terms
-            </Link>
-          </div>
-        </footer>
       </div>
     </main>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Link from "next/link";
 
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
@@ -277,14 +276,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="text-center text-sm text-slate-400 border-t border-slate-200 pt-8">
-          <p>&copy; {new Date().getFullYear()} MedicalBillReader.com &middot; For informational purposes only &middot; Not medical or legal advice</p>
-          <div className="mt-2 space-x-4">
-            <Link href="/privacy" className="text-slate-400 hover:text-slate-600">Privacy Policy</Link>
-            <Link href="/terms" className="text-slate-400 hover:text-slate-600">Terms of Service</Link>
-          </div>
-        </footer>
       </div>
     </main>
   );

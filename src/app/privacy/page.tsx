@@ -315,15 +315,6 @@ export default function PrivacyPage() {
           </section>
         </div>
 
-        {/* Footer */}
-        <footer className="text-center text-sm text-slate-400 border-t border-slate-200 pt-8 mt-12">
-          <p>&copy; {new Date().getFullYear()} MedicalBillReader.com &middot; For informational purposes only &middot; Not medical or legal advice</p>
-          <div className="mt-2 space-x-4">
-            <Link href="/" className="text-slate-400 hover:text-slate-600">Home</Link>
-            <Link href="/privacy" className="text-slate-400 hover:text-slate-600">Privacy</Link>
-            <Link href="/terms" className="text-slate-400 hover:text-slate-600">Terms</Link>
-          </div>
-        </footer>
       </div>
     </main>
   );

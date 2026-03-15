@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Medical Bill Reader — Understand Your Medical Bill in Plain English",
   description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+  keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
+  robots: "index, follow, max-snippet:-1",
+  other: {
+    "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
+  },
 };
 
 const webAppJsonLd = {
@@ -45,13 +51,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <footer className="w-full border-t border-slate-200 bg-slate-50 py-4 px-4 text-center text-xs text-slate-500">
-          <p>
-            This content is for informational purposes only and is not a substitute
-            for professional medical advice. Always consult a qualified healthcare
-            provider regarding your medical bills or insurance questions.
-          </p>
-        </footer>
+        <Footer />
       </body>
     </html>
   );
