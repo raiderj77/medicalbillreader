@@ -35,7 +35,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="w-full border-t border-slate-200 bg-slate-50 py-4 px-4 text-center text-xs text-slate-500">
+          <p>
+            This content is for informational purposes only and is not a substitute
+            for professional medical advice. Always consult a qualified healthcare
+            provider regarding your medical bills or insurance questions.
+          </p>
+        </footer>
+      </body>
     </html>
   );
 }

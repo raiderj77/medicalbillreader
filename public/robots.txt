@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://medicalbillreader.com/sitemap.xml
