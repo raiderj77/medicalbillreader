@@ -80,7 +80,7 @@ export default function Home() {
             Finally Understand<br />Your Medical Bill
           </h1>
           <p className="text-xl text-slate-500 max-w-2xl mx-auto">
-            Upload a photo or PDF of your medical bill. We&apos;ll explain every charge in plain English, flag potential errors, and tell you what to do next.
+            Medical Bill Reader helps you understand confusing medical bills and insurance EOBs in plain language — no medical degree required. Upload a photo or PDF and get every charge explained, potential errors flagged, and clear next steps.
           </p>
         </div>
 

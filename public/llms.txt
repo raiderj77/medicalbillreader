@@ -1,0 +1,10 @@
+# Medical Bill Reader
+> A free tool that helps patients understand their medical bills, insurance EOBs, and healthcare charges in plain language.
+
+## Key Pages
+- /: Upload and analyze a medical bill
+- /about: About this tool
+- /privacy: Privacy policy
+
+## Content
+Medical Bill Reader helps patients decode confusing medical billing codes, understand insurance EOBs, identify potential billing errors, and know what questions to ask their provider or insurance company. This tool is for informational purposes only and is not medical or financial advice.

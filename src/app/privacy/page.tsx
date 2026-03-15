@@ -31,6 +31,10 @@ export default function PrivacyPage() {
         </p>
 
         <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
+          <p className="text-lg text-slate-600 leading-relaxed">
+            This privacy policy explains how Medical Bill Reader collects, uses, and protects your personal information.
+          </p>
+
           {/* Data Controller */}
           <section>
             <h2 className="text-xl font-bold text-slate-800">1. Who We Are</h2>
