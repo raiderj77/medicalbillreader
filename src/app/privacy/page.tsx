@@ -6,12 +6,42 @@ export const metadata: Metadata = {
   description:
     "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
   keywords: "privacy policy, medical bill reader, data privacy, CCPA, GDPR, health data",
+  alternates: {
+    canonical: "https://medicalbillreader.com/privacy",
+  },
   robots: "index, follow, max-snippet:-1",
+};
+
+const privacyFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How is my uploaded medical bill data handled?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Your uploaded medical bill is sent to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. The analysis results exist only in your browser session and disappear when you close or refresh the page.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How can I request deletion of my personal data?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Medical bill documents are deleted automatically immediately after analysis, so there is nothing to delete. For other personal data such as analytics or account information, email privacy@medicalbillreader.com and we will respond within 45 days as required by applicable law.",
+      },
+    },
+  ],
 };
 
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(privacyFaqJsonLd) }}
+      />
       {/* Answer capsule — must be first visible text for GEO/AI scrapers */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
         <p className="text-lg text-slate-700 leading-relaxed mb-0 bg-white border border-slate-200 rounded-lg p-5">
@@ -33,6 +63,7 @@ export default function PrivacyPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
+        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
         <p className="text-sm text-slate-500 mb-8">
           Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
@@ -304,6 +335,25 @@ export default function PrivacyPage() {
             <p>
               We may update this Privacy Policy periodically. Material changes will be posted on this page with an updated &quot;Last Updated&quot; date. Your continued use of the service after changes constitutes acceptance.
             </p>
+          </section>
+
+          {/* FAQ */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-800">Frequently Asked Questions About Your Privacy</h2>
+            <div className="space-y-4 mt-4">
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">How is my uploaded medical bill data handled?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  Your uploaded medical bill is sent to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. The analysis results exist only in your browser session and disappear when you close or refresh the page.
+                </p>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">How can I request deletion of my personal data?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  Medical bill documents are deleted automatically immediately after analysis, so there is nothing to delete. For other personal data such as analytics or account information, email privacy@medicalbillreader.com and we will respond within 45 days as required by applicable law.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Contact */}

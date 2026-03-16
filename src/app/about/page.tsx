@@ -7,7 +7,33 @@ export const metadata: Metadata = {
     "Learn how Medical Bill Reader helps patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
     "about medical bill reader, understand medical bills, EOB explanation, medical billing help, CPT codes, deductible, coinsurance",
+  alternates: {
+    canonical: "https://medicalbillreader.com/about",
+  },
   robots: "index, follow, max-snippet:-1",
+};
+
+const aboutFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Who built Medical Bill Reader and why?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Medical Bill Reader was built by an experienced web professional who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does the AI bill analysis tool work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "You upload a photo or PDF of your medical bill. Our AI reads every line item, procedure code, and charge, then translates them into plain English. It also flags potential billing errors like duplicate charges or upcoding and suggests clear next steps you can take.",
+      },
+    },
+  ],
 };
 
 const organizationJsonLd = {
@@ -32,6 +58,10 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutFaqJsonLd) }}
+      />
       {/* Nav */}
       <nav className="bg-white border-b border-slate-200">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -48,6 +78,7 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold text-slate-900 mb-6">
           About Medical Bill Reader
         </h1>
+        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
 
         <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
           {/* What It Does */}
@@ -203,6 +234,27 @@ export default function AboutPage() {
               Bill Reader aims to reduce the financial burden of healthcare and
               empower people to take control of their medical expenses.
             </p>
+          </section>
+
+          {/* FAQ */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-800">
+              Frequently Asked Questions About Medical Bill Reader
+            </h2>
+            <div className="space-y-4 mt-4">
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">Who built Medical Bill Reader and why?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  Medical Bill Reader was built by an experienced web professional who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
+                </p>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">How does the AI bill analysis tool work?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  You upload a photo or PDF of your medical bill. Our AI reads every line item, procedure code, and charge, then translates them into plain English. It also flags potential billing errors like duplicate charges or upcoding and suggests clear next steps you can take.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Disclaimer */}

@@ -78,6 +78,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
             Finally Understand<br />Your Medical Bill
           </h1>
+          <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
           <p className="text-xl text-slate-500 max-w-2xl mx-auto">
             Medical Bill Reader helps you understand confusing medical bills and insurance EOBs in plain language — no medical degree required. Upload a photo or PDF and get every charge explained, potential errors flagged, and clear next steps.
           </p>
@@ -176,7 +177,7 @@ export default function Home() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center text-xl">✅</div>
-                  <h2 className="text-xl font-bold text-slate-800">Your Bill Explained</h2>
+                  <h2 className="text-xl font-bold text-slate-800">Your Medical Bill Explained Simply</h2>
                 </div>
                 <button
                   onClick={reset}
@@ -244,7 +245,7 @@ export default function Home() {
 
         {/* FAQ */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-800 mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-slate-800 mb-6">Frequently Asked Questions About Medical Bills</h2>
           <div className="space-y-4">
             {[
               {

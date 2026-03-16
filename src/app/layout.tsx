@@ -4,9 +4,12 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Medical Bill Reader — Understand Your Medical Bill in Plain English",
+  title: "Medical Bill Reader — Understand Your Bill",
   description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
+  alternates: {
+    canonical: "https://medicalbillreader.com",
+  },
   robots: "index, follow, max-snippet:-1",
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",

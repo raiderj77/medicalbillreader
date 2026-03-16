@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   description:
     "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
   keywords: "contact medical bill reader, support, feedback, privacy request",
+  alternates: {
+    canonical: "https://medicalbillreader.com/contact",
+  },
   robots: "index, follow, max-snippet:-1",
 };
 
@@ -28,6 +31,7 @@ export default function ContactPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 mb-6">Contact Us</h1>
+        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
 
         <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
           <section>
