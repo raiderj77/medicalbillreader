@@ -30,6 +30,10 @@ export default function PrivacyPage() {
           Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
 
+        <p className="text-lg text-slate-700 leading-relaxed mb-8 bg-white border border-slate-200 rounded-lg p-5">
+          MedicalBillReader.com is committed to protecting your privacy. This policy explains what information we collect when you use our AI-powered bill analysis tool, how we use it, and your rights under U.S. state and international privacy laws. We never store your uploaded medical bills — documents are deleted immediately after analysis and results exist only in your browser session.
+        </p>
+
         <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
           <p className="text-lg text-slate-600 leading-relaxed">
             This privacy policy explains how Medical Bill Reader collects, uses, and protects your personal information.
