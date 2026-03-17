@@ -1,0 +1,25 @@
+# Medical Bill Reader
+
+> Medical Bill Reader helps patients understand confusing medical bills. Upload your bill and get plain-English explanations of CPT codes, ICD-10 codes, HCPCS codes, charges, and insurance columns.
+
+## What This Tool Does
+- Explains medical billing codes in plain language
+- Identifies CPT, ICD-10, and HCPCS codes
+- Clarifies insurance columns (allowed amount, patient responsibility, adjustments)
+- Flags potential billing errors
+- Processes everything privately — bills are deleted immediately after analysis
+
+## Main Pages
+- [Home](https://medicalbillreader.com): Upload and analyze your medical bill
+- [About](https://medicalbillreader.com/about): How the tool works and our approach
+- [Privacy Policy](https://medicalbillreader.com/privacy): How we handle your data
+- [Contact](https://medicalbillreader.com/contact): Get in touch
+
+## Privacy & Data Handling
+Medical bills contain sensitive personal and health information. All uploaded documents are deleted immediately after analysis. No bill contents are logged or stored. Analysis happens server-side via secure API.
+
+## Disclaimer
+This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your provider and insurance company.
+
+## About
+Built by an experienced web professional. For questions visit the contact page.
