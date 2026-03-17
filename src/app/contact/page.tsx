@@ -12,9 +12,44 @@ export const metadata: Metadata = {
   robots: "index, follow, max-snippet:-1",
 };
 
+const contactFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How do I get help understanding my medical bill?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The fastest way to understand your medical bill is to use our free tool on the homepage. Upload a photo or PDF of your bill and our AI will explain every charge in plain English within about 30 seconds. If you run into any issues with the tool or have questions about your results, email us at support@medicalbillreader.com and we will help you out.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is my medical bill data safe if I contact you?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. We never ask you to send your medical bill via email. Bills are only processed through our secure upload tool on the website, where they are analyzed in memory and deleted immediately. If you contact us by email, please do not attach medical bills or documents containing sensitive health information. Our support team handles inquiries without needing access to your actual bill data.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How long does it take to get a response?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We typically respond to general support inquiries within 1-2 business days. Privacy and data deletion requests are processed within the legally required timeframes, which is usually 45 days under laws like the CCPA and GDPR. If your matter is time-sensitive, mention it in the subject line and we will do our best to respond sooner.",
+      },
+    },
+  ],
+};
+
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactFaqJsonLd) }}
+      />
       {/* Nav */}
       <nav className="bg-white border-b border-slate-200">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -39,6 +74,39 @@ export default function ContactPage() {
               The MedicalBillReader team is here to help. Whether you have a
               question about how the tool works, want to report a problem, or
               need to submit a privacy-related request, we are happy to assist.
+              Medical Bill Reader is a free AI-powered tool that helps patients
+              understand confusing medical bills and insurance Explanations of
+              Benefits in plain language. You upload a photo or PDF of your bill,
+              and our AI reads every charge, translates procedure codes and
+              medical jargon into straightforward explanations, flags potential
+              billing errors, and suggests clear next steps so you know exactly
+              what you owe and why.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800">
+              What Kinds of Questions We Can Help With
+            </h2>
+            <p>
+              Our support team can assist with a range of topics related to
+              using Medical Bill Reader. If you are having trouble uploading a
+              bill, receiving an error during analysis, or your results seem
+              incomplete, we want to hear about it so we can improve the tool.
+              We also welcome general feedback about the user experience,
+              suggestions for new features, and questions about what file
+              formats are supported. If you are unsure whether Medical Bill
+              Reader can handle a specific type of document, such as an
+              itemized hospital statement, a dental bill, or a pharmacy receipt,
+              feel free to ask before uploading.
+            </p>
+            <p>
+              Please note that we cannot provide medical advice, financial
+              advice, or help you dispute a specific charge with your provider.
+              Our tool is designed to explain your bill in plain English and
+              flag potential errors, but any disputes or negotiations should be
+              directed to your healthcare provider&apos;s billing department or
+              your insurance company.
             </p>
           </section>
 
@@ -61,11 +129,45 @@ export default function ContactPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800">
+              What to Include in Your Message for Faster Support
+            </h2>
+            <p>
+              To help us resolve your issue as quickly as possible, please
+              include the following details when you contact us:
+            </p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>A brief description of the issue or question you have.</li>
+              <li>The type of document you uploaded (medical bill, EOB, hospital statement, etc.).</li>
+              <li>The file format you used (JPG, PNG, or PDF).</li>
+              <li>The browser and device you were using (for example, Chrome on Windows or Safari on iPhone).</li>
+              <li>Any error messages you saw during the upload or analysis process.</li>
+            </ul>
+            <p>
+              Including these details upfront helps us diagnose the problem
+              without needing to send follow-up questions, which means you get
+              a resolution faster.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800">
               Privacy and Data Deletion Requests
             </h2>
             <p>
-              For privacy inquiries, data deletion requests, or questions about
-              how we handle your information, email us at:
+              We take your privacy seriously. Medical Bill Reader processes
+              uploaded bills in memory and deletes them immediately after
+              analysis is complete. We never store your bill images or PDFs on
+              our servers, and the contents of your medical bills are never
+              logged, saved to a database, or shared with advertising networks.
+              Your analysis results exist only in your browser session and
+              disappear when you close or refresh the page.
+            </p>
+            <p>
+              If you have questions about how your data is handled, want to
+              request deletion of any personal information we may hold such as
+              server logs or analytics data, or need to exercise your rights
+              under privacy laws such as the CCPA, GDPR, or state health data
+              laws, email us at:
             </p>
             <p>
               <a
@@ -77,7 +179,8 @@ export default function ContactPage() {
             </p>
             <p>
               We respond to all privacy requests within 45 days as required by
-              applicable law. For details on how we handle your data, see our{" "}
+              applicable law. For full details on how we collect, use, and
+              protect your information, see our{" "}
               <Link
                 href="/privacy"
                 className="text-teal-600 hover:text-teal-800 underline"
@@ -93,10 +196,58 @@ export default function ContactPage() {
               Expected Response Times for Inquiries
             </h2>
             <p>
-              We aim to respond to all inquiries within 1-2 business days.
-              Privacy and data requests are handled within the timeframes
-              required by your state or country&apos;s privacy laws.
+              We aim to respond to all general inquiries within 1-2 business
+              days. Privacy and data deletion requests are handled within the
+              timeframes required by your state or country&apos;s privacy laws,
+              typically within 45 days. If your request is urgent, please
+              include the word &quot;urgent&quot; in the subject line and we
+              will prioritize it accordingly.
             </p>
+          </section>
+
+          {/* FAQ */}
+          <section>
+            <h2 className="text-xl font-bold text-slate-800">
+              Frequently Asked Questions About Contacting Us
+            </h2>
+            <div className="space-y-4 mt-4">
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">How do I get help understanding my medical bill?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  The fastest way to understand your medical bill is to use our
+                  free tool on the{" "}
+                  <Link href="/" className="text-teal-600 hover:text-teal-800 underline">homepage</Link>.
+                  Upload a photo or PDF of your bill and our AI will explain
+                  every charge in plain English within about 30 seconds. If you
+                  run into any issues with the tool or have questions about your
+                  results, email us at support@medicalbillreader.com and we will
+                  help you out.
+                </p>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">Is my medical bill data safe if I contact you?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  Yes. We never ask you to send your medical bill via email.
+                  Bills are only processed through our secure upload tool on the
+                  website, where they are analyzed in memory and deleted
+                  immediately. If you contact us by email, please do not attach
+                  medical bills or documents containing sensitive health
+                  information. Our support team handles inquiries without
+                  needing access to your actual bill data.
+                </p>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 p-6">
+                <h3 className="font-semibold text-slate-800 mb-2">How long does it take to get a response?</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  We typically respond to general support inquiries within 1-2
+                  business days. Privacy and data deletion requests are
+                  processed within the legally required timeframes, which is
+                  usually 45 days under laws like the CCPA and GDPR. If your
+                  matter is time-sensitive, mention it in the subject line and
+                  we will do our best to respond sooner.
+                </p>
+              </div>
+            </div>
           </section>
 
           {/* Disclaimer */}
