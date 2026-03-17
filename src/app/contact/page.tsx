@@ -44,7 +44,7 @@ export default function ContactPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800">
-              General Inquiries
+              General Inquiries and Support
             </h2>
             <p>
               For general questions, feedback, or support requests, email us at:
@@ -61,7 +61,7 @@ export default function ContactPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800">
-              Privacy &amp; Data Requests
+              Privacy and Data Deletion Requests
             </h2>
             <p>
               For privacy inquiries, data deletion requests, or questions about
@@ -90,7 +90,7 @@ export default function ContactPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800">
-              Response Times
+              Expected Response Times for Inquiries
             </h2>
             <p>
               We aim to respond to all inquiries within 1-2 business days.
