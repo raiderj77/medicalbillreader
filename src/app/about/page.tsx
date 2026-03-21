@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AnswerBlock from "@/components/AnswerBlock";
 
 export const metadata: Metadata = {
   title: "About — Medical Bill Reader",
@@ -53,7 +54,7 @@ const organizationJsonLd = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -63,11 +64,11 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutFaqJsonLd) }}
       />
       {/* Nav */}
-      <nav className="bg-white border-b border-slate-200">
+      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🩺</span>
-            <span className="font-bold text-slate-800 text-lg tracking-tight">
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
               MedicalBillReader
             </span>
           </Link>
@@ -75,15 +76,22 @@ export default function AboutPage() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-slate-900 mb-6">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           About Medical Bill Reader
         </h1>
-        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
 
-        <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
+        <AnswerBlock
+          what="A free AI tool that reads medical bills, explains every charge in plain English, and flags potential billing errors."
+          who="Patients, families, and caregivers who want to understand confusing medical bills or insurance EOBs before paying."
+          bottomLine="Upload any medical bill for a free line-by-line explanation — results are for informational purposes only and not financial or medical advice."
+          lastUpdated="2026-03-20"
+        />
+
+        <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           {/* What It Does */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               What Medical Bill Reader Does
             </h2>
             <p>
@@ -115,7 +123,7 @@ export default function AboutPage() {
 
           {/* Who It Helps */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Who Medical Bill Reader Helps
             </h2>
             <p>
@@ -138,7 +146,7 @@ export default function AboutPage() {
 
           {/* How to Use It */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               How to Use Medical Bill Reader
             </h2>
             <p>
@@ -158,7 +166,7 @@ export default function AboutPage() {
 
           {/* Common Medical Billing Terms */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Common Medical Billing Terms Explained
             </h2>
             <p>
@@ -210,7 +218,7 @@ export default function AboutPage() {
 
           {/* Why It Matters */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Why Understanding Your Medical Bill Matters
             </h2>
             <p>
@@ -238,19 +246,19 @@ export default function AboutPage() {
 
           {/* FAQ */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Frequently Asked Questions About Medical Bill Reader
             </h2>
             <div className="space-y-4 mt-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">Who built Medical Bill Reader and why?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader and why?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   Medical Bill Reader was built by an experienced web professional who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
                 </p>
               </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">How does the AI bill analysis tool work?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How does the AI bill analysis tool work?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   You upload a photo or PDF of your medical bill. Our AI reads every line item, procedure code, and charge, then translates them into plain English. It also flags potential billing errors like duplicate charges or upcoding and suggests clear next steps you can take.
                 </p>
               </div>
@@ -259,11 +267,11 @@ export default function AboutPage() {
 
           {/* Disclaimer */}
           <section>
-            <div className="p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
-              <p className="text-amber-900 font-semibold text-base mb-2">
+            <div className="p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
+              <p className="text-amber-900 dark:text-amber-300 font-semibold text-base mb-2">
                 Important Disclaimer
               </p>
-              <p className="text-amber-800 text-sm leading-relaxed">
+              <p className="text-amber-800 dark:text-amber-400 text-sm leading-relaxed">
                 Medical Bill Reader is for informational purposes only. The analysis
                 provided by this tool does not constitute medical advice, financial
                 advice, legal advice, or a professional billing review. Always verify
