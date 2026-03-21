@@ -5,3 +5,9 @@ body {
   background-color: #f8fafc;
   color: #171717;
 }
+
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+  .bg-blue-600 { background-color: #2563eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
