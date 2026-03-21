@@ -11,7 +11,7 @@ const sisterSites = [
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-slate-200 bg-slate-50 py-8 px-4 text-center text-xs text-slate-500">
+    <footer className="w-full border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 py-8 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
       <p className="max-w-3xl mx-auto mb-4">
         This tool provides general explanations of medical billing codes and
         charges for informational purposes only. It is not financial or medical
@@ -20,19 +20,19 @@ export default function Footer() {
       </p>
 
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4">
-        <Link href="/" className="hover:text-slate-700">
+        <Link href="/" className="hover:text-slate-700 dark:hover:text-slate-300">
           Home
         </Link>
-        <Link href="/about" className="hover:text-slate-700">
+        <Link href="/about" className="hover:text-slate-700 dark:hover:text-slate-300">
           About
         </Link>
-        <Link href="/contact" className="hover:text-slate-700">
+        <Link href="/contact" className="hover:text-slate-700 dark:hover:text-slate-300">
           Contact
         </Link>
-        <Link href="/privacy" className="hover:text-slate-700">
+        <Link href="/privacy" className="hover:text-slate-700 dark:hover:text-slate-300">
           Privacy
         </Link>
-        <Link href="/terms" className="hover:text-slate-700">
+        <Link href="/terms" className="hover:text-slate-700 dark:hover:text-slate-300">
           Terms
         </Link>
       </div>
@@ -45,7 +45,7 @@ export default function Footer() {
             href={site.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-slate-700"
+            className="hover:text-slate-700 dark:hover:text-slate-300"
           >
             {site.name}
           </a>

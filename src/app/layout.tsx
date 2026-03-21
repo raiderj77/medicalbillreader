@@ -40,6 +40,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `
+  (function() {
+    try {
+      var s = localStorage.getItem('theme');
+      var m = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var t = s || (m ? 'dark' : 'light');
+      document.documentElement.classList.add(t);
+    } catch(e) {}
+  })();
+` }} />
         <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
