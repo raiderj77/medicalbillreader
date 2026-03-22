@@ -1,15 +1,39 @@
-"use client";
+import type { Metadata } from "next";
+import BillAnalyzer from "@/components/BillAnalyzer";
+import AnswerBlock from "@/components/AnswerBlock";
+import Disclaimer from "@/components/Disclaimer";
+import ThemeToggle from "@/components/ThemeToggle";
 
-import { useState, useRef } from "react";
-import EmailCapture from '@/components/EmailCapture'
-import AnswerBlock from '@/components/AnswerBlock'
-import ThemeToggle from '@/components/ThemeToggle'
+export const metadata: Metadata = {
+  title: "Medical Bill Reader — Understand Your Bill",
+  description:
+    "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+  keywords:
+    "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
+  alternates: {
+    canonical: "https://medicalbillreader.com",
+  },
+  robots: "index, follow, max-snippet:-1",
+  openGraph: {
+    title: "Medical Bill Reader — Understand Your Bill",
+    description:
+      "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+    url: "https://medicalbillreader.com",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
+};
 
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://medicalbillreader.com",
+    },
   ],
 };
 
@@ -61,57 +85,6 @@ const faqJsonLd = {
 };
 
 export default function Home() {
-  const [isDragging, setIsDragging] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const handleFile = (f: File) => {
-    setFile(f);
-    setResult(null);
-    setError(null);
-    const reader = new FileReader();
-    reader.onload = (e) => setPreview(e.target?.result as string);
-    reader.readAsDataURL(f);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const f = e.dataTransfer.files[0];
-    if (f) handleFile(f);
-  };
-
-  const handleSubmit = async () => {
-    if (!file || !preview) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: preview, fileType: file.type }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong");
-      setResult(data.result);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const reset = () => {
-    setFile(null);
-    setPreview(null);
-    setResult(null);
-    setError(null);
-  };
-
   return (
     <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
@@ -122,6 +95,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+
       {/* Nav */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -132,7 +106,9 @@ export default function Home() {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-500 dark:text-slate-400">Free · No account needed</span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              Free · No account needed
+            </span>
             <ThemeToggle />
           </div>
         </div>
@@ -147,13 +123,17 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
             Finally Understand<br />Your Medical Bill
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">
+            Last updated: March 16, 2026
+          </p>
           <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
-            Medical Bill Reader helps you understand confusing medical bills and insurance EOBs in plain language — no medical degree required. Upload a photo or PDF and get every charge explained, potential errors flagged, and clear next steps.
+            Medical Bill Reader helps you understand confusing medical bills and insurance
+            EOBs in plain language — no medical degree required. Upload a photo or PDF and
+            get every charge explained, potential errors flagged, and clear next steps.
           </p>
         </div>
 
-        {/* Answer Block */}
+        {/* Answer Block (server-rendered) */}
         <AnswerBlock
           what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
           who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
@@ -161,282 +141,96 @@ export default function Home() {
           lastUpdated="2026-03-20"
         />
 
-        {/* Disclaimer — visible before results */}
-        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-center">
-          <p className="text-amber-800 dark:text-amber-400 text-sm">
-            This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your healthcare provider and insurance company.
-          </p>
+        {/* Disclaimer — server-rendered, visible before tool */}
+        <div className="mb-6">
+          <Disclaimer />
         </div>
 
-        {/* Main Tool */}
-        {!result ? (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 mb-8">
-            {!file ? (
-              <div
-                className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
-                  isDragging
-                    ? "border-teal-400 bg-teal-50 dark:bg-teal-900/20"
-                    : "border-slate-300 dark:border-slate-600 hover:border-teal-400 hover:bg-slate-50 dark:hover:bg-slate-700"
-                }`}
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={handleDrop}
-                onClick={() => fileRef.current?.click()}
-              >
-                <div className="text-5xl mb-4">📄</div>
-                <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
-                  Drop your bill here or click to upload
-                </p>
-                <p className="text-sm text-slate-400 mb-3">
-                  Supports JPG, PNG, or PDF
-                </p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 max-w-md mx-auto">
-                  Your bill is sent securely to our AI for analysis and deleted immediately after processing. It is never stored, logged, or shared. Results exist only in your browser session.
-                </p>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*,application/pdf"
-                  className="hidden"
-                  onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-                />
-              </div>
-            ) : (
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 rounded-lg flex items-center justify-center text-xl">📄</div>
-                    <div>
-                      <p className="font-medium text-slate-800 dark:text-slate-200">{file.name}</p>
-                      <p className="text-sm text-slate-400">{(file.size / 1024).toFixed(0)} KB</p>
-                    </div>
-                  </div>
-                  <button onClick={reset} className="text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
-                    Remove
-                  </button>
-                </div>
+        {/* Interactive Tool (client component) */}
+        <BillAnalyzer />
 
-                {preview && file.type.startsWith("image/") && (
-                  <div className="mb-6 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 max-h-64 flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={preview} alt="Bill preview" className="max-h-64 object-contain" />
-                  </div>
-                )}
-
-                {/* Upload privacy notice */}
-                <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    🔒 Your bill will be sent securely to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. Results exist only in your browser session and disappear when you close the page.
-                  </p>
-                </div>
-
-                {error && (
-                  <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
-                >
-                  {loading ? (
-                    <span className="flex items-center justify-center gap-3">
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                      </svg>
-                      Analyzing your bill…
-                    </span>
-                  ) : (
-                    "Explain My Bill →"
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          /* Results */
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8 overflow-hidden">
-            {/* AI-Generated Analysis Badge */}
-            <div className="bg-blue-600 px-6 py-3 flex items-center gap-2">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 00.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5l-2.47 2.47a2.25 2.25 0 01-1.59.659H9.06a2.25 2.25 0 01-1.59-.659L5 14.5m14 0V17a2.25 2.25 0 01-2.25 2.25H7.25A2.25 2.25 0 015 17v-2.5" />
-              </svg>
-              <span className="text-white font-bold text-sm tracking-wide uppercase">AI-Generated Analysis</span>
-            </div>
-
-            <div className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 rounded-lg flex items-center justify-center text-xl">✅</div>
-                  <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Your Medical Bill Explained Simply</h2>
-                </div>
-                <button
-                  onClick={reset}
-                  className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
-                >
-                  Analyze Another Bill
-                </button>
-              </div>
-              <div className="prose prose-slate dark:prose-invert max-w-none">
-                {result.split("\n").map((line, i) => {
-                  if (line.startsWith("## ")) {
-                    return <h2 key={i} className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-6 mb-2">{line.replace("## ", "")}</h2>;
-                  }
-                  if (line.startsWith("**") && line.endsWith("**")) {
-                    return <p key={i} className="font-semibold text-slate-700 dark:text-slate-300 mt-4">{line.replace(/\*\*/g, "")}</p>;
-                  }
-                  if (line.startsWith("- ")) {
-                    return <li key={i} className="text-slate-600 dark:text-slate-400 ml-4 list-disc">{line.replace("- ", "")}</li>;
-                  }
-                  if (line.trim() === "") return <br key={i} />;
-                  return <p key={i} className="text-slate-600 dark:text-slate-400 leading-relaxed">{line}</p>;
-                })}
-              </div>
-
-              {/* Disclaimer */}
-              <div className="mt-8 p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
-                <p className="text-amber-900 dark:text-amber-300 font-semibold text-base mb-2">Important Disclaimer</p>
-                <p className="text-amber-800 dark:text-amber-400 text-sm leading-relaxed">
-                  This analysis was generated by artificial intelligence and is for informational purposes only. It does not constitute medical or financial advice. Always verify charges with your healthcare provider and insurance company before taking action.
-                </p>
-              </div>
-
-              {/* Email Capture */}
-              <div className="mt-6">
-                <EmailCapture
-                  headline="Email me this analysis"
-                  subtext="Get a copy of your results plus a plain-English guide to disputing overcharges"
-                  buttonText="Send My Results"
-                  source="medicalbillreader-results"
-                  leadMagnet="bill-analysis-copy"
-                  variant="inline"
-                />
-              </div>
-
-              {/* Action Buttons */}
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  onClick={() => {
-                    const text = result.split('\n').map(line => {
-                      if (line.startsWith('## ')) return line.replace('## ', '') + ':';
-                      if (line.startsWith('**') && line.endsWith('**')) return line.replace(/\*\*/g, '');
-                      if (line.startsWith('- ')) return '  • ' + line.replace('- ', '');
-                      return line;
-                    }).join('\n');
-                    navigator.clipboard.writeText(text).then(() => {
-                      const btn = document.getElementById('copy-btn');
-                      if (btn) {
-                        btn.textContent = '✓ Copied!';
-                        setTimeout(() => { btn.textContent = 'Copy Summary'; }, 2000);
-                      }
-                    });
-                  }}
-                  id="copy-btn"
-                  className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
-                >
-                  Copy Summary
-                </button>
-                <button
-                  onClick={() => window.print()}
-                  className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
-                >
-                  Download PDF
-                </button>
-                <button
-                  onClick={() => {
-                    if (typeof navigator !== 'undefined' && navigator.share) {
-                      navigator.share({
-                        title: 'Medical Bill Analysis',
-                        text: 'I analyzed my medical bill at MedicalBillReader.com',
-                        url: window.location.href,
-                      }).catch(() => {});
-                    } else {
-                      navigator.clipboard.writeText('I analyzed my medical bill at MedicalBillReader.com ' + window.location.href).then(() => {
-                        const btn = document.getElementById('share-btn');
-                        if (btn) {
-                          btn.textContent = '✓ Copied!';
-                          setTimeout(() => { btn.textContent = 'Share'; }, 2000);
-                        }
-                      });
-                    }
-                  }}
-                  id="share-btn"
-                  className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
-                >
-                  Share
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* How It Works */}
+        {/* How It Works (server-rendered) */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {[
-            { icon: "📤", title: "Upload Your Bill", desc: "Take a photo or upload a PDF of any medical bill, EOB, or hospital statement." },
-            { icon: "🤖", title: "AI Reads It", desc: "Our AI scans every line item, code, and charge — the same way a billing expert would." },
-            { icon: "💬", title: "Get Plain English", desc: "You get a clear breakdown of every charge, plus flags for anything that looks unusual." },
-          ].map((step) => (
-            <div key={step.title} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
-              <div className="text-4xl mb-3">{step.icon}</div>
-              <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">{step.title}</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Trust Bar */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-12 flex flex-wrap justify-center gap-8 text-center">
-          {[
-            { icon: "🔒", label: "Never stored", desc: "Bills are never saved" },
-            { icon: "🆓", label: "Always free", desc: "No account needed" },
-            { icon: "⚡", label: "30 seconds", desc: "Fast results" },
-          ].map((t) => (
-            <div key={t.label}>
-              <div className="text-2xl mb-1">{t.icon}</div>
-              <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">{t.label}</p>
-              <p className="text-xs text-slate-400">{t.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* FAQ */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">Frequently Asked Questions About Medical Bills</h2>
-          <div className="space-y-4">
-            {[
-              {
-                q: "Is my medical bill kept private?",
-                a: "Yes. Your bill is sent directly to our AI for analysis and is never stored, logged, or shared. Each session is completely private.",
-              },
-              {
-                q: "What types of bills can I upload?",
-                a: "Any medical bill, hospital statement, Explanation of Benefits (EOB) from your insurer, or itemized billing statement. JPG, PNG, and PDF formats are all supported.",
-              },
-              {
-                q: "Can this tool catch billing errors?",
-                a: "Yes. Our AI is trained to flag common billing issues like duplicate charges, upcoding, unbundling, and charges for services not rendered. However, always verify with your provider.",
-              },
-              {
-                q: "What should I do if my bill has errors?",
-                a: "Contact your healthcare provider's billing department directly. Ask for an itemized bill if you don't have one, and request a review of any flagged charges. You can also contact your insurance company.",
-              },
-              {
-                q: "Is this medical or legal advice?",
-                a: "No. This tool provides educational information to help you understand your bill. It is not a substitute for professional medical billing advice or legal counsel.",
-              },
-            ].map((faq) => (
-              <div key={faq.q} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">{faq.q}</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
-              </div>
-            ))}
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <div className="text-4xl mb-3">📤</div>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">Upload Your Bill</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Take a photo or upload a PDF of any medical bill, EOB, or hospital statement.
+            </p>
+          </div>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <div className="text-4xl mb-3">🤖</div>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">AI Reads It</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Our AI scans every line item, code, and charge — the same way a billing expert would.
+            </p>
+          </div>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+            <div className="text-4xl mb-3">💬</div>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">Get Plain English</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              You get a clear breakdown of every charge, plus flags for anything that looks unusual.
+            </p>
           </div>
         </div>
 
+        {/* Trust Bar (server-rendered) */}
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-12 flex flex-wrap justify-center gap-8 text-center">
+          <div>
+            <div className="text-2xl mb-1">🔒</div>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Never stored</p>
+            <p className="text-xs text-slate-400">Bills are never saved</p>
+          </div>
+          <div>
+            <div className="text-2xl mb-1">🆓</div>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Always free</p>
+            <p className="text-xs text-slate-400">No account needed</p>
+          </div>
+          <div>
+            <div className="text-2xl mb-1">⚡</div>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">30 seconds</p>
+            <p className="text-xs text-slate-400">Fast results</p>
+          </div>
+        </div>
+
+        {/* FAQ (server-rendered) */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">
+            Frequently Asked Questions About Medical Bills
+          </h2>
+          <div className="space-y-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill kept private?</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                Yes. Your bill is sent directly to our AI for analysis and is never stored, logged, or shared. Each session is completely private.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What types of bills can I upload?</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                Any medical bill, hospital statement, Explanation of Benefits (EOB) from your insurer, or itemized billing statement. JPG, PNG, and PDF formats are all supported.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can this tool catch billing errors?</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                Yes. Our AI is trained to flag common billing issues like duplicate charges, upcoding, unbundling, and charges for services not rendered. However, always verify with your provider.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What should I do if my bill has errors?</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                Contact your healthcare provider&apos;s billing department directly. Ask for an itemized bill if you don&apos;t have one, and request a review of any flagged charges. You can also contact your insurance company.
+              </p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is this medical or legal advice?</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                No. This tool provides educational information to help you understand your bill. It is not a substitute for professional medical billing advice or legal counsel.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AnswerBlock from "@/components/AnswerBlock";
+import Disclaimer from "@/components/Disclaimer";
 
 export const metadata: Metadata = {
   title: "About — Medical Bill Reader",
@@ -287,20 +288,7 @@ export default function AboutPage() {
 
           {/* Disclaimer */}
           <section>
-            <div className="p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
-              <p className="text-amber-900 dark:text-amber-300 font-semibold text-base mb-2">
-                Important Disclaimer
-              </p>
-              <p className="text-amber-800 dark:text-amber-400 text-sm leading-relaxed">
-                Medical Bill Reader is for informational purposes only. The analysis
-                provided by this tool does not constitute medical advice, financial
-                advice, legal advice, or a professional billing review. Always verify
-                charges directly with your healthcare provider and insurance company
-                before taking action. If you believe your bill contains errors, contact
-                your provider&apos;s billing department or your insurance company&apos;s member
-                services line for resolution.
-              </p>
-            </div>
+            <Disclaimer />
           </section>
         </div>
 

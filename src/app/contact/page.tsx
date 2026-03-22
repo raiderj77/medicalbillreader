@@ -105,7 +105,7 @@ export default function ContactPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               What Kinds of Questions We Can Help With
             </h2>
             <p>
@@ -131,7 +131,7 @@ export default function ContactPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               General Inquiries and Support
             </h2>
             <p>
@@ -148,7 +148,7 @@ export default function ContactPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               What to Include in Your Message for Faster Support
             </h2>
             <p>
@@ -170,7 +170,7 @@ export default function ContactPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Privacy and Data Deletion Requests
             </h2>
             <p>
@@ -212,7 +212,7 @@ export default function ContactPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Expected Response Times for Inquiries
             </h2>
             <p>
@@ -227,13 +227,13 @@ export default function ContactPage() {
 
           {/* FAQ */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               Frequently Asked Questions About Contacting Us
             </h2>
             <div className="space-y-4 mt-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">How do I get help understanding my medical bill?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How do I get help understanding my medical bill?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   The fastest way to understand your medical bill is to use our
                   free tool on the{" "}
                   <Link href="/" className="text-teal-600 hover:text-teal-800 underline">homepage</Link>.
@@ -244,9 +244,9 @@ export default function ContactPage() {
                   help you out.
                 </p>
               </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">Is my medical bill data safe if I contact you?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data safe if I contact you?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   Yes. We never ask you to send your medical bill via email.
                   Bills are only processed through our secure upload tool on the
                   website, where they are analyzed in memory and deleted
@@ -256,9 +256,9 @@ export default function ContactPage() {
                   needing access to your actual bill data.
                 </p>
               </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">How long does it take to get a response?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How long does it take to get a response?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   We typically respond to general support inquiries within 1-2
                   business days. Privacy and data deletion requests are
                   processed within the legally required timeframes, which is
@@ -272,11 +272,11 @@ export default function ContactPage() {
 
           {/* Disclaimer */}
           <section>
-            <div className="p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
-              <p className="text-amber-900 font-semibold text-base mb-2">
+            <div className="p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
+              <p className="text-amber-900 dark:text-amber-300 font-semibold text-base mb-2">
                 Important Notice
               </p>
-              <p className="text-amber-800 text-sm leading-relaxed">
+              <p className="text-amber-800 dark:text-amber-400 text-sm leading-relaxed">
                 The MedicalBillReader team cannot provide medical advice,
                 financial advice, or billing dispute assistance. Our tool
                 provides informational explanations of medical billing codes and
