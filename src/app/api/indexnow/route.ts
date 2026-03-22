@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const SITE_HOST = "medicalbillreader.com";
-const KEY = process.env.INDEXNOW_API_KEY ?? "551164191f80e3446f0870f79c15d9c7";
+const KEY = process.env.INDEXNOW_API_KEY ?? "1af58049462445718b7a9a3fbd66f393";
 
 const URLS = [
   `https://${SITE_HOST}/`,
