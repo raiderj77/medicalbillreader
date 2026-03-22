@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   robots: "index, follow, max-snippet:-1",
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
+    "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
   },
   openGraph: {
     title: "Medical Bill Reader — Understand Your Bill",
