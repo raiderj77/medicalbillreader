@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     canonical: "https://medicalbillreader.com/about",
   },
   robots: "index, follow, max-snippet:-1",
+  openGraph: {
+    title: "About — Medical Bill Reader",
+    description: "Learn how Medical Bill Reader helps patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
+    url: "https://medicalbillreader.com/about",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
 };
 
 const aboutFaqJsonLd = {
@@ -52,9 +59,18 @@ const organizationJsonLd = {
   },
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+    { "@type": "ListItem", position: 2, name: "About", item: "https://medicalbillreader.com/about" },
+  ],
+};
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -62,6 +78,10 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutFaqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Nav */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">

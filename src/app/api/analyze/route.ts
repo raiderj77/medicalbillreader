@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
     if (!image) return NextResponse.json({ error: "No image provided" }, { status: 400 });
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    console.log("KEY LENGTH:", apiKey?.length, "FIRST10:", apiKey?.substring(0,10));
     if (!apiKey) return NextResponse.json({ error: "API key not configured" }, { status: 500 });
 
     const base64Data = image.split(",")[1];

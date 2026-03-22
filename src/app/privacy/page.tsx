@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     canonical: "https://medicalbillreader.com/privacy",
   },
   robots: "index, follow, max-snippet:-1",
+  openGraph: {
+    title: "Privacy Policy — Medical Bill Reader",
+    description: "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
+    url: "https://medicalbillreader.com/privacy",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
 };
 
 const privacyFaqJsonLd = {
@@ -35,12 +42,25 @@ const privacyFaqJsonLd = {
   ],
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+    { "@type": "ListItem", position: 2, name: "Privacy Policy", item: "https://medicalbillreader.com/privacy" },
+  ],
+};
+
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(privacyFaqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Answer capsule — must be first visible text for GEO/AI scrapers */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
@@ -50,11 +70,11 @@ export default function PrivacyPage() {
       </div>
 
       {/* Nav */}
-      <nav className="bg-white border-b border-slate-200">
+      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🩺</span>
-            <span className="font-bold text-slate-800 text-lg tracking-tight">
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
               MedicalBillReader
             </span>
           </Link>
@@ -62,13 +82,13 @@ export default function PrivacyPage() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Privacy Policy</h1>
         <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
         <p className="text-sm text-slate-500 mb-8">
           Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
 
-        <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
+        <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           {/* Data Controller */}
           <section>
             <h2 className="text-xl font-bold text-slate-800">1. Who We Are</h2>

@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     canonical: "https://medicalbillreader.com/contact",
   },
   robots: "index, follow, max-snippet:-1",
+  openGraph: {
+    title: "Contact — Medical Bill Reader",
+    description: "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
+    url: "https://medicalbillreader.com/contact",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
 };
 
 const contactFaqJsonLd = {
@@ -43,21 +50,34 @@ const contactFaqJsonLd = {
   ],
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+    { "@type": "ListItem", position: 2, name: "Contact", item: "https://medicalbillreader.com/contact" },
+  ],
+};
+
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(contactFaqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Nav */}
-      <nav className="bg-white border-b border-slate-200">
+      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl" role="img" aria-label="Stethoscope">
               🩺
             </span>
-            <span className="font-bold text-slate-800 text-lg tracking-tight">
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
               MedicalBillReader
             </span>
           </Link>
@@ -65,10 +85,10 @@ export default function ContactPage() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-slate-900 mb-6">Contact Us</h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">Contact Us</h1>
         <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
 
-        <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
+        <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           <section>
             <p>
               The MedicalBillReader team is here to help. Whether you have a

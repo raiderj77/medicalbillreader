@@ -5,6 +5,61 @@ import EmailCapture from '@/components/EmailCapture'
 import AnswerBlock from '@/components/AnswerBlock'
 import ThemeToggle from '@/components/ThemeToggle'
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+  ],
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is my medical bill kept private?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Your bill is sent directly to our AI for analysis and is never stored, logged, or shared. Each session is completely private.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What types of bills can I upload?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Any medical bill, hospital statement, Explanation of Benefits (EOB) from your insurer, or itemized billing statement. JPG, PNG, and PDF formats are all supported.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can this tool catch billing errors?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Our AI is trained to flag common billing issues like duplicate charges, upcoding, unbundling, and charges for services not rendered. However, always verify with your provider.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What should I do if my bill has errors?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Contact your healthcare provider's billing department directly. Ask for an itemized bill if you don't have one, and request a review of any flagged charges. You can also contact your insurance company.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is this medical or legal advice?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. This tool provides educational information to help you understand your bill. It is not a substitute for professional medical billing advice or legal counsel.",
+      },
+    },
+  ],
+};
+
 export default function Home() {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -58,7 +113,15 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Nav */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -98,6 +161,13 @@ export default function Home() {
           lastUpdated="2026-03-20"
         />
 
+        {/* Disclaimer — visible before results */}
+        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-center">
+          <p className="text-amber-800 dark:text-amber-400 text-sm">
+            This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your healthcare provider and insurance company.
+          </p>
+        </div>
+
         {/* Main Tool */}
         {!result ? (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 mb-8">
@@ -117,8 +187,11 @@ export default function Home() {
                 <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
                   Drop your bill here or click to upload
                 </p>
-                <p className="text-sm text-slate-400">
-                  Supports JPG, PNG, or PDF · Processed privately in your browser session
+                <p className="text-sm text-slate-400 mb-3">
+                  Supports JPG, PNG, or PDF
+                </p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 max-w-md mx-auto">
+                  Your bill is sent securely to our AI for analysis and deleted immediately after processing. It is never stored, logged, or shared. Results exist only in your browser session.
                 </p>
                 <input
                   ref={fileRef}
@@ -149,6 +222,13 @@ export default function Home() {
                     <img src={preview} alt="Bill preview" className="max-h-64 object-contain" />
                   </div>
                 )}
+
+                {/* Upload privacy notice */}
+                <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    🔒 Your bill will be sent securely to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. Results exist only in your browser session and disappear when you close the page.
+                  </p>
+                </div>
 
                 {error && (
                   <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">

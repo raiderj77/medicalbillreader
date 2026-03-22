@@ -14,6 +14,37 @@ export const metadata: Metadata = {
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
   },
+  openGraph: {
+    title: "Medical Bill Reader — Understand Your Bill",
+    description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+    url: "https://medicalbillreader.com",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Medical Bill Reader",
+  url: "https://medicalbillreader.com",
+  description:
+    "AI-powered medical bill analysis tool that helps patients understand confusing medical bills and insurance EOBs in plain language.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    email: "support@medicalbillreader.com",
+    url: "https://medicalbillreader.com/contact",
+  },
+};
+
+const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Medical Bill Reader",
+  url: "https://medicalbillreader.com",
+  description:
+    "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
 };
 
 const webAppJsonLd = {
@@ -57,12 +88,39 @@ export default function RootLayout({
           data-blockingmode="auto"
           strategy="beforeInteractive"
         />
+        <Script
+          id="consent-mode-v2"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'denied',
+    personalization_storage: 'denied',
+    wait_for_update: 500
+  });
+` }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
         />
       </head>
       <body>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-600 focus:text-white focus:rounded">
+          Skip to main content
+        </a>
         {children}
         <Footer />
       </body>

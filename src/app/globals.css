@@ -8,11 +8,6 @@ body {
   color: #171717;
 }
 
-.dark body,
-.dark main {
-  background-color: #0f172a;
-  color: #f1f5f9;
-}
 
 @media print {
   nav, footer, .no-print { display: none !important; }

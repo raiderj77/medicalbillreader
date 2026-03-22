@@ -53,7 +53,7 @@ export default function Footer() {
       </div>
 
       <p className="mt-4 text-slate-400">
-        &copy; {new Date().getFullYear()} MedicalBillReader.com
+        &copy; {new Date().getFullYear()} Your Friendly Developer. All rights reserved.
       </p>
     </footer>
   );

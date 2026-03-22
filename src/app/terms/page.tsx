@@ -6,20 +6,43 @@ export const metadata: Metadata = {
   description:
     "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
   keywords: "terms of service, medical bill reader, terms and conditions, user agreement",
+  alternates: {
+    canonical: "https://medicalbillreader.com/terms",
+  },
   robots: "index, follow, max-snippet:-1",
+  openGraph: {
+    title: "Terms of Service — Medical Bill Reader",
+    description: "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
+    url: "https://medicalbillreader.com/terms",
+    siteName: "Medical Bill Reader",
+    type: "website",
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
+    { "@type": "ListItem", position: 2, name: "Terms of Service", item: "https://medicalbillreader.com/terms" },
+  ],
 };
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Nav */}
-      <nav className="bg-white border-b border-slate-200">
+      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl" role="img" aria-label="Stethoscope">
               🩺
             </span>
-            <span className="font-bold text-slate-800 text-lg tracking-tight">
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
               MedicalBillReader
             </span>
           </Link>
@@ -27,16 +50,16 @@ export default function TermsPage() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Terms of Service
         </h1>
-        <p className="text-sm text-slate-500 mb-8">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
           Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
 
-        <div className="prose prose-slate max-w-none space-y-8 text-slate-700 text-[15px] leading-relaxed">
+        <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               1. Acceptance of Terms
             </h2>
             <p>
@@ -47,7 +70,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               2. Description of Service
             </h2>
             <p>
@@ -60,7 +83,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               3. Not Medical, Financial, or Legal Advice
             </h2>
             <div className="p-5 bg-amber-50 border-2 border-amber-300 rounded-xl">
@@ -81,7 +104,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               4. Use of the Service
             </h2>
             <p>You agree to:</p>
@@ -107,7 +130,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               5. Privacy and Data Handling
             </h2>
             <p>
@@ -140,7 +163,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               6. AI-Generated Content
             </h2>
             <p>
@@ -164,7 +187,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               7. Limitation of Liability
             </h2>
             <p>
@@ -185,7 +208,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               8. Intellectual Property
             </h2>
             <p>
@@ -201,7 +224,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               9. Service Availability
             </h2>
             <p>
@@ -213,7 +236,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               10. Changes to Terms
             </h2>
             <p>
@@ -225,7 +248,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               11. Governing Law
             </h2>
             <p>
@@ -237,7 +260,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
               12. Contact
             </h2>
             <p>
