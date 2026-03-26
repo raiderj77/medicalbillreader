@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd C:/Users/jason/empire/medicalbillreader && npm run build 2>&1)",
+      "Bash(cd C:/Users/jason/empire/medicalbillreader && npx next build 2>&1)",
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(sleep:*)",
+      "Bash(curl:*)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(openssl rand:*)",
+      "Bash(find:*)"
+    ]
+  }
+}
