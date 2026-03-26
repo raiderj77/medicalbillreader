@@ -29,6 +29,9 @@ export default function Footer() {
         <Link href="/contact" className="hover:text-slate-700 dark:hover:text-slate-300">
           Contact
         </Link>
+        <Link href="/blog" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Blog
+        </Link>
         <Link href="/privacy" className="hover:text-slate-700 dark:hover:text-slate-300">
           Privacy
         </Link>
