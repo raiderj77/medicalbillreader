@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import Script from "next/script";
 import Footer from "@/components/Footer";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Medical Bill Reader — Understand Your Bill",
@@ -10,7 +17,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://medicalbillreader.com",
   },
-  robots: "index, follow, max-snippet:-1",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large" as const,
+      "max-video-preview": -1,
+    },
+  },
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
@@ -71,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `
   (function() {
