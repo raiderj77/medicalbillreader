@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             key: "Referrer-Policy",
@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:; base-uri 'none';",
+            value: "object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; base-uri 'none';",
           },
         ],
       },

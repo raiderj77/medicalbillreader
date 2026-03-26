@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
+    "google-adsense-account": "ca-pub-7171402107622932",
   },
   openGraph: {
     title: "Medical Bill Reader — Understand Your Bill",
@@ -88,6 +89,13 @@ export default function RootLayout({
           data-cbid="a9a99ccb-4863-4e33-a895-a6d5642f408d"
           data-blockingmode="auto"
           strategy="beforeInteractive"
+        />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <Script
+          id="adsense"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7171402107622932"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
         <Script
           id="consent-mode-v2"
