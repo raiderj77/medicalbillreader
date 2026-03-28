@@ -31,7 +31,7 @@ const aboutFaqJsonLd = {
       name: "Who built Medical Bill Reader and why?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical Bill Reader was built by an experienced web professional who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
+        text: "Medical Bill Reader was built by an experienced web professional with expertise in healthcare billing systems who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
       },
     },
     {
@@ -274,7 +274,7 @@ export default function AboutPage() {
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader and why?</h3>
                 <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                  Medical Bill Reader was built by an experienced web professional who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
+                  Medical Bill Reader was built by an experienced web professional with expertise in healthcare billing systems who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">

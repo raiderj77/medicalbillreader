@@ -73,7 +73,7 @@ const webAppJsonLd = {
   url: "https://medicalbillreader.com",
   description:
     "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
-  applicationCategory: "UtilityApplication",
+  applicationCategory: "HealthApplication",
   operatingSystem: "All",
   offers: {
     "@type": "Offer",

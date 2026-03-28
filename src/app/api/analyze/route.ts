@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const err = await response.json();
-      console.error("Anthropic API error:", JSON.stringify(err));
+      console.error("Anthropic API error:", err?.error?.type || "unknown");
       return NextResponse.json({ error: "Failed to analyze bill." }, { status: 500 });
     }
 

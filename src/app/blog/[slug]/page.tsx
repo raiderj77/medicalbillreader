@@ -48,9 +48,10 @@ export default async function BlogPostPage({
     datePublished: post.datePublished,
     dateModified: post.dateModified,
     author: {
-      "@type": "Organization",
-      name: "Medical Bill Reader",
-      url: "https://medicalbillreader.com",
+      "@type": "Person",
+      name: "Medical Bill Reader Team",
+      url: "https://medicalbillreader.com/about",
+      description: "Experienced web professionals specializing in healthcare billing transparency",
     },
     publisher: {
       "@type": "Organization",
@@ -106,8 +107,14 @@ export default async function BlogPostPage({
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
             {post.title}
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
             Last updated: {post.dateModified}
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+            By the Medical Bill Reader Team &mdash;{" "}
+            <Link href="/about" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 underline">
+              About the author
+            </Link>
           </p>
 
           <Disclaimer />

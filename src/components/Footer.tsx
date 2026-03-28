@@ -38,6 +38,24 @@ export default function Footer() {
         <Link href="/terms" className="hover:text-slate-700 dark:hover:text-slate-300">
           Terms
         </Link>
+        <Link href="/cookies" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Cookies
+        </Link>
+        <Link href="/accessibility" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Accessibility
+        </Link>
+        <Link href="/disclaimer" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Disclaimer
+        </Link>
+      </div>
+
+      <div className="mb-4">
+        <Link
+          href="/do-not-sell"
+          className="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium underline"
+        >
+          Do Not Sell or Share My Personal Information
+        </Link>
       </div>
 
       <p className="mb-3 text-slate-400">Our Other Tools</p>
@@ -56,7 +74,7 @@ export default function Footer() {
       </div>
 
       <p className="mt-4 text-slate-400">
-        &copy; {new Date().getFullYear()} Your Friendly Developer. All rights reserved.
+        &copy; {new Date().getFullYear()} Medical Bill Reader. All rights reserved.
       </p>
     </footer>
   );

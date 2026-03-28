@@ -9,7 +9,23 @@
 - [About Us](https://medicalbillreader.com/about): How Medical Bill Reader works and who it helps
 - [Privacy Policy](https://medicalbillreader.com/privacy): How we handle your data and medical bill information
 - [Terms of Service](https://medicalbillreader.com/terms): Terms and conditions for using the service
-- [Contact](https://medicalbillreader.com/contact): Get in touch with the MedicalBillReader team
+- [Contact](https://medicalbillreader.com/contact): Get in touch with the Medical Bill Reader team
+
+## Legal & Compliance
+- [Cookie Policy](https://medicalbillreader.com/cookies): What cookies we use and how to control them
+- [Accessibility Statement](https://medicalbillreader.com/accessibility): WCAG 2.1 AA commitment and known limitations
+- [Do Not Sell](https://medicalbillreader.com/do-not-sell): CCPA/CPRA opt-out information
+- [Disclaimer](https://medicalbillreader.com/disclaimer): Medical, financial, and legal disclaimer
+
+## Privacy Approach
+- Uploaded medical bills are processed in memory and deleted immediately after analysis
+- No bill content is stored, logged, or retained
+- Health data is never passed to advertising systems
+- Non-personalized ads only on analysis pages
+- Cookiebot CMP for cookie consent (IAB TCF v2.2)
+
+## Blog
+- [Blog](https://medicalbillreader.com/blog): Guides on reading medical bills, understanding billing codes, spotting errors, and navigating insurance EOBs
 
 ## Disclaimer
 This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your healthcare provider and insurance company.
