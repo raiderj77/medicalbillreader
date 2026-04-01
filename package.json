@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:content": "node scripts/content-lint.js",
+    "lint:predeploy": "node scripts/predeploy-check.js",
+    "prebuild": "npm run lint:predeploy && npm run lint:content"
   },
   "dependencies": {
     "next": "16.1.6",
