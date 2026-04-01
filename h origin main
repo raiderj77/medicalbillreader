@@ -1,0 +1,32 @@
+[33mcommit 5cca8708185848ec315f176fc0ca84e1646b7b4c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Jason Ramirez <raiderj77@gmail.com>
+Date:   Fri Mar 27 19:19:20 2026 -0700
+
+    fix: legal pages, CCPA compliance, do-not-sell, security headers, attribution
+    
+    - Add /cookies, /accessibility, /do-not-sell, /disclaimer pages
+    - Add "Do Not Sell or Share My Personal Information" link to footer
+    - Add cookies, accessibility, disclaimer links to footer nav
+    - Fix Referrer-Policy: no-referrer on homepage (medical bill URLs must not leak)
+    - Fix WebApplication applicationCategory to HealthApplication
+    - Add author attribution to blog posts
+    - Update llms.txt with new legal/compliance pages
+    - Add new pages to sitemap
+    - Fix API error logging to not leak bill content
+    - Update about page attribution with healthcare billing expertise
+    
+    Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+
+ public/llms.txt                |  18 [32m++++++++[m[31m-[m
+ src/app/about/page.tsx         |   4 [32m+[m[31m-[m
+ src/app/accessibility/page.tsx | 155 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ src/app/api/analyze/route.ts   |   2 [32m+[m[31m-[m
+ src/app/blog/[slug]/page.tsx   |  15 [32m+++++[m[31m--[m
+ src/app/cookies/page.tsx       | 162 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ src/app/disclaimer/page.tsx    | 149 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ src/app/do-not-sell/page.tsx   | 145 [32m+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++[m
+ src/app/layout.tsx             |   2 [32m+[m[31m-[m
+ src/app/sitemap.ts             |  24 [32m+++++++++++[m
+ src/components/Footer.tsx      |  20 [32m++++++++[m[31m-[m
+ vercel.json                    |   9 [32m+++++[m
+ 12 files changed, 695 insertions(+), 10 deletions(-)
