@@ -1,18 +1,21 @@
-name: IndexNow Submission
-
+name: IndexNow Submit
 on:
   push:
     branches: [main]
-
 jobs:
-  indexnow:
+  submit:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Vercel deploy
-        run: sleep 60
-
-      - name: Submit URLs to IndexNow
+      - uses: actions/checkout@v4
+      - name: Submit to IndexNow
         run: |
-          curl -s -X POST https://medicalbillreader.com/api/indexnow \
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" \
             -H "Content-Type: application/json" \
-            -w "\nHTTP Status: %{http_code}\n"
+            -d '{
+              "host": "medicalbillreader.com",
+              "key": "1af58049462445718b7a9a3fbd66f393",
+              "keyLocation": "https://medicalbillreader.com/1af58049462445718b7a9a3fbd66f393.txt",
+              "urlList": ["https://medicalbillreader.com/"]
+            }')
+          echo "IndexNow response: $RESPONSE"
+          exit 0
