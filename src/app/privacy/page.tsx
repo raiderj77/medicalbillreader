@@ -339,6 +339,30 @@ export default function PrivacyPage() {
             <p>
               We use cookies on marketing pages for analytics and advertising. We do not use advertising cookies or trackers on bill analysis pages. For EU/EEA/UK visitors, we obtain consent before setting non-essential cookies.
             </p>
+            <p>
+              We work with third-party advertising partners, including Google, who may use cookies to serve ads based on your prior visits to this website or other websites.
+            </p>
+            <p>
+              To opt out of interest-based advertising, visit{" "}
+              <a
+                href="https://ads.google.com/settings"
+                className="text-teal-600 hover:text-teal-800 underline"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                Google Ad Settings
+              </a>{" "}
+              or{" "}
+              <a
+                href="https://optout.aboutads.info"
+                className="text-teal-600 hover:text-teal-800 underline"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                optout.aboutads.info
+              </a>
+              .
+            </p>
           </section>
 
           {/* Children */}

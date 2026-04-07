@@ -131,6 +131,9 @@ export default function Home() {
             EOBs in plain language — no medical degree required. Upload a photo or PDF and
             get every charge explained, potential errors flagged, and clear next steps.
           </p>
+          <p className="text-sm text-slate-400 dark:text-slate-500 mt-4">
+            Built by an experienced web professional
+          </p>
         </div>
 
         {/* Answer Block (server-rendered) */}
