@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
+  dateModified: "2026-04-07",
   itemListElement: [
     {
       "@type": "ListItem",
@@ -40,45 +41,46 @@ const breadcrumbJsonLd = {
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  dateModified: "2026-04-07",
   mainEntity: [
     {
       "@type": "Question",
-      name: "Is my medical bill kept private?",
+      name: "What is Medical Bill Reader?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Your bill is sent directly to our AI for analysis and is never stored, logged, or shared. Each session is completely private.",
+        text: "Medical Bill Reader is a free AI-powered tool that explains medical bills in plain English. Upload your bill and the tool identifies CPT codes, ICD-10 codes, and HCPCS codes, explains what each charge is for, flags potential billing errors, and breaks down insurance columns like allowed amount and patient responsibility.",
       },
     },
     {
       "@type": "Question",
-      name: "What types of bills can I upload?",
+      name: "Is my medical bill data kept private?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Any medical bill, hospital statement, Explanation of Benefits (EOB) from your insurer, or itemized billing statement. JPG, PNG, and PDF formats are all supported.",
+        text: "Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information — we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.",
       },
     },
     {
       "@type": "Question",
-      name: "Can this tool catch billing errors?",
+      name: "What medical billing codes does the tool explain?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Our AI is trained to flag common billing issues like duplicate charges, upcoding, unbundling, and charges for services not rendered. However, always verify with your provider.",
+        text: "The tool explains CPT codes (procedure codes), ICD-10 codes (diagnosis codes), and HCPCS codes (supplies and services). These codes appear on Explanation of Benefits (EOB) documents and itemized medical bills. Understanding them helps you verify charges and identify potential errors before paying.",
       },
     },
     {
       "@type": "Question",
-      name: "What should I do if my bill has errors?",
+      name: "Can Medical Bill Reader detect billing errors?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Contact your healthcare provider's billing department directly. Ask for an itemized bill if you don't have one, and request a review of any flagged charges. You can also contact your insurance company.",
+        text: "The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only — consult a medical billing advocate or your insurance company to dispute any specific charge.",
       },
     },
     {
       "@type": "Question",
-      name: "Is this medical or legal advice?",
+      name: "Is Medical Bill Reader a substitute for professional advice?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. This tool provides educational information to help you understand your bill. It is not a substitute for professional medical billing advice or legal counsel.",
+        text: "No. Medical Bill Reader provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a certified medical billing advocate.",
       },
     },
   ],
@@ -203,33 +205,33 @@ export default function Home() {
           </h2>
           <div className="space-y-4">
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill kept private?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What is Medical Bill Reader?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Yes. Your bill is sent directly to our AI for analysis and is never stored, logged, or shared. Each session is completely private.
+                Medical Bill Reader is a free AI-powered tool that explains medical bills in plain English. Upload your bill and the tool identifies CPT codes, ICD-10 codes, and HCPCS codes, explains what each charge is for, flags potential billing errors, and breaks down insurance columns like allowed amount and patient responsibility.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What types of bills can I upload?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data kept private?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Any medical bill, hospital statement, Explanation of Benefits (EOB) from your insurer, or itemized billing statement. JPG, PNG, and PDF formats are all supported.
+                Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information — we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can this tool catch billing errors?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What medical billing codes does the tool explain?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Yes. Our AI is trained to flag common billing issues like duplicate charges, upcoding, unbundling, and charges for services not rendered. However, always verify with your provider.
+                The tool explains CPT codes (procedure codes), ICD-10 codes (diagnosis codes), and HCPCS codes (supplies and services). These codes appear on Explanation of Benefits (EOB) documents and itemized medical bills. Understanding them helps you verify charges and identify potential errors before paying.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What should I do if my bill has errors?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader detect billing errors?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Contact your healthcare provider&apos;s billing department directly. Ask for an itemized bill if you don&apos;t have one, and request a review of any flagged charges. You can also contact your insurance company.
+                The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only — consult a medical billing advocate or your insurance company to dispute any specific charge.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is this medical or legal advice?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is Medical Bill Reader a substitute for professional advice?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                No. This tool provides educational information to help you understand your bill. It is not a substitute for professional medical billing advice or legal counsel.
+                No. Medical Bill Reader provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a certified medical billing advocate.
               </p>
             </div>
           </div>
