@@ -154,6 +154,107 @@ export default function Home() {
         {/* Interactive Tool (client component) */}
         <BillAnalyzer />
 
+        {/* GEO Content Sections (server-rendered) */}
+        <section className="mb-12 space-y-10">
+
+          {/* Section 1 — How AI analysis works */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+              How does AI medical bill analysis work?
+            </h2>
+            <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
+              Upload your medical bill or EOB document — the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
+            </p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete — nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors affect an estimated 80% of medical bills, according to the Medical Billing Advocates of America — understanding your bill before you pay is one of the most impactful steps you can take.
+            </p>
+          </div>
+
+          {/* Section 2 — Common billing errors */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+              What are the most common medical billing errors?
+            </h2>
+            <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
+              The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
+            </p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              Americans are overcharged billions annually due to medical billing errors — the average billing error costs patients $1,300 out of pocket, according to a 2023 healthcare billing analysis. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spend over $400 billion on out-of-pocket medical costs annually, making accurate bill review one of the most impactful personal finance actions available.
+            </p>
+          </div>
+
+          {/* Section 3 — CPT codes */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+              What do CPT codes mean on a medical bill?
+            </h2>
+            <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
+              CPT (Current Procedural Terminology) codes are 5-digit numbers that identify specific medical procedures. Each code corresponds to a standard procedure with a defined cost range that insurers use to determine reimbursement.
+            </p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              CPT codes are maintained and updated annually by the American Medical Association (AMA). As a patient, you have the right to request an itemized bill that lists every CPT code billed during your visit — your provider is required to provide one. Mismatched or incorrect CPT codes are one of the most common sources of overbilling: a code for a more complex procedure than what was performed (known as upcoding) can result in significant overcharges that go undetected if you only review the summary statement.
+            </p>
+          </div>
+
+          {/* Section 4 — Upload safety */}
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+              Is it safe to upload a medical bill?
+            </h2>
+            <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
+              Yes — bills are processed server-side over encrypted HTTPS and deleted immediately after analysis. No medical information is stored, logged, or used for any purpose beyond your requested explanation.
+            </p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              No account is required and no login is needed — your bill is never associated with an identity. Medical data is never passed to advertising systems; ads on this site run in non-personalized mode on analysis pages specifically to prevent any health information from reaching ad networks.
+            </p>
+          </div>
+
+          {/* Required YMYL Disclaimer */}
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-5">
+            <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+              <strong>Important:</strong> This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider or insurance company directly.
+            </p>
+          </div>
+
+          {/* Further Reading */}
+          <div>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3">Further Reading</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a
+                  href="https://www.cms.gov/medicare/billing/medicarebillingforms"
+                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                >
+                  CMS (Centers for Medicare &amp; Medicaid Services) — Understanding Your Medical Bill
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.patientadvocate.org/explore-our-resources/understanding-healthcare-bills/"
+                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                >
+                  Patient Advocate Foundation — Medical Billing Resources
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.ama-assn.org/practice-management/cpt/cpt-overview-and-code-approval"
+                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                >
+                  American Medical Association — CPT Code Overview
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </section>
+
         {/* How It Works (server-rendered) */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
