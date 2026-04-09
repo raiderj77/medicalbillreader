@@ -163,6 +163,21 @@ export default function RootLayout({
   })(window, document, "clarity", "script", "vsqobt7va0");
 ` }}
         />
+        <Script
+          id="ga4-src"
+          src="https://www.googletagmanager.com/gtag/js?id=G-3P9M4GWKE7"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="ga4-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3P9M4GWKE7');
+` }}
+        />
       </body>
     </html>
   );
