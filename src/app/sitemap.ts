@@ -1,15 +1,17 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blog";
+import { getAllMarkdownPosts } from "@/lib/blog-markdown";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://medicalbillreader.com";
 
-  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.dateModified),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  const markdownBlogEntries: MetadataRoute.Sitemap = getAllMarkdownPosts().map(
+    (post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.date ? new Date(post.date) : new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    })
+  );
 
   return [
     {
@@ -24,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    ...blogEntries,
+    ...markdownBlogEntries,
     {
       url: `${baseUrl}/about`,
       lastModified: new Date(),
