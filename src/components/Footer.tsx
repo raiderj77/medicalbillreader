@@ -6,7 +6,9 @@ const sisterSites = [
   { name: "FlipMyCase", url: "https://flipmycase.com" },
   { name: "Creator Revenue Calculator", url: "https://creatorrevenuecalculator.com" },
   { name: "ContractExtract", url: "https://contractextract.com" },
+  { name: "TaxBreakTools", url: "https://taxbreaktools.com" },
   { name: "524 Tracker", url: "https://524tracker.com" },
+  { name: "AI Business Alternative", url: "https://aibusinessalternative.com" },
 ];
 
 export default function Footer() {
