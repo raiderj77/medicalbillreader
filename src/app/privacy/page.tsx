@@ -221,11 +221,17 @@ export default function PrivacyPage() {
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Maryland Online Data Privacy Act (MD MODPA)</h3>
             <p>
-              For Maryland residents, the Maryland Online Data Privacy Act (effective October 2025)
+              For Maryland residents, the Maryland Online Data Privacy Act (enforcement effective April 1, 2026)
               prohibits the sale of sensitive data including health information. We do not sell
               medical bill data or any health-related information. Maryland residents have the right
-              to access, delete, correct, and opt out of the processing of their personal data by
+              to access, delete, correct, opt out of processing, and exercise portability of their personal data by
               contacting us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+            </p>
+            <p>
+              We honor the Global Privacy Control (GPC) browser signal as a universal opt-out of targeted advertising, data sale, and data sharing. When your browser sends a GPC signal, we automatically suppress all non-essential cookies and data collection.
+            </p>
+            <p>
+              To exercise your MODPA rights, contact us at the email above. We respond to MODPA requests within 45 days.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Minimization</h3>
@@ -297,7 +303,7 @@ export default function PrivacyPage() {
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Oregon</td><td className="py-2 pr-4">OCPA</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Tennessee</td><td className="py-2 pr-4">TIPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Minnesota</td><td className="py-2 pr-4">MNDPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Maryland</td><td className="py-2 pr-4">MODPA</td><td className="py-2 pr-4">Oct 2025</td><td className="py-2">Access, delete, correct, opt-out; bans sale of sensitive data</td></tr>
+                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Maryland</td><td className="py-2 pr-4">MODPA</td><td className="py-2 pr-4">Apr 2026</td><td className="py-2">Access, delete, correct, opt-out, portability; honors GPC; bans sale of sensitive data</td></tr>
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Indiana</td><td className="py-2 pr-4">IDCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Kentucky</td><td className="py-2 pr-4">KYCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
                   <tr className="border-b border-slate-200"><td className="py-2 pr-4">Rhode Island</td><td className="py-2 pr-4">RIDPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
