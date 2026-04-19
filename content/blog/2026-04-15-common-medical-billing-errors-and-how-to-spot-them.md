@@ -4,8 +4,6 @@ date: "2026-04-15"
 slug: "common-medical-billing-errors-and-how-to-spot-them"
 description: "Learn the 7 most common medical billing errors and how to identify them on your bill using our free tool."
 status: published
-author: "Jason Ramirez"
-reviewer: "Jason Ramirez"
 tags: [medical-billing, billing-errors, patient-rights]
 ---
 

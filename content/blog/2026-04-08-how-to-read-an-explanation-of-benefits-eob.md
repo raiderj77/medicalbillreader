@@ -7,7 +7,6 @@ status: published
 site: "medicalbillreader.com"
 repo: "medicalbillreader"
 content_dir: "content/blog"
-reviewer: "Jason Ramirez, CADC-II"
 tags: [rex-draft, mindcheck, needs-review]
 ---
 
