@@ -58,9 +58,10 @@ export default async function BlogPostPage({
     url: `https://medicalbillreader.com/blog/${post.slug}`,
     mainEntityOfPage: `https://medicalbillreader.com/blog/${post.slug}`,
     author: {
-      "@type": "Organization",
-      name: "Medical Bill Reader",
-      url: "https://medicalbillreader.com",
+      "@type": "Person",
+      name: "Built by an experienced web professional",
+      jobTitle: "Web Professional",
+      url: "https://medicalbillreader.com/about",
     },
     publisher: {
       "@type": "Organization",
