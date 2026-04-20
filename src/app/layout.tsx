@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Medical Bill Reader — Understand Your Bill",
   description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
-  authors: [{ name: "Built by an experienced web professional" }],
+  authors: [{ name: "Jason Ramirez" }],
   alternates: {
     canonical: "https://medicalbillreader.com",
   },
@@ -82,8 +82,8 @@ const webAppJsonLd = {
   dateModified: "2026-04-07",
   author: {
     "@type": "Person",
-    name: "Built by an experienced web professional",
-    jobTitle: "Web Professional",
+    name: "Jason Ramirez",
+    jobTitle: "Healthcare Technology Analyst",
     url: "https://medicalbillreader.com/about",
   },
   offers: {
