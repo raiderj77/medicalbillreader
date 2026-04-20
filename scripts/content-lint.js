@@ -101,7 +101,7 @@ for (const file of srcFiles) {
   const content = readFileSync(file, "utf-8");
   const lines = content.split("\n");
 
-  checkPersonalName(file, lines);
+  // checkPersonalName disabled per YMYL named-author exception (EMPIRE_BUILD_STANDARDS Section 7)
   checkMedicalFinancialAdviceClaims(file, lines);
 }
 
