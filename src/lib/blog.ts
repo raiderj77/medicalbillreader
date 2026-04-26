@@ -16,7 +16,7 @@ export const blogPosts: BlogPost[] = [
     description: "Learn how to read every section of a medical bill — from patient info and dates of service to CPT codes, charge amounts, adjustments, and balance due.",
     keywords: ["how to read a medical bill", "medical bill explained", "understand hospital bill", "medical billing line items"],
     datePublished: "2026-03-20",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why Medical Bills Are So Confusing", body: "Medical bills are written for insurance companies and billing departments, not patients. They use standardized codes, abbreviations, and layouts that assume you already understand the healthcare billing system. A single emergency room visit can generate separate bills from the hospital, the attending physician, the radiologist, and the lab — each with its own format. Understanding the structure of a medical bill is the first step toward catching errors, negotiating charges, and avoiding collections." },
       { heading: "Patient Information and Account Details", body: "The top of your bill shows your name, account number, medical record number (MRN), and the date of service. Check these carefully — billing errors often start with wrong patient data or incorrect dates. Your insurance information should also appear here. If the insurance section is blank or shows the wrong plan, the bill may not have been submitted to your insurer at all." },
@@ -38,7 +38,7 @@ export const blogPosts: BlogPost[] = [
     description: "Understand the four main types of medical billing codes — CPT, ICD-10, HCPCS, and revenue codes — and how they affect what you pay.",
     keywords: ["CPT codes explained", "ICD-10 codes", "medical billing codes", "HCPCS codes", "revenue codes"],
     datePublished: "2026-03-20",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why Medical Billing Uses Codes", body: "Medical billing codes are a standardized language that allows hospitals, doctors, and insurance companies to communicate about diagnoses and treatments. Every visit, procedure, lab test, and prescription is translated into a numeric or alphanumeric code. These codes determine what your insurance covers, how much the provider gets paid, and what you owe. Errors in coding — whether accidental or intentional — are one of the most common causes of incorrect medical bills." },
       { heading: "CPT Codes: What Was Done", body: "Current Procedural Terminology (CPT) codes are five-digit numbers maintained by the American Medical Association. They describe the specific service or procedure performed. For example, 99213 is a standard office visit, 36415 is a routine blood draw, and 70553 is a brain MRI with and without contrast. CPT codes are grouped into three categories: Category I (standard procedures), Category II (performance measures), and Category III (emerging technology). The CPT code determines the base price of each service." },
@@ -58,7 +58,7 @@ export const blogPosts: BlogPost[] = [
     description: "Your insurance EOB is not a bill — but it tells you exactly what you should owe. Learn how to read an EOB and catch billing errors before you pay.",
     keywords: ["explanation of benefits", "EOB explained", "how to read EOB", "insurance EOB", "EOB vs bill"],
     datePublished: "2026-03-20",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is an Explanation of Benefits?", body: "An Explanation of Benefits (EOB) is a statement from your insurance company that breaks down how a medical claim was processed. It is not a bill — it is a summary of what the provider charged, what insurance covered, and what you may owe. You typically receive an EOB after every medical visit or procedure. Reading your EOB carefully is the single most effective way to catch billing errors before you pay an incorrect amount." },
       { heading: "Key Sections of an EOB", body: "Every EOB includes: the patient name and claim number, the provider name and date of service, the billed amount (what the provider charged), the allowed amount (what insurance agreed to pay for that service), the insurance payment (what your plan actually paid), and your responsibility (copay, coinsurance, or deductible). Some EOBs also include a reason code explaining why a charge was denied or adjusted." },
@@ -77,7 +77,7 @@ export const blogPosts: BlogPost[] = [
     description: "Studies show up to 80% of medical bills contain errors. Learn the 10 most common mistakes and how to identify them before you pay.",
     keywords: ["medical billing errors", "hospital bill mistakes", "billing errors to watch for", "medical bill overcharges"],
     datePublished: "2026-03-20",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "How Common Are Medical Billing Errors?", body: "Research from medical billing advocates and consumer groups consistently finds that a significant percentage of medical bills contain errors. Some estimates suggest that 30-80% of bills have at least one mistake, though the exact figure depends on the study and methodology. Even a small coding error can add hundreds or thousands of dollars to your bill. Checking your bill carefully is not paranoia — it is practical self-defense." },
       { heading: "1. Duplicate Charges", body: "The same service appears on your bill twice. This happens most often in hospital settings where multiple departments enter charges. Look for identical CPT codes with the same date of service." },
@@ -102,7 +102,7 @@ export const blogPosts: BlogPost[] = [
     description: "The No Surprises Act protects you from unexpected out-of-network bills. Learn what is covered, your rights, and how to file a complaint.",
     keywords: ["No Surprises Act", "surprise medical bills", "out-of-network billing", "balance billing protection", "No Surprises Act 2026"],
     datePublished: "2026-03-21",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is the No Surprises Act?", body: "The No Surprises Act (NSA) is a federal law that took effect January 1, 2022. It protects patients from surprise medical bills when they receive emergency care, are treated by out-of-network providers at in-network facilities, or receive air ambulance services from out-of-network providers. Under the NSA, you only owe your in-network cost-sharing amount (copay, coinsurance, or deductible) in these situations — the provider and insurer must resolve the payment dispute between themselves." },
       { heading: "When Does the No Surprises Act Apply?", body: "The NSA applies in three main scenarios: (1) Emergency services at any facility, regardless of network status. (2) Non-emergency services at an in-network facility by an out-of-network provider you did not choose (such as an anesthesiologist, radiologist, or assistant surgeon). (3) Air ambulance services from out-of-network providers. The law applies to most private insurance plans, including employer-sponsored plans and marketplace plans. It does not apply to Medicare, Medicaid, TRICARE, or VA benefits, which have their own protections." },
@@ -121,7 +121,7 @@ export const blogPosts: BlogPost[] = [
     description: "You can negotiate almost any medical bill. Learn proven strategies for reducing your hospital and doctor bills, including payment plans and financial assistance.",
     keywords: ["negotiate medical bill", "reduce medical bill", "hospital bill negotiation", "medical bill discount", "financial assistance hospital"],
     datePublished: "2026-03-21",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Can You Really Negotiate Medical Bills?", body: "Yes. Medical bills are not fixed prices — they are the starting point for a negotiation. Hospitals and medical practices routinely offer discounts, payment plans, and financial hardship programs. Studies show that patients who negotiate their bills reduce them by an average of 30-50%. The key is knowing what to ask for and when to ask." },
       { heading: "Step 1: Request an Itemized Bill", body: "Before negotiating, get a detailed breakdown of every charge. Call the billing department and ask for an itemized statement with CPT codes. Review each line item and flag anything that looks incorrect, duplicated, or inflated. You are in a much stronger negotiating position when you can point to specific charges that need correction." },
@@ -142,7 +142,7 @@ export const blogPosts: BlogPost[] = [
     description: "Learn how health insurance deductibles work, what counts toward them, and strategies for managing your deductible so you spend less on healthcare.",
     keywords: ["health insurance deductible", "deductible explained", "how deductibles work", "deductible vs copay", "out-of-pocket maximum"],
     datePublished: "2026-03-21",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is a Health Insurance Deductible?", body: "A deductible is the amount you must pay out of pocket for covered healthcare services before your insurance plan starts paying. For example, if your plan has a $2,000 deductible, you pay the first $2,000 of covered medical expenses yourself. After you meet the deductible, your insurance begins sharing costs with you through copays or coinsurance." },
       { heading: "Individual vs. Family Deductibles", body: "Most plans have both an individual deductible and a family deductible. The individual deductible applies per person. The family deductible is the total amount the family must spend before the plan covers everyone. Some plans use an 'embedded' structure where meeting the individual deductible triggers coverage for that person even if the family deductible has not been met. Others use an 'aggregate' structure where no one gets coverage until the full family deductible is met." },
@@ -161,7 +161,7 @@ export const blogPosts: BlogPost[] = [
     description: "If a medical bill goes to collections, you still have rights. Learn how to verify the debt, negotiate with collectors, and protect your credit score.",
     keywords: ["medical debt collections", "medical bill collections rights", "medical debt credit score", "dispute medical debt", "medical collections"],
     datePublished: "2026-03-22",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "How Medical Bills End Up in Collections", body: "When a medical bill goes unpaid for 90-180 days, the provider may sell or assign the debt to a collection agency. This can happen even if you are disputing the bill or waiting for insurance to process the claim. Once in collections, the debt collector will contact you to collect payment. Understanding your rights under federal and state law is critical to protecting yourself." },
       { heading: "Your Rights Under the Fair Debt Collection Practices Act", body: "The FDCPA gives you the right to: (1) Receive a written validation notice within 5 days of first contact. (2) Dispute the debt in writing within 30 days. (3) Request verification of the debt. (4) Be free from harassment, threats, or deceptive practices. (5) Restrict how and when collectors contact you. Collectors cannot call before 8 AM or after 9 PM, use abusive language, or threaten actions they cannot legally take." },
@@ -180,7 +180,7 @@ export const blogPosts: BlogPost[] = [
     description: "Federal law requires hospitals to publish their prices. Learn how to find and use hospital price data to compare costs and avoid surprises.",
     keywords: ["hospital price transparency", "hospital prices online", "compare hospital costs", "hospital chargemaster", "price transparency rule"],
     datePublished: "2026-03-22",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is the Hospital Price Transparency Rule?", body: "Since January 1, 2021, all hospitals in the United States are required by federal law to publish their prices online in two formats: a comprehensive machine-readable file with all items and services, and a consumer-friendly display of shoppable services showing at least 300 common procedures with self-pay and insurer-specific negotiated rates. This rule was issued by CMS (Centers for Medicare & Medicaid Services) and applies to all hospitals operating in the US." },
       { heading: "How to Find Hospital Prices", body: "Go to the hospital's website and search for 'price transparency,' 'price list,' 'standard charges,' or 'chargemaster.' Most hospitals have a dedicated page with downloadable files. You can also use CMS's Hospital Price Transparency tool or third-party sites like Turquoise Health that aggregate and make the data searchable. Compare the self-pay rate, minimum and maximum negotiated rates, and the rate for your specific insurer." },
@@ -199,7 +199,7 @@ export const blogPosts: BlogPost[] = [
     description: "A Health Savings Account can save you thousands on medical bills. Learn HSA eligibility, contribution limits, tax advantages, and investment strategies for 2026.",
     keywords: ["HSA guide", "health savings account", "HSA 2026", "HSA contribution limits", "HSA tax benefits"],
     datePublished: "2026-03-22",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is a Health Savings Account?", body: "A Health Savings Account (HSA) is a tax-advantaged savings account designed for people enrolled in a High-Deductible Health Plan (HDHP). HSAs offer a triple tax advantage: contributions are tax-deductible, earnings grow tax-free, and withdrawals for qualified medical expenses are tax-free. No other savings vehicle in the US tax code offers all three benefits." },
       { heading: "HSA Eligibility and 2026 Contribution Limits", body: "To open and contribute to an HSA, you must be enrolled in an HDHP (minimum deductible of $1,650 for individuals or $3,300 for families in 2026), have no other non-HDHP health coverage, not be enrolled in Medicare, and not be claimed as a dependent. The 2026 contribution limits are $4,300 for individuals and $8,550 for families. If you are 55 or older, you can contribute an additional $1,000 catch-up contribution." },
@@ -218,7 +218,7 @@ export const blogPosts: BlogPost[] = [
     description: "Most providers offer interest-free payment plans for medical bills. Learn how to negotiate terms, what to put in writing, and how to avoid collections.",
     keywords: ["medical bill payment plan", "hospital payment plan", "pay medical bill in installments", "interest-free medical payments"],
     datePublished: "2026-03-22",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why Payment Plans Exist", body: "Healthcare providers would rather receive gradual payment than send your account to collections (where they recover only a fraction of the bill). Most hospitals and medical practices offer interest-free payment plans as a standard option. You do not need to have financial hardship to request one — payment plans are available to anyone who asks." },
       { heading: "How to Request a Payment Plan", body: "Call the billing department and say you would like to set up a payment plan. Ask specifically about: the length of the plan (most offer 12-24 months), whether interest or fees are charged, the minimum monthly payment, and whether the plan prevents the account from going to collections. Get all terms in writing before making your first payment." },
@@ -237,7 +237,7 @@ export const blogPosts: BlogPost[] = [
     description: "Insurance companies deny claims frequently, but most denials can be overturned on appeal. Learn the exact steps to file an internal and external appeal.",
     keywords: ["appeal denied claim", "insurance claim denied", "appeal health insurance denial", "how to appeal medical claim", "insurance appeal letter"],
     datePublished: "2026-03-23",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why Claims Get Denied", body: "Insurance claims are denied for many reasons: lack of prior authorization, the service was deemed not medically necessary, coding errors, the provider was out of network, timely filing deadlines were missed, or incomplete information on the claim. A denial does not mean you are responsible for the full bill — it means the insurance company needs more information or disagrees with the claim as submitted." },
       { heading: "Step 1: Understand the Denial", body: "Read the denial letter or EOB carefully. It should include a reason code or explanation of why the claim was denied, and instructions for how to appeal. Note the deadline for filing an appeal — most plans allow 180 days for internal appeals. If the denial reason is a coding error, your provider's billing department may be able to correct and resubmit the claim without a formal appeal." },
@@ -257,7 +257,7 @@ export const blogPosts: BlogPost[] = [
     description: "Balance billing happens when a provider charges you the difference between their rate and insurance's allowed amount. Learn when it is legal and how to fight back.",
     keywords: ["balance billing", "surprise billing", "balance billing illegal", "out-of-network balance billing", "balance billing protection"],
     datePublished: "2026-03-23",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is Balance Billing?", body: "Balance billing (also called surprise billing) occurs when a healthcare provider bills you for the difference between their full charge and the amount your insurance company pays. For example, if a surgeon charges $10,000 for a procedure, your insurance allows $6,000, and the surgeon bills you the remaining $4,000 — that $4,000 is a balance bill. For in-network providers, balance billing is prohibited by contract. The controversy and legal protections focus on out-of-network balance billing." },
       { heading: "When Is Balance Billing Illegal?", body: "Under the federal No Surprises Act (2022), balance billing is illegal in these situations: emergency services at any facility, non-emergency services at in-network facilities by out-of-network providers you did not choose, and air ambulance services from out-of-network providers. Many states have additional protections that go beyond the federal law. In these protected situations, you only owe your in-network cost-sharing amount." },
@@ -275,7 +275,7 @@ export const blogPosts: BlogPost[] = [
     description: "Copays and coinsurance both come out of your pocket, but they work differently. Learn how each affects your healthcare costs and total spending.",
     keywords: ["copay vs coinsurance", "what is copay", "what is coinsurance", "health insurance copay", "coinsurance explained"],
     datePublished: "2026-03-23",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is a Copay?", body: "A copay (or copayment) is a fixed dollar amount you pay for a healthcare service at the time of the visit. Common copays include $30 for a primary care visit, $50 for a specialist, and $10-$40 for a prescription. Copays are the same regardless of the total cost of the service. Some plans charge copays before you meet your deductible, while others only apply copays after the deductible is met." },
       { heading: "What Is Coinsurance?", body: "Coinsurance is a percentage of the total allowed cost that you pay after meeting your deductible. If your plan has 20% coinsurance, you pay 20% and insurance pays 80%. Unlike copays, coinsurance amounts vary based on the cost of the service — 20% of a $500 lab test is $100, but 20% of a $50,000 surgery is $10,000. Coinsurance typically applies after the deductible until you reach your out-of-pocket maximum." },
@@ -294,7 +294,7 @@ export const blogPosts: BlogPost[] = [
     description: "Medical debt has a statute of limitations that varies by state. Learn how long a provider or collector can sue you for an unpaid medical bill.",
     keywords: ["medical bill statute of limitations", "medical debt time limit", "how long can medical debt be collected", "medical collections statute"],
     datePublished: "2026-03-23",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is the Statute of Limitations on Medical Debt?", body: "The statute of limitations is the time period during which a creditor or collection agency can file a lawsuit to collect a debt. Once the statute expires, the debt becomes 'time-barred' — the collector can no longer sue you, though they may still contact you. For medical debt, the statute of limitations is determined by state law and typically ranges from 3 to 6 years, though some states allow up to 10 years." },
       { heading: "How the Clock Works", body: "The statute of limitations clock typically starts on the date of the last payment or the date the account became delinquent. Making a payment — even a small one — can restart the clock in many states. Similarly, acknowledging the debt in writing may reset the statute. Be cautious about making partial payments on old debts without understanding your state's rules." },
@@ -313,7 +313,7 @@ export const blogPosts: BlogPost[] = [
     description: "Non-profit hospitals are legally required to offer financial assistance. Learn who qualifies, how to apply, and how much you can save on medical bills.",
     keywords: ["hospital charity care", "financial assistance hospital", "hospital financial aid", "non-profit hospital free care", "medical bill assistance"],
     datePublished: "2026-03-24",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is Hospital Charity Care?", body: "Charity care (also called financial assistance) is a program that non-profit hospitals are required to offer under the IRS's conditions for tax-exempt status (Section 501(r) of the Internal Revenue Code). These programs reduce or eliminate medical bills for patients who meet income and financial criteria. The specifics vary by hospital, but most programs cover patients earning up to 200-400% of the Federal Poverty Level (FPL)." },
       { heading: "Who Qualifies?", body: "Eligibility varies by hospital, but general guidelines are: patients earning up to 200% FPL often qualify for 100% write-off (free care), patients earning 200-300% FPL may qualify for 75-90% reduction, and patients earning 300-400% FPL may qualify for 25-50% reduction. For 2026, 200% FPL is approximately $31,200 for a single person and $64,400 for a family of four. Some hospitals use different thresholds — check the specific hospital's Financial Assistance Policy (FAP)." },
@@ -332,7 +332,7 @@ export const blogPosts: BlogPost[] = [
     description: "The most common CPT billing codes patients see on medical bills, explained in plain English. Know what you are being charged for.",
     keywords: ["common CPT codes", "CPT code list", "medical billing codes patient", "what is CPT 99213", "CPT codes explained for patients"],
     datePublished: "2026-03-24",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Are CPT Codes and Why Should You Care?", body: "CPT (Current Procedural Terminology) codes are the five-digit numbers that appear on your medical bills and insurance claims. Each code represents a specific medical service, procedure, or test. Understanding the most common codes helps you verify that you are being charged for services you actually received and can help you spot billing errors like upcoding or duplicate charges." },
       { heading: "Office Visit Codes (99201-99215)", body: "These are the codes you see most often. They are divided by whether you are a new patient (99201-99205) or an established patient (99211-99215), and by the complexity of the visit. 99213 is the most common — a standard office visit for an established patient with moderate complexity. 99214 is for more detailed visits, and 99215 is the highest-level established patient visit, typically used for complex or time-intensive problems. If you had a quick 10-minute check-up but see 99215 on your bill, you may be a victim of upcoding." },
@@ -351,7 +351,7 @@ export const blogPosts: BlogPost[] = [
     description: "Under the No Surprises Act, you have the right to a Good Faith Estimate before any scheduled medical service. Learn how to request one and what to do if the final bill is too high.",
     keywords: ["good faith estimate", "GFE medical", "medical cost estimate", "no surprises act estimate", "right to know medical costs"],
     datePublished: "2026-03-24",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is a Good Faith Estimate?", body: "A Good Faith Estimate (GFE) is a written estimate of expected charges for a scheduled or requested healthcare service. Under the No Surprises Act, healthcare providers and facilities must provide a GFE to uninsured or self-pay patients upon request or when scheduling a service. The GFE must include expected charges for the primary service and any related items or services (such as anesthesia, lab tests, or imaging) that are reasonably expected." },
       { heading: "Who Is Entitled to a GFE?", body: "You can request a Good Faith Estimate if you are uninsured, self-pay (choosing not to use your insurance), or if you want a price estimate before deciding whether to submit a claim. Providers must give you the GFE within 1 business day of scheduling if the service is within 3 days, or within 3 business days if the service is at least 10 days away." },
@@ -370,7 +370,7 @@ export const blogPosts: BlogPost[] = [
     description: "The out-of-pocket maximum is the most you will spend on covered healthcare in a year. Learn how it works, what counts, and the 2026 limits.",
     keywords: ["out-of-pocket maximum", "out-of-pocket limit", "maximum out-of-pocket 2026", "OOP max", "health insurance spending cap"],
     datePublished: "2026-03-24",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is the Out-of-Pocket Maximum?", body: "The out-of-pocket maximum (OOP max) is the most you have to pay for covered in-network healthcare services in a plan year. Once you reach this amount, your insurance pays 100% of covered services for the rest of the year. The 2026 federal limit is $9,450 for individual plans and $18,900 for family plans. Your plan's actual OOP max may be lower than the federal limit." },
       { heading: "What Counts Toward the OOP Max", body: "Typically, these costs count: deductibles, copays, coinsurance for in-network covered services. What does NOT count: monthly premiums, out-of-network charges (on most plans), non-covered services, and charges above the allowed amount. Some plans have separate OOP maximums for in-network and out-of-network services." },
@@ -388,7 +388,7 @@ export const blogPosts: BlogPost[] = [
     description: "Emergency room bills average $2,000-$3,000 per visit. Learn why ER bills are so expensive, how to read them, and how to reduce what you owe.",
     keywords: ["emergency room bill", "ER bill too high", "why are ER bills so expensive", "reduce emergency room bill", "ER bill explained"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why Are ER Bills So Expensive?", body: "Emergency rooms are expensive because they must be staffed and equipped 24/7 to handle any medical emergency, from a sprained ankle to a cardiac arrest. ER overhead costs include specialized equipment, on-call specialists, and the legal requirement to treat all patients regardless of ability to pay (EMTALA). The average ER visit costs $2,000-$3,000, but complex visits can exceed $20,000. Additionally, ER visits generate multiple separate bills — the facility fee, physician fee, and fees from specialists, labs, and imaging." },
       { heading: "How ER Billing Works", body: "ER visits are billed using codes 99281-99285, with higher levels for more severe conditions. The facility charges a 'facility fee' for use of the ER space and equipment, separate from the doctor's charges. You may receive separate bills from the emergency physician group, radiologists, pathologists, and any consulting specialists. Each bill should be reviewed independently." },
@@ -406,7 +406,7 @@ export const blogPosts: BlogPost[] = [
     description: "Under the ACA, many preventive services must be covered at no cost. Learn exactly which screenings, vaccines, and check-ups are free on your plan.",
     keywords: ["free preventive care", "ACA preventive services", "preventive care no cost", "free screenings health insurance", "preventive services covered"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Preventive Services Are Free?", body: "Under the Affordable Care Act, all marketplace and most employer health plans must cover certain preventive services at no cost — no copay, no coinsurance, and no deductible. These services are based on recommendations from the US Preventive Services Task Force (USPSTF), the Advisory Committee on Immunization Practices (ACIP), and HRSA. The free services fall into three categories: services for all adults, services for women, and services for children." },
       { heading: "Free Services for All Adults", body: "Covered at no cost include: annual wellness visit, blood pressure screening, cholesterol screening (for certain age groups and risk factors), colorectal cancer screening (ages 45-75), depression screening, diabetes screening (type 2, for adults with high blood pressure), hepatitis B and C screening, HIV screening, immunizations (flu, hepatitis A and B, HPV, measles, meningococcal, pneumonia, shingles, tetanus, and others), lung cancer screening (for high-risk adults 50-80), obesity screening and counseling, sexually transmitted infection screening, and tobacco use screening and cessation support." },
@@ -424,7 +424,7 @@ export const blogPosts: BlogPost[] = [
     description: "Prior authorization delays treatment and causes claim denials. Learn what it is, when it is required, how to get approval faster, and what to do if denied.",
     keywords: ["prior authorization", "pre-authorization insurance", "prior auth denied", "insurance prior authorization process"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is Prior Authorization?", body: "Prior authorization (also called pre-authorization, pre-cert, or prior approval) is a requirement by your insurance company to approve a medical service before it is performed. The insurer reviews the request to determine whether the procedure, medication, or test is medically necessary under your plan. Without prior authorization for services that require it, your insurance may deny the claim entirely, leaving you responsible for the full cost." },
       { heading: "Which Services Require Prior Authorization?", body: "Common services requiring prior authorization include advanced imaging (MRI, CT, PET scans), non-emergency surgery, specialty medications, durable medical equipment, physical therapy beyond a set number of sessions, mental health treatment, and out-of-network referrals. The specific requirements vary by insurance plan. Your plan documents or member portal will list which services need prior approval. When in doubt, call the number on your insurance card before scheduling." },
@@ -443,7 +443,7 @@ export const blogPosts: BlogPost[] = [
     description: "You may qualify for medical bill forgiveness through hospital charity care, nonprofit programs, or state assistance. Learn who qualifies and how to apply.",
     keywords: ["medical bill forgiveness", "hospital debt forgiveness", "medical debt relief programs", "medical bill assistance"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Medical Debt Forgiveness Is Real", body: "Millions of Americans qualify for partial or full forgiveness of medical bills but never apply. Nonprofit hospitals are legally required to offer financial assistance programs under IRS rules. For-profit hospitals and physician groups often have hardship programs too. Additionally, nonprofits like RIP Medical Debt purchase and forgive medical debt in bulk. If you are struggling with medical bills, forgiveness may be available — but you have to ask." },
       { heading: "Hospital Financial Assistance (Charity Care)", body: "Under IRS Section 501(r), all nonprofit hospitals must maintain a financial assistance policy (FAP) and make it available to patients. Many hospitals forgive 100% of bills for patients earning below 200% of the federal poverty level (about $30,120 for an individual in 2026) and offer sliding-scale discounts for higher incomes. To apply, request the hospital's financial assistance application, provide proof of income, and submit it to the billing department." },
@@ -462,7 +462,7 @@ export const blogPosts: BlogPost[] = [
     description: "Every charge on your medical bill has a code. Learn how to look up CPT, ICD-10, HCPCS, and revenue codes for free to verify you were billed correctly.",
     keywords: ["look up medical billing codes", "CPT code lookup", "ICD-10 code search", "check medical bill codes"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Why You Should Look Up Your Billing Codes", body: "Every procedure, diagnosis, and supply on your medical bill is represented by a code. These codes determine how much you are charged. Billing errors — including upcoding, unbundling, and incorrect diagnosis codes — are extremely common. Looking up the codes on your bill lets you verify that each charge matches the service you actually received. This is the single most effective way to catch overcharges." },
       { heading: "How to Look Up CPT Codes", body: "CPT codes are five-digit numbers that describe procedures and services. You can search them for free at the AAPC's CPT code lookup tool (aapc.com). The AMA maintains the official CPT code set but charges for full access. For basic lookups, search the code number plus the word 'CPT' in any search engine. Compare the code description to what actually happened during your visit. Common codes: 99213 (office visit, established patient, moderate), 99214 (office visit, established patient, moderate-high), 36415 (routine blood draw)." },
@@ -481,7 +481,7 @@ export const blogPosts: BlogPost[] = [
     description: "An itemized bill breaks down every charge. Learn how to request one, what to look for, and how it helps you catch errors and negotiate lower costs.",
     keywords: ["itemized medical bill", "request itemized bill", "itemized hospital bill", "detailed medical bill"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is an Itemized Medical Bill?", body: "An itemized medical bill lists every individual charge from your healthcare visit — each procedure, test, medication, supply, and facility fee on its own line with the corresponding billing code and price. This is different from a summary bill, which may only show a total amount or broad category totals. An itemized bill is your most powerful tool for finding errors, because it lets you verify every charge against the care you actually received." },
       { heading: "Your Right to an Itemized Bill", body: "Under federal law and most state laws, you have the right to request an itemized statement from any healthcare provider. The provider is required to provide it within 30 days (some states require faster turnaround). There should be no charge for this request. If a provider refuses or delays, escalate your request in writing and cite your right under the No Surprises Act's good faith estimate provisions and applicable state patient billing laws." },
@@ -500,7 +500,7 @@ export const blogPosts: BlogPost[] = [
     description: "Insurance paid — so why is there still a bill? Understand copays, coinsurance, deductibles, and out-of-pocket costs that remain after insurance processes your claim.",
     keywords: ["medical bill after insurance", "why do I owe after insurance", "patient responsibility medical bill", "copay coinsurance deductible explained"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Insurance Does Not Mean Free", body: "Health insurance is designed to share costs between you and the insurance company — not eliminate them entirely. Even after your insurer processes a claim, you are typically responsible for some portion of the bill. The amount you owe depends on your plan's cost-sharing structure: your deductible, copay, and coinsurance rates. Understanding these three numbers is the key to predicting what any medical visit will cost you." },
       { heading: "Your Deductible Comes First", body: "Your deductible is the amount you must pay out of pocket before your insurance starts paying. If your plan has a $2,000 deductible and you have not met it yet, you will pay the first $2,000 of covered medical costs yourself. Most plans reset the deductible annually on January 1. Early-year medical visits tend to cost more because patients have not yet met their deductible. Some services (like preventive care) are covered before the deductible." },
@@ -520,7 +520,7 @@ export const blogPosts: BlogPost[] = [
     description: "Telehealth visits have different billing rules than in-person care. Learn what telehealth should cost, common overcharges, and how to check your bill.",
     keywords: ["telehealth billing", "telemedicine costs", "virtual visit billing", "telehealth insurance coverage"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "How Telehealth Billing Works", body: "Telehealth visits are billed using the same CPT codes as in-person visits (like 99213 or 99214 for office visits), plus a modifier code indicating the visit was virtual. The modifier tells the insurance company the visit was conducted by video or phone. Since the COVID-19 pandemic, most insurers cover telehealth at the same rate as in-person visits, but some plans still have different cost-sharing rules for virtual care." },
       { heading: "What a Telehealth Visit Should Cost", body: "If your plan covers telehealth, you should pay the same copay or coinsurance as an in-person visit of the same type. A standard primary care telehealth visit typically costs $0-$75 with insurance. Some plans offer $0 telehealth through dedicated platforms. Without insurance, direct-to-consumer telehealth services charge $50-$300 per visit depending on the specialty." },
@@ -539,7 +539,7 @@ export const blogPosts: BlogPost[] = [
     description: "A step-by-step action plan for handling unexpected medical bills — from verifying the charges to disputing errors and negotiating the balance.",
     keywords: ["surprise medical bill", "unexpected medical bill", "what to do surprise bill", "dispute medical bill"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Do Not Panic and Do Not Pay Immediately", body: "The most important thing to do when you receive a surprise medical bill is to not pay it right away. You have time. Most medical bills do not go to collections for at least 90-120 days, and federal law requires providers to give at least 30 days before any collection action. Use this time to verify every charge, compare the bill to your EOB, and explore your options. Paying immediately means losing your leverage to negotiate or dispute." },
       { heading: "Step 1: Request an Itemized Bill", body: "Call the billing department and request a fully itemized bill with CPT codes, descriptions, and individual prices. A summary bill with just a total amount is not enough to verify charges. An itemized bill lets you check each service against what actually happened during your visit. You have a legal right to this document at no cost." },
@@ -559,7 +559,7 @@ export const blogPosts: BlogPost[] = [
     description: "A medical billing advocate can negotiate bills, find errors, and save thousands. Learn when it is worth hiring one and how to choose the right advocate.",
     keywords: ["medical billing advocate", "patient advocate medical bills", "hire billing advocate", "medical bill negotiation help"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What Is a Medical Billing Advocate?", body: "A medical billing advocate is a professional who reviews your medical bills, identifies errors, negotiates with providers and insurance companies on your behalf, and helps you navigate appeals and financial assistance programs. They understand billing codes, insurance contracts, and patient rights — expertise that most patients lack. Advocates can be independent professionals, part of nonprofit organizations, or employed by specialized firms." },
       { heading: "When It Is Worth Hiring One", body: "Consider an advocate when your bill exceeds $5,000, when you have been denied insurance coverage for a service you believe should be covered, when you are dealing with multiple bills from a complex hospitalization, when you suspect billing fraud, or when you have already tried to resolve billing issues on your own without success. The larger the bill, the more an advocate can potentially save you." },
@@ -578,7 +578,7 @@ export const blogPosts: BlogPost[] = [
     description: "New rules have changed how medical debt appears on credit reports. Learn what is reported, what is protected, and how to remove incorrect medical collections.",
     keywords: ["medical debt credit report", "medical collections credit score", "remove medical debt credit report", "medical debt reporting rules 2026"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "Major Changes to Medical Debt Reporting", body: "The credit reporting landscape for medical debt has changed dramatically. Starting in 2023, the three major credit bureaus (Equifax, Experian, TransUnion) removed paid medical collections from credit reports and stopped reporting medical debt under $500. In 2024, the CFPB finalized a rule to remove all medical debt from credit reports entirely. These changes mean that medical bills — whether paid or unpaid — have far less impact on your credit than they did just a few years ago." },
       { heading: "What Medical Debt Still Affects Credit", body: "While the major bureaus have removed most medical debt, some impacts remain. Medical debt reported before the rule changes may still appear until it ages off (typically 7 years from the original delinquency date). Additionally, if a medical creditor obtains a court judgment against you, that judgment may still appear on your credit report. Medical credit cards and personal loans used to pay medical bills are reported as regular consumer debt." },
@@ -597,7 +597,7 @@ export const blogPosts: BlogPost[] = [
     description: "The difference between in-network and out-of-network can mean thousands of dollars. Learn how network status affects your bill and how to avoid surprises.",
     keywords: ["in-network vs out-of-network", "out-of-network costs", "in-network provider", "network status medical billing"],
     datePublished: "2026-03-25",
-    dateModified: "2026-03-25",
+    dateModified: new Date().toISOString().substring(0,10),
     sections: [
       { heading: "What In-Network and Out-of-Network Mean", body: "In-network providers have signed contracts with your insurance company agreeing to accept negotiated rates for their services. Out-of-network providers have no such agreement and can charge any amount they choose. When you see an in-network provider, your insurer pays its contracted rate and you pay your standard copay or coinsurance. When you see an out-of-network provider, you may face a separate deductible, higher coinsurance (often 40-50%), and possible balance billing." },
       { heading: "The Cost Difference Can Be Enormous", body: "A procedure that costs you $500 in-network might cost $3,000 or more out-of-network. This is because out-of-network providers can charge list prices rather than negotiated rates, your out-of-network deductible is typically 2-3 times higher, your coinsurance rate is higher, and some plans have no out-of-network coverage at all (HMO plans). The single most impactful thing you can do to control medical costs is to verify network status before every visit." },

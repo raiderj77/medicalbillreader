@@ -51,7 +51,7 @@ const organizationJsonLd = {
   url: "https://medicalbillreader.com",
   description:
     "AI-powered medical bill analysis tool that helps patients understand confusing medical bills and insurance EOBs in plain language.",
-  dateModified: "2026-04-07",
+  dateModified: new Date().toISOString().substring(0,10),
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
@@ -67,7 +67,7 @@ const webSiteJsonLd = {
   url: "https://medicalbillreader.com",
   description:
     "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
-  dateModified: "2026-04-07",
+  dateModified: new Date().toISOString().substring(0,10),
 };
 
 const webAppJsonLd = {
@@ -79,7 +79,7 @@ const webAppJsonLd = {
     "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   applicationCategory: "HealthApplication",
   operatingSystem: "All",
-  dateModified: "2026-04-07",
+  dateModified: new Date().toISOString().substring(0,10),
   author: {
     "@type": "Person",
     name: "Jason Ramirez",

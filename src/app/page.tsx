@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  dateModified: "2026-04-07",
+  dateModified: new Date().toISOString().substring(0,10),
   itemListElement: [
     {
       "@type": "ListItem",
@@ -41,7 +41,7 @@ const breadcrumbJsonLd = {
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  dateModified: "2026-04-07",
+  dateModified: new Date().toISOString().substring(0,10),
   mainEntity: [
     {
       "@type": "Question",
