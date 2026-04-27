@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         "anthropic-beta": "pdfs-2024-09-25",
       },
       body: JSON.stringify({
-        model: "claude-opus-4-5",
+        model: "claude-opus-4-7",
         max_tokens: 2000,
         messages: [{ role: "user", content: [ fileContent, { type: "text", text: `You are a medical billing expert. Analyze this medical bill and explain it in plain English. Use these sections:\n\n## What This Bill Is For\n## Breakdown of Charges\n## What You Owe\n## ⚠️ Potential Issues to Review\n## What To Do Next` }]}],
       }),

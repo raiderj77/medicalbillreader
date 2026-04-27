@@ -115,7 +115,7 @@ export default function MethodologyPage() {
         <p>
           The analyzer calls the Anthropic Claude API. The current model is{" "}
           <code className="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-sm">
-            claude-opus-4-5
+            claude-opus-4-7
           </code>
           , Anthropic&apos;s general-purpose multimodal model. The API request
           is made server-side from a Next.js API route. The Anthropic API key
