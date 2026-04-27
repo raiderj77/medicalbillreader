@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { recordAnalysis } from "@/lib/analysis-stats";
 
 export const maxDuration = 30;
 
@@ -39,7 +40,11 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json({ result: data.content?.[0]?.text || "Unable to analyze." });
+    const resultText = data.content?.[0]?.text || "Unable to analyze.";
+    try {
+      recordAnalysis({ fileType: fileType || "unknown", resultText });
+    } catch {}
+    return NextResponse.json({ result: resultText });
   } catch (error) {
     console.error("Route error:", error);
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
