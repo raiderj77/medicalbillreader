@@ -1,6 +1,28 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useRef } from "react";
+
+function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
+  const text =
+    variant === "pre"
+      ? "AI-extracted analysis for informational purposes only. Always verify with your insurance company and provider before disputing any charge or making payment decisions."
+      : "This analysis is informational, not medical or financial advice. For disputes or appeals, consult your insurer, your provider's billing office, or a billing advocate.";
+  return (
+    <div className="rounded-lg border border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-teal-950/30 px-4 py-3 text-sm text-teal-900 dark:text-teal-200 flex items-start gap-2">
+      <svg className="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <span>
+        {text}{" "}
+        <Link href="/methodology" className="underline font-medium hover:text-teal-700 dark:hover:text-teal-100">
+          How this works
+        </Link>
+        .
+      </span>
+    </div>
+  );
+}
 
 export default function BillAnalyzer() {
   const [isDragging, setIsDragging] = useState(false);
@@ -102,6 +124,10 @@ export default function BillAnalyzer() {
             </p>
           </div>
 
+          <div className="mt-4">
+            <VerificationBadge variant="post" />
+          </div>
+
           {/* Action Buttons */}
           <div className="mt-6 flex flex-wrap gap-3">
             <button
@@ -162,6 +188,9 @@ export default function BillAnalyzer() {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 mb-8">
+      <div className="mb-5">
+        <VerificationBadge variant="pre" />
+      </div>
       {!file ? (
         <div
           className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
