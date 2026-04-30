@@ -83,7 +83,7 @@ const webAppJsonLd = {
   author: {
     "@type": "Person",
     name: "Jason Ramirez",
-    jobTitle: "Healthcare Technology Analyst",
+    jobTitle: "Founder of Your Friendly Developer",
     url: "https://medicalbillreader.com/about",
   },
   offers: {
@@ -112,6 +112,23 @@ export default async function RootLayout({
       document.documentElement.classList.add(t);
     } catch(e) {}
   })();
+` }} />
+        <Script
+          id="consent-mode"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'denied',
+    personalization_storage: 'denied',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
 ` }} />
         {!gpcHeader && (
           <Script
@@ -152,22 +169,6 @@ export default async function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        <Script
-          id="consent-mode-v2"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'denied',
-    functionality_storage: 'granted',
-    personalization_storage: 'denied',
-    wait_for_update: 500
-  });
-` }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

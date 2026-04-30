@@ -20,6 +20,7 @@ export async function generateMetadata({
     title: post.title,
     description: post.description || undefined,
     keywords: post.keywords.length ? post.keywords : undefined,
+    authors: [{ name: "Jason Ramirez", url: "https://medicalbillreader.com/about" }],
     robots: { index: true, follow: true, googleBot: { "max-snippet": -1 } },
     alternates: { canonical: `https://medicalbillreader.com/blog/${post.slug}` },
     openGraph: {
@@ -59,8 +60,8 @@ export default async function BlogPostPage({
     mainEntityOfPage: `https://medicalbillreader.com/blog/${post.slug}`,
     author: {
       "@type": "Person",
-      name: "Built by an experienced web professional",
-      jobTitle: "Web Professional",
+      name: "Jason Ramirez",
+      jobTitle: "Founder of Your Friendly Developer",
       url: "https://medicalbillreader.com/about",
     },
     publisher: {
@@ -148,7 +149,10 @@ export default async function BlogPostPage({
           </time>
         )}
         <span aria-hidden="true">&middot;</span>
-        <span>Built by an experienced web professional</span>
+        <Link href="/about" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+          Jason Ramirez
+        </Link>
+        <span>, Founder of Your Friendly Developer</span>
       </div>
 
       {/* Medical disclaimer */}

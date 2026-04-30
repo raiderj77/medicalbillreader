@@ -4,22 +4,32 @@ import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
 
 export const metadata: Metadata = {
-  title: "About — Medical Bill Reader",
+  title: "About Jason Ramirez — Medical Bill Reader",
   description:
-    "Learn how Medical Bill Reader helps patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
+    "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
-    "about medical bill reader, understand medical bills, EOB explanation, medical billing help, CPT codes, deductible, coinsurance",
+    "about medical bill reader, Jason Ramirez, understand medical bills, EOB explanation, medical billing help, CPT codes, deductible, coinsurance",
+  authors: [{ name: "Jason Ramirez", url: "https://medicalbillreader.com/about" }],
   alternates: {
     canonical: "https://medicalbillreader.com/about",
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "About — Medical Bill Reader",
-    description: "Learn how Medical Bill Reader helps patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
+    title: "About Jason Ramirez — Medical Bill Reader",
+    description: "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
     url: "https://medicalbillreader.com/about",
     siteName: "Medical Bill Reader",
     type: "website",
   },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Jason Ramirez",
+  jobTitle: "Founder of Your Friendly Developer",
+  worksFor: { "@type": "Organization", name: "Your Friendly Developer LLC" },
+  url: "https://medicalbillreader.com/about",
 };
 
 const aboutFaqJsonLd = {
@@ -31,7 +41,7 @@ const aboutFaqJsonLd = {
       name: "Who built Medical Bill Reader and why?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical Bill Reader was built by an experienced web professional with expertise in healthcare billing systems who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
+        text: "Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. He built it after seeing how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
       },
     },
     {
@@ -74,6 +84,10 @@ export default function AboutPage() {
     <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
       <script
@@ -101,6 +115,10 @@ export default function AboutPage() {
           About Medical Bill Reader
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
+
+        <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-6">
+          Hi. I&apos;m Jason Ramirez. This is why I built this.
+        </p>
 
         <AnswerBlock
           what="A free AI tool that reads medical bills, explains every charge in plain English, and flags potential billing errors."
@@ -274,7 +292,7 @@ export default function AboutPage() {
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader and why?</h3>
                 <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                  Medical Bill Reader was built by an experienced web professional with expertise in healthcare billing systems who saw how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
+                  Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. He built it after seeing how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -290,6 +308,11 @@ export default function AboutPage() {
           <section>
             <Disclaimer />
           </section>
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400">
+          <p className="font-medium text-slate-700 dark:text-slate-300">Jason Ramirez</p>
+          <p>Your Friendly Developer LLC</p>
         </div>
 
       </div>
