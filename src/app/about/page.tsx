@@ -4,7 +4,7 @@ import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
 
 export const metadata: Metadata = {
-  title: "About Jason Ramirez — Medical Bill Reader",
+  title: "About Jason Ramirez ,  Medical Bill Reader",
   description:
     "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "About Jason Ramirez — Medical Bill Reader",
+    title: "About Jason Ramirez ,  Medical Bill Reader",
     description: "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
     url: "https://medicalbillreader.com/about",
     siteName: "Medical Bill Reader",
@@ -123,7 +123,7 @@ export default function AboutPage() {
         <AnswerBlock
           what="A free AI tool that reads medical bills, explains every charge in plain English, and flags potential billing errors."
           who="Patients, families, and caregivers who want to understand confusing medical bills or insurance EOBs before paying."
-          bottomLine="Upload any medical bill for a free line-by-line explanation — results are for informational purposes only and not financial or medical advice."
+          bottomLine="Upload any medical bill for a free line-by-line explanation ,  results are for informational purposes only and not financial or medical advice."
           lastUpdated="2026-03-20"
         />
 
@@ -135,7 +135,7 @@ export default function AboutPage() {
             </h2>
             <p>
               Medical Bill Reader helps you understand confusing medical bills and
-              insurance Explanations of Benefits (EOBs) in plain language — no medical
+              insurance Explanations of Benefits (EOBs) in plain language ,  no medical
               degree required. Our free AI-powered tool reads your bill, breaks down
               every charge, flags potential billing errors, and suggests clear next
               steps so you know exactly what you owe and why.
@@ -199,7 +199,7 @@ export default function AboutPage() {
             </p>
             <p>
               No account is required. Your bill is processed privately and deleted
-              immediately after analysis — it is never stored on our servers.
+              immediately after analysis ,  it is never stored on our servers.
             </p>
           </section>
 
@@ -223,7 +223,7 @@ export default function AboutPage() {
                 <strong>EOB (Explanation of Benefits):</strong> A document your insurance
                 company sends after processing a claim. It shows what the provider
                 charged, what the insurance paid, and what you still owe. An EOB is not a
-                bill — it is a summary of how your claim was handled.
+                bill ,  it is a summary of how your claim was handled.
               </li>
               <li>
                 <strong>Deductible:</strong> The amount you must pay out of pocket each

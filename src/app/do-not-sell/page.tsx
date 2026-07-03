@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Do Not Sell or Share My Personal Information — Medical Bill Reader",
+  title: "Do Not Sell or Share My Personal Information ,  Medical Bill Reader",
   description:
     "Exercise your right under CCPA/CPRA to opt out of the sale or sharing of your personal information on MedicalBillReader.com.",
   keywords: "do not sell, CCPA, CPRA, personal information, opt out, privacy rights, California",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Do Not Sell or Share My Personal Information — Medical Bill Reader",
+    title: "Do Not Sell or Share My Personal Information ,  Medical Bill Reader",
     description: "Exercise your CCPA/CPRA right to opt out of the sale or sharing of personal information.",
     url: "https://medicalbillreader.com/do-not-sell",
     siteName: "Medical Bill Reader",

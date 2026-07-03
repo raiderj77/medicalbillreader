@@ -45,7 +45,7 @@ Current Procedural Terminology (CPT) codes identify specific medical procedures.
 
 Upcoding is when a provider bills for a more expensive service or procedure than what was actually provided. The HHS Office of Inspector General has consistently identified upcoding as one of the top sources of improper Medicare payments.
 
-**How to spot it:** Compare the complexity level of your visit with the code billed. Emergency room visits are particularly prone to upcoding — if a straightforward ER visit for a minor issue is billed at the highest severity level (CPT 99285), that warrants a closer look.
+**How to spot it:** Compare the complexity level of your visit with the code billed. Emergency room visits are particularly prone to upcoding ,  if a straightforward ER visit for a minor issue is billed at the highest severity level (CPT 99285), that warrants a closer look.
 
 ### 4. Unbundled charges
 

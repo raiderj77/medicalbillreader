@@ -7,7 +7,7 @@
 - Identifies CPT, ICD-10, and HCPCS codes
 - Clarifies insurance columns (allowed amount, patient responsibility, adjustments)
 - Flags potential billing errors
-- Processes everything privately — bills are deleted immediately after analysis
+- Processes everything privately ,  bills are deleted immediately after analysis
 
 ## Main Pages
 - [Home](https://medicalbillreader.com): Upload and analyze your medical bill

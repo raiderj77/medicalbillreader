@@ -9,7 +9,7 @@ export function detectGPCServer(request: Request): boolean {
 
 export function detectGPCClient(): boolean {
   if (typeof navigator === 'undefined') return false
-  // @ts-expect-error — globalPrivacyControl is not yet in the TS lib
+  // @ts-expect-error ,  globalPrivacyControl is not yet in the TS lib
   return navigator.globalPrivacyControl === true
 }
 

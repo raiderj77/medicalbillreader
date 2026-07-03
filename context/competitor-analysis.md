@@ -1,4 +1,4 @@
-# medicalbillreader.com — Competitor Analysis
+# medicalbillreader.com ,  Competitor Analysis
 
 ## FILL IN: Run /research-gaps to auto-populate.
 

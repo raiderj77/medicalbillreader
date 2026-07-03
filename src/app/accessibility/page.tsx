@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement — Medical Bill Reader",
+  title: "Accessibility Statement ,  Medical Bill Reader",
   description:
     "Accessibility statement for MedicalBillReader.com. Our commitment to WCAG 2.1 AA compliance and making medical bill analysis accessible to everyone.",
   keywords: "accessibility, WCAG, medical bill reader, accessible, screen reader, disability",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Accessibility Statement — Medical Bill Reader",
+    title: "Accessibility Statement ,  Medical Bill Reader",
     description: "Accessibility statement for MedicalBillReader.com. Our commitment to WCAG 2.1 AA compliance.",
     url: "https://medicalbillreader.com/accessibility",
     siteName: "Medical Bill Reader",

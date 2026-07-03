@@ -5,7 +5,7 @@ import Disclaimer from "@/components/Disclaimer";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
-  title: "Medical Bill Reader — Understand Your Bill",
+  title: "Medical Bill Reader ,  Understand Your Bill",
   description:
     "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   keywords:
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Medical Bill Reader — Understand Your Bill",
+    title: "Medical Bill Reader ,  Understand Your Bill",
     description:
       "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
     url: "https://medicalbillreader.com",
@@ -56,7 +56,7 @@ const faqJsonLd = {
       name: "Is my medical bill data kept private?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information — we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.",
+        text: "Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information ,  we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.",
       },
     },
     {
@@ -72,7 +72,7 @@ const faqJsonLd = {
       name: "Can Medical Bill Reader detect billing errors?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only — consult a medical billing advocate or your insurance company to dispute any specific charge.",
+        text: "The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only ,  consult a medical billing advocate or your insurance company to dispute any specific charge.",
       },
     },
     {
@@ -120,7 +120,7 @@ export default function Home() {
         {/* Hero */}
         <div className="text-center mb-12">
           <div className="inline-block bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-teal-200 dark:border-teal-700">
-            Free Medical Bill Explainer — No Sign-Up Required
+            Free Medical Bill Explainer ,  No Sign-Up Required
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
             Finally Understand<br />Your Medical Bill
@@ -130,7 +130,7 @@ export default function Home() {
           </p>
           <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
             Medical Bill Reader helps you understand confusing medical bills and insurance
-            EOBs in plain language — no medical degree required. Upload a photo or PDF and
+            EOBs in plain language ,  no medical degree required. Upload a photo or PDF and
             get every charge explained, potential errors flagged, and clear next steps.
           </p>
           <p className="text-sm text-slate-400 dark:text-slate-500 mt-4">
@@ -142,11 +142,11 @@ export default function Home() {
         <AnswerBlock
           what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
           who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
-          bottomLine="Upload your medical bill for a free line-by-line explanation — results are for informational purposes only and not financial or medical advice."
+          bottomLine="Upload your medical bill for a free line-by-line explanation ,  results are for informational purposes only and not financial or medical advice."
           lastUpdated="2026-03-20"
         />
 
-        {/* Disclaimer — server-rendered, visible before tool */}
+        {/* Disclaimer ,  server-rendered, visible before tool */}
         <div className="mb-6">
           <Disclaimer />
         </div>
@@ -157,20 +157,20 @@ export default function Home() {
         {/* GEO Content Sections (server-rendered) */}
         <section className="mb-12 space-y-10">
 
-          {/* Section 1 — How AI analysis works */}
+          {/* Section 1 ,  How AI analysis works */}
           <div>
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
               How does AI medical bill analysis work?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              Upload your medical bill or EOB document — the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
+              Upload your medical bill or EOB document ,  the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete — nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors affect an estimated 80% of medical bills, according to the Medical Billing Advocates of America — understanding your bill before you pay is one of the most impactful steps you can take.
+              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete ,  nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors affect an estimated 80% of medical bills, according to the Medical Billing Advocates of America ,  understanding your bill before you pay is one of the most impactful steps you can take.
             </p>
           </div>
 
-          {/* Section 2 — Common billing errors */}
+          {/* Section 2 ,  Common billing errors */}
           <div>
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
               What are the most common medical billing errors?
@@ -179,11 +179,11 @@ export default function Home() {
               The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              Americans are overcharged billions annually due to medical billing errors — the average billing error costs patients $1,300 out of pocket, according to a 2023 healthcare billing analysis. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spend over $400 billion on out-of-pocket medical costs annually, making accurate bill review one of the most impactful personal finance actions available.
+              Americans are overcharged billions annually due to medical billing errors ,  the average billing error costs patients $1,300 out of pocket, according to a 2023 healthcare billing analysis. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spend over $400 billion on out-of-pocket medical costs annually, making accurate bill review one of the most impactful personal finance actions available.
             </p>
           </div>
 
-          {/* Section 3 — CPT codes */}
+          {/* Section 3 ,  CPT codes */}
           <div>
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
               What do CPT codes mean on a medical bill?
@@ -192,20 +192,20 @@ export default function Home() {
               CPT (Current Procedural Terminology) codes are 5-digit numbers that identify specific medical procedures. Each code corresponds to a standard procedure with a defined cost range that insurers use to determine reimbursement.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              CPT codes are maintained and updated annually by the American Medical Association (AMA). As a patient, you have the right to request an itemized bill that lists every CPT code billed during your visit — your provider is required to provide one. Mismatched or incorrect CPT codes are one of the most common sources of overbilling: a code for a more complex procedure than what was performed (known as upcoding) can result in significant overcharges that go undetected if you only review the summary statement.
+              CPT codes are maintained and updated annually by the American Medical Association (AMA). As a patient, you have the right to request an itemized bill that lists every CPT code billed during your visit ,  your provider is required to provide one. Mismatched or incorrect CPT codes are one of the most common sources of overbilling: a code for a more complex procedure than what was performed (known as upcoding) can result in significant overcharges that go undetected if you only review the summary statement.
             </p>
           </div>
 
-          {/* Section 4 — Upload safety */}
+          {/* Section 4 ,  Upload safety */}
           <div>
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
               Is it safe to upload a medical bill?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              Yes — bills are processed server-side over encrypted HTTPS and deleted immediately after analysis. No medical information is stored, logged, or used for any purpose beyond your requested explanation.
+              Yes ,  bills are processed server-side over encrypted HTTPS and deleted immediately after analysis. No medical information is stored, logged, or used for any purpose beyond your requested explanation.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              No account is required and no login is needed — your bill is never associated with an identity. Medical data is never passed to advertising systems; ads on this site run in non-personalized mode on analysis pages specifically to prevent any health information from reaching ad networks.
+              No account is required and no login is needed ,  your bill is never associated with an identity. Medical data is never passed to advertising systems; ads on this site run in non-personalized mode on analysis pages specifically to prevent any health information from reaching ad networks.
             </p>
           </div>
 
@@ -227,7 +227,7 @@ export default function Home() {
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  CMS (Centers for Medicare &amp; Medicaid Services) — Understanding Your Medical Bill
+                  CMS (Centers for Medicare &amp; Medicaid Services) ,  Understanding Your Medical Bill
                 </a>
               </li>
               <li>
@@ -237,7 +237,7 @@ export default function Home() {
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  Patient Advocate Foundation — Medical Billing Resources
+                  Patient Advocate Foundation ,  Medical Billing Resources
                 </a>
               </li>
               <li>
@@ -247,7 +247,7 @@ export default function Home() {
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  American Medical Association — CPT Code Overview
+                  American Medical Association ,  CPT Code Overview
                 </a>
               </li>
             </ul>
@@ -268,7 +268,7 @@ export default function Home() {
             <div className="text-4xl mb-3">🤖</div>
             <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">AI Reads It</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Our AI scans every line item, code, and charge — the same way a billing expert would.
+              Our AI scans every line item, code, and charge ,  the same way a billing expert would.
             </p>
           </div>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
@@ -314,7 +314,7 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data kept private?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information — we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.
+                Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information ,  we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -326,7 +326,7 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader detect billing errors?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only — consult a medical billing advocate or your insurance company to dispute any specific charge.
+                The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only ,  consult a medical billing advocate or your insurance company to dispute any specific charge.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">

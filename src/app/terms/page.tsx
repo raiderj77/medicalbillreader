@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Medical Bill Reader",
+  title: "Terms of Service ,  Medical Bill Reader",
   description:
     "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
   keywords: "terms of service, medical bill reader, terms and conditions, user agreement",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Terms of Service — Medical Bill Reader",
+    title: "Terms of Service ,  Medical Bill Reader",
     description: "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
     url: "https://medicalbillreader.com/terms",
     siteName: "Medical Bill Reader",

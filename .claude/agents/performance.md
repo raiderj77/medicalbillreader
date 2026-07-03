@@ -519,7 +519,7 @@ Based on opportunity analysis, allocate effort as follows:
 
 ### Every Recommendation Must:
 1. **Be Data-Driven**: Based on actual performance metrics, not guesses
-2. **Be Specific**: Exact URLs, keywords, and actions—no vague suggestions
+2. **Be Specific**: Exact URLs, keywords, and actions, no vague suggestions
 3. **Estimate Impact**: Quantify expected results (traffic, rankings, clicks)
 4. **Include Effort**: Realistic time/resource estimates
 5. **Prioritize ROI**: Highest value per hour of work

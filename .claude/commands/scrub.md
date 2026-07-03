@@ -33,23 +33,23 @@ The scrubber identifies and removes several types of invisible Unicode character
 
 ### 2. Em-Dash Replacement
 
-AI-generated content tends to overuse em-dashes (—). The scrubber intelligently replaces them based on context:
+AI-generated content tends to overuse em-dashes (, ). The scrubber intelligently replaces them based on context:
 
 #### Contextual Rules
 - **Attribution**: Replaces with comma when used for quotes or attribution
-  - Example: "Text — Author Name" becomes "Text, Author Name"
+  - Example: "Text ,  Author Name" becomes "Text, Author Name"
 
 - **Independent Clauses**: Replaces with semicolon when joining complete thoughts
-  - Example: "First clause — second clause" becomes "First clause; second clause"
+  - Example: "First clause ,  second clause" becomes "First clause; second clause"
 
 - **Strong Breaks**: Replaces with period when separating distinct sentences
-  - Example: "Sentence one — Sentence two" becomes "Sentence one. Sentence two"
+  - Example: "Sentence one ,  Sentence two" becomes "Sentence one. Sentence two"
 
 - **Simple Separation**: Replaces with comma for list items or simple separation
-  - Example: "Item — detail" becomes "Item, detail"
+  - Example: "Item ,  detail" becomes "Item, detail"
 
 - **Conjunctive Adverbs**: Replaces with semicolon before words like "however", "therefore", "moreover"
-  - Example: "Text — however, more text" becomes "Text; however, more text"
+  - Example: "Text ,  however, more text" becomes "Text; however, more text"
 
 ### 3. Whitespace Normalization
 
@@ -126,7 +126,7 @@ The scrubbing process:
 
 **Before:**
 ```
-Content​ marketing​ is​ a​ powerful​ strategy—businesses can reach global audiences—and convert more customers.
+Content​ marketing​ is​ a​ powerful​ strategy, businesses can reach global audiences, and convert more customers.
 ```
 (Contains zero-width spaces after words and em-dashes)
 

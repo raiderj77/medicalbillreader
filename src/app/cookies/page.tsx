@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy — Medical Bill Reader",
+  title: "Cookie Policy ,  Medical Bill Reader",
   description:
     "Cookie policy for MedicalBillReader.com. Learn about the cookies we use, why we use them, and how to control them.",
   keywords: "cookie policy, cookies, medical bill reader, tracking, analytics, advertising cookies",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Cookie Policy — Medical Bill Reader",
+    title: "Cookie Policy ,  Medical Bill Reader",
     description: "Cookie policy for MedicalBillReader.com. Learn about the cookies we use, why we use them, and how to control them.",
     url: "https://medicalbillreader.com/cookies",
     siteName: "Medical Bill Reader",
@@ -107,7 +107,7 @@ export default function CookiesPage() {
             your consent. Non-essential cookies (analytics, advertising) are blocked until you opt in.
           </p>
           <p>
-            For visitors in the EU/EEA/UK, we follow an <strong>opt-in model</strong> — no tracking
+            For visitors in the EU/EEA/UK, we follow an <strong>opt-in model</strong> ,  no tracking
             cookies fire until you give affirmative consent. For visitors in California and other US
             states with privacy laws, we follow an <strong>opt-out model</strong> and honor Global
             Privacy Control (GPC) signals automatically.

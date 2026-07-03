@@ -48,16 +48,16 @@ The Empire is a portfolio of 7 websites: 5 utility tools (ad-supported via Googl
 
 Every site is assigned a compliance tier that determines which additional requirements apply beyond the universal baseline.
 
-**Tier 1 — Standard**: All 15 sections of this document apply at baseline.
+**Tier 1 ,  Standard**: All 15 sections of this document apply at baseline.
 Sites: flipmycase.com, creatorrevenuecalculator.com
 
-**Tier 2 — YMYL-Adjacent**: Tier 1 + legal disclaimers, document privacy, enhanced data handling disclosures.
+**Tier 2 ,  YMYL-Adjacent**: Tier 1 + legal disclaimers, document privacy, enhanced data handling disclosures.
 Sites: contractextract.com, 524tracker.com
 
-**Tier 3 — Full YMYL**: Tier 2 + health data privacy (GDPR Article 9, WA MHMDA, MD MODPA), crisis resources on every page, licensed professional review attribution, Cookiebot CMP, non-personalized ad consideration, AAA accessibility consideration for cognitive accessibility.
+**Tier 3 ,  Full YMYL**: Tier 2 + health data privacy (GDPR Article 9, WA MHMDA, MD MODPA), crisis resources on every page, licensed professional review attribution, Cookiebot CMP, non-personalized ad consideration, AAA accessibility consideration for cognitive accessibility.
 Sites: mindchecktools.com, medicalbillreader.com
 
-**Tier 4 — Micro-SaaS**: Additional API security, document upload handling/deletion policies, freemium model compliance, upload privacy notices.
+**Tier 4 ,  Micro-SaaS**: Additional API security, document upload handling/deletion policies, freemium model compliance, upload privacy notices.
 Sites: contractextract.com, medicalbillreader.com
 
 A site can be in multiple tiers (e.g., medicalbillreader.com is both Tier 3 and Tier 4).
@@ -65,16 +65,16 @@ A site can be in multiple tiers (e.g., medicalbillreader.com is both Tier 3 and 
 ### Required Files (Every Site)
 
 Every Empire site must have these files in `public/`:
-- `ads.txt` — AdSense authorized sellers
-- `robots.txt` — Crawler configuration including AI crawlers (template in Section 15)
-- `sitemap.xml` — Auto-generated, submitted to Google and Bing
-- `llms.txt` — LLM-friendly site summary in Markdown (format in Section 11)
+- `ads.txt` ,  AdSense authorized sellers
+- `robots.txt` ,  Crawler configuration including AI crawlers (template in Section 15)
+- `sitemap.xml` ,  Auto-generated, submitted to Google and Bing
+- `llms.txt` ,  LLM-friendly site summary in Markdown (format in Section 11)
 
 Every Empire site must have these pages:
-- `/privacy` — Privacy Policy
-- `/terms` — Terms of Service
-- `/about` — About page with verifiable organizational info
-- `/contact` — Contact information
+- `/privacy` ,  Privacy Policy
+- `/terms` ,  Terms of Service
+- `/about` ,  About page with verifiable organizational info
+- `/contact` ,  Contact information
 
 ---
 
@@ -122,7 +122,7 @@ Every Empire site must have these pages:
 - **Monetization**: AdSense
 - **Attribution**: "Built by an experienced web developer"
 - **Schema Types**: Organization, WebSite, WebApplication, BreadcrumbList
-- **Special Rules**: Client-side conversions only (no server round-trips). Performance is critical — conversions must be instant.
+- **Special Rules**: Client-side conversions only (no server round-trips). Performance is critical ,  conversions must be instant.
 
 ### creatorrevenuecalculator.com
 - **Type**: Utility (ad-supported) | **Tier**: Standard
@@ -159,16 +159,16 @@ Every Empire site must have these pages:
 ### 524tracker.com
 - **Type**: Utility (ad-supported) | **Tier**: YMYL-Adjacent
 - **Repo**: `524tracker` (`C:\Users\jason\empire\524tracker`)
-- **Purpose**: Credit card application rules tracker — Chase 5/24, Amex lifetime bonus, Citi 8/65, BofA 2/3/4, plus annual fee reminders, hard inquiry tracker, card value calculator, best-cards-by-category
-- **Monetization**: AdSense + credit card affiliate links (Chase, Amex, Capital One — $50–$200 per approved card)
+- **Purpose**: Credit card application rules tracker ,  Chase 5/24, Amex lifetime bonus, Citi 8/65, BofA 2/3/4, plus annual fee reminders, hard inquiry tracker, card value calculator, best-cards-by-category
+- **Monetization**: AdSense + credit card affiliate links (Chase, Amex, Capital One ,  $50–$200 per approved card)
 - **Attribution**: "Built by an experienced web professional"
 - **Schema Types**: Organization, WebSite, WebApplication (per tool), BreadcrumbList
 - **Required Disclaimer**: "This tool is for informational and educational purposes only. Credit card terms, eligibility rules, and approval odds change frequently. Always verify current rules directly with the card issuer before applying. This is not financial advice."
 - **Special Rules**:
   - All affiliate links MUST include `rel="nofollow sponsored"`
   - Financial disclaimer on EVERY tool page (Tier 2 requirement)
-  - All rule data (5/24, Amex lifetime, Citi 8/65, BofA 2/3/4) stored client-side via localStorage — NEVER passed to advertising systems
-  - Content sourced from community knowledge (r/churning) — always caveat that rules may change
+  - All rule data (5/24, Amex lifetime, Citi 8/65, BofA 2/3/4) stored client-side via localStorage ,  NEVER passed to advertising systems
+  - Content sourced from community knowledge (r/churning) ,  always caveat that rules may change
   - No personally identifiable financial data collected or stored server-side
 
 ### Cross-Site Links
@@ -227,7 +227,7 @@ public/
 
 ## 4. AdSense & Monetization
 
-### ads.txt (CRITICAL — incorrect ads.txt breaks ALL revenue)
+### ads.txt (CRITICAL ,  incorrect ads.txt breaks ALL revenue)
 - Serve at root: `https://domain.com/ads.txt`
 - Content: `google.com, pub-7171402107622932, DIRECT, f08c47fec0942fa0`
 - Include `OWNERDOMAIN` and `MANAGERDOMAIN` directives per IAB ads.txt v1.1 spec
@@ -241,12 +241,12 @@ public/
 - No floating box scripts wrapping ads
 - No CSS-hidden ad units (unless responsive ad units)
 - No code modifications that inflate performance metrics
-- Reserve explicit `width`/`height` on ALL ad containers — this is the #1 cause of CLS failures
-- Mobile: follow Better Ads Standard — ads cannot push primary content below the fold
+- Reserve explicit `width`/`height` on ALL ad containers ,  this is the #1 cause of CLS failures
+- Mobile: follow Better Ads Standard ,  ads cannot push primary content below the fold
 
 ### Content & Traffic Policies
 - Prohibited content near ads: adult material, violence, hate speech, medical misinformation, hacking, illicit drugs
-- Zero tolerance for invalid traffic — no clicking own ads, no incentivizing clicks, no bot traffic
+- Zero tolerance for invalid traffic ,  no clicking own ads, no incentivizing clicks, no bot traffic
 - Required pages for AdSense: About Us, Privacy Policy, Contact
 - Health pages must not contain medical misinformation
 
@@ -270,14 +270,14 @@ public/
 - Googlebot is NOT blocked via robots.txt
 - All public pages return HTTP 200 status codes
 - Pages contain indexable content (not behind login, not `noindex`, publicly accessible)
-- JavaScript-rendered content is crawlable — use SSR/SSG for ALL critical content
+- JavaScript-rendered content is crawlable ,  use SSR/SSG for ALL critical content
 
 ### Spam Policy Compliance (violation = potential deindexing)
 - No cloaking (showing different content to search engines vs users)
 - No doorway pages (thin pages targeting specific queries funneling to one destination)
 - No link spam (buying/selling links, excessive exchanges, automated link programs)
 - No hidden text or links (white-on-white, 0px font, single-character links)
-- No scaled content abuse — mass-produced low-value pages violate policy regardless of whether AI or human-generated
+- No scaled content abuse ,  mass-produced low-value pages violate policy regardless of whether AI or human-generated
 - No scraped/republished content without substantial added value
 - No sneaky redirects showing users unexpected content
 - No thin affiliate pages without original value
@@ -305,7 +305,7 @@ INP replaced FID in March 2024. It measures responsiveness throughout the entire
 
 ### How to Maintain CWV
 - Reserve explicit `width`/`height` on ALL ad containers (top cause of CLS failures)
-- Audit AdSense JavaScript impact on INP — heavy ad scripts degrade responsiveness
+- Audit AdSense JavaScript impact on INP ,  heavy ad scripts degrade responsiveness
 - Use `next/image` with `width`/`height` props to prevent image-driven layout shifts
 - Use `next/font` to prevent font-loading layout shifts
 - Leverage Vercel edge functions and ISR/SSR for LCP optimization
@@ -322,7 +322,7 @@ Bing has no formal Core Web Vitals program but considers speed and mobile-friend
 
 ## 7. E-E-A-T & YMYL Compliance
 
-E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness. **Trust** is the central pillar. For YMYL (Your Money or Your Life) content — which includes mental health screening, medical bill analysis, and legal contract tools — Google applies the highest level of scrutiny.
+E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness. **Trust** is the central pillar. For YMYL (Your Money or Your Life) content ,  which includes mental health screening, medical bill analysis, and legal contract tools ,  Google applies the highest level of scrutiny.
 
 ### Experience
 - Demonstrate first-hand knowledge in content (case studies, real-world testing, practical insights)
@@ -344,12 +344,12 @@ E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness
 - Comprehensive, up-to-date Privacy Policy and Terms of Service
 - Transparent About page with verifiable organizational information, mission, and team credentials
 - Readily accessible Contact information
-- Editorial process description (especially for YMYL — explain how content is reviewed and fact-checked)
+- Editorial process description (especially for YMYL ,  explain how content is reviewed and fact-checked)
 
 ### YMYL Requirements for mindchecktools.com
 - All content reviewed by licensed CADC-II professional with credentials displayed
 - Crisis resources on EVERY page (988, Crisis Text Line 741741, SAMHSA 1-800-662-4357)
-- Tools framed as supplementary to professional care — NEVER replacements for diagnosis or treatment
+- Tools framed as supplementary to professional care ,  NEVER replacements for diagnosis or treatment
 - Prominent disclaimers on every screening page
 - Cite validated clinical instruments (PHQ-9, GAD-7) and authoritative sources (WHO, CDC, APA, PubMed)
 - Content must never worsen conditions or delay treatment-seeking
@@ -376,11 +376,11 @@ Google's preferred format is JSON-LD. It helps search engines understand page co
 
 ### Implementation Rules
 - Use **JSON-LD format exclusively** (Google-preferred, easiest to maintain)
-- Place in `<head>` or `<body>` — in Next.js, use `generateMetadata()` or `<Script>` component
-- All markup MUST match visible page content exactly — no hidden or misleading schema
+- Place in `<head>` or `<body>` ,  in Next.js, use `generateMetadata()` or `<Script>` component
+- All markup MUST match visible page content exactly ,  no hidden or misleading schema
 - All required properties must be present for each type
-- Always include `dateModified` — critical freshness signal for both search and AI
-- Keep structured data current — stale time-sensitive data disqualifies rich results
+- Always include `dateModified` ,  critical freshness signal for both search and AI
+- Keep structured data current ,  stale time-sensitive data disqualifies rich results
 - Validate with Google Rich Results Test AND Bing Markup Validator
 
 ### Required Schema Per Page Type
@@ -454,8 +454,8 @@ Google's preferred format is JSON-LD. It helps search engines understand page co
 Still useful for AI answer extraction despite being deprecated for rich results on most sites. Health/government sites may still get FAQ rich results.
 
 ### 2025-2026 Changes
-- FAQPage rich results restricted to authoritative health/government sites only — but schema still helps AI parsing
-- HowTo rich results completely deprecated — schema still useful for AI
+- FAQPage rich results restricted to authoritative health/government sites only ,  but schema still helps AI parsing
+- HowTo rich results completely deprecated ,  schema still useful for AI
 - 7 additional structured data features retired in 2025
 - Bing now aligned on JSON-LD preference and actively uses Open Graph tags
 
@@ -466,10 +466,10 @@ Still useful for AI answer extraction despite being deprecated for rich results 
 Google completed the transition to 100% mobile-first indexing in July 2024. ALL indexing and ranking signals come exclusively from the smartphone crawl.
 
 ### Requirements
-- **Content parity**: Mobile version MUST contain ALL content from desktop — same text, headings, structured data, metadata
+- **Content parity**: Mobile version MUST contain ALL content from desktop ,  same text, headings, structured data, metadata
 - Same `meta robots` tags on mobile and desktop
 - Same structured data on mobile and desktop
-- Responsive design (serve same HTML to all devices) — Google's preferred approach
+- Responsive design (serve same HTML to all devices) ,  Google's preferred approach
 - Viewport meta tag: `<meta name="viewport" content="width=device-width, initial-scale=1">`
 - **Touch targets**: At least 48px wide/tall with adequate spacing
 - **Body text**: Minimum 16px font size
@@ -488,14 +488,14 @@ Bing has unified mobile/desktop indexing but still **leans desktop-first**. More
 Bing powers not just its own search but also **Microsoft Copilot, ChatGPT's Browse feature, DuckDuckGo, and Ecosia**. No Bing presence means no AI citation from any of these platforms.
 
 ### Requirements That Differ From Google
-- **Include `<meta name="keywords">` tag** — Bing still recognizes it as a signal (Google ignores it entirely)
-- **Social media engagement matters** — Bing confirms likes, shares, and engagement on Facebook, X, LinkedIn as ranking factors
+- **Include `<meta name="keywords">` tag** ,  Bing still recognizes it as a signal (Google ignores it entirely)
+- **Social media engagement matters** ,  Bing confirms likes, shares, and engagement on Facebook, X, LinkedIn as ranking factors
 - **Exact-match keywords** in titles, H1, meta descriptions, and URLs carry higher weight on Bing than Google's semantic approach
-- **`Crawl-delay` directive supported** — add `Crawl-delay: 10` for Bingbot in robots.txt (Google ignores it)
-- **Meta descriptions used more literally** — Bing displays them as-written more often than Google. Write longer, more descriptive meta descriptions.
+- **`Crawl-delay` directive supported** ,  add `Crawl-delay: 10` for Bingbot in robots.txt (Google ignores it)
+- **Meta descriptions used more literally** ,  Bing displays them as-written more often than Google. Write longer, more descriptive meta descriptions.
 - **Domain age** is a stronger trust signal for Bing (3+ year domains advantaged)
 - **.edu and .gov backlinks** carry extra weight on Bing
-- **No formal Core Web Vitals** — Bing considers speed but has no equivalent thresholds
+- **No formal Core Web Vitals** ,  Bing considers speed but has no equivalent thresholds
 
 ### IndexNow (Push-Based Indexing)
 IndexNow notifies search engines immediately when content changes, instead of waiting for them to discover changes via crawling. Supported by Bing, Yandex, Seznam, Naver, Yep. Google has NOT adopted IndexNow.
@@ -511,18 +511,18 @@ Implementation for Next.js on Vercel:
 ### Bing Webmaster Tools
 - Verify all 6 Empire properties (can bulk import from Google Search Console)
 - Submit XML sitemaps to BWT
-- Monitor AI Performance dashboard (public preview February 2026) — tracks citations across Copilot and Bing AI summaries
+- Monitor AI Performance dashboard (public preview February 2026) ,  tracks citations across Copilot and Bing AI summaries
 
 ### Bing AI/Copilot Content Optimization (October 2025 Official Microsoft Guidance)
-- Title, H1, and meta description must be **aligned and consistent** — AI uses these to interpret page scope
+- Title, H1, and meta description must be **aligned and consistent** ,  AI uses these to interpret page scope
 - Use **structured headings (H2/H3)** as chapter titles defining clear content slices for AI
-- Write **Q&A-format content** with direct questions and clear answers — AI can lift these directly
-- Include **lists, tables, and comparison formats** — highly extractable by AI systems
-- Do NOT hide content behind tabs, accordions, or expandable menus — Bingbot doesn't click/expand
+- Write **Q&A-format content** with direct questions and clear answers ,  AI can lift these directly
+- Include **lists, tables, and comparison formats** ,  highly extractable by AI systems
+- Do NOT hide content behind tabs, accordions, or expandable menus ,  Bingbot doesn't click/expand
 - Avoid PDFs for core information (lack structured signals)
-- Avoid key information only in images — provide HTML text + alt text
-- Anchor claims in **measurable facts with evidence** — data and cited sources build AI citation trust
-- Keep content fresh — AI strongly prefers current information
+- Avoid key information only in images ,  provide HTML text + alt text
+- Anchor claims in **measurable facts with evidence** ,  data and cited sources build AI citation trust
+- Keep content fresh ,  AI strongly prefers current information
 
 ---
 
@@ -532,7 +532,7 @@ AI-referred traffic increased 527% in early 2025. LLMs typically cite only 2–7
 
 ### llms.txt (Required on All Sites)
 
-Create `/llms.txt` at site root — a Markdown file that gives LLMs quick context about the site. Serve with `text/plain` MIME type, UTF-8 encoding.
+Create `/llms.txt` at site root ,  a Markdown file that gives LLMs quick context about the site. Serve with `text/plain` MIME type, UTF-8 encoding.
 
 **Format:**
 ```markdown
@@ -553,7 +553,7 @@ Create `/llms.txt` at site root — a Markdown file that gives LLMs quick contex
 - [FAQ](https://domain.com/faq): Common questions
 ```
 
-Also create `/llms-full.txt` with full site documentation in Markdown — reduces LLM token consumption by 90%+ vs crawling HTML. For SaaS sites, include product capabilities, pricing, limits, comparisons, and FAQs.
+Also create `/llms-full.txt` with full site documentation in Markdown ,  reduces LLM token consumption by 90%+ vs crawling HTML. For SaaS sites, include product capabilities, pricing, limits, comparisons, and FAQs.
 
 ### Content Structure for AI Citation
 
@@ -562,10 +562,10 @@ Also create `/llms-full.txt` with full site documentation in Markdown — reduce
 - **Question-based headings**: Mirror natural queries ("How does the yarn weight calculator work?")
 - **Short paragraphs**: 2–4 sentences, 40–60 word blocks
 - **50–70 word answer capsules** at the top of content sections for AI Overview eligibility
-- Include **statistics and data** — boosts AI visibility 15–30% per research
+- Include **statistics and data** ,  boosts AI visibility 15–30% per research
 - Add visible **"Last Updated" dates** on all content pages
 - **Flesch readability score** above 60
-- **SSR all critical content** — AI crawlers do NOT execute client-side JavaScript
+- **SSR all critical content** ,  AI crawlers do NOT execute client-side JavaScript
 - Set `<meta name="robots" content="index, follow, max-snippet:-1">` to allow full snippet extraction
 
 ### Google AI Overviews
@@ -573,12 +573,12 @@ Also create `/llms-full.txt` with full site documentation in Markdown — reduce
 - 53% of #1-ranked pages appear in AI Overviews, but 40% of cited links come from outside top 10
 - FAQ schema still helps AI Overviews despite being deprecated for regular rich results
 - Build topical authority with content clusters, not just single pages
-- Blocking `Google-Extended` does NOT prevent AI Overview inclusion — only blocking `Googlebot` does
+- Blocking `Google-Extended` does NOT prevent AI Overview inclusion ,  only blocking `Googlebot` does
 
 ### Perplexity Optimization
 - Allow `PerplexityBot` in robots.txt
 - Lead with answer in first 1–2 sentences
-- One intent per URL — don't combine definition + tutorial + blog on one page
+- One intent per URL ,  don't combine definition + tutorial + blog on one page
 - Fast loading (under 3 seconds)
 - HTML-first rendering (page must be readable with JS disabled)
 - Create comparison tables in HTML (not images)
@@ -594,7 +594,7 @@ Also create `/llms-full.txt` with full site documentation in Markdown — reduce
 
 ## 12. Privacy & Consent
 
-### GDPR (EU/EEA Users) — Privacy Policy Must Include
+### GDPR (EU/EEA Users) ,  Privacy Policy Must Include
 - Identity and contact details of data controller (and DPO if applicable)
 - Lawful basis for each type of processing
 - Categories of personal data collected
@@ -616,8 +616,8 @@ Also create `/llms-full.txt` with full site documentation in Markdown — reduce
 - **January 1, 2026**: New CCPA regulations expand definitions of sensitive personal data, updated transparency requirements
 
 ### Cookie Consent
-- **EU/EEA/UK**: Opt-in model — prior affirmative consent REQUIRED before any tracking cookies fire. Pre-checked boxes do NOT qualify.
-- **California**: Opt-out model — tracking permitted by default, but must honor Global Privacy Control (GPC) signals
+- **EU/EEA/UK**: Opt-in model ,  prior affirmative consent REQUIRED before any tracking cookies fire. Pre-checked boxes do NOT qualify.
+- **California**: Opt-out model ,  tracking permitted by default, but must honor Global Privacy Control (GPC) signals
 - **15+ US states**: Must honor universal opt-out mechanisms and GPC signals
 - Use Google-certified CMP with IAB TCF v2.2 integration for AdSense in EEA/UK/Switzerland
 - TCF v2.2 requires: consent-only legal basis for personalization, total vendor count on initial banner, easy withdrawal
@@ -626,7 +626,7 @@ Also create `/llms-full.txt` with full site documentation in Markdown — reduce
 - Treat ALL health screening data as **sensitive data** requiring explicit consent
 - NEVER pass health screening data to advertising systems
 - GDPR Article 9: Health data is special category data requiring explicit consent
-- **Washington My Health My Data Act**: Protects "consumer health data" broadly — applies even to non-HIPAA entities
+- **Washington My Health My Data Act**: Protects "consumer health data" broadly ,  applies even to non-HIPAA entities
 - **Maryland MODPA** (October 2025): Bans sale of sensitive data including health data
 - Privacy policy must specifically address health data collection, processing, and retention
 - Process screening results client-side where possible to minimize data exposure
@@ -648,7 +648,7 @@ WCAG 2.1 Level AA is the legal floor in the US under ADA case law. The **Europea
 - Text spacing adjustable without content or functionality loss
 
 ### Operable
-- ALL functionality available via keyboard — no keyboard traps
+- ALL functionality available via keyboard ,  no keyboard traps
 - Skip navigation links present on every page
 - Descriptive, unique page titles
 - Logical focus order and **visible focus indicators** on all interactive elements
@@ -684,7 +684,7 @@ WCAG 2.1 Level AA is the legal floor in the US under ADA case law. The **Europea
 - YMYL sites (mindchecktools.com, medicalbillreader.com): Consider AAA criteria for cognitive accessibility given vulnerable users
 - Interactive calculators: Results must be programmatically associated with inputs using semantic HTML
 - All dynamic content changes in tools must be announced to screen readers
-- **Overlay widgets (AccessiBe, UserWay) are NOT sufficient** for legal compliance and have been cited in ADA lawsuits — do not use them
+- **Overlay widgets (AccessiBe, UserWay) are NOT sufficient** for legal compliance and have been cited in ADA lawsuits ,  do not use them
 
 ---
 
@@ -703,7 +703,7 @@ Referrer-Policy: strict-origin-when-cross-origin
 For health content pages (mindchecktools.com, medicalbillreader.com), use `Referrer-Policy: no-referrer` to prevent health page URLs from leaking to third parties.
 
 ### Content Security Policy (AdSense-Compatible)
-AdSense requires `unsafe-eval` — this is a known trade-off.
+AdSense requires `unsafe-eval` ,  this is a known trade-off.
 ```
 Content-Security-Policy:
   object-src 'none';
@@ -723,7 +723,7 @@ Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 Disable all browser features not used by your tools. `interest-cohort=()` opts out of Google's Topics API.
 
 ### Cross-Origin Headers
-- Do NOT enable strict COEP/COOP on pages running AdSense — they break ad rendering
+- Do NOT enable strict COEP/COOP on pages running AdSense ,  they break ad rendering
 - Use `Cross-Origin-Opener-Policy: unsafe-none` on pages with ads that open cross-origin popups
 - Safe to use `Cross-Origin-Resource-Policy: same-origin` on non-ad pages
 
@@ -741,9 +741,9 @@ Disable all browser features not used by your tools. `interest-cohort=()` opts o
 - UTF-8 encoded XML with proper declaration
 - **50,000 URLs max** per sitemap file, **50 MB max** uncompressed
 - Use sitemap index file if exceeding limits
-- `<loc>`: Required — full absolute canonical URL
-- `<lastmod>`: Recommended — W3C Datetime format, only update when content genuinely changes (the only optional tag Google uses)
-- `<changefreq>` and `<priority>`: Ignored by Google — harmless to include but zero benefit
+- `<loc>`: Required ,  full absolute canonical URL
+- `<lastmod>`: Recommended ,  W3C Datetime format, only update when content genuinely changes (the only optional tag Google uses)
+- `<changefreq>` and `<priority>`: Ignored by Google ,  harmless to include but zero benefit
 - Include image sitemaps for JavaScript-loaded images
 - Submit to both Google Search Console and Bing Webmaster Tools
 - Reference in robots.txt: `Sitemap: https://domain.com/sitemap.xml`
@@ -820,15 +820,15 @@ Disallow: /private/
 Sitemap: https://DOMAIN/sitemap.xml
 ```
 
-Note: `Claude-Web` and `anthropic-ai` are deprecated agent names — use the three-tier system above instead.
+Note: `Claude-Web` and `anthropic-ai` are deprecated agent names ,  use the three-tier system above instead.
 
 ### Essential Metadata (Every Page)
-- `<title>` — Unique, descriptive, under 60 characters
-- `<meta name="description">` — Direct answer to page's main query, ~155 characters
-- `<meta name="keywords">` — Include for Bing (Google ignores)
-- `<meta name="robots" content="index, follow, max-snippet:-1">` — Allow full snippet extraction
-- `<meta name="author">` — Author attribution
-- `<link rel="canonical">` — Prevent duplicate content issues
+- `<title>` ,  Unique, descriptive, under 60 characters
+- `<meta name="description">` ,  Direct answer to page's main query, ~155 characters
+- `<meta name="keywords">` ,  Include for Bing (Google ignores)
+- `<meta name="robots" content="index, follow, max-snippet:-1">` ,  Allow full snippet extraction
+- `<meta name="author">` ,  Author attribution
+- `<link rel="canonical">` ,  Prevent duplicate content issues
 - **Open Graph tags**: `og:title`, `og:description`, `og:image` (1200×630px minimum), `og:url`, `og:type`, `article:published_time`, `article:modified_time`, `article:author`
 - **Semantic HTML5**: `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<footer>`, `<aside>`, `<time datetime="...">`
 - Proper heading hierarchy: One H1 per page, then H2 → H3, no skipping levels
@@ -843,7 +843,7 @@ Note: `Claude-Web` and `anthropic-ai` are deprecated agent names — use the thr
 - **Production branch**: `main`
 - **Build command**: `npm run build`
 - **Output directory**: `.next`
-- **Environment variables**: Store all API keys and secrets (ANTHROPIC_API_KEY, INDEXNOW_API_KEY, etc.) in Vercel dashboard — NEVER in code
+- **Environment variables**: Store all API keys and secrets (ANTHROPIC_API_KEY, INDEXNOW_API_KEY, etc.) in Vercel dashboard ,  NEVER in code
 
 ### Pre-Deploy Checklist
 
@@ -868,10 +868,10 @@ Run through this EVERY time before deploying:
 
 Things Claude Code must NEVER do on ANY Empire site:
 
-1. **Never expose the site owner's personal name** in any code, content, comments, metadata, or configuration — EXCEPT on the About page, blog post bylines, and Article/Person schema of YMYL sites where Google's E-E-A-T scrutiny requires a verifiable named author with credentials. YMYL sites and their attribution: [mindchecktools.com](http://mindchecktools.com) (Jason Ramirez, CADC-II), [524tracker.com](http://524tracker.com) (Jason Ramirez, Founder of Your Friendly Developer), [taxbreaktools.com](http://taxbreaktools.com) (Jason Ramirez, Founder of Your Friendly Developer), [contractextract.com](http://contractextract.com) (Jason Ramirez, Founder of Your Friendly Developer), [medicalbillreader.com](http://medicalbillreader.com) (Jason Ramirez, Founder of Your Friendly Developer). Tool pages, calculator pages, OG tags on non-author pages, and footers across all sites use generic credentials only ("Built by an experienced web professional with a focus on [domain]").
-2. **Never modify ads.txt** unless explicitly asked — incorrect ads.txt stops ALL ad revenue
-3. **Never remove legal pages** (privacy policy, terms of service) — creates legal exposure
-4. **Never hardcode API keys** in any file — use environment variables exclusively
+1. **Never expose the site owner's personal name** in any code, content, comments, metadata, or configuration ,  EXCEPT on the About page, blog post bylines, and Article/Person schema of YMYL sites where Google's E-E-A-T scrutiny requires a verifiable named author with credentials. YMYL sites and their attribution: [mindchecktools.com](http://mindchecktools.com) (Jason Ramirez, CADC-II), [524tracker.com](http://524tracker.com) (Jason Ramirez, Founder of Your Friendly Developer), [taxbreaktools.com](http://taxbreaktools.com) (Jason Ramirez, Founder of Your Friendly Developer), [contractextract.com](http://contractextract.com) (Jason Ramirez, Founder of Your Friendly Developer), [medicalbillreader.com](http://medicalbillreader.com) (Jason Ramirez, Founder of Your Friendly Developer). Tool pages, calculator pages, OG tags on non-author pages, and footers across all sites use generic credentials only ("Built by an experienced web professional with a focus on [domain]").
+2. **Never modify ads.txt** unless explicitly asked ,  incorrect ads.txt stops ALL ad revenue
+3. **Never remove legal pages** (privacy policy, terms of service) ,  creates legal exposure
+4. **Never hardcode API keys** in any file ,  use environment variables exclusively
 5. **Never push directly to main** without testing that `npm run build` succeeds
 6. **Never remove sister site cross-links** from the footer
 7. **Never remove or weaken security headers** (HSTS, CSP, X-Frame-Options, etc.)
@@ -879,7 +879,7 @@ Things Claude Code must NEVER do on ANY Empire site:
 9. **Never remove llms.txt** or AI crawler rules from robots.txt
 10. **Never remove crisis resources** from mindchecktools.com (988, Crisis Text Line, SAMHSA)
 11. **Never present screening results as diagnoses** on mindchecktools.com
-12. **Never modify validated screening instruments** (PHQ-9, GAD-7, AUDIT, AUDIT-C) — their questions and scoring are clinically standardized
+12. **Never modify validated screening instruments** (PHQ-9, GAD-7, AUDIT, AUDIT-C) ,  their questions and scoring are clinically standardized
 13. **Never place ads adjacent to crisis resources** on mindchecktools.com
 14. **Never pass health data to advertising systems** on YMYL sites
 15. **Never store uploaded documents** (contracts, medical bills) longer than necessary on micro-SaaS sites
@@ -893,8 +893,8 @@ Things Claude Code must NEVER do on ANY Empire site:
 
 Custom skills for cross-site management are available at `~/empire-skills/`:
 
-- **empire-sitesync** (`~/empire-skills/empire-sitesync/SKILL.md`) — 12-category site audits, sync checks, and dashboards
-- **empire-projectfiles** (`~/empire-skills/empire-projectfiles/SKILL.md`) — Per-site CLAUDE.md generation and syncing
+- **empire-sitesync** (`~/empire-skills/empire-sitesync/SKILL.md`) ,  12-category site audits, sync checks, and dashboards
+- **empire-projectfiles** (`~/empire-skills/empire-projectfiles/SKILL.md`) ,  Per-site CLAUDE.md generation and syncing
 
 When performing cross-site operations, read the relevant SKILL.md first.
 

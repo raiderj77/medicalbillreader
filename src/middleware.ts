@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const gpc = request.headers.get('sec-gpc') === '1'
   if (gpc) {
     // empire_gpc cookie is readable by the client-side Cookiebot auto-decline script.
-    // httpOnly: false is intentional — the consent banner JS must read this value.
+    // httpOnly: false is intentional ,  the consent banner JS must read this value.
     response.cookies.set('empire_gpc', '1', {
       httpOnly: false,
       sameSite: 'lax',

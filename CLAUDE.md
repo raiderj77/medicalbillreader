@@ -23,8 +23,8 @@ Revenue model: free MVP now, paid later ($9.99/bill or $14.99/month unlimited).
 
 ## IMPORTANT RULES
 - No personal name on any public page
-- This is NOT medical advice — always disclaim
-- CADC-II credentials do NOT apply here — pure AI product, no healthcare authority claimed
+- This is NOT medical advice ,  always disclaim
+- CADC-II credentials do NOT apply here ,  pure AI product, no healthcare authority claimed
 - All bill processing must be secure
 - Never store uploaded bills longer than needed for analysis
 - Privacy policy must clearly explain data handling

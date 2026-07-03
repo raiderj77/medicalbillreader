@@ -190,9 +190,9 @@ Save the calendar to `content/research/content-calendar-YYYY-MM.md` where YYYY-M
 
 ---
 
-## Week 1: [Mon DD - Sun DD] — Quick Wins + Trending
+## Week 1: [Mon DD - Sun DD] ,  Quick Wins + Trending
 
-### [Day], [Month] [DD] — [Topic/Title]
+### [Day], [Month] [DD] ,  [Topic/Title]
 - **Keyword**: [primary keyword]
 - **Type**: Quick Win Update
 - **Current Position**: 14 | **Volume**: 1,200/mo
@@ -202,7 +202,7 @@ Save the calendar to `content/research/content-calendar-YYYY-MM.md` where YYYY-M
 - **Data Source**: Quick Wins Report
 - **Command**: `/rewrite [topic]` then `/optimize [file]`
 
-### [Day], [Month] [DD] — [Topic/Title]
+### [Day], [Month] [DD] ,  [Topic/Title]
 - **Keyword**: [primary keyword]
 - **Type**: Trending
 - **Trend Velocity**: +45% | **Volume**: 890/mo
@@ -214,19 +214,19 @@ Save the calendar to `content/research/content-calendar-YYYY-MM.md` where YYYY-M
 
 ---
 
-## Week 2: [Mon DD - Sun DD] — Mixed
+## Week 2: [Mon DD - Sun DD] ,  Mixed
 
 [Same format per entry...]
 
 ---
 
-## Week 3: [Mon DD - Sun DD] — Cluster Focus: [Cluster Name]
+## Week 3: [Mon DD - Sun DD] ,  Cluster Focus: [Cluster Name]
 
 [Same format, entries grouped by cluster...]
 
 ---
 
-## Week 4: [Mon DD - Sun DD] — Strategic
+## Week 4: [Mon DD - Sun DD] ,  Strategic
 
 [Same format...]
 
@@ -267,7 +267,7 @@ Items that didn't fit this month but should be scheduled next:
 
 ## Next Steps
 
-1. Start with Week 1 items — these deliver fastest results
+1. Start with Week 1 items ,  these deliver fastest results
 2. Run `/research [topic]` before each new article for deeper keyword research
 3. Use `/priorities` mid-month to reassess based on new data
 4. Re-run `/content-calendar [posts-per-week] [next-month]` at month end to plan ahead

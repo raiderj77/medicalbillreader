@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer — Medical Bill Reader",
+  title: "Disclaimer ,  Medical Bill Reader",
   description:
     "Medical disclaimer for MedicalBillReader.com. This tool provides general explanations of medical billing codes and charges for informational purposes only.",
   keywords: "disclaimer, medical bill reader, not medical advice, not financial advice, informational only",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Disclaimer — Medical Bill Reader",
+    title: "Disclaimer ,  Medical Bill Reader",
     description: "Medical disclaimer for MedicalBillReader.com. This tool is for informational purposes only.",
     url: "https://medicalbillreader.com/disclaimer",
     siteName: "Medical Bill Reader",

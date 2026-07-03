@@ -1,5 +1,5 @@
 /**
- * content-lint.js — Content compliance linter for medicalbillreader.com
+ * content-lint.js ,  Content compliance linter for medicalbillreader.com
  * Scans src/**\/*.{tsx,ts} for:
  *   - Personal name exposure (site owner)
  *   - Medical/financial advice claims (flags direct claims, not disclaimers)
@@ -17,7 +17,7 @@ let failures = 0;
 
 function fail(file, line, msg) {
   const rel = relative(ROOT, file);
-  console.error(`  ❌ ${rel}:${line} — ${msg}`);
+  console.error(`  ❌ ${rel}:${line} ,  ${msg}`);
   failures++;
 }
 
@@ -53,7 +53,7 @@ function checkPersonalName(file, lines) {
     if (!namePattern.test(lines[i])) continue;
     if (bylineLinePattern.test(lines[i])) continue;
     if (schemaNamePattern.test(lines[i])) continue;
-    fail(file, i + 1, "Personal name detected in body/prose — name is only allowed in byline metadata");
+    fail(file, i + 1, "Personal name detected in body/prose ,  name is only allowed in byline metadata");
   }
 }
 
@@ -85,7 +85,7 @@ function checkMedicalFinancialAdviceClaims(file, lines) {
       fail(
         file,
         i + 1,
-        "Medical/financial advice claim detected — this site must never claim to provide medical or financial advice"
+        "Medical/financial advice claim detected ,  this site must never claim to provide medical or financial advice"
       );
     }
   }
@@ -114,7 +114,7 @@ for (const file of srcFiles) {
 // ---------------------------------------------------------------------------
 console.log("\n" + "=".repeat(50));
 if (failures > 0) {
-  console.error(`\n💥 ${failures} content issue(s) found — fix before deploying.\n`);
+  console.error(`\n💥 ${failures} content issue(s) found ,  fix before deploying.\n`);
   process.exit(1);
 } else {
   console.log("\n🎉 All content checks passed.\n");

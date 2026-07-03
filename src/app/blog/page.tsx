@@ -23,7 +23,7 @@ export default function BlogIndexPage() {
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Medical Billing Guides & Resources — Medical Bill Reader",
+    name: "Medical Billing Guides & Resources ,  Medical Bill Reader",
     description:
       "Practical guides to understanding medical bills, insurance claims, billing codes, and your patient rights.",
     url: "https://medicalbillreader.com/blog",

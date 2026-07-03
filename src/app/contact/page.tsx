@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contact — Medical Bill Reader",
+  title: "Contact ,  Medical Bill Reader",
   description:
     "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
   keywords: "contact medical bill reader, support, feedback, privacy request",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Contact — Medical Bill Reader",
+    title: "Contact ,  Medical Bill Reader",
     description: "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
     url: "https://medicalbillreader.com/contact",
     siteName: "Medical Bill Reader",

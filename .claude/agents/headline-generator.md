@@ -61,11 +61,11 @@ Examples:
 #### 4. Benefit + Without Pain
 ```
 [Achieve Outcome] Without [Pain/Sacrifice]
-[Benefit] — No [Pain Point] Required
+[Benefit] ,  No [Pain Point] Required
 ```
 Examples:
 - "Professional Product Hosting Without the Complexity"
-- "Launch Your Product — No Technical Skills Required"
+- "Launch Your Product ,  No Technical Skills Required"
 
 #### 5. The [Adjective] Way
 ```

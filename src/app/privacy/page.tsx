@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Medical Bill Reader",
+  title: "Privacy Policy ,  Medical Bill Reader",
   description:
     "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
   keywords: "privacy policy, medical bill reader, data privacy, CCPA, GDPR, health data",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Privacy Policy — Medical Bill Reader",
+    title: "Privacy Policy ,  Medical Bill Reader",
     description: "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
     url: "https://medicalbillreader.com/privacy",
     siteName: "Medical Bill Reader",
@@ -62,10 +62,10 @@ export default function PrivacyPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {/* Answer capsule — must be first visible text for GEO/AI scrapers */}
+      {/* Answer capsule ,  must be first visible text for GEO/AI scrapers */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
         <p className="text-lg text-slate-700 leading-relaxed mb-0 bg-white border border-slate-200 rounded-lg p-5">
-          MedicalBillReader.com is committed to protecting your privacy. This policy explains what information we collect when you use our AI-powered bill analysis tool, how we use it, and your rights under U.S. state and international privacy laws. We never store your uploaded medical bills — documents are deleted immediately after analysis and results exist only in your browser session.
+          MedicalBillReader.com is committed to protecting your privacy. This policy explains what information we collect when you use our AI-powered bill analysis tool, how we use it, and your rights under U.S. state and international privacy laws. We never store your uploaded medical bills ,  documents are deleted immediately after analysis and results exist only in your browser session.
         </p>
       </div>
 
@@ -105,10 +105,10 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-slate-800">2. Categories of Personal Data We Collect</h2>
             <p>We collect the following categories of personal data:</p>
             <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Uploaded Medical Bills</strong> — Images or PDFs you upload for analysis. These may contain sensitive personal and health information including patient names, dates of service, diagnoses, procedure codes (CPT, ICD-10, HCPCS), and billing amounts.</li>
-              <li><strong>Device &amp; Browser Information</strong> — IP address, browser type, operating system, and device identifiers collected automatically via server logs and analytics.</li>
-              <li><strong>Usage Data</strong> — Pages visited, features used, timestamps, and interaction patterns.</li>
-              <li><strong>Cookies &amp; Tracking Technologies</strong> — Data collected via cookies for analytics and advertising purposes (on marketing pages only).</li>
+              <li><strong>Uploaded Medical Bills</strong> ,  Images or PDFs you upload for analysis. These may contain sensitive personal and health information including patient names, dates of service, diagnoses, procedure codes (CPT, ICD-10, HCPCS), and billing amounts.</li>
+              <li><strong>Device &amp; Browser Information</strong> ,  IP address, browser type, operating system, and device identifiers collected automatically via server logs and analytics.</li>
+              <li><strong>Usage Data</strong> ,  Pages visited, features used, timestamps, and interaction patterns.</li>
+              <li><strong>Cookies &amp; Tracking Technologies</strong> ,  Data collected via cookies for analytics and advertising purposes (on marketing pages only).</li>
             </ul>
           </section>
 
@@ -126,9 +126,9 @@ export default function PrivacyPage() {
             </p>
           </section>
 
-          {/* Medical Bill Data — Critical Section */}
+          {/* Medical Bill Data ,  Critical Section */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">4. Medical Bill Data — How We Handle Your Health Information</h2>
+            <h2 className="text-xl font-bold text-slate-800">4. Medical Bill Data ,  How We Handle Your Health Information</h2>
             <p>
               We treat all uploaded medical bills with the highest level of sensitivity. Medical bills may contain protected health information and are handled with HIPAA-adjacent care, even though MedicalBillReader.com is not a HIPAA-covered entity.
             </p>
@@ -151,10 +151,10 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">5. Third Parties We Share Data With</h2>
             <ul className="list-disc ml-6 space-y-2">
-              <li><strong>Anthropic (Claude API)</strong> — Uploaded bill images/text are sent to Anthropic for AI-powered analysis. Anthropic processes data under their API terms and does not use API inputs for model training.</li>
-              <li><strong>Google AdSense</strong> — On marketing pages only, Google may collect cookies and device information for ad serving. Medical bill data is never shared with Google.</li>
-              <li><strong>Google Analytics</strong> — We use Google Analytics to understand website usage patterns. Analytics data does not include medical bill contents.</li>
-              <li><strong>Vercel</strong> — Our hosting provider processes server requests. No medical bill data is persisted by Vercel beyond standard request processing.</li>
+              <li><strong>Anthropic (Claude API)</strong> ,  Uploaded bill images/text are sent to Anthropic for AI-powered analysis. Anthropic processes data under their API terms and does not use API inputs for model training.</li>
+              <li><strong>Google AdSense</strong> ,  On marketing pages only, Google may collect cookies and device information for ad serving. Medical bill data is never shared with Google.</li>
+              <li><strong>Google Analytics</strong> ,  We use Google Analytics to understand website usage patterns. Analytics data does not include medical bill contents.</li>
+              <li><strong>Vercel</strong> ,  Our hosting provider processes server requests. No medical bill data is persisted by Vercel beyond standard request processing.</li>
             </ul>
           </section>
 
@@ -162,15 +162,15 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">6. Data Retention Periods</h2>
             <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Uploaded Medical Bills:</strong> Deleted immediately after analysis — zero retention.</li>
-              <li><strong>Analysis Results:</strong> Exist only in your browser session — not stored on our servers.</li>
+              <li><strong>Uploaded Medical Bills:</strong> Deleted immediately after analysis ,  zero retention.</li>
+              <li><strong>Analysis Results:</strong> Exist only in your browser session ,  not stored on our servers.</li>
               <li><strong>Server Logs:</strong> Retained for up to 30 days for security and debugging, then automatically deleted. Logs do not contain medical bill contents.</li>
               <li><strong>Analytics Data:</strong> Retained per Google Analytics default settings (up to 14 months).</li>
               <li><strong>Cookie Data:</strong> Varies by cookie type; advertising cookies expire per Google&apos;s cookie policies.</li>
             </ul>
           </section>
 
-          {/* California Privacy Rights — CCPA/CPRA Jan 2026 + State Health Laws */}
+          {/* California Privacy Rights ,  CCPA/CPRA Jan 2026 + State Health Laws */}
           <section id="california-privacy" aria-labelledby="california-heading">
             <h2 id="california-heading" className="text-xl font-bold text-slate-800">7. California Privacy Rights (CCPA/CPRA)</h2>
 
@@ -186,10 +186,10 @@ export default function PrivacyPage() {
               <li><strong>Identifiers:</strong> IP address, email address (if account created), browser type, device identifiers.</li>
               <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
               <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis. This data is processed server-side and deleted immediately after analysis is complete. It is never stored, logged beyond the active session, or shared.</li>
-              <li><strong>Inferred data:</strong> Interests inferred from browsing behavior via advertising partners (marketing pages only — not analysis pages).</li>
+              <li><strong>Inferred data:</strong> Interests inferred from browsing behavior via advertising partners (marketing pages only ,  not analysis pages).</li>
             </ul>
 
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Sensitive Personal Information — Medical Bill Data</h3>
+            <h3 className="text-lg font-semibold text-slate-800 mt-4">Sensitive Personal Information ,  Medical Bill Data</h3>
             <p>
               As of January 1, 2026, California law defines health and medical information as sensitive
               personal information requiring heightened protections. Medical bills you upload contain
@@ -326,7 +326,7 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li>We process health data solely based on your explicit consent given at the time of upload.</li>
               <li>Processing is limited to the specific purpose of bill analysis.</li>
-              <li>Data is deleted immediately after processing — no retention.</li>
+              <li>Data is deleted immediately after processing ,  no retention.</li>
               <li>We implement appropriate technical and organizational safeguards.</li>
             </ul>
           </section>
