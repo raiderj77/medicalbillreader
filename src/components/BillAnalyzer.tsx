@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { canUseFreeTier, incrementUsage } from "@/lib/free-tier";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   const text =
@@ -24,7 +26,14 @@ function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   );
 }
 
+function hasActiveSubscriptionCookie(): boolean {
+  return document.cookie
+    .split("; ")
+    .some((c) => c.trim() === "mbr_sub_active=1");
+}
+
 export default function BillAnalyzer() {
+  const router = useRouter();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -32,6 +41,20 @@ export default function BillAnalyzer() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  // One-time hint that we just came back from a successful per-use checkout.
+  // Consumed by the first analysis attempt and stripped from the URL
+  // immediately so it can't be reused by submitting a second bill without
+  // paying again. The server independently verifies and consumes the real
+  // entitlement via an httpOnly cookie, this is only a UX gate.
+  const [justPaid, setJustPaid] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("payment") === "success") {
+      setJustPaid(true);
+      router.replace("/", { scroll: false });
+    }
+  }, [router]);
 
   const handleFile = (f: File) => {
     setFile(f);
@@ -51,6 +74,14 @@ export default function BillAnalyzer() {
 
   const handleSubmit = async () => {
     if (!file || !preview) return;
+
+    const isPaid = justPaid || hasActiveSubscriptionCookie();
+
+    if (!isPaid && !canUseFreeTier()) {
+      router.push("/pricing");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -62,6 +93,13 @@ export default function BillAnalyzer() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       setResult(data.result);
+
+      if (!isPaid) {
+        incrementUsage();
+      }
+      if (justPaid) {
+        setJustPaid(false);
+      }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

@@ -1,10 +1,52 @@
 import { NextRequest, NextResponse } from "next/server";
 import { recordAnalysis } from "@/lib/analysis-stats";
+import {
+  BILL_ANALYSIS_INSTRUCTIONS,
+  buildBillAnalysisPrompt,
+} from "@/lib/bill-analysis-prompt";
+import {
+  checkPerUseSessionAvailable,
+  consumePerUseSession,
+  verifyActiveSubscription,
+} from "@/lib/entitlement";
 
 export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   try {
+    // Entitlement check. Paid analyses are verified against Stripe directly,
+    // there is no local database of purchases or subscribers. Requests with
+    // neither cookie fall through unchanged (the existing client-side free
+    // tier gate). The per-use session is only checked (not consumed) here,
+    // it's marked used after the analysis actually succeeds below, so a
+    // transient failure doesn't burn the customer's paid credit.
+    const pendingUseSessionId = req.cookies.get("mbr_pending_use")?.value;
+    const subscriptionId = req.cookies.get("mbr_sub_id")?.value;
+
+    if (pendingUseSessionId) {
+      const available = await checkPerUseSessionAvailable(pendingUseSessionId);
+      if (!available) {
+        return NextResponse.json(
+          {
+            error:
+              "This payment could not be verified or has already been used. Please purchase a new analysis.",
+          },
+          { status: 402 }
+        );
+      }
+    } else if (subscriptionId) {
+      const active = await verifyActiveSubscription(subscriptionId);
+      if (!active) {
+        return NextResponse.json(
+          {
+            error:
+              "Your subscription is not active. Please check your billing or resubscribe.",
+          },
+          { status: 402 }
+        );
+      }
+    }
+
     const { image, fileType } = await req.json();
     if (!image) return NextResponse.json({ error: "No image provided" }, { status: 400 });
 
@@ -29,7 +71,20 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: "claude-opus-4-7",
         max_tokens: 2000,
-        messages: [{ role: "user", content: [ fileContent, { type: "text", text: `You are a medical billing expert. Analyze this medical bill and explain it in plain English. Use these sections:\n\n## What This Bill Is For\n## Breakdown of Charges\n## What You Owe\n## ⚠️ Potential Issues to Review\n## What To Do Next` }]}],
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: BILL_ANALYSIS_INSTRUCTIONS,
+                cache_control: { type: "ephemeral" },
+              },
+              { type: "text", text: buildBillAnalysisPrompt() },
+              fileContent,
+            ],
+          },
+        ],
       }),
     });
 
@@ -44,7 +99,20 @@ export async function POST(req: NextRequest) {
     try {
       recordAnalysis({ fileType: fileType || "unknown", resultText });
     } catch {}
-    return NextResponse.json({ result: resultText });
+
+    if (pendingUseSessionId) {
+      // Only mark the session consumed now that the analysis actually
+      // succeeded.
+      await consumePerUseSession(pendingUseSessionId);
+    }
+
+    const jsonResponse = NextResponse.json({ result: resultText });
+    if (pendingUseSessionId) {
+      // Clear the cookie so this session can't be replayed against another
+      // request.
+      jsonResponse.cookies.set("mbr_pending_use", "", { maxAge: 0, path: "/" });
+    }
+    return jsonResponse;
   } catch (error) {
     console.error("Route error:", error);
     return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
