@@ -86,6 +86,10 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: "claude-opus-4-7",
         max_tokens: 2000,
+        // Deterministic extraction, not creative writing. Lower temperature
+        // reduces embellishment and keeps repeated runs on the same
+        // document consistent.
+        temperature: 0,
         messages: [
           {
             role: "user",
