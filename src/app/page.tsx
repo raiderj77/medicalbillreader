@@ -109,7 +109,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-slate-500 dark:text-slate-400">
-              Free · No account needed
+              1 free analysis/month · No account needed
             </span>
             <ThemeToggle />
           </div>
@@ -289,8 +289,8 @@ export default function Home() {
           </div>
           <div>
             <div className="text-2xl mb-1">🆓</div>
-            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Always free</p>
-            <p className="text-xs text-slate-400">No account needed</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Free to try</p>
+            <p className="text-xs text-slate-400">1 per month, no account</p>
           </div>
           <div>
             <div className="text-2xl mb-1">⚡</div>

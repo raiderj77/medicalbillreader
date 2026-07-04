@@ -1,12 +1,18 @@
 # Medical Bill Reader
 
-> A free AI-powered tool that helps patients understand their medical bills, insurance EOBs, and healthcare charges in plain language. Built for anyone confused by medical billing codes, charges, or insurance statements.
+> A free-to-start AI-powered tool that helps patients understand their medical bills, insurance EOBs, and healthcare charges in plain language. Built for anyone confused by medical billing codes, charges, or insurance statements.
 
 ## Main Tools
 - [Medical Bill Analyzer](https://medicalbillreader.com): Upload a medical bill image or PDF and get a plain-English explanation of every charge, potential errors flagged, and clear next steps.
 
+## Pricing
+- Free: 1 bill or EOB per month
+- Pay Per Bill: $4.99 per bill
+- Monthly Plan: $49/month, up to 44 bills per month
+
 ## About
 - [About Us](https://medicalbillreader.com/about): How Medical Bill Reader works and who it helps
+- [Pricing](https://medicalbillreader.com/pricing): Free, pay-per-bill, and monthly plan options
 - [Privacy Policy](https://medicalbillreader.com/privacy): How we handle your data and medical bill information
 - [Terms of Service](https://medicalbillreader.com/terms): Terms and conditions for using the service
 - [Contact](https://medicalbillreader.com/contact): Get in touch with the Medical Bill Reader team
