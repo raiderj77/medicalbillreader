@@ -105,7 +105,20 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              4. Use of the Service
+              4. Pricing and Billing
+            </h2>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>Free tier users may analyze up to 1 medical bill or EOB per month.</li>
+              <li>Pay-per-bill customers receive one analysis per purchase ($4.99).</li>
+              <li>Monthly subscribers ($49/month) may analyze up to 44 bills or EOBs per calendar month, which resets on the first of each month regardless of billing date.</li>
+              <li>Payments are processed securely through Stripe. We do not store your payment card details.</li>
+              <li>Monthly subscriptions can be cancelled at any time and remain active through the end of the current billing period.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+              5. Use of the Service
             </h2>
             <p>You agree to:</p>
             <ul className="list-disc ml-6 space-y-1">
@@ -131,7 +144,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              5. Privacy and Data Handling
+              6. Privacy and Data Handling
             </h2>
             <p>
               Your use of the Service is also governed by our{" "}
@@ -164,7 +177,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              6. AI-Generated Content
+              7. AI-Generated Content
             </h2>
             <p>
               The Service uses artificial intelligence to analyze medical bills.
@@ -188,7 +201,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              7. Limitation of Liability
+              8. Limitation of Liability
             </h2>
             <p>
               To the fullest extent permitted by law, MedicalBillReader.com and
@@ -209,7 +222,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              8. Intellectual Property
+              9. Intellectual Property
             </h2>
             <p>
               All content, design, and code on MedicalBillReader.com are
@@ -225,7 +238,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              9. Service Availability
+              10. Service Availability
             </h2>
             <p>
               We strive to keep the Service available at all times but do not
@@ -237,7 +250,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              10. Changes to Terms
+              11. Changes to Terms
             </h2>
             <p>
               We may update these Terms of Service at any time. Material changes
@@ -249,7 +262,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              11. Governing Law
+              12. Governing Law
             </h2>
             <p>
               These Terms of Service are governed by and construed in accordance
@@ -261,7 +274,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              12. Contact
+              13. Contact
             </h2>
             <p>
               If you have questions about these Terms of Service, please contact

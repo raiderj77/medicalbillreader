@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe, PRICES } from "@/lib/stripe";
+import { getStripe, PRICES, SUBSCRIPTION_MONTHLY_CAP } from "@/lib/stripe";
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,9 +49,8 @@ export async function POST(request: NextRequest) {
             price_data: {
               currency: PRICES.monthly.currency,
               product_data: {
-                name: "Medical Bill Analysis, Unlimited Monthly",
-                description:
-                  "Unlimited medical bill and EOB analyses per month with full plain-English reports",
+                name: "Medical Bill Analysis, Monthly Plan",
+                description: `Up to ${SUBSCRIPTION_MONTHLY_CAP} medical bill or EOB analyses per month with full plain-English reports`,
               },
               unit_amount: PRICES.monthly.amount,
               recurring: {

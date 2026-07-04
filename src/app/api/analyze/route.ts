@@ -8,7 +8,10 @@ import {
   checkPerUseSessionAvailable,
   consumePerUseSession,
   verifyActiveSubscription,
+  checkSubscriptionCapAvailable,
+  incrementSubscriptionUsage,
 } from "@/lib/entitlement";
+import { SUBSCRIPTION_MONTHLY_CAP } from "@/lib/stripe";
 
 export const maxDuration = 30;
 
@@ -41,6 +44,18 @@ export async function POST(req: NextRequest) {
           {
             error:
               "Your subscription is not active. Please check your billing or resubscribe.",
+          },
+          { status: 402 }
+        );
+      }
+      const withinCap = await checkSubscriptionCapAvailable(
+        subscriptionId,
+        SUBSCRIPTION_MONTHLY_CAP
+      );
+      if (!withinCap) {
+        return NextResponse.json(
+          {
+            error: `You've used all ${SUBSCRIPTION_MONTHLY_CAP} analyses included in your plan this month. Your limit resets next calendar month, or you can purchase a one-time analysis for $4.99 in the meantime.`,
           },
           { status: 402 }
         );
@@ -104,6 +119,8 @@ export async function POST(req: NextRequest) {
       // Only mark the session consumed now that the analysis actually
       // succeeded.
       await consumePerUseSession(pendingUseSessionId);
+    } else if (subscriptionId) {
+      await incrementSubscriptionUsage(subscriptionId);
     }
 
     const jsonResponse = NextResponse.json({ result: resultText });

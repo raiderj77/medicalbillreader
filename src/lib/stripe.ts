@@ -12,11 +12,6 @@ export function getStripe(): Stripe {
   return _stripe;
 }
 
-// $4.99 per-use and $49/month unlimited mirror ContractExtract's pricing for
-// brand consistency. A medical bill analysis costs a few cents in Anthropic
-// API usage (Opus 4.7, short bill image plus a cached instructions block,
-// well under $0.10 even uncached), so both tiers clear the 75-90% margin
-// target comfortably even before caching discounts.
 export const PRICES = {
   perUse: {
     amount: 499,
@@ -26,6 +21,14 @@ export const PRICES = {
   monthly: {
     amount: 4900,
     currency: "usd",
-    label: "$49/month unlimited",
+    label: "$49/month, up to 44 bills",
   },
 } as const;
+
+// Realistic worst-case per-analysis cost (Opus 4.7, a 30-page hospitalization
+// itemized bill plus the cached instructions block at full price, max
+// output) is about $0.11. 44/month keeps a genuine ~90% margin on the $49
+// subscription even if every analysis that month hit that worst case,
+// comfortably inside the 85-95% target instead of sitting right at the 85%
+// floor.
+export const SUBSCRIPTION_MONTHLY_CAP = 44;

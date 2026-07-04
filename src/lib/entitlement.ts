@@ -74,6 +74,63 @@ export async function verifyActiveSubscription(
   }
 }
 
+function currentMonthKey(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+}
+
+// Checks whether an active subscriber still has analyses left in their
+// monthly cap, WITHOUT consuming one. The count lives in the subscription's
+// own Stripe metadata (usage_month / usage_count), reset on the calendar
+// month rather than the exact billing-cycle anchor day, so this doesn't
+// depend on Stripe API version specifics for period boundaries. Still no
+// local database, Stripe is the only place this number is stored.
+export async function checkSubscriptionCapAvailable(
+  subscriptionId: string,
+  monthlyCap: number
+): Promise<boolean> {
+  const stripe = getStripe();
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const usageMonth = subscription.metadata?.usage_month;
+    const usageCount =
+      usageMonth === currentMonthKey()
+        ? parseInt(subscription.metadata?.usage_count || "0", 10)
+        : 0;
+    return usageCount < monthlyCap;
+  } catch (err) {
+    console.error("checkSubscriptionCapAvailable error:", err);
+    return false;
+  }
+}
+
+// Marks one analysis as used against the subscriber's monthly cap. Only
+// call this after an analysis has actually succeeded, matching the
+// per-use session's consume-after-success behavior.
+export async function incrementSubscriptionUsage(
+  subscriptionId: string
+): Promise<void> {
+  const stripe = getStripe();
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const month = currentMonthKey();
+    const usageCount =
+      subscription.metadata?.usage_month === month
+        ? parseInt(subscription.metadata?.usage_count || "0", 10)
+        : 0;
+
+    await stripe.subscriptions.update(subscriptionId, {
+      metadata: {
+        ...subscription.metadata,
+        usage_month: month,
+        usage_count: String(usageCount + 1),
+      },
+    });
+  } catch (err) {
+    console.error("incrementSubscriptionUsage error:", err);
+  }
+}
+
 // Called right after Stripe redirects back from Checkout. Determines what
 // kind of purchase just happened, purely by asking Stripe, so we know which
 // cookie to set.

@@ -39,12 +39,12 @@ const tiers = [
     priceType: "per-use",
   },
   {
-    name: "Unlimited",
+    name: "Monthly Plan",
     price: "$49",
     period: "/month",
     description: "Best value if you or your family deal with medical bills regularly.",
     features: [
-      "Unlimited bills and EOBs",
+      "Up to 44 bills and EOBs per month",
       "Full plain-English report",
       "Potential billing error flags",
       "Priority processing",
@@ -200,7 +200,7 @@ export default function PricingPage() {
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">I manage medical bills for myself or my family regularly</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">The <strong>Unlimited</strong> plan at $49 per month is the best value if you review more than 10 bills a month, for example if you are managing ongoing treatment or caring for family members. Cancel anytime with no penalty.</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">The <strong>Monthly Plan</strong> at $49 per month is the best value if you review more than 10 bills a month, for example if you are managing ongoing treatment or caring for family members. It includes up to 44 analyses per month (more than one a day). Cancel anytime with no penalty.</p>
             </div>
           </div>
         </section>
@@ -255,6 +255,10 @@ export default function PricingPage() {
               {
                 q: "Can I cancel the monthly plan?",
                 a: "Yes, you can cancel anytime. Your access continues until the end of the current billing period. There are no cancellation fees or long-term commitments.",
+              },
+              {
+                q: "How many bills can I analyze on the Monthly Plan?",
+                a: "Up to 44 bills or EOBs per month, more than one per day. That covers the vast majority of people managing ongoing care or a family's medical bills. If you need more, contact us about a higher-volume plan.",
               },
               {
                 q: "Is there a refund policy?",
