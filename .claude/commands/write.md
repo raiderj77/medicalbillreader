@@ -368,28 +368,45 @@ Every article MUST include a **40–60 word direct answer block** beneath each H
 [Continue with full section body...]
 ```
 
+### AI Content Disclosure (EU AI Act Art. 50 prep — see EMPIRE_BUILD_STANDARDS.md §6.8, deadline 2026-12-02)
+
+Before an article publishes, determine which path applies:
+
+- **Path A (no visible disclosure required):** A named person will genuinely read this specific article and take editorial responsibility for it before it goes live. Only use this path if that review is real, not a formality.
+- **Path B (visible disclosure required):** The article publishes via automated pipeline without genuine per-article human review before going live. This is the default for any site where publish happens on a cron schedule with no human-approval step in between.
+
+**If Path B applies**, append this block immediately before any other disclaimer/attribution block:
+```
+---
+*This article was drafted with AI assistance and has not been individually reviewed by a human editor prior to publication.*
+```
+
+**Never claim a named reviewer or "Reviewed by [credential]" byline unless that specific review genuinely happened for that specific article.** A claimed reviewer who did not actually read the piece is worse than no disclosure at all, both under Art. 50(4) and independently.
+
 ### YMYL Compliance Override
 
-**mindchecktools.com ONLY ,  append this block to every article before saving:**
+**mindchecktools.com ONLY — append this block to every article before saving:**
 ```
 ---
 *This article is for informational purposes only and does not constitute medical or mental health advice. If you are in crisis, call or text 988 (Suicide & Crisis Lifeline) or text HOME to 741741 (Crisis Text Line). For substance use support, call SAMHSA at 1-800-662-4357.*
 
 *Reviewed by a Certified Drug and Alcohol Counselor (CADC-II).*
 ```
+**⚠ FLAG (2026-07-05, needs owner confirmation):** This byline is only honest, and this site only qualifies for AI-disclosure Path A, if a CADC-II genuinely reads each article before `mindcheck_publish` runs. Per the current cron schedule, `mindcheck_draft` runs at 3:00am and `mindcheck_publish` runs at 3:10am with no human-approval step between them. Until confirmed otherwise, treat mindchecktools.com as Path B and append the AI Content Disclosure block above in addition to (not instead of) this crisis-resources block.
 
-**medicalbillreader.com ONLY ,  append this block:**
+**medicalbillreader.com ONLY — append this block:**
 ```
 ---
 *This article is for informational purposes only and does not constitute financial, legal, or medical billing advice. Consult a qualified billing advocate or healthcare attorney for your specific situation.*
 
 *Content reviewed by a certified billing professional.*
 ```
+Note: this site is not on the automated cron publish pipeline; content currently goes through direct human-in-the-loop sessions, which can qualify as Path A once a named reviewer's byline is real (see reviewer-recruitment effort in progress). Until a named reviewer is confirmed, use the generic phrasing above and also append the AI Content Disclosure block (Path B) for consistency.
 
 ### Attribution Rules (All Sites)
-- **mindchecktools.com**: Use "Reviewed by a Certified Drug and Alcohol Counselor (CADC-II)"
-- **All other sites**: Use generic bylines only ,  no personal names in author fields
-- **Exception**: mindchecktools.com tool pages (not blog posts) may display "Jason Ramirez, CADC-II" for E-E-A-T
+- **mindchecktools.com**: Use "Reviewed by a Certified Drug and Alcohol Counselor (CADC-II)" only if that review is genuinely happening per-article (see flag above)
+- **All other sites**: Use generic bylines only — no personal names in author fields
+- **Exception**: mindchecktools.com tool pages (not blog posts) may display "Jason Ramirez, CADC-II" for E-E-A-T, if genuinely accurate
 
 ### Output Path (Empire)
 All draft files go to: `content/drafts/[topic-slug]-[YYYY-MM-DD].md`
