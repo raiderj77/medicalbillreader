@@ -166,7 +166,7 @@ export default function Home() {
               Upload your medical bill or EOB document ,  the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete ,  nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors affect an estimated 80% of medical bills, according to the Medical Billing Advocates of America ,  understanding your bill before you pay is one of the most impactful steps you can take.
+              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete ,  nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors have been estimated by patient advocacy groups like the Medical Billing Advocates of America to affect as many as 80% of medical bills, though estimates vary by study and methodology ,  understanding your bill before you pay is one of the most impactful steps you can take.
             </p>
           </div>
 
@@ -179,7 +179,7 @@ export default function Home() {
               The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              Americans are overcharged billions annually due to medical billing errors ,  the average billing error costs patients $1,300 out of pocket, according to a 2023 healthcare billing analysis. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spend over $400 billion on out-of-pocket medical costs annually, making accurate bill review one of the most impactful personal finance actions available.
+              Americans are overcharged billions annually due to medical billing errors ,  on bills over $10,000, reported overcharges have averaged around $1,300 per bill. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spent over $550 billion out-of-pocket on medical costs in 2024, according to CMS National Health Expenditure data, making accurate bill review one of the most impactful personal finance actions available.
             </p>
           </div>
 
