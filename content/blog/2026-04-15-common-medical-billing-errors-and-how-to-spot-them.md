@@ -93,7 +93,7 @@ Estimates vary widely depending on the study and methodology. Patient advocacy o
 
 ### Can medical billing errors affect my credit score?
 
-Yes. If an incorrect charge goes to collections, it can appear on your credit report. Starting July 1, 2022, the three major credit bureaus (Equifax, Experian, TransUnion) stopped reporting paid medical debt and removed medical collections under $500 from credit reports. However, larger erroneous charges that go unpaid can still cause damage.
+Yes. If an incorrect charge goes to collections, it can appear on your credit report. The three major credit bureaus (Equifax, Experian, TransUnion) stopped reporting paid medical collections starting in July 2022, and stopped reporting medical collections under $500 starting in 2023. However, larger erroneous charges that go unpaid can still be reported and can still cause damage , a 2025 federal rule that would have banned this was struck down in court.
 
 ### How long do I have to dispute a medical bill?
 
