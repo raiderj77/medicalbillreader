@@ -179,7 +179,7 @@ export default function Home() {
               The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              Americans are overcharged billions annually due to medical billing errors ,  on bills over $10,000, reported overcharges have averaged around $1,300 per bill. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spent over $550 billion out-of-pocket on medical costs in 2024, according to CMS National Health Expenditure data, making accurate bill review one of the most impactful personal finance actions available.
+              Inaccurate medical bills have been estimated to cost Americans $88 billion, according to the Consumer Financial Protection Bureau. Additionally, on bills over $10,000, reported overcharges have averaged around $1,300 per bill, according to an Equifax survey reported by ABC News. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spent over $550 billion out-of-pocket on medical costs in 2024, according to CMS National Health Expenditure data, making accurate bill review one of the most impactful personal finance actions available.
             </p>
           </div>
 
