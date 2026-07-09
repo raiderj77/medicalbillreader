@@ -81,6 +81,12 @@ export default function Footer() {
       <p className="mt-4 text-slate-400">
         &copy; {new Date().getFullYear()} Medical Bill Reader. All rights reserved.
       </p>
+      <p className="mt-1 text-slate-400">
+        Built by{" "}
+        <a href="https://automation-services-eta.vercel.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-700 dark:hover:text-slate-300">
+          Jason Ramirez
+        </a>
+      </p>
     </footer>
   );
 }
