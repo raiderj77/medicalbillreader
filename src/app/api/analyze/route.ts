@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!aiResponse.ok) {
-      safeSecurityLog("anthropic_request_failed");
+      safeSecurityLog(`anthropic_request_failed_${aiResponse.status}`);
       await releaseEntitlement(reservation); reservation = null;
       return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
     }
