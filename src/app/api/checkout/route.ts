@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getStripe,
-  stripePriceId,
   SUBSCRIPTION_MONTHLY_CAP,
+  verifiedStripePriceId,
 } from "@/lib/stripe";
 import { clientIp, safeSecurityLog } from "@/lib/security";
 import { enforceRateLimit } from "@/lib/rate-limit";
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         mode: "payment",
         line_items: [
           {
-            price: stripePriceId("per-use"),
+            price: await verifiedStripePriceId("per-use"),
             quantity: 1,
           },
         ],
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         mode: "subscription",
         line_items: [
           {
-            price: stripePriceId("subscription"),
+            price: await verifiedStripePriceId("subscription"),
             quantity: 1,
           },
         ],

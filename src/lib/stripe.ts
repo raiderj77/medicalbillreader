@@ -38,6 +38,27 @@ export function stripePriceId(type: PurchaseType): string {
   return value;
 }
 
+export async function verifiedStripePriceId(
+  type: PurchaseType,
+): Promise<string> {
+  const id = stripePriceId(type);
+  const price = await getStripe().prices.retrieve(id);
+  const expected = type === "per-use" ? PRICES.perUse : PRICES.monthly;
+  const recurringIsValid =
+    type === "per-use"
+      ? price.recurring === null
+      : price.recurring?.interval === "month";
+  if (
+    !price.active ||
+    price.unit_amount !== expected.amount ||
+    price.currency !== expected.currency ||
+    !recurringIsValid
+  ) {
+    throw new Error(`Stripe price mapping is invalid for ${type}`);
+  }
+  return id;
+}
+
 // Realistic worst-case per-analysis cost (Opus 4, a 30-page hospitalization
 // itemized bill plus the cached instructions block at full price, max
 // output) is about $0.11. 44/month keeps a genuine ~90% margin on the $49

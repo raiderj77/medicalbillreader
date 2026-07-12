@@ -5,14 +5,14 @@ const stripe = vi.hoisted(() => ({
   checkout: { sessions: { create: vi.fn() } },
 }));
 const prices = vi.hoisted(() => ({
-  priceId: vi.fn((type: string) =>
+  priceId: vi.fn(async (type: string) =>
     type === "per-use" ? "price_single" : "price_monthly",
   ),
 }));
 
 vi.mock("@/lib/stripe", () => ({
   getStripe: () => stripe,
-  stripePriceId: prices.priceId,
+  verifiedStripePriceId: prices.priceId,
   SUBSCRIPTION_MONTHLY_CAP: 44,
 }));
 vi.mock("@/lib/rate-limit", () => ({
