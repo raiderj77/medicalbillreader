@@ -42,7 +42,9 @@ export async function POST(request: NextRequest) {
     });
 
     if (!aiResponse.ok) {
-      safeSecurityLog(`anthropic_request_failed_${aiResponse.status}`);
+      const failure = (await aiResponse.json().catch(() => null)) as { error?: { type?: string } } | null;
+      const category = failure?.error?.type?.replace(/[^a-z0-9_-]/gi, "").slice(0, 40) || "unknown";
+      safeSecurityLog(`anthropic_request_failed_${aiResponse.status}_${category}`);
       await releaseEntitlement(reservation); reservation = null;
       return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
     }
