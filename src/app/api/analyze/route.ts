@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const aiResponse = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 2000, temperature: 0, messages: [{ role: "user", content: [{ type: "text", text: BILL_ANALYSIS_INSTRUCTIONS }, { type: "text", text: buildBillAnalysisPrompt() }, fileContent] }] }),
+      body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, temperature: 0, messages: [{ role: "user", content: [{ type: "text", text: BILL_ANALYSIS_INSTRUCTIONS }, { type: "text", text: buildBillAnalysisPrompt() }, fileContent] }] }),
     });
 
     if (!aiResponse.ok) {
