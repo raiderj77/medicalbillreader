@@ -13,21 +13,16 @@ The Vercel project contains the existing Anthropic, Redis, entitlement, and Stri
 
 No secret values are recorded in this file or in test output.
 
-## Required Stripe test setup
+## Stripe sandbox setup completed
 
-1. Supply a Stripe test secret key.
-2. Create or select one active, one-time USD price for exactly $4.99 and assign its `price_...` identifier to `STRIPE_PRICE_PER_USE`.
-3. Create or select one active, monthly USD price for exactly $49.00 and assign its `price_...` identifier to `STRIPE_PRICE_MONTHLY`.
-4. Configure the Stripe customer portal to allow subscription cancellation.
-5. Create a webhook endpoint for `/api/stripe/webhook` and subscribe it to:
-   - `checkout.session.completed`
-   - `charge.refunded`
-   - `refund.created`
-   - `customer.subscription.deleted`
-   - `invoice.payment_failed`
-6. Store the webhook signing secret as `STRIPE_WEBHOOK_SECRET`.
+- created one active, one-time USD price for exactly $4.99
+- created one active, monthly USD price for exactly $49.00
+- mapped both price identifiers to the pull-request preview branch only
+- verified the customer portal creates a management session for a server-verified subscriber
+- created a temporary refund webhook subscribed only to `charge.refunded` and `refund.created`
+- verified its signature and duplicate-delivery handling against the local branch, then removed the temporary destination to prevent retries against Vercel's protected preview
 
-Do not add live-mode values until the complete test-mode payment and delivery matrix passes.
+No live-mode Stripe value or production Vercel variable was changed.
 
 ## Verified automatically
 
@@ -54,15 +49,34 @@ Using a synthetic document containing no medical or identifying information:
 - first free analysis returned `200`
 - replaying the same free entitlement returned `401`
 
-## Production-only test matrix still required
+## Stripe sandbox matrix completed
 
-- $4.99 test Checkout completes, returns, and delivers exactly one analysis
-- $49 test subscription completes, returns, and enforces the monthly cap
-- card decline and cancelled Checkout grant no cookie or entitlement
-- expired Checkout grants no entitlement
-- refund revokes unused pay-per-use access
-- portal cancellation stops access when Stripe reports the subscription inactive
-- Stripe test webhook retries and duplicate delivery remain idempotent
-- consented analytics receive the six conversion events without medical or identifying fields
+Using Stripe sandbox cards and a generated image containing no patient or medical information:
 
-The pull request must not be merged and no production variables should be changed until Jason approves this matrix and supplies the missing test-mode Stripe configuration.
+- the $4.99 Checkout completed and returned through the server confirmation route
+- the server accepted the paid entitlement and delivered one Anthropic analysis
+- Stripe marked the paid credit used only after successful delivery
+- replaying the paid entitlement returned `401`
+- the $49 subscription Checkout completed with active status and a server cap of 44 analyses
+- a seeded usage count of 44 caused request 45 to return `401`; the temporary usage key was removed after the check
+- the billing portal created a valid Stripe portal session
+- cancelling the test subscription changed its status to cancelled and subsequent analysis returned `401`
+- Stripe's decline card remained unpaid and produced no entitlement
+- leaving the declined Checkout returned to the cancellation URL and still produced no entitlement
+- a full test refund generated a real `refund.created` event
+- the signed refund event was accepted, marked the PaymentIntent refunded, and a duplicate delivery was safely acknowledged without processing twice
+- local logs contained neither the synthetic document marker nor base64 upload data
+- all six conversion event names are covered by automated tests, and analytics discard unapproved identity, bill, diagnosis, account, and upload-text fields
+
+Expired, unrelated, malformed, and concurrent entitlement cases remain covered by the automated suite because Stripe does not offer a practical dashboard flow for every adversarial state.
+
+## Owner-approved production actions still required
+
+After Jason approves merge and production deployment:
+
+1. create or select live-mode $4.99 and $49 prices
+2. set the four production Stripe variables to live values
+3. create a public live webhook for `/api/stripe/webhook` subscribed only to `charge.refunded` and `refund.created`
+4. perform one owner-approved live purchase, delivery, refund, and production-log check
+
+The pull request must remain unmerged and production Stripe configuration must remain unchanged until that approval.
