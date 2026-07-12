@@ -56,7 +56,7 @@ const faqJsonLd = {
       name: "Is my medical bill data kept private?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information ,  we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.",
+        text: "Uploaded documents are transmitted to Anthropic solely to generate the requested analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Processing and retention by infrastructure providers are governed by their applicable terms.",
       },
     },
     {
@@ -166,7 +166,7 @@ export default function Home() {
               Upload your medical bill or EOB document ,  the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              When you upload a file, it is sent over encrypted HTTPS to our server for processing and deleted immediately after analysis is complete ,  nothing is retained. The tool supports JPG, PNG, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors have been estimated by patient advocacy groups like the Medical Billing Advocates of America to affect as many as 80% of medical bills, though estimates vary by study and methodology ,  understanding your bill before you pay is one of the most impactful steps you can take.
+              When you upload a file, it is sent over encrypted HTTPS through our server to Anthropic solely to generate the analysis. Medical Bill Reader does not intentionally save the document in its own database. The tool supports JPEG, PNG, WebP, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors have been estimated by patient advocacy groups like the Medical Billing Advocates of America to affect as many as 80% of medical bills, though estimates vary by study and methodology ,  understanding your bill before you pay is one of the most impactful steps you can take.
             </p>
           </div>
 
@@ -202,7 +202,7 @@ export default function Home() {
               Is it safe to upload a medical bill?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              Yes ,  bills are processed server-side over encrypted HTTPS and deleted immediately after analysis. No medical information is stored, logged, or used for any purpose beyond your requested explanation.
+              Bills are processed over encrypted HTTPS and transmitted to Anthropic solely for your requested explanation. They are not sold or used for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database.
             </p>
             <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
               No account is required and no login is needed ,  your bill is never associated with an identity. Medical data is never passed to advertising systems; ads on this site run in non-personalized mode on analysis pages specifically to prevent any health information from reaching ad networks.
@@ -284,8 +284,8 @@ export default function Home() {
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-12 flex flex-wrap justify-center gap-8 text-center">
           <div>
             <div className="text-2xl mb-1">🔒</div>
-            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Never stored</p>
-            <p className="text-xs text-slate-400">Bills are never saved</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">No bill database</p>
+            <p className="text-xs text-slate-400">Not intentionally saved by us</p>
           </div>
           <div>
             <div className="text-2xl mb-1">🆓</div>
@@ -314,7 +314,7 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data kept private?</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Yes. Uploaded medical bills are processed immediately and deleted after analysis. No bill content is stored, logged, or retained. Medical bills contain sensitive personal and health information ,  we treat all uploaded data with the highest level of privacy protection and never use it for advertising purposes.
+                Documents are transmitted securely to Anthropic solely for analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store them in its own database. See the Privacy Policy for infrastructure and retention details.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">

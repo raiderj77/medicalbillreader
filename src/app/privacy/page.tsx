@@ -28,7 +28,7 @@ const privacyFaqJsonLd = {
       name: "How is my uploaded medical bill data handled?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Your uploaded medical bill is sent to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. The analysis results exist only in your browser session and disappear when you close or refresh the page.",
+        text: "Your document is transmitted to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Anthropic, Vercel, and infrastructure providers process data under their applicable terms and retention practices.",
       },
     },
     {
@@ -36,7 +36,7 @@ const privacyFaqJsonLd = {
       name: "How can I request deletion of my personal data?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical bill documents are deleted automatically immediately after analysis, so there is nothing to delete. For other personal data such as analytics or account information, email privacy@medicalbillreader.com and we will respond within 45 days as required by applicable law.",
+        text: "Medical Bill Reader does not intentionally retain bill documents in its own database. Infrastructure providers may retain limited data under their applicable terms. For a privacy request, email privacy@medicalbillreader.com.",
       },
     },
   ],
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
       {/* Answer capsule ,  must be first visible text for GEO/AI scrapers */}
       <div className="max-w-3xl mx-auto px-6 pt-8">
         <p className="text-lg text-slate-700 leading-relaxed mb-0 bg-white border border-slate-200 rounded-lg p-5">
-          MedicalBillReader.com is committed to protecting your privacy. This policy explains what information we collect when you use our AI-powered bill analysis tool, how we use it, and your rights under U.S. state and international privacy laws. We never store your uploaded medical bills ,  documents are deleted immediately after analysis and results exist only in your browser session.
+          MedicalBillReader.com is committed to protecting your privacy. This policy explains how uploaded documents are transmitted to Anthropic for analysis, how our hosting and infrastructure providers process requests, and the choices available to you. We do not sell bill data or intentionally store bill documents in our own database.
         </p>
       </div>
 
@@ -133,14 +133,14 @@ export default function PrivacyPage() {
               We treat all uploaded medical bills with the highest level of sensitivity. Medical bills may contain protected health information and are handled with HIPAA-adjacent care, even though MedicalBillReader.com is not a HIPAA-covered entity.
             </p>
             <ul className="list-disc ml-6 space-y-2">
-              <li><strong>Immediate Deletion:</strong> Uploaded medical bills are deleted immediately after analysis is complete. We do not retain your bill images or PDFs on our servers.</li>
+              <li><strong>Our storage:</strong> Medical Bill Reader does not intentionally write uploaded bill images or PDFs to its own database. Documents pass through server memory while the request is processed.</li>
               <li><strong>No Logging of Bill Contents:</strong> The text, codes, charges, and other contents of your medical bills are never logged, stored in databases, or written to server logs.</li>
-              <li><strong>Anthropic API Disclosure:</strong> To analyze your bill, the uploaded image or PDF text is sent to Anthropic&apos;s Claude API for AI-powered processing. Anthropic processes this data according to their <a href="https://www.anthropic.com/privacy" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">privacy policy</a>. Anthropic does not use API inputs to train their models.</li>
+              <li><strong>Anthropic API disclosure:</strong> The complete uploaded image or PDF is transmitted to Anthropic solely to generate the requested analysis. Anthropic processes API data under its <a href="https://www.anthropic.com/legal/commercial-terms" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Commercial Terms</a> and <a href="https://privacy.anthropic.com/" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Privacy Center</a>. Retention depends on the API service configuration and contractual terms in effect.</li>
               <li><strong>No Advertising Use:</strong> Your medical bill data, health information, and analysis results are never shared with advertising systems, ad networks, or used for ad targeting.</li>
               <li><strong>Browser-Session Only:</strong> Your bill preview and analysis results exist only in your browser session and are cleared when you close or refresh the page.</li>
             </ul>
             <p>
-              During the upload experience, we display a visible privacy notice informing you that your bill will be processed by AI and deleted immediately after analysis.
+              During upload, we display a notice that the document will be transmitted to Anthropic and not used for advertising.
             </p>
             <p>
               <strong>Important:</strong> Analysis results are estimates for informational purposes only. They do not constitute medical advice, financial advice, or a professional billing review.
@@ -154,7 +154,7 @@ export default function PrivacyPage() {
               <li><strong>Anthropic (Claude API)</strong> ,  Uploaded bill images/text are sent to Anthropic for AI-powered analysis. Anthropic processes data under their API terms and does not use API inputs for model training.</li>
               <li><strong>Google AdSense</strong> ,  On marketing pages only, Google may collect cookies and device information for ad serving. Medical bill data is never shared with Google.</li>
               <li><strong>Google Analytics</strong> ,  We use Google Analytics to understand website usage patterns. Analytics data does not include medical bill contents.</li>
-              <li><strong>Vercel</strong> ,  Our hosting provider processes server requests. No medical bill data is persisted by Vercel beyond standard request processing.</li>
+              <li><strong>Vercel</strong> ,  Our hosting provider routes and executes server requests. Vercel may process request metadata and operational logs according to our configuration, plan, and Vercel&apos;s terms. We configure application logs not to include bill content, base64 data, or model output.</li>
             </ul>
           </section>
 
@@ -185,7 +185,7 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li><strong>Identifiers:</strong> IP address, email address (if account created), browser type, device identifiers.</li>
               <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
-              <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis. This data is processed server-side and deleted immediately after analysis is complete. It is never stored, logged beyond the active session, or shared.</li>
+              <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis are transmitted to Anthropic. Medical Bill Reader does not intentionally store them in its own database or log their contents.</li>
               <li><strong>Inferred data:</strong> Interests inferred from browsing behavior via advertising partners (marketing pages only ,  not analysis pages).</li>
             </ul>
 
@@ -201,9 +201,9 @@ export default function PrivacyPage() {
               information.</strong> Specifically:
             </p>
             <ul className="list-disc ml-6 space-y-1">
-              <li>Bill documents are processed in memory and deleted immediately after analysis is returned to you</li>
+              <li>Bill documents pass through application memory and are not intentionally written to Medical Bill Reader&apos;s own database</li>
               <li>We do not store, log, index, or retain bill content after your session ends</li>
-              <li>Bill content is never used for advertising targeting, never sold, and never shared with third parties</li>
+              <li>Bill content is not sold or shared for advertising; it is disclosed to Anthropic and infrastructure providers as needed to deliver the analysis</li>
               <li>Advertising is served via non-personalized ads on analysis pages to prevent any health data from reaching advertising systems</li>
             </ul>
 
@@ -237,8 +237,7 @@ export default function PrivacyPage() {
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Minimization</h3>
             <p>
               We collect only the minimum personal information necessary to operate this service.
-              Medical bill documents are processed in memory and deleted immediately after analysis.
-              We do not retain document content beyond the active processing session.
+              Medical bill documents pass through application memory and are not intentionally stored in our own database. Provider-side processing and retention are governed by the applicable Anthropic, Vercel, and infrastructure terms and configuration.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">How We Use Your Information</h3>
@@ -272,7 +271,7 @@ export default function PrivacyPage() {
             <p>Contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>. We will respond within 45 days. Identity verification may be required.</p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Retention</h3>
-            <p>Account data is retained until account deletion. Analytics data is retained for 26 months. Medical bill documents are deleted immediately after processing. Server logs (without health content) are retained for 90 days.</p>
+            <p>Medical Bill Reader does not intentionally retain bill documents in its own database. Analysis results remain in the active browser session. Stripe retains payment records under its terms. Anthropic, Vercel, Redis, and other infrastructure providers may retain request metadata or processed data according to their service configuration, contracts, and legal obligations. We do not promise zero retention where those provider settings have not been contractually verified.</p>
           </section>
 
           {/* Additional U.S. State Privacy Rights */}
@@ -326,7 +325,7 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li>We process health data solely based on your explicit consent given at the time of upload.</li>
               <li>Processing is limited to the specific purpose of bill analysis.</li>
-              <li>Data is deleted immediately after processing ,  no retention.</li>
+              <li>Medical Bill Reader does not intentionally store bill documents in its own database; provider-side retention is governed by applicable service terms and configuration.</li>
               <li>We implement appropriate technical and organizational safeguards.</li>
             </ul>
           </section>
@@ -394,13 +393,13 @@ export default function PrivacyPage() {
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-2">How is my uploaded medical bill data handled?</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">
-                  Your uploaded medical bill is sent to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. The analysis results exist only in your browser session and disappear when you close or refresh the page.
+                  Your document is transmitted to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store it in its own database. Infrastructure providers process data under their applicable terms and retention practices.
                 </p>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-2">How can I request deletion of my personal data?</h3>
                 <p className="text-slate-500 text-sm leading-relaxed">
-                  Medical bill documents are deleted automatically immediately after analysis, so there is nothing to delete. For other personal data such as analytics or account information, email privacy@medicalbillreader.com and we will respond within 45 days as required by applicable law.
+                  Medical Bill Reader does not intentionally retain bill documents in its own database. For questions or privacy requests concerning other data, email privacy@medicalbillreader.com. Provider-side records may be subject to the provider&apos;s own deletion process and legal obligations.
                 </p>
               </div>
             </div>

@@ -198,8 +198,7 @@ export default function AboutPage() {
               flags for potential errors, and suggestions for next steps.
             </p>
             <p>
-              No account is required. Your bill is processed privately and deleted
-              immediately after analysis ,  it is never stored on our servers.
+              No account is required for the free tier. Your bill is transmitted to Anthropic solely for analysis and is not intentionally stored in Medical Bill Reader&apos;s own database.
             </p>
           </section>
 

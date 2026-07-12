@@ -266,7 +266,7 @@ export default function PricingPage() {
               },
               {
                 q: "Do you store my bill or EOB after analyzing it?",
-                a: "No. Your document is sent securely for analysis and deleted immediately afterward. It is never stored on our servers, logged, or shared with third parties, whether you use the free tier or a paid plan.",
+                a: "Your document is transmitted securely to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Anthropic, Vercel, and other infrastructure providers process data under their applicable terms and retention practices.",
               },
             ].map(({ q, a }) => (
               <details key={q} className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 group">

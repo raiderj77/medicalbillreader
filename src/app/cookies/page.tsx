@@ -79,6 +79,7 @@ export default function CookiesPage() {
           <ul className="list-disc ml-6 space-y-1">
             <li><strong>CookieConsent (Cookiebot):</strong> Stores your cookie consent preferences so we do not ask you repeatedly. Expires after 12 months.</li>
             <li><strong>Theme preference:</strong> Stores your light/dark mode preference in localStorage (not a cookie, but similar local storage).</li>
+            <li><strong>Analysis entitlements:</strong> Signed HttpOnly cookies identify a paid, subscription, or anonymous free-tier allowance. They contain opaque identifiers, not bill content. The anonymous free tier is enforced per cookie; clearing or blocking cookies can affect enforcement, and shared devices share the same browser allowance. Short-lived hashed IP counters are also used for abuse prevention.</li>
           </ul>
 
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Analytics Cookies</h3>
@@ -130,7 +131,7 @@ export default function CookiesPage() {
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Health Data and Cookies</h2>
           <p>
             Medical bill content is never stored in cookies, localStorage, or any client-side storage.
-            Your uploaded bills are processed in server memory and deleted immediately after analysis.
+            Uploaded bills pass through server memory and are transmitted to Anthropic solely for analysis. Medical Bill Reader does not intentionally store them in its own database.
             No health data is ever passed to advertising or analytics systems.
           </p>
 

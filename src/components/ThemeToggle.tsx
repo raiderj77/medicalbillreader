@@ -6,6 +6,8 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // Hydration guard: theme preferences are available only in the browser.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     const stored = localStorage.getItem('theme') as 'light' | 'dark' | null
     const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'

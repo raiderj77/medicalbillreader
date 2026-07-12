@@ -25,7 +25,7 @@ export const PRICES = {
   },
 } as const;
 
-// Realistic worst-case per-analysis cost (Opus 4.7, a 30-page hospitalization
+// Realistic worst-case per-analysis cost (Opus 4, a 30-page hospitalization
 // itemized bill plus the cached instructions block at full price, max
 // output) is about $0.11. 44/month keeps a genuine ~90% margin on the $49
 // subscription even if every analysis that month hit that worst case,

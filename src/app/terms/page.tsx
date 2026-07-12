@@ -158,11 +158,10 @@ export default function TermsPage() {
             </p>
             <ul className="list-disc ml-6 space-y-1">
               <li>
-                Uploaded medical bills are deleted immediately after analysis.
+                Medical Bill Reader does not intentionally store uploaded bill documents in its own database.
               </li>
               <li>
-                Bill contents are never stored, logged, or retained on our
-                servers.
+                Documents are transmitted to Anthropic solely to generate an analysis; infrastructure providers may process request data under their own terms and retention practices.
               </li>
               <li>
                 Analysis results exist only in your browser session and are not
