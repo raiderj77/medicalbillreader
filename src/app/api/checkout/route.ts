@@ -1,18 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe, PRICES, SUBSCRIPTION_MONTHLY_CAP } from "@/lib/stripe";
+import {
+  getStripe,
+  stripePriceId,
+  SUBSCRIPTION_MONTHLY_CAP,
+} from "@/lib/stripe";
+import { clientIp, safeSecurityLog } from "@/lib/security";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    if (
+      !(await enforceRateLimit(
+        "checkout-ip",
+        clientIp(request.headers),
+        10,
+        60,
+      ))
+    ) {
+      return NextResponse.json(
+        { error: "Too many checkout attempts. Please wait and try again." },
+        { status: 429 },
+      );
+    }
     if (!process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json(
         { error: "Stripe is not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    const { priceType } = await request.json();
+    const { priceType } = (await request.json()) as { priceType?: string };
 
-    const origin = request.headers.get("origin") || "http://localhost:3000";
+    const origin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
     const successUrl = `${origin}/api/checkout/confirm?session_id={CHECKOUT_SESSION_ID}`;
 
     const stripe = getStripe();
@@ -22,20 +41,14 @@ export async function POST(request: NextRequest) {
         mode: "payment",
         line_items: [
           {
-            price_data: {
-              currency: PRICES.perUse.currency,
-              product_data: {
-                name: "Medical Bill Analysis, Single Use",
-                description:
-                  "One-time medical bill or EOB analysis with a full plain-English report",
-              },
-              unit_amount: PRICES.perUse.amount,
-            },
+            price: stripePriceId("per-use"),
             quantity: 1,
           },
         ],
         success_url: successUrl,
         cancel_url: `${origin}/pricing?payment=cancelled`,
+        metadata: { mbr_entitlement: "per_use" },
+        payment_intent_data: { metadata: { mbr_entitlement: "per_use" } },
       });
 
       return NextResponse.json({ url: session.url });
@@ -46,36 +59,30 @@ export async function POST(request: NextRequest) {
         mode: "subscription",
         line_items: [
           {
-            price_data: {
-              currency: PRICES.monthly.currency,
-              product_data: {
-                name: "Medical Bill Analysis, Monthly Plan",
-                description: `Up to ${SUBSCRIPTION_MONTHLY_CAP} medical bill or EOB analyses per month with full plain-English reports`,
-              },
-              unit_amount: PRICES.monthly.amount,
-              recurring: {
-                interval: "month",
-              },
-            },
+            price: stripePriceId("subscription"),
             quantity: 1,
           },
         ],
         success_url: successUrl,
         cancel_url: `${origin}/pricing?payment=cancelled`,
+        metadata: { mbr_entitlement: "subscription" },
+        subscription_data: {
+          metadata: {
+            mbr_entitlement: "subscription",
+            monthly_cap: String(SUBSCRIPTION_MONTHLY_CAP),
+          },
+        },
       });
 
       return NextResponse.json({ url: session.url });
     }
 
-    return NextResponse.json(
-      { error: "Invalid price type." },
-      { status: 400 }
-    );
-  } catch (error) {
-    console.error("Checkout error:", error);
+    return NextResponse.json({ error: "Invalid price type." }, { status: 400 });
+  } catch {
+    safeSecurityLog("checkout_creation_failed");
     return NextResponse.json(
       { error: "Failed to create checkout session." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
