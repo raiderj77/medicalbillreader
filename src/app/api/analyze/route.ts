@@ -1,141 +1,68 @@
 import { NextRequest, NextResponse } from "next/server";
 import { recordAnalysis } from "@/lib/analysis-stats";
-import {
-  BILL_ANALYSIS_INSTRUCTIONS,
-  buildBillAnalysisPrompt,
-} from "@/lib/bill-analysis-prompt";
-import {
-  checkPerUseSessionAvailable,
-  consumePerUseSession,
-  verifyActiveSubscription,
-  checkSubscriptionCapAvailable,
-  incrementSubscriptionUsage,
-} from "@/lib/entitlement";
-import { SUBSCRIPTION_MONTHLY_CAP } from "@/lib/stripe";
+import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
+import { commitEntitlement, releaseEntitlement, reserveRequestEntitlement, type EntitlementReservation } from "@/lib/entitlement";
+import { enforceRateLimit } from "@/lib/rate-limit";
+import { StoreUnavailableError } from "@/lib/redis";
+import { clientIp, safeSecurityLog } from "@/lib/security";
+import { readLimitedJson, UploadValidationError, validateUpload } from "@/lib/upload-validation";
 
 export const maxDuration = 30;
+export const runtime = "nodejs";
 
-export async function POST(req: NextRequest) {
+function errorResponse(error: string, status: number) {
+  return NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
+}
+
+export async function POST(request: NextRequest) {
+  let reservation: EntitlementReservation | null = null;
   try {
-    // Entitlement check. Paid analyses are verified against Stripe directly,
-    // there is no local database of purchases or subscribers. Requests with
-    // neither cookie fall through unchanged (the existing client-side free
-    // tier gate). The per-use session is only checked (not consumed) here,
-    // it's marked used after the analysis actually succeeds below, so a
-    // transient failure doesn't burn the customer's paid credit.
-    const pendingUseSessionId = req.cookies.get("mbr_pending_use")?.value;
-    const subscriptionId = req.cookies.get("mbr_sub_id")?.value;
+    if (!(await enforceRateLimit("analyze-ip", clientIp(request.headers), 10, 60))) return errorResponse("Too many analysis requests. Please wait and try again.", 429);
 
-    if (pendingUseSessionId) {
-      const available = await checkPerUseSessionAvailable(pendingUseSessionId);
-      if (!available) {
-        return NextResponse.json(
-          {
-            error:
-              "This payment could not be verified or has already been used. Please purchase a new analysis.",
-          },
-          { status: 402 }
-        );
-      }
-    } else if (subscriptionId) {
-      const active = await verifyActiveSubscription(subscriptionId);
-      if (!active) {
-        return NextResponse.json(
-          {
-            error:
-              "Your subscription is not active. Please check your billing or resubscribe.",
-          },
-          { status: 402 }
-        );
-      }
-      const withinCap = await checkSubscriptionCapAvailable(
-        subscriptionId,
-        SUBSCRIPTION_MONTHLY_CAP
-      );
-      if (!withinCap) {
-        return NextResponse.json(
-          {
-            error: `You've used all ${SUBSCRIPTION_MONTHLY_CAP} analyses included in your plan this month. Your limit resets next calendar month, or you can purchase a one-time analysis for $4.99 in the meantime.`,
-          },
-          { status: 402 }
-        );
-      }
+    reservation = await reserveRequestEntitlement(request);
+    if (!reservation) return errorResponse("A valid analysis entitlement is required.", 401);
+
+    if (!(await enforceRateLimit("analyze-entitlement", reservation.key, 3, 60))) {
+      await releaseEntitlement(reservation);
+      reservation = null;
+      return errorResponse("This analysis entitlement is being used too quickly. Please wait and try again.", 429);
     }
 
-    const { image, fileType } = await req.json();
-    if (!image) return NextResponse.json({ error: "No image provided" }, { status: 400 });
-
+    const upload = validateUpload(await readLimitedJson(request));
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return NextResponse.json({ error: "API key not configured" }, { status: 500 });
+    if (!apiKey) throw new Error("anthropic_not_configured");
+    const fileContent = upload.mediaType === "application/pdf"
+      ? { type: "document", source: { type: "base64", media_type: upload.mediaType, data: upload.data } }
+      : { type: "image", source: { type: "base64", media_type: upload.mediaType, data: upload.data } };
 
-    const base64Data = image.split(",")[1];
-    const isPDF = fileType === "application/pdf";
-
-    const fileContent = isPDF
-      ? { type: "document", source: { type: "base64", media_type: "application/pdf", data: base64Data } }
-      : { type: "image", source: { type: "base64", media_type: fileType || "image/jpeg", data: base64Data } };
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const aiResponse = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-        "anthropic-beta": "pdfs-2024-09-25",
-      },
-      body: JSON.stringify({
-        model: "claude-opus-4-7",
-        max_tokens: 2000,
-        // Deterministic extraction, not creative writing. Lower temperature
-        // reduces embellishment and keeps repeated runs on the same
-        // document consistent.
-        temperature: 0,
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: BILL_ANALYSIS_INSTRUCTIONS,
-                cache_control: { type: "ephemeral" },
-              },
-              { type: "text", text: buildBillAnalysisPrompt() },
-              fileContent,
-            ],
-          },
-        ],
-      }),
+      headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-beta": "pdfs-2024-09-25" },
+      body: JSON.stringify({ model: "claude-opus-4-7", max_tokens: 2000, temperature: 0, messages: [{ role: "user", content: [{ type: "text", text: BILL_ANALYSIS_INSTRUCTIONS, cache_control: { type: "ephemeral" } }, { type: "text", text: buildBillAnalysisPrompt() }, fileContent] }] }),
     });
 
-    if (!response.ok) {
-      const err = await response.json();
-      console.error("Anthropic API error:", err?.error?.type || "unknown");
-      return NextResponse.json({ error: "Failed to analyze bill." }, { status: 500 });
+    if (!aiResponse.ok) {
+      safeSecurityLog("anthropic_request_failed");
+      await releaseEntitlement(reservation); reservation = null;
+      return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
     }
-
-    const data = await response.json();
-    const resultText = data.content?.[0]?.text || "Unable to analyze.";
-    try {
-      recordAnalysis({ fileType: fileType || "unknown", resultText });
-    } catch {}
-
-    if (pendingUseSessionId) {
-      // Only mark the session consumed now that the analysis actually
-      // succeeded.
-      await consumePerUseSession(pendingUseSessionId);
-    } else if (subscriptionId) {
-      await incrementSubscriptionUsage(subscriptionId);
+    const data = (await aiResponse.json()) as { content?: Array<{ text?: string }> };
+    const result = data.content?.[0]?.text;
+    if (!result) {
+      await releaseEntitlement(reservation); reservation = null;
+      return errorResponse("The analysis service returned an incomplete response. Your paid credit was not used.", 502);
     }
-
-    const jsonResponse = NextResponse.json({ result: resultText });
-    if (pendingUseSessionId) {
-      // Clear the cookie so this session can't be replayed against another
-      // request.
-      jsonResponse.cookies.set("mbr_pending_use", "", { maxAge: 0, path: "/" });
-    }
-    return jsonResponse;
+    if (!(await commitEntitlement(reservation))) return errorResponse("The analysis could not be finalized safely. Please contact support.", 503);
+    const kind = reservation.kind; reservation = null;
+    recordAnalysis({ fileType: upload.mediaType });
+    const response = NextResponse.json({ result }, { headers: { "Cache-Control": "no-store" } });
+    if (kind === "paid") response.cookies.set("mbr_pending_use", "", { maxAge: 0, path: "/" });
+    return response;
   } catch (error) {
-    console.error("Route error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+    if (reservation) { try { await releaseEntitlement(reservation); } catch { safeSecurityLog("entitlement_release_failed"); } }
+    if (error instanceof UploadValidationError) return errorResponse(error.message, 400);
+    if (error instanceof StoreUnavailableError) return errorResponse("Analysis access is temporarily unavailable.", 503);
+    safeSecurityLog("analysis_route_failed");
+    return errorResponse("The analysis could not be completed. Your paid credit was not used.", 500);
   }
 }

@@ -21,22 +21,8 @@ function getStore(): Stats {
   return globalForStats.__mbrStats;
 }
 
-const CODE_PATTERNS: { key: string; regex: RegExp }[] = [
-  { key: "CPT", regex: /\bCPT\b/i },
-  { key: "HCPCS", regex: /\bHCPCS\b/i },
-  { key: "ICD-10", regex: /\bICD[- ]?10\b/i },
-  { key: "NDC", regex: /\bNDC\b/i },
-  { key: "DRG", regex: /\bDRG\b/i },
-  { key: "Modifier", regex: /\bmodifier\b/i },
-  { key: "Revenue code", regex: /\brevenue code\b/i },
-];
-
-const ISSUES_HEADING = /##\s*[^\n]*Potential Issues to Review/i;
-const ISSUES_NONE = /(no (obvious |apparent )?issues|nothing (that )?stands out|did not (find|identify) any|none (identified|found|apparent))/i;
-
 export function recordAnalysis(input: {
   fileType: string;
-  resultText: string;
 }): void {
   try {
     const s = getStore();
@@ -44,20 +30,6 @@ export function recordAnalysis(input: {
     const ft = (input.fileType || "unknown").toLowerCase();
     s.byFileType[ft] = (s.byFileType[ft] || 0) + 1;
 
-    const text = input.resultText || "";
-    for (const { key, regex } of CODE_PATTERNS) {
-      if (regex.test(text)) {
-        s.codeMentions[key] = (s.codeMentions[key] || 0) + 1;
-      }
-    }
-
-    const issuesMatch = text.match(ISSUES_HEADING);
-    if (issuesMatch) {
-      const after = text.slice(issuesMatch.index! + issuesMatch[0].length, issuesMatch.index! + issuesMatch[0].length + 600);
-      if (!ISSUES_NONE.test(after) && after.trim().length > 40) {
-        s.issuesFlaggedCount += 1;
-      }
-    }
   } catch {
     // Stats are best-effort. Never break the analyze path.
   }

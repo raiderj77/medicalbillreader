@@ -37,8 +37,8 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 35, // ~monthly billing cycle plus grace
       path: "/",
     });
-    // Non-httpOnly hint cookie so the client can skip the free-tier gate
-    // for returning subscribers without needing to read the real cookie.
+    // Non-httpOnly UX hint only. The analyze route independently verifies the
+    // HttpOnly subscription cookie and never authorizes from this value.
     response.cookies.set("mbr_sub_active", "1", {
       httpOnly: false,
       secure: true,

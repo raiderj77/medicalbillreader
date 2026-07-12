@@ -74,7 +74,7 @@ export default function DoNotSellPage() {
             <li>We do <strong>not sell</strong> any personal information to third parties</li>
             <li>We do <strong>not share</strong> personal information for cross-context behavioral advertising</li>
             <li>We do <strong>not sell or share</strong> medical bill content, health data, or billing codes under any circumstances</li>
-            <li>Uploaded medical bills are processed in memory and <strong>deleted immediately</strong> after analysis</li>
+            <li>Uploaded medical bills pass through application memory, are transmitted to Anthropic solely for analysis, and are <strong>not intentionally stored in our own database</strong></li>
             <li>We do <strong>not</strong> use health data for advertising targeting</li>
             <li>We serve <strong>non-personalized ads</strong> on analysis pages to prevent any health data exposure to advertising systems</li>
           </ul>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { canUseFreeTier, incrementUsage } from "@/lib/free-tier";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   const text =
@@ -57,6 +56,11 @@ export default function BillAnalyzer() {
   }, [router]);
 
   const handleFile = (f: File) => {
+    const allowed = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+    if (!allowed.includes(f.type) || f.size > 10 * 1024 * 1024) {
+      setError(f.size > 10 * 1024 * 1024 ? "Files must be 10 MB or smaller." : "Choose a JPEG, PNG, WebP, or PDF file.");
+      return;
+    }
     setFile(f);
     setResult(null);
     setError(null);
@@ -77,14 +81,16 @@ export default function BillAnalyzer() {
 
     const isPaid = justPaid || hasActiveSubscriptionCookie();
 
-    if (!isPaid && !canUseFreeTier()) {
-      router.push("/pricing");
-      return;
-    }
-
     setLoading(true);
     setError(null);
     try {
+      if (!isPaid) {
+        const accessResponse = await fetch("/api/entitlement/free", { method: "POST" });
+        if (!accessResponse.ok) {
+          const accessData = await accessResponse.json();
+          throw new Error(accessData.error || "Free analysis access is unavailable.");
+        }
+      }
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,9 +100,6 @@ export default function BillAnalyzer() {
       if (!res.ok) throw new Error(data.error || "Something went wrong");
       setResult(data.result);
 
-      if (!isPaid) {
-        incrementUsage();
-      }
       if (justPaid) {
         setJustPaid(false);
       }
@@ -249,12 +252,12 @@ export default function BillAnalyzer() {
             Supports JPG, PNG, or PDF
           </p>
           <p className="text-xs text-slate-400 dark:text-slate-500 max-w-md mx-auto">
-            Your bill is sent securely to our AI for analysis and deleted immediately after processing. It is never stored, logged, or shared. Results exist only in your browser session.
+            Your document is transmitted securely to Anthropic solely to generate the analysis. Medical Bill Reader does not intentionally save bill documents in its own database or use them for advertising.
           </p>
           <input
             ref={fileRef}
             type="file"
-            accept="image/*,application/pdf"
+            accept="image/jpeg,image/png,image/webp,application/pdf"
             className="hidden"
             onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
           />
@@ -284,7 +287,7 @@ export default function BillAnalyzer() {
           {/* Upload privacy notice */}
           <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              🔒 Your bill will be sent securely to our AI for analysis and deleted immediately after processing. It is never stored on our servers, logged, or shared with third parties. Results exist only in your browser session and disappear when you close the page.
+              🔒 Your document will be transmitted securely to Anthropic solely to generate this analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store the document in its own database. Infrastructure providers may process limited request data under their own terms.
             </p>
           </div>
 

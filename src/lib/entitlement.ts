@@ -1,5 +1,36 @@
 import { getStripe } from "./stripe";
 import type Stripe from "stripe";
+import type { NextRequest } from "next/server";
+import { redisCommand } from "./redis";
+import { currentMonth, opaqueHash, randomToken, verifySignedValue } from "./security";
+import { SUBSCRIPTION_MONTHLY_CAP } from "./stripe";
+
+const RESERVE_SCRIPT = `redis.call('ZREMRANGEBYSCORE',KEYS[2],'-inf',ARGV[3]) local used=tonumber(redis.call('HGET',KEYS[1],'used') or '0') local reserved=redis.call('ZCARD',KEYS[2]) if used+reserved>=tonumber(ARGV[1]) then return 0 end redis.call('ZADD',KEYS[2],ARGV[4],ARGV[2]) if tonumber(ARGV[5])>0 then redis.call('EXPIRE',KEYS[1],ARGV[5]) end redis.call('EXPIRE',KEYS[2],600) return 1`;
+const COMMIT_SCRIPT = `if redis.call('ZREM',KEYS[2],ARGV[1])==0 then return 0 end redis.call('HINCRBY',KEYS[1],'used',1) return 1`;
+const RELEASE_SCRIPT = `return redis.call('ZREM',KEYS[2],ARGV[1])`;
+
+export type EntitlementReservation = { kind: "paid" | "subscription" | "free"; key: string; reservationId: string; externalId?: string };
+async function reserve(key: string, cap: number, kind: EntitlementReservation["kind"], externalId?: string, usageTtl = 60 * 60 * 24 * 40): Promise<EntitlementReservation | null> { const reservationId = randomToken(); const now = Date.now(); const accepted = await redisCommand<number>(["EVAL", RESERVE_SCRIPT, 2, key, `${key}:reservations`, cap, reservationId, now, now + 2 * 60 * 1000, usageTtl]); return accepted === 1 ? { kind, key, reservationId, externalId } : null; }
+
+export async function reserveRequestEntitlement(request: NextRequest): Promise<EntitlementReservation | null> {
+  const paid = request.cookies.get("mbr_pending_use")?.value;
+  if (paid) { if (!(await checkPerUseSessionAvailable(paid))) return null; return reserve(`mbr:paid:${opaqueHash(paid)}`, 1, "paid", paid, 0); }
+  const subscription = request.cookies.get("mbr_sub_id")?.value;
+  if (subscription) { if (!(await verifyActiveSubscription(subscription))) return null; return reserve(`mbr:sub:${opaqueHash(subscription)}:${currentMonth()}`, SUBSCRIPTION_MONTHLY_CAP, "subscription", subscription); }
+  const signedFree = request.cookies.get("mbr_free_entitlement")?.value;
+  if (!signedFree) return null;
+  const free = verifySignedValue(signedFree); if (!free) return null;
+  const [token, month] = free.split(":"); if (!token || month !== currentMonth()) return null;
+  return reserve(`mbr:free:${opaqueHash(token)}:${month}`, 1, "free");
+}
+
+export async function commitEntitlement(reservation: EntitlementReservation): Promise<boolean> {
+  const committed = await redisCommand<number>(["EVAL", COMMIT_SCRIPT, 2, reservation.key, `${reservation.key}:reservations`, reservation.reservationId]);
+  if (committed === 1 && reservation.kind === "paid" && reservation.externalId) await consumePerUseSession(reservation.externalId);
+  if (committed === 1 && reservation.kind === "subscription" && reservation.externalId) await incrementSubscriptionUsage(reservation.externalId);
+  return committed === 1;
+}
+export async function releaseEntitlement(reservation: EntitlementReservation): Promise<void> { await redisCommand<number>(["EVAL", RELEASE_SCRIPT, 2, reservation.key, `${reservation.key}:reservations`, reservation.reservationId]); }
 
 // Checks that a pay-per-use Checkout Session was actually paid and has not
 // already been consumed, WITHOUT consuming it. Called before we spend any

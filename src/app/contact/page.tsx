@@ -36,7 +36,7 @@ const contactFaqJsonLd = {
       name: "Is my medical bill data safe if I contact you?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. We never ask you to send your medical bill via email. Bills are only processed through our secure upload tool on the website, where they are analyzed in memory and deleted immediately. If you contact us by email, please do not attach medical bills or documents containing sensitive health information. Our support team handles inquiries without needing access to your actual bill data.",
+        text: "Yes. Never send a medical bill by email. Documents submitted through the upload tool pass through application memory and are transmitted to Anthropic solely for analysis; Medical Bill Reader does not intentionally store them in its own database. Infrastructure providers process data under their applicable terms.",
       },
     },
     {
@@ -175,9 +175,9 @@ export default function ContactPage() {
             </h2>
             <p>
               We take your privacy seriously. Medical Bill Reader processes
-              uploaded bills in memory and deletes them immediately after
-              analysis is complete. We never store your bill images or PDFs on
-              our servers, and the contents of your medical bills are never
+              uploaded bills in memory and transmits them to Anthropic solely for
+              analysis. We do not intentionally store your bill images or PDFs in
+              our own database, and the contents of your medical bills are not
               logged, saved to a database, or shared with advertising networks.
               Your analysis results exist only in your browser session and
               disappear when you close or refresh the page.
@@ -249,8 +249,7 @@ export default function ContactPage() {
                 <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
                   Yes. We never ask you to send your medical bill via email.
                   Bills are only processed through our secure upload tool on the
-                  website, where they are analyzed in memory and deleted
-                  immediately. If you contact us by email, please do not attach
+                  website, where they pass through application memory and are transmitted to Anthropic solely for analysis. If you contact us by email, please do not attach
                   medical bills or documents containing sensitive health
                   information. Our support team handles inquiries without
                   needing access to your actual bill data.
