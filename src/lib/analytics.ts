@@ -13,11 +13,7 @@ type SafeParameters = {
 
 declare global {
   interface Window {
-    gtag?: (
-      command: "event",
-      event: ConversionEvent,
-      parameters?: SafeParameters,
-    ) => void;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 

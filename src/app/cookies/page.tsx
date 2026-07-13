@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Cookie Policy ,  Medical Bill Reader",
   description:
     "Cookie policy for MedicalBillReader.com. Learn about the cookies we use, why we use them, and how to control them.",
-  keywords: "cookie policy, cookies, medical bill reader, tracking, analytics, advertising cookies",
+  keywords: "cookie policy, cookies, medical bill reader, tracking, analytics cookies",
   alternates: {
     canonical: "https://medicalbillreader.com/cookies",
   },
@@ -77,7 +77,7 @@ export default function CookiesPage() {
             These cookies are strictly necessary for the website to function. They include:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>CookieConsent (Cookiebot):</strong> Stores your cookie consent preferences so we do not ask you repeatedly. Expires after 12 months.</li>
+            <li><strong>Privacy preference:</strong> A first-party cookie stores whether you allowed optional analytics so we do not ask you repeatedly. It expires after 180 days.</li>
             <li><strong>Theme preference:</strong> Stores your light/dark mode preference in localStorage (not a cookie, but similar local storage).</li>
             <li><strong>Analysis entitlements:</strong> Signed HttpOnly cookies identify a paid, subscription, or anonymous free-tier allowance. They contain opaque identifiers, not bill content. The anonymous free tier is enforced per cookie; clearing or blocking cookies can affect enforcement, and shared devices share the same browser allowance. Short-lived hashed IP counters are also used for abuse prevention.</li>
           </ul>
@@ -91,40 +91,28 @@ export default function CookiesPage() {
             <li><strong>Google Analytics:</strong> Collects anonymous usage data (pages visited, time on site, referral source). Set only after you grant consent via our cookie banner.</li>
           </ul>
 
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Advertising Cookies</h3>
-          <p>
-            Google AdSense may set cookies to serve ads and measure ad performance. On pages where
-            medical bill analysis occurs, we serve only non-personalized ads to protect your health data
-            privacy. Advertising cookies are set only after you grant consent via our cookie banner.
-          </p>
-          <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Google AdSense cookies:</strong> Used to serve relevant advertisements and limit how often you see an ad. These are blocked until you provide consent.</li>
-          </ul>
-
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Cookie Consent</h2>
           <p>
-            We use Cookiebot as our Consent Management Platform (CMP), certified by Google and
-            compliant with IAB TCF v2.2. When you first visit our site, a cookie banner asks for
-            your consent. Non-essential cookies (analytics, advertising) are blocked until you opt in.
+            Our first-party privacy control asks for your permission before Google Analytics loads.
+            Optional analytics remains blocked unless you opt in.
           </p>
           <p>
-            For visitors in the EU/EEA/UK, we follow an <strong>opt-in model</strong> ,  no tracking
-            cookies fire until you give affirmative consent. For visitors in California and other US
-            states with privacy laws, we follow an <strong>opt-out model</strong> and honor Global
-            Privacy Control (GPC) signals automatically.
+            We use an <strong>opt-in model</strong> for every visitor: optional analytics does not load
+            until you give affirmative consent. We also honor Global Privacy Control (GPC) signals
+            automatically by keeping optional analytics off.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">How to Control Cookies</h2>
           <p>You can manage cookies in several ways:</p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Cookie banner:</strong> Use the Cookiebot banner that appears on your first visit. You can change your preferences at any time by clicking the cookie icon in the bottom-left corner of any page.</li>
+            <li><strong>Privacy choices:</strong> Use the banner that appears on your first visit. You can change your preference at any time with the Privacy choices button in the bottom-left corner.</li>
             <li><strong>Browser settings:</strong> Most browsers let you block or delete cookies. Check your browser&apos;s help documentation for instructions.</li>
             <li><strong>Global Privacy Control:</strong> Enable GPC in your browser to automatically signal your opt-out preference.</li>
             <li><strong>Opt out of Google ads personalization:</strong> Visit <a href="https://adssettings.google.com" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
           </ul>
           <p>
             Disabling essential cookies may prevent parts of the website from functioning correctly.
-            Disabling analytics or advertising cookies will not affect your ability to use the medical
+            Disabling analytics cookies will not affect your ability to use the medical
             bill analysis tool.
           </p>
 
