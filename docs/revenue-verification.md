@@ -4,14 +4,14 @@ Last reviewed: 2026-07-12
 
 ## Production configuration audit
 
-The Vercel project contains the existing Anthropic, Redis, entitlement, and Stripe variable names. The production `STRIPE_SECRET_KEY` currently resolves to an empty value. These required revenue variables are absent:
+The Vercel production project contains the existing Anthropic, Redis, entitlement, and Stripe variable names. As of July 12, 2026, all required revenue variable names are present and encrypted:
 
 - `STRIPE_PRICE_PER_USE`
 - `STRIPE_PRICE_MONTHLY`
 - `STRIPE_WEBHOOK_SECRET`
-- `NEXT_PUBLIC_SITE_URL` (the code safely falls back to the request origin)
+- `NEXT_PUBLIC_SITE_URL`
 
-No secret values are recorded in this file or in test output.
+The variable names were audited without printing their secret values. The live Checkout verification below confirms that the monthly price mapping resolves to the intended active product and amount.
 
 ## Stripe sandbox setup completed
 
@@ -48,6 +48,12 @@ Using a synthetic document containing no medical or identifying information:
 - free entitlement issuance returned `200`
 - first free analysis returned `200`
 - replaying the same free entitlement returned `401`
+- a live $4.99 purchase returned through server confirmation, delivered one synthetic analysis, and was refunded
+- the production refund webhook accepted the signed event and revoked the paid entitlement
+- the $49 subscription button opened a live Stripe Checkout for “Medical Bill Reader Monthly” at exactly $49 per month with a 44-analysis description
+- the $49 Checkout was exited through its cancellation URL without entering payment information, creating a charge, or granting an entitlement
+- the expired Cookiebot dependency was replaced; Google Analytics stays unloaded until explicit opt-in and loads after consent
+- Microsoft Clarity session recording and the inactive AdSense loader were removed to reduce health-data privacy risk
 
 ## Stripe sandbox matrix completed
 
@@ -70,13 +76,14 @@ Using Stripe sandbox cards and a generated image containing no patient or medica
 
 Expired, unrelated, malformed, and concurrent entitlement cases remain covered by the automated suite because Stripe does not offer a practical dashboard flow for every adversarial state.
 
-## Owner-approved production actions still required
+## Priority 1 closeout
 
-After Jason approves merge and production deployment:
+Medical Bill Reader's revenue-verification milestone is complete:
 
-1. create or select live-mode $4.99 and $49 prices
-2. set the four production Stripe variables to live values
-3. create a public live webhook for `/api/stripe/webhook` subscribed only to `charge.refunded` and `refund.created`
-4. perform one owner-approved live purchase, delivery, refund, and production-log check
+- production price mappings and webhook configuration are present
+- the $4.99 live purchase-delivery-refund path was verified
+- the $49 path was verified in Stripe sandbox through delivery, cap enforcement, portal access, cancellation, and post-cancellation denial
+- the live $49 product mapping and cancellation return were verified without an unnecessary charge
+- the six allow-listed conversion events are wired and covered by automated privacy tests
 
-The pull request must remain unmerged and production Stripe configuration must remain unchanged until that approval.
+Google Analytics reports only consented traffic, so dashboard counts will be lower than total visits by design. Receipt of every conversion event in the production Analytics dashboard depends on future users performing those actions after opting in; no traffic or conversion claim should be made until that data exists.
