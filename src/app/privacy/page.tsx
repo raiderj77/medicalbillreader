@@ -108,7 +108,7 @@ export default function PrivacyPage() {
               <li><strong>Uploaded Medical Bills</strong> ,  Images or PDFs you upload for analysis. These may contain sensitive personal and health information including patient names, dates of service, diagnoses, procedure codes (CPT, ICD-10, HCPCS), and billing amounts.</li>
               <li><strong>Device &amp; Browser Information</strong> ,  IP address, browser type, operating system, and device identifiers collected automatically via server logs and analytics.</li>
               <li><strong>Usage Data</strong> ,  Pages visited, features used, timestamps, and interaction patterns.</li>
-              <li><strong>Cookies &amp; Tracking Technologies</strong> ,  Data collected via cookies for analytics and advertising purposes (on marketing pages only).</li>
+              <li><strong>Cookies &amp; Tracking Technologies</strong> ,  Optional website usage data collected only after you consent to analytics.</li>
             </ul>
           </section>
 
@@ -118,7 +118,7 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li>To analyze your uploaded medical bills and provide plain-English explanations.</li>
               <li>To operate, maintain, and improve our website and services.</li>
-              <li>To display relevant advertisements on marketing pages (not on analysis pages).</li>
+              <li>To understand aggregate website usage when you opt in to analytics.</li>
               <li>To comply with legal obligations.</li>
             </ul>
             <p>
@@ -152,8 +152,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-slate-800">5. Third Parties We Share Data With</h2>
             <ul className="list-disc ml-6 space-y-2">
               <li><strong>Anthropic (Claude API)</strong> ,  Uploaded bill images/text are sent to Anthropic for AI-powered analysis. Anthropic processes data under their API terms and does not use API inputs for model training.</li>
-              <li><strong>Google AdSense</strong> ,  On marketing pages only, Google may collect cookies and device information for ad serving. Medical bill data is never shared with Google.</li>
-              <li><strong>Google Analytics</strong> ,  We use Google Analytics to understand website usage patterns. Analytics data does not include medical bill contents.</li>
+              <li><strong>Google Analytics</strong> ,  If you opt in, this service receives limited website usage data. We do not send medical bill contents or analysis results to it.</li>
               <li><strong>Vercel</strong> ,  Our hosting provider routes and executes server requests. Vercel may process request metadata and operational logs according to our configuration, plan, and Vercel&apos;s terms. We configure application logs not to include bill content, base64 data, or model output.</li>
             </ul>
           </section>
@@ -162,11 +161,11 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">6. Data Retention Periods</h2>
             <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Uploaded Medical Bills:</strong> Deleted immediately after analysis ,  zero retention.</li>
+              <li><strong>Uploaded Medical Bills:</strong> Not intentionally stored in Medical Bill Reader&apos;s own database. Provider-side processing and retention depend on the applicable Anthropic, Vercel, and infrastructure configuration and terms.</li>
               <li><strong>Analysis Results:</strong> Exist only in your browser session ,  not stored on our servers.</li>
               <li><strong>Server Logs:</strong> Retained for up to 30 days for security and debugging, then automatically deleted. Logs do not contain medical bill contents.</li>
               <li><strong>Analytics Data:</strong> Retained per Google Analytics default settings (up to 14 months).</li>
-              <li><strong>Cookie Data:</strong> Varies by cookie type; advertising cookies expire per Google&apos;s cookie policies.</li>
+              <li><strong>Privacy Preference:</strong> The first-party consent cookie expires after 180 days.</li>
             </ul>
           </section>
 
@@ -186,7 +185,6 @@ export default function PrivacyPage() {
               <li><strong>Identifiers:</strong> IP address, email address (if account created), browser type, device identifiers.</li>
               <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
               <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis are transmitted to Anthropic. Medical Bill Reader does not intentionally store them in its own database or log their contents.</li>
-              <li><strong>Inferred data:</strong> Interests inferred from browsing behavior via advertising partners (marketing pages only ,  not analysis pages).</li>
             </ul>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Sensitive Personal Information ,  Medical Bill Data</h3>
@@ -204,7 +202,7 @@ export default function PrivacyPage() {
               <li>Bill documents pass through application memory and are not intentionally written to Medical Bill Reader&apos;s own database</li>
               <li>We do not store, log, index, or retain bill content after your session ends</li>
               <li>Bill content is not sold or shared for advertising; it is disclosed to Anthropic and infrastructure providers as needed to deliver the analysis</li>
-              <li>Advertising is served via non-personalized ads on analysis pages to prevent any health data from reaching advertising systems</li>
+              <li>Medical bill content and analysis results are not sent to analytics or advertising systems</li>
             </ul>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Washington My Health My Data Act (WA MHMDA)</h3>
@@ -243,7 +241,6 @@ export default function PrivacyPage() {
             <h3 className="text-lg font-semibold text-slate-800 mt-4">How We Use Your Information</h3>
             <ul className="list-disc ml-6 space-y-1">
               <li>To perform medical bill analysis using AI processing</li>
-              <li>To display non-personalized advertising on marketing pages through Google AdSense</li>
               <li>To analyze aggregate site traffic via analytics (no health data included)</li>
               <li>To maintain site security and prevent fraud</li>
             </ul>
@@ -252,17 +249,16 @@ export default function PrivacyPage() {
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Your Rights as a California Resident</h3>
             <ul className="list-disc ml-6 space-y-1">
               <li><strong>Right to Know:</strong> Request disclosure of personal information collected in the past 12 months.</li>
-              <li><strong>Right to Delete:</strong> Request deletion of personal information. Note: medical bill documents are deleted automatically upon processing completion.</li>
+              <li><strong>Right to Delete:</strong> Request deletion of personal information we control. Medical Bill Reader does not intentionally store bill documents in its own database.</li>
               <li><strong>Right to Correct:</strong> Request correction of inaccurate personal information such as account details.</li>
-              <li><strong>Right to Opt-Out:</strong> Opt out of sharing personal information for advertising. We honor Global Privacy Control (GPC) signals automatically. We use non-personalized ads on analysis pages by default.</li>
+              <li><strong>Right to Opt-Out:</strong> Opt out of optional analytics. We honor Global Privacy Control (GPC) signals automatically.</li>
               <li><strong>Right to Limit Use of Sensitive Information:</strong> You have the right to limit our use of your sensitive personal information (including health data) to only what is necessary to provide the service you requested.</li>
               <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of these rights.</li>
             </ul>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Do Not Sell or Share My Personal Information</h3>
             <p>
-              We do not sell personal information or health data. To opt out of sharing for advertising
-              purposes on non-analysis pages, use a{' '}
+              We do not sell personal information or health data. To keep optional analytics off, use a{' '}
               <a href="https://globalprivacycontrol.org/" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Global Privacy Control (GPC)</a>-enabled
               browser, or contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
             </p>
@@ -334,7 +330,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">10. HIPAA-Adjacent Sensitivity</h2>
             <p>
-              While MedicalBillReader.com is not a HIPAA-covered entity or business associate, we recognize that medical bills contain the same types of sensitive health information protected under HIPAA. We voluntarily adopt HIPAA-adjacent security and privacy practices, including immediate data deletion, no logging of health data, and access controls on data processing systems.
+              While MedicalBillReader.com is not a HIPAA-covered entity or business associate, we recognize that medical bills contain the same types of sensitive health information protected under HIPAA. We voluntarily adopt HIPAA-adjacent security and privacy practices, including not intentionally storing bill documents in our own database, not logging bill contents, and restricting access to data processing systems.
             </p>
           </section>
 
@@ -342,31 +338,13 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">11. Cookies &amp; Tracking</h2>
             <p>
-              We use cookies on marketing pages for analytics and advertising. We do not use advertising cookies or trackers on bill analysis pages. For EU/EEA/UK visitors, we obtain consent before setting non-essential cookies.
+              Essential cookies support security, entitlements, and your privacy preference. Google
+              Analytics loads only after you affirmatively opt in. Uploaded bill content and analysis
+              results are not sent to Google Analytics.
             </p>
             <p>
-              We work with third-party advertising partners, including Google, who may use cookies to serve ads based on your prior visits to this website or other websites.
-            </p>
-            <p>
-              To opt out of interest-based advertising, visit{" "}
-              <a
-                href="https://ads.google.com/settings"
-                className="text-teal-600 hover:text-teal-800 underline"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                Google Ad Settings
-              </a>{" "}
-              or{" "}
-              <a
-                href="https://optout.aboutads.info"
-                className="text-teal-600 hover:text-teal-800 underline"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                optout.aboutads.info
-              </a>
-              .
+              You can change your choice at any time with the Privacy choices button. A Global Privacy
+              Control signal automatically keeps optional analytics off.
             </p>
           </section>
 

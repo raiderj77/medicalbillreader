@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
-import { headers } from "next/headers";
 import Footer from "@/components/Footer";
+import PrivacyConsent from "@/components/PrivacyConsent";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,7 +33,6 @@ export const metadata: Metadata = {
   other: {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
-    "google-adsense-account": "ca-pub-7171402107622932",
   },
   openGraph: {
     title: "Medical Bill Reader ,  Understand Your Bill",
@@ -93,13 +92,11 @@ const webAppJsonLd = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const gpcHeader = headersList.get('sec-gpc') === '1';
   return (
     <html lang="en" className={inter.variable}>
       <head>
@@ -130,45 +127,6 @@ export default async function RootLayout({
     wait_for_update: 500
   });
 ` }} />
-        {!gpcHeader && (
-          <Script
-            id="Cookiebot"
-            src="https://consent.cookiebot.com/uc.js"
-            data-cbid="a9a99ccb-4863-4e33-a895-a6d5642f408d"
-            data-blockingmode="auto"
-            strategy="beforeInteractive"
-          />
-        )}
-        {!gpcHeader && (
-          <Script
-            id="gpc-auto-decline"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-        (function() {
-          try {
-            var gpcActive = !!navigator.globalPrivacyControl || document.cookie.indexOf('empire_gpc=1') !== -1;
-            if (!gpcActive) return;
-            if (window.Cookiebot && window.Cookiebot.decline) {
-              window.Cookiebot.decline();
-            } else {
-              window.addEventListener('CookiebotOnLoad', function() {
-                if (window.Cookiebot) window.Cookiebot.decline();
-              });
-            }
-          } catch(e) {}
-        })();
-      `,
-            }}
-          />
-        )}
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <Script
-          id="adsense"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7171402107622932"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -188,32 +146,7 @@ export default async function RootLayout({
         </a>
         {children}
         <Footer />
-        <Script
-          id="microsoft-clarity"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-  (function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "vsqobt7va0");
-` }}
-        />
-        <Script
-          id="ga4-src"
-          src="https://www.googletagmanager.com/gtag/js?id=G-3P9M4GWKE7"
-          strategy="afterInteractive"
-        />
-        <Script
-          id="ga4-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-3P9M4GWKE7');
-` }}
-        />
+        <PrivacyConsent />
       </body>
     </html>
   );

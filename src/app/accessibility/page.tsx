@@ -104,7 +104,7 @@ export default function AccessibilityPage() {
           <ul className="list-disc ml-6 space-y-1">
             <li><strong>Uploaded bill images:</strong> AI-generated analysis text is accessible, but the original uploaded bill image may not have alt text since it is user-provided content.</li>
             <li><strong>PDF rendering:</strong> Some uploaded PDF bills may not be fully accessible in their original format. Our AI analysis output is always provided as accessible HTML text.</li>
-            <li><strong>Third-party content:</strong> Advertising delivered through Google AdSense and the Cookiebot consent banner are third-party components. We have limited control over their accessibility but select providers that commit to accessibility standards.</li>
+            <li><strong>Third-party analytics:</strong> Google Analytics loads only after a visitor opts in and does not add interactive controls to the medical bill analysis workflow.</li>
           </ul>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">European Accessibility Act</h2>

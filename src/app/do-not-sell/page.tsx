@@ -76,14 +76,13 @@ export default function DoNotSellPage() {
             <li>We do <strong>not sell or share</strong> medical bill content, health data, or billing codes under any circumstances</li>
             <li>Uploaded medical bills pass through application memory, are transmitted to Anthropic solely for analysis, and are <strong>not intentionally stored in our own database</strong></li>
             <li>We do <strong>not</strong> use health data for advertising targeting</li>
-            <li>We serve <strong>non-personalized ads</strong> on analysis pages to prevent any health data exposure to advertising systems</li>
+            <li>We do <strong>not</strong> send medical bill content or analysis results to analytics or advertising systems</li>
           </ul>
 
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Advertising and Third Parties</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Analytics and Third Parties</h2>
           <p>
-            We display Google AdSense advertisements on marketing pages. While AdSense may use cookies
-            for ad serving (with your consent), we do not sell your data to Google or any other
-            advertiser. On pages where medical bill analysis occurs, only non-personalized ads are served.
+            If you opt in, Google Analytics receives limited website usage data. We do not sell that
+            data, and we do not send medical bill content or analysis results to Google Analytics.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">How to Opt Out</h2>
@@ -97,8 +96,8 @@ export default function DoNotSellPage() {
               </a>.
             </li>
             <li>
-              <strong>Cookie preferences:</strong> Click the Cookiebot cookie icon (bottom-left corner of
-              any page) to withdraw consent for analytics and advertising cookies at any time.
+              <strong>Privacy choices:</strong> Use the Privacy choices button in the bottom-left corner
+              of any page to withdraw consent for optional analytics at any time.
             </li>
             <li>
               <strong>Contact us directly:</strong> Email{" "}
