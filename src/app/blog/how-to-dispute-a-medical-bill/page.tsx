@@ -1,87 +1,105 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
+import Link from "next/link";
 
-type Params = Promise<{ slug: string }>;
+export const metadata: Metadata = {
+  title: "How to Dispute a Medical Bill: Steps and Letter Template",
+  description:
+    "A careful, source-backed guide to checking and disputing a medical bill, including a privacy-conscious letter template and official help resources.",
+  alternates: {
+    canonical: "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
+  },
+};
 
-export async function generateStaticParams() {
-  return [{ slug: 'how-to-dispute-a-medical-bill' }];
-}
+const sources = [
+  {
+    label: "CMS: How to read an Explanation of Benefits",
+    href: "https://www.cms.gov/medical-bill-rights/help/guides/explanation-of-benefits",
+  },
+  {
+    label: "CMS: Medical bill rights and No Surprises Act protections",
+    href: "https://www.cms.gov/medical-bill-rights",
+  },
+  {
+    label: "CMS: Submit a No Surprises complaint",
+    href: "https://www.cms.gov/medical-bill-rights/help/submit-a-complaint",
+  },
+  {
+    label: "HealthCare.gov: Internal health-plan appeals",
+    href: "https://www.healthcare.gov/appeal-insurance-company-decision/internal-appeals/",
+  },
+  {
+    label: "HealthCare.gov: External review",
+    href: "https://www.healthcare.gov/appeal-insurance-company-decision/external-review/",
+  },
+  {
+    label: "HHS: Accessing medical and billing records under HIPAA",
+    href: "https://www.hhs.gov/hipaa/for-individuals/medical-records/index.html",
+  },
+  {
+    label: "CFPB: Disputing a debt with a debt collector",
+    href: "https://www.consumerfinance.gov/ask-cfpb/can-a-debt-collector-still-collect-a-debt-after-ive-disputed-it-en-338/",
+  },
+  {
+    label: "IRS: Financial assistance policies for tax-exempt hospitals",
+    href: "https://www.irs.gov/charities-non-profits/financial-assistance-policies-faps",
+  },
+];
 
-export async function generateMetadata(
-  props: { params: Params }
-): Promise<Metadata> {
-  await props.params;
-  return {
-    title: 'How to Dispute a Medical Bill — Free Template 2026',
-    description:
-      'Step-by-step guide to disputing a medical bill in 2026. Free dispute letter template included. Learn your rights, common billing errors, and how to negotiate.',
-    robots: { index: true, follow: true, googleBot: { 'max-snippet': -1 } },
-    alternates: { canonical: '/blog/how-to-dispute-a-medical-bill' },
-  };
-}
+const faqItems = [
+  {
+    question: "Can I question a medical bill after I paid it?",
+    answer:
+      "You can ask the provider and health plan to review a suspected error after payment, but refund rights and deadlines depend on the provider, plan, contract, and applicable state law. Act promptly, keep proof of payment, and follow the appeal instructions on your EOB or denial notice.",
+  },
+  {
+    question: "Does an EOB prove what I owe?",
+    answer:
+      "An Explanation of Benefits is not a bill. It explains the claim, the plan's allowed amount and payment, and the patient balance calculated by the plan. Compare it with the provider's bill and ask both organizations about a mismatch.",
+  },
+  {
+    question: "How long does a medical-bill dispute take?",
+    answer:
+      "There is no universal deadline for a provider's voluntary billing review. Health-plan appeals have deadlines stated in the denial notice and plan documents. Under federal Marketplace guidance, many internal appeals must be filed within 180 days, with different decision timelines depending on whether care is urgent, pending, or already received.",
+  },
+  {
+    question: "Should I send my full medical record with a dispute?",
+    answer:
+      "Send only the records needed to explain the disputed line item. Use the provider or insurer's secure portal when possible, avoid ordinary email for sensitive documents, and keep copies of what you submit.",
+  },
+];
 
-export default async function Page({ params }: { params: Params }) {
-  await params;
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "How to Dispute a Medical Bill: Steps and Letter Template",
+  description:
+    "A source-backed guide to checking and disputing a medical bill, with a privacy-conscious letter template.",
+  datePublished: "2026-03-28",
+  dateModified: "2026-07-12",
+  author: {
+    "@type": "Organization",
+    name: "Medical Bill Reader",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Medical Bill Reader",
+    url: "https://medicalbillreader.com",
+  },
+  mainEntityOfPage:
+    "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
+};
 
-  const articleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: 'How to Dispute a Medical Bill — Free Template 2026',
-    description:
-      'Step-by-step guide to disputing a medical bill, with a free dispute letter template and guidance on your patient rights.',
-    datePublished: '2026-03-28',
-    dateModified: '2026-03-28',
-    author: {
-      '@type': 'Organization',
-      name: 'Medical Bill Reader',
-      url: 'https://medicalbillreader.com',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Medical Bill Reader',
-      url: 'https://medicalbillreader.com',
-    },
-    mainEntityOfPage: 'https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill',
-  };
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'Can I dispute a medical bill after paying it?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes. You can dispute a medical bill even after you have paid it. If the dispute reveals an overcharge or billing error, the provider or insurer may issue a refund. Some states have specific time limits for post-payment disputes, typically 1 to 3 years, so act as soon as you identify an error.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the most common medical billing error?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'The most common medical billing errors include duplicate charges (the same service billed twice), upcoding (billing for a more expensive service than was provided), unbundling (billing separately for services that should be grouped together), and billing for services that were not provided. Studies estimate that 40 to 80 percent of medical bills contain at least one error.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How long does a medical bill dispute take?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'A typical medical bill dispute with a provider takes 30 to 90 days. Insurance disputes filed through formal appeal processes take 30 to 60 days for internal appeals and up to 180 days for external appeals. Keep records of every communication and follow up if you have not received a response within the stated timeframe.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is an itemized bill and why should I request one?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'An itemized medical bill lists every individual charge with its CPT code, description, date of service, and amount billed. Hospitals are legally required to provide one upon request. An itemized bill lets you verify that every charge corresponds to a service you actually received, at the correct price, on the correct date. Most billing errors are only visible on an itemized bill, not a summary statement.',
-        },
-      },
-    ],
-  };
-
+export default function DisputeMedicalBillPage() {
   return (
     <>
       <script
@@ -92,231 +110,336 @@ export default async function Page({ params }: { params: Params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <article className="prose mx-auto max-w-3xl px-4 py-8">
 
-        <p className="text-xs text-gray-400 border border-gray-200 rounded p-3 mb-6">
-          <strong>Disclaimer:</strong> This content is for educational purposes only and does not
-          constitute medical or financial advice. Consult a patient advocate or attorney for
-          guidance specific to your situation.
-        </p>
-
-        <h1 className="text-3xl font-bold mb-2">
-          How to Dispute a Medical Bill — Free Template 2026
-        </h1>
-        <p className="text-sm text-gray-400 mb-6">Last updated: March 28, 2026</p>
-
-        {/* ANSWER BLOCK */}
-        <p className="lead text-lg text-gray-700 bg-gray-50 border-l-4 border-blue-400 pl-4 py-3 mb-8">
-          To dispute a medical bill, start by requesting an itemized bill from the provider,
-          then compare it against your Explanation of Benefits (EOB) from your insurer. Identify
-          the specific error or discrepancy, write a formal dispute letter with documentation,
-          and submit it to both the provider&apos;s billing department and your insurer. Keep copies
-          of everything. Most disputes resolve within 30 to 90 days.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Step 1 — Request Your Itemized Bill</h2>
-
-        <p>
-          The first step in any medical bill dispute is obtaining an itemized statement. A
-          summary bill shows only totals; an itemized bill shows every individual charge with
-          its CPT code, description, and amount. Providers are legally required to give you
-          one upon request under federal law.
-        </p>
-
-        <p>
-          Call the billing department and ask specifically for &ldquo;an itemized bill with CPT
-          codes.&rdquo; If they are unfamiliar with the term, ask for &ldquo;a line-item breakdown of every
-          charge.&rdquo; Allow 5 to 10 business days for delivery. Use{' '}
-          <a href="https://medicalbillreader.com" className="text-blue-600 hover:underline">
-            Medical Bill Reader
-          </a>{' '}
-          to decode CPT codes and identify what each charge represents in plain language.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-10 mb-4">Step 2 — Get Your Explanation of Benefits (EOB)</h2>
-
-        <p>
-          Your insurer sends an Explanation of Benefits (EOB) for every claim processed. The EOB
-          shows what your insurer was billed, what they allowed, what they paid, and what you owe.
-          Log into your insurer&apos;s online portal or call member services to request EOBs for the
-          dates of service in question.
-        </p>
-
-        <p>
-          Compare the EOB against the itemized bill. Common discrepancies include: the provider
-          billed more than the insurer&apos;s allowed amount and attempted to pass the difference to
-          you (balance billing), charges that appear on the bill but not the EOB, and differences
-          in CPT codes between the two documents.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-10 mb-4">Step 3 — Identify the Error</h2>
-
-        <p>
-          Research shows that 40&ndash;80% of medical bills contain at least one error. The most
-          common errors to look for:
-        </p>
-
-        <div className="overflow-x-auto my-6">
-          <table className="min-w-full text-sm border border-gray-200">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 text-left border border-gray-200">Error Type</th>
-                <th className="px-4 py-2 text-left border border-gray-200">What It Looks Like</th>
-                <th className="px-4 py-2 text-left border border-gray-200">How to Spot It</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ['Duplicate charge', 'Same CPT code billed twice on the same date', 'Look for identical line items on same date'],
-                ['Upcoding', 'Billed for a more complex procedure than performed', 'Compare CPT code description to your medical records'],
-                ['Unbundling', 'Components of one procedure billed as separate items', 'Look for multiple codes that should be one bundled code'],
-                ['Service not rendered', 'Charge for something you did not receive', 'Compare itemized bill to your visit notes'],
-                ['Wrong patient info', 'Incorrect insurance ID, DOB, or spelling of name', 'Check header information on the bill'],
-                ['Balance billing', 'In-network provider billing you for amounts above allowed', 'Compare provider-billed vs insurer-allowed on EOB'],
-              ].map(([type, look, spot]) => (
-                <tr key={type} className="even:bg-gray-50">
-                  <td className="px-4 py-2 border border-gray-200 font-medium">{type}</td>
-                  <td className="px-4 py-2 border border-gray-200 text-gray-600">{look}</td>
-                  <td className="px-4 py-2 border border-gray-200 text-gray-600">{spot}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <h2 className="text-2xl font-semibold mt-10 mb-4">Step 4 — Write Your Dispute Letter</h2>
-
-        <p>
-          A formal dispute letter creates a paper trail and starts the clock on required response
-          times. Send it via certified mail with return receipt, and keep a copy. Here is a
-          free template you can customize:
-        </p>
-
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 my-6 text-sm font-mono leading-relaxed">
-          <p>[Your Name]</p>
-          <p>[Your Address]</p>
-          <p>[City, State, ZIP]</p>
-          <p>[Date]</p>
-          <br />
-          <p>Billing Department</p>
-          <p>[Provider or Hospital Name]</p>
-          <p>[Provider Address]</p>
-          <br />
-          <p><strong>Re: Account Number [ACCOUNT #] &mdash; Dispute of Charges</strong></p>
-          <br />
-          <p>Dear Billing Department,</p>
-          <br />
-          <p>
-            I am writing to formally dispute charges on my bill for services rendered on
-            [DATE OF SERVICE]. My account number is [ACCOUNT NUMBER] and my date of birth
-            is [DATE OF BIRTH].
-          </p>
-          <br />
-          <p>
-            Specifically, I dispute the following charge(s): [LIST EACH DISPUTED CHARGE WITH
-            CPT CODE, DESCRIPTION, AND AMOUNT]. The reason for this dispute is: [EXPLAIN
-            THE SPECIFIC ERROR &mdash; e.g., &ldquo;This service was not rendered during my visit&rdquo; OR
-            &ldquo;This charge appears twice on my itemized bill&rdquo; OR &ldquo;This CPT code does not match
-            the procedure performed according to my discharge summary&rdquo;].
-          </p>
-          <br />
-          <p>
-            I have enclosed [LIST DOCUMENTS: itemized bill, EOB, medical records excerpt,
-            etc.] to support this dispute. I request that you investigate these charges and
-            provide a written response within 30 days.
-          </p>
-          <br />
-          <p>
-            If you determine that a correction is warranted, please send an updated statement
-            reflecting the corrected amount. If you disagree with my dispute, please provide
-            a written explanation with supporting documentation.
-          </p>
-          <br />
-          <p>Sincerely,</p>
-          <p>[Your Name]</p>
-          <p>[Phone Number]</p>
-          <p>[Email Address]</p>
-        </div>
-
-        <h2 className="text-2xl font-semibold mt-10 mb-4">Step 5 — Escalate If Needed</h2>
-
-        <p>
-          If the provider does not respond within 30 days or denies your dispute without
-          adequate explanation, escalate:
-        </p>
-
-        <p>
-          <strong>File an insurance appeal.</strong> If the issue involves what your insurer
-          paid, file a formal appeal with your insurer. Most plans allow at least two levels
-          of internal appeal, followed by an independent external review. The{' '}
-          <a
-            href="https://www.cms.gov/marketplace/resources/navigator-training-materials/appeals"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
-          >
-            CMS Appeals Resource Center
-          </a>{' '}
-          provides guidance on your appeal rights under the ACA.
-        </p>
-
-        <p>
-          <strong>Contact your state insurance commissioner.</strong> If you believe your
-          insurer is violating your rights, file a complaint with your state&apos;s Department
-          of Insurance. Most states require insurers to respond to complaints within 30 days.
-        </p>
-
-        <p>
-          <strong>Request a payment plan or financial assistance.</strong> Even if the bill
-          is legitimate, you may qualify for charity care, financial hardship programs, or
-          negotiated payment plans. Most hospitals are required to offer these under federal
-          law if they receive Medicare or Medicaid funding.
-        </p>
-
-        <h2 className="text-2xl font-semibold mt-10 mb-4">Frequently Asked Questions</h2>
-
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold text-lg">Can I dispute a medical bill after paying it?</h3>
-            <p>
-              Yes &mdash; you can dispute even after paying. If the dispute reveals an overcharge,
-              the provider may issue a refund. Most states allow disputes within 1&ndash;3 years
-              of payment. Act quickly once you identify an error.
+      <main id="main-content" className="bg-slate-50 px-4 py-10 dark:bg-slate-950">
+        <article className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm sm:p-10 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+          <header>
+            <p className="text-sm font-semibold text-teal-700 dark:text-teal-300">
+              Medical bill guidance
             </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-lg">What is the most common medical billing error?</h3>
-            <p>
-              Duplicate charges (same service billed twice) and upcoding (billing for a
-              more expensive service than was provided) are the most common errors. Studies
-              estimate 40&ndash;80% of medical bills contain at least one error.
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
+              How to Dispute a Medical Bill
+            </h1>
+            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+              Last reviewed July 12, 2026
             </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-lg">How long does a medical bill dispute take?</h3>
-            <p>
-              Most provider disputes resolve in 30&ndash;90 days. Insurance appeals take
-              30&ndash;60 days for internal review and up to 180 days for external review.
-              Follow up if you have not received a response within the stated timeframe.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold text-lg">What is an itemized bill and why do I need one?</h3>
-            <p>
-              An itemized bill lists every individual charge with its CPT code, description,
-              and amount. Providers must provide one on request. Most billing errors are
-              only visible on an itemized bill &mdash; summary statements hide them.
-            </p>
-          </div>
-        </div>
+            <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+              This guide provides general educational information, not medical,
+              legal, insurance, or financial advice. Rights and deadlines can
+              depend on your health plan, provider, state, and the type of bill.
+              Follow the instructions on your bill, EOB, and denial notice, and
+              consult a qualified professional when needed.
+            </div>
+          </header>
 
-        <p className="text-sm text-gray-400 mt-12 pt-6 border-t border-gray-200">
-          This content is for educational purposes only and does not constitute medical or
-          financial advice. Reviewed by an experienced web professional with expertise in
-          healthcare billing and patient advocacy resources.
-        </p>
+          <div className="mt-8 space-y-8 leading-7">
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Start with the two documents that should match
+              </h2>
+              <p className="mt-3">
+                Ask the provider for a detailed statement showing the dates of
+                service, descriptions, codes when available, charges, payments,
+                and adjustments. HIPAA generally gives individuals a right to
+                inspect and receive copies of medical and billing records held by
+                covered providers and health plans, subject to limited exceptions
+                and permitted copying costs. A provider cannot deny access to
+                those records solely because the underlying bill is unpaid. See
+                the{" "}
+                <a
+                  className="font-medium text-teal-700 underline dark:text-teal-300"
+                  href="https://www.hhs.gov/hipaa/for-individuals/medical-records/index.html"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  HHS medical-record access guidance
+                </a>
+                .
+              </p>
+              <p className="mt-3">
+                If insurance processed the claim, download the corresponding
+                Explanation of Benefits. CMS emphasizes that an EOB is not a bill:
+                it explains the provider charge, allowed charge, insurer payment,
+                and the patient balance calculated by the plan. Compare that
+                patient balance with the provider&apos;s bill. If the provider bill is
+                higher, ask both the provider and plan to explain the difference.
+              </p>
+            </section>
 
-      </article>
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Check facts before alleging a coding error
+              </h2>
+              <p className="mt-3">
+                First look for facts you can verify: a duplicate line, the wrong
+                patient or insurance information, an incorrect date, a payment
+                that is missing, or a service you did not receive. Procedure-code
+                questions can be legitimate, but coding rules are complex. Ask the
+                billing office to explain the code and compare it with your records
+                before describing it as upcoding or unbundling.
+              </p>
+              <div className="mt-4 overflow-x-auto">
+                <table className="min-w-full border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="bg-slate-100 dark:bg-slate-800">
+                      <th className="border border-slate-200 p-3 dark:border-slate-700">
+                        What you notice
+                      </th>
+                      <th className="border border-slate-200 p-3 dark:border-slate-700">
+                        What to request
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        The same line appears twice
+                      </td>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        An explanation of quantity, units, and whether the services
+                        were distinct
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        The bill and EOB show different patient balances
+                      </td>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        A corrected claim or an explanation from both the provider
+                        and health plan
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        You do not recognize a service
+                      </td>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        The service description and relevant portion of your record
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        Insurance information is wrong
+                      </td>
+                      <td className="border border-slate-200 p-3 dark:border-slate-700">
+                        Correction and resubmission of the claim, if appropriate
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-4">
+                You can use{" "}
+                <Link className="font-medium text-teal-700 underline dark:text-teal-300" href="/">
+                  Medical Bill Reader
+                </Link>{" "}
+                to organize the document into plain-language questions. Its output
+                is informational and should not be treated as proof that a charge
+                is improper.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Contact the right organization
+              </h2>
+              <ul className="mt-3 list-disc space-y-3 pl-6">
+                <li>
+                  <strong>Provider billing issue:</strong> Contact the provider for
+                  a duplicate, missing payment, wrong demographic information, or a
+                  service-description question.
+                </li>
+                <li>
+                  <strong>Coverage or claim denial:</strong> Contact the health plan
+                  and use the appeal instructions on the EOB or denial notice.
+                </li>
+                <li>
+                  <strong>Possible surprise bill:</strong> The federal No Surprises
+                  Act protects many people with group or individual insurance from
+                  certain out-of-network bills for emergency care, some services at
+                  in-network facilities, and air ambulances. It does not cover every
+                  bill or every plan. CMS offers a{" "}
+                  <a
+                    className="font-medium text-teal-700 underline dark:text-teal-300"
+                    href="https://www.cms.gov/medical-bill-rights/help/submit-a-complaint"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    No Surprises complaint process
+                  </a>{" "}
+                  and Help Desk at 1-800-985-3059.
+                </li>
+                <li>
+                  <strong>Uninsured or self-pay estimate dispute:</strong> CMS says
+                  you may qualify for the federal patient-provider dispute process
+                  when a provider charges at least $400 more than its good faith
+                  estimate and the initial bill is dated within the last 120
+                  calendar days. Review the complete{" "}
+                  <a
+                    className="font-medium text-teal-700 underline dark:text-teal-300"
+                    href="https://www.cms.gov/medical-bill-rights/help/dispute-a-bill"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    CMS eligibility rules
+                  </a>{" "}
+                  before applying.
+                </li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Medical bill review letter template
+              </h2>
+              <p className="mt-3">
+                Use the provider&apos;s secure portal when available. Share only the
+                information needed to locate the account and explain the disputed
+                line. Do not put a full Social Security number, full date of birth,
+                diagnosis history, or unrelated records in an ordinary email.
+              </p>
+              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-5 font-mono text-sm leading-6 dark:border-slate-700 dark:bg-slate-950">
+                <p>[Your name]</p>
+                <p>[Preferred secure contact method]</p>
+                <p>[Date]</p>
+                <br />
+                <p>Billing Department</p>
+                <p>[Provider or facility]</p>
+                <br />
+                <p>
+                  <strong>
+                    Re: Request to review account ending [LAST FOUR DIGITS], date
+                    of service [DATE]
+                  </strong>
+                </p>
+                <br />
+                <p>Dear Billing Department:</p>
+                <br />
+                <p>
+                  I am asking you to review the following item on my detailed bill:
+                  [DATE, DESCRIPTION OR CODE, AND AMOUNT].
+                </p>
+                <br />
+                <p>
+                  My concern is: [STATE THE VERIFIABLE ISSUE — for example, the
+                  line appears twice, the payment is missing, the date is wrong, or
+                  I do not recognize the described service].
+                </p>
+                <br />
+                <p>
+                  Please investigate and send me a written explanation. If a
+                  correction is appropriate, please send a corrected statement and,
+                  when applicable, submit the corrected claim to my health plan. I
+                  also request that you note the account as disputed while you
+                  review it.
+                </p>
+                <br />
+                <p>
+                  I have included only the following supporting documents: [LIST
+                  COPIES, NOT ORIGINALS]. Please use my secure contact method above
+                  if you need additional information.
+                </p>
+                <br />
+                <p>Sincerely,</p>
+                <p>[Your name]</p>
+              </div>
+              <p className="mt-3 text-sm">
+                Asking for an account hold does not guarantee the provider must
+                grant one. Confirm the provider&apos;s collection policy and continue
+                monitoring statements while the review is pending.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                If the health plan denied the claim
+              </h2>
+              <p className="mt-3">
+                A provider billing review and a health-plan appeal are different
+                processes. Follow the denial notice. HealthCare.gov says that under
+                the federal framework, an internal appeal generally must be filed
+                within 180 days of the denial. Internal decisions generally must be
+                completed within 30 days for services not yet received and 60 days
+                for services already received, with faster procedures for urgent
+                situations. Plan and state rules can differ or provide additional
+                rights.
+              </p>
+              <p className="mt-3">
+                If an eligible internal appeal remains denied, the notice should
+                explain external review. Federal guidance generally gives four
+                months to request external review and requires a standard external
+                decision as soon as possible, no later than 45 days after receipt.
+                Use the deadlines printed on your own notice rather than relying on
+                a general article.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Financial assistance and collections
+              </h2>
+              <p className="mt-3">
+                Ask the hospital whether it has a financial assistance policy and
+                whether you qualify. Federal tax rules require tax-exempt hospital
+                organizations subject to Internal Revenue Code section 501(r) to
+                maintain and publicize a written policy for emergency and other
+                medically necessary care. That requirement is not the same as a
+                promise that every hospital or every patient qualifies for free
+                care.
+              </p>
+              <p className="mt-3">
+                If a third-party debt collector contacts you, separate federal debt
+                collection rules may apply. The CFPB explains that a written dispute
+                sent within the validation period—generally 30 days after you
+                receive the validation notice—requires the collector to pause
+                collection of the disputed amount until it sends verification.
+                This rule concerns debt collectors and should not be described as a
+                universal 30-day deadline for the original provider.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Frequently asked questions
+              </h2>
+              <div className="mt-4 space-y-5">
+                {faqItems.map((item) => (
+                  <div key={item.question}>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                      {item.question}
+                    </h3>
+                    <p className="mt-1">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                Primary sources
+              </h2>
+              <p className="mt-3 text-sm">
+                Last reviewed July 12, 2026. Official guidance can change; check the
+                linked source before relying on a deadline or eligibility rule.
+              </p>
+              <ul className="mt-3 list-disc space-y-2 pl-6">
+                {sources.map((source) => (
+                  <li key={source.href}>
+                    <a
+                      className="font-medium text-teal-700 underline dark:text-teal-300"
+                      href={source.href}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {source.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        </article>
+      </main>
     </>
   );
 }
