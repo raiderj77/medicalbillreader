@@ -5,7 +5,7 @@ import Disclaimer from "@/components/Disclaimer";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
-  title: "Medical Bill Reader ,  Understand Your Bill",
+  title: "Medical Bill Reader — Understand Your Bill",
   description:
     "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   keywords:
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Medical Bill Reader ,  Understand Your Bill",
+    title: "Medical Bill Reader — Understand Your Bill",
     description:
       "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
     url: "https://medicalbillreader.com",
@@ -100,27 +100,28 @@ export default function Home() {
 
       {/* Nav */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🩺</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
+            <span className="text-base font-bold tracking-tight text-slate-800 dark:text-slate-100 sm:text-lg">
               MedicalBillReader
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-500 dark:text-slate-400">
-              1 free analysis/month · No account needed
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
+              <span className="sm:hidden">1 free/month</span>
+              <span className="hidden sm:inline">1 free analysis/month · No account needed</span>
             </span>
             <ThemeToggle />
           </div>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Hero */}
-        <div className="text-center mb-12">
+        <div className="mb-8 text-center sm:mb-12">
           <div className="inline-block bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-teal-200 dark:border-teal-700">
-            Free Medical Bill Explainer ,  No Sign-Up Required
+            Free Medical Bill Explainer — No Sign-Up Required
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
             Finally Understand<br />Your Medical Bill
@@ -128,23 +129,21 @@ export default function Home() {
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">
             Last updated: March 16, 2026
           </p>
-          <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-lg text-slate-500 dark:text-slate-400 sm:text-xl">
             Medical Bill Reader helps you understand confusing medical bills and insurance
-            EOBs in plain language ,  no medical degree required. Upload a photo or PDF and
+            EOBs in plain language — no medical degree required. Upload a photo or PDF and
             get every charge explained, potential errors flagged, and clear next steps.
           </p>
+          <a
+            href="#analyzer"
+            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600"
+          >
+            Start free analysis
+          </a>
           <p className="text-sm text-slate-400 dark:text-slate-500 mt-4">
             Built by an experienced web professional
           </p>
         </div>
-
-        {/* Answer Block (server-rendered) */}
-        <AnswerBlock
-          what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
-          who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
-          bottomLine="Upload your medical bill for a free line-by-line explanation ,  results are for informational purposes only and not financial or medical advice."
-          lastUpdated="2026-03-20"
-        />
 
         {/* Disclaimer ,  server-rendered, visible before tool */}
         <div className="mb-6">
@@ -153,6 +152,14 @@ export default function Home() {
 
         {/* Interactive Tool (client component) */}
         <BillAnalyzer />
+
+        {/* Answer Block (server-rendered) */}
+        <AnswerBlock
+          what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
+          who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
+          bottomLine="Upload your medical bill for a free line-by-line explanation. Results are informational only and not financial or medical advice."
+          lastUpdated="2026-03-20"
+        />
 
         {/* GEO Content Sections (server-rendered) */}
         <section className="mb-12 space-y-10">

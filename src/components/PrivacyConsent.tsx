@@ -102,7 +102,8 @@ export default function PrivacyConsent() {
       {preferencesOpen && (
         <section
           aria-labelledby="privacy-consent-title"
-          className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl dark:border-slate-700 dark:bg-slate-900"
+          aria-describedby="privacy-consent-description"
+          className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-slate-900 sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-[28rem] sm:max-w-[calc(100vw-2rem)] sm:p-5"
           role="dialog"
         >
           <h2
@@ -111,7 +112,10 @@ export default function PrivacyConsent() {
           >
             Your privacy choices
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+          <p
+            id="privacy-consent-description"
+            className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300"
+          >
             Essential cookies keep the service secure and remember this choice.
             With your permission, Google Analytics helps us understand site usage.
             We never send uploaded bill content or analysis results to it.
