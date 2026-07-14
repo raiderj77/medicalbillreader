@@ -12,7 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Medical Bill Reader ,  Understand Your Bill",
+  metadataBase: new URL("https://medicalbillreader.com"),
+  title: "Medical Bill Reader — Understand Your Bill",
   description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
   keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
   authors: [{ name: "Jason Ramirez" }],
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
   },
   openGraph: {
-    title: "Medical Bill Reader ,  Understand Your Bill",
+    title: "Medical Bill Reader — Understand Your Bill",
     description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",

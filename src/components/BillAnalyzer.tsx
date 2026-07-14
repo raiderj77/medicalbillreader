@@ -328,13 +328,16 @@ export default function BillAnalyzer() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 mb-8">
+    <div id="analyzer" className="mb-8 scroll-mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8">
       <div className="mb-5">
         <VerificationBadge variant="pre" />
       </div>
       {!file ? (
-        <div
-          className={`border-2 border-dashed rounded-xl p-12 text-center cursor-pointer transition-all ${
+        <>
+        <button
+          type="button"
+          aria-describedby="upload-formats upload-privacy"
+          className={`w-full rounded-xl border-2 border-dashed p-7 text-center transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 sm:p-12 ${
             isDragging
               ? "border-teal-400 bg-teal-50 dark:bg-teal-900/20"
               : "border-slate-300 dark:border-slate-600 hover:border-teal-400 hover:bg-slate-50 dark:hover:bg-slate-700"
@@ -351,33 +354,43 @@ export default function BillAnalyzer() {
           <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
             Drop your bill here or click to upload
           </p>
-          <p className="text-sm text-slate-400 mb-3">
-            Supports JPG, PNG, or PDF
+          <p id="upload-formats" className="mb-3 text-sm text-slate-500 dark:text-slate-400">
+            JPEG, PNG, WebP, or PDF · 10 MB maximum
           </p>
-          <p className="text-xs text-slate-400 dark:text-slate-500 max-w-md mx-auto">
+          <p id="upload-privacy" className="mx-auto max-w-md text-xs text-slate-500 dark:text-slate-400">
             Your document is transmitted securely to Anthropic solely to
             generate the analysis. Medical Bill Reader does not intentionally
             save bill documents in its own database or use them for advertising.
           </p>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            className="hidden"
-            onChange={(e) =>
-              e.target.files?.[0] && handleFile(e.target.files[0])
-            }
-          />
-        </div>
+        </button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,application/pdf"
+          className="sr-only"
+          aria-label="Upload a medical bill"
+          onChange={(e) =>
+            e.target.files?.[0] && handleFile(e.target.files[0])
+          }
+        />
+        {error && (
+          <div
+            className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
+        </>
       ) : (
         <div>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="flex min-w-0 items-center gap-3">
               <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 rounded-lg flex items-center justify-center text-xl">
                 📄
               </div>
-              <div>
-                <p className="font-medium text-slate-800 dark:text-slate-200">
+              <div className="min-w-0">
+                <p className="break-words font-medium text-slate-800 dark:text-slate-200">
                   {file.name}
                 </p>
                 <p className="text-sm text-slate-400">
@@ -387,7 +400,7 @@ export default function BillAnalyzer() {
             </div>
             <button
               onClick={reset}
-              className="text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
             >
               Remove
             </button>
@@ -416,7 +429,7 @@ export default function BillAnalyzer() {
           </div>
 
           {error && (
-            <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
+            <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm" role="alert">
               {error}
             </div>
           )}
@@ -424,6 +437,7 @@ export default function BillAnalyzer() {
           <button
             onClick={handleSubmit}
             disabled={loading}
+            aria-busy={loading}
             className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
           >
             {loading ? (
