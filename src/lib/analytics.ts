@@ -2,6 +2,7 @@ export type ConversionEvent =
   | "upload_started"
   | "upload_completed"
   | "checkout_started"
+  | "checkout_cancelled"
   | "purchase_completed"
   | "analysis_delivered"
   | "payment_failed";

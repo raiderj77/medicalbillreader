@@ -19,7 +19,8 @@ const tiers = [
     limitations: [],
     cta: "Start Free",
     href: "/",
-    popular: false,
+    highlighted: false,
+    checkoutNote: null,
     priceType: null,
   },
   {
@@ -36,7 +37,9 @@ const tiers = [
     limitations: [],
     cta: "Buy Single Analysis",
     href: null,
-    popular: true,
+    highlighted: true,
+    checkoutNote:
+      "Secure checkout on Stripe. After payment, you return to the bill analyzer to upload one bill or EOB.",
     priceType: "per-use",
   },
   {
@@ -54,7 +57,9 @@ const tiers = [
     limitations: [],
     cta: "Subscribe Now",
     href: null,
-    popular: false,
+    highlighted: false,
+    checkoutNote:
+      "Secure checkout on Stripe. After payment, you return to the bill analyzer with monthly access enabled.",
     priceType: "subscription",
   },
 ];
@@ -63,10 +68,11 @@ export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
 
   useEffect(() => {
-    if (
-      new URLSearchParams(window.location.search).get("payment") === "error"
-    ) {
+    const paymentState = new URLSearchParams(window.location.search).get("payment");
+    if (paymentState === "error") {
       trackConversion("payment_failed");
+    } else if (paymentState === "cancelled") {
+      trackConversion("checkout_cancelled");
     }
   }, []);
 
@@ -140,37 +146,37 @@ export default function PricingPage() {
             <div
               key={tier.name}
               className={`rounded-2xl p-8 flex flex-col ${
-                tier.popular
+                tier.highlighted
                   ? "bg-slate-900 dark:bg-slate-950 text-white ring-2 ring-teal-500 shadow-xl scale-105"
                   : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
               }`}
             >
-              {tier.popular && (
+              {tier.highlighted && (
                 <div className="text-teal-400 text-sm font-bold uppercase tracking-wider mb-2">
-                  Most Popular
+                  One extra analysis
                 </div>
               )}
               <h2
-                className={`text-xl font-bold mb-1 ${tier.popular ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
+                className={`text-xl font-bold mb-1 ${tier.highlighted ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
               >
                 {tier.name}
               </h2>
               <div className="flex items-baseline gap-1 mb-4">
                 <span
-                  className={`text-4xl font-bold ${tier.popular ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
+                  className={`text-4xl font-bold ${tier.highlighted ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
                 >
                   {tier.price}
                 </span>
                 {tier.period && (
                   <span
-                    className={`text-sm ${tier.popular ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                    className={`text-sm ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
                   >
                     {tier.period}
                   </span>
                 )}
               </div>
               <p
-                className={`text-sm mb-6 ${tier.popular ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                className={`text-sm mb-6 ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
               >
                 {tier.description}
               </p>
@@ -178,7 +184,7 @@ export default function PricingPage() {
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2 text-sm">
                     <svg
-                      className={`w-4 h-4 flex-shrink-0 ${tier.popular ? "text-teal-400" : "text-teal-600"}`}
+                      className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? "text-teal-400" : "text-teal-600"}`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -193,7 +199,7 @@ export default function PricingPage() {
                     </svg>
                     <span
                       className={
-                        tier.popular
+                        tier.highlighted
                           ? "text-slate-200"
                           : "text-slate-600 dark:text-slate-300"
                       }
@@ -208,7 +214,7 @@ export default function PricingPage() {
                 <Link
                   href={tier.href}
                   className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors ${
-                    tier.popular
+                    tier.highlighted
                       ? "bg-teal-500 text-white hover:bg-teal-600"
                       : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
                   }`}
@@ -222,13 +228,20 @@ export default function PricingPage() {
                   }
                   disabled={loading === tier.priceType}
                   className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 ${
-                    tier.popular
+                    tier.highlighted
                       ? "bg-teal-500 text-white hover:bg-teal-600"
                       : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
                   }`}
                 >
                   {loading === tier.priceType ? "Loading..." : tier.cta}
                 </button>
+              )}
+              {tier.checkoutNote && (
+                <p
+                  className={`mt-3 text-xs leading-relaxed ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                >
+                  {tier.checkoutNote}
+                </p>
               )}
             </div>
           ))}
