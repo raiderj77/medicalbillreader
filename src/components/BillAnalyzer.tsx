@@ -54,6 +54,7 @@ export default function BillAnalyzer() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [needsUpgrade, setNeedsUpgrade] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   // One-time hint that we just came back from a successful per-use checkout.
   // Consumed by the first analysis attempt and stripped from the URL
@@ -90,6 +91,7 @@ export default function BillAnalyzer() {
     trackConversion("upload_started", { file_type: f.type });
     setResult(null);
     setError(null);
+    setNeedsUpgrade(false);
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target?.result as string);
@@ -112,6 +114,7 @@ export default function BillAnalyzer() {
 
     setLoading(true);
     setError(null);
+    setNeedsUpgrade(false);
     try {
       if (!isPaid) {
         const accessResponse = await fetch("/api/entitlement/free", {
@@ -130,7 +133,15 @@ export default function BillAnalyzer() {
         body: JSON.stringify({ image: preview, fileType: file.type }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      if (!res.ok) {
+        if (res.status === 401) {
+          setNeedsUpgrade(true);
+          throw new Error(
+            "Your free analysis has already been used. Choose a paid option to analyze another bill.",
+          );
+        }
+        throw new Error(data.error || "Something went wrong");
+      }
       setResult(data.result);
       trackConversion("analysis_delivered");
 
@@ -149,6 +160,7 @@ export default function BillAnalyzer() {
     setPreview(null);
     setResult(null);
     setError(null);
+    setNeedsUpgrade(false);
   };
 
   if (result) {
@@ -430,7 +442,15 @@ export default function BillAnalyzer() {
 
           {error && (
             <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm" role="alert">
-              {error}
+              <p>{error}</p>
+              {needsUpgrade && (
+                <Link
+                  href="/pricing"
+                  className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-teal-600 px-4 py-2 font-semibold text-white hover:bg-teal-700"
+                >
+                  See analysis options
+                </Link>
+              )}
             </div>
           )}
 
