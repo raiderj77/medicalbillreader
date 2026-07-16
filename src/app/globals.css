@@ -13,6 +13,28 @@ body {
   nav, footer, .no-print { display: none !important; }
   main { padding: 0 !important; }
   .bg-blue-600 { background-color: #2563eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body:has(#printable-results) * {
+    visibility: hidden;
+  }
+
+  body:has(#printable-results) #printable-results,
+  body:has(#printable-results) #printable-results * {
+    visibility: visible;
+  }
+
+  body:has(#printable-results) #printable-results {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+  }
 }
 
 /* ── Blog / Markdown prose ── */
