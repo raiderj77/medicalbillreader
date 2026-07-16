@@ -165,7 +165,7 @@ export default function BillAnalyzer() {
 
   if (result) {
     return (
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8 overflow-hidden">
+      <div id="printable-results" className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8 overflow-hidden">
         {/* AI-Generated Analysis Badge */}
         <div className="bg-blue-600 px-6 py-3 flex items-center gap-2">
           <svg
@@ -198,7 +198,7 @@ export default function BillAnalyzer() {
             </div>
             <button
               onClick={reset}
-              className="text-sm text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
+              className="no-print text-sm text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
             >
               Analyze Another Bill
             </button>
@@ -265,7 +265,7 @@ export default function BillAnalyzer() {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="no-print mt-6 flex flex-wrap gap-3">
             <button
               onClick={() => {
                 const text = result
@@ -296,10 +296,12 @@ export default function BillAnalyzer() {
               Copy Summary
             </button>
             <button
+              type="button"
               onClick={() => window.print()}
+              title="Print your analysis or save it as a PDF"
               className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
-              Download PDF
+              Print or Save PDF
             </button>
             <button
               onClick={() => {
