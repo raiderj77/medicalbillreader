@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://medicalbillreader.com"),
   title: "Medical Bill Reader — Understand Your Bill",
-  description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+  description: "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
   keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
   authors: [{ name: "Jason Ramirez" }],
   alternates: {
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Medical Bill Reader — Understand Your Bill",
-    description: "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+    description: "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -50,8 +50,7 @@ const organizationJsonLd = {
   name: "Medical Bill Reader",
   url: "https://medicalbillreader.com",
   description:
-    "AI-powered medical bill analysis tool that helps patients understand confusing medical bills and insurance EOBs in plain language.",
-  dateModified: new Date().toISOString().substring(0,10),
+    "AI-assisted tool that organizes visible billing codes, charges, and insurance fields from supported medical bills and EOBs.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
@@ -66,8 +65,7 @@ const webSiteJsonLd = {
   name: "Medical Bill Reader",
   url: "https://medicalbillreader.com",
   description:
-    "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
-  dateModified: new Date().toISOString().substring(0,10),
+    "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
 };
 
 const webAppJsonLd = {
@@ -76,10 +74,9 @@ const webAppJsonLd = {
   name: "Medical Bill Reader",
   url: "https://medicalbillreader.com",
   description:
-    "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+    "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
   applicationCategory: "HealthApplication",
   operatingSystem: "All",
-  dateModified: new Date().toISOString().substring(0,10),
   author: {
     "@type": "Person",
     name: "Jason Ramirez",
@@ -142,7 +139,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-600 focus:text-white focus:rounded">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-700 focus:text-white focus:rounded">
           Skip to main content
         </a>
         {children}

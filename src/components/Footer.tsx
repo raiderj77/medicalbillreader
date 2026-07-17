@@ -13,7 +13,7 @@ const sisterSites = [
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 py-8 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+    <footer className="w-full border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 py-8 px-4 text-center text-xs text-slate-700 dark:text-slate-300">
       <p className="max-w-3xl mx-auto mb-4">
         This tool provides general explanations of medical billing codes and
         charges for informational purposes only. It is not financial or medical
@@ -57,13 +57,13 @@ export default function Footer() {
       <div className="mb-4">
         <Link
           href="/do-not-sell"
-          className="text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium underline"
+          className="text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 font-medium underline"
         >
           Do Not Sell or Share My Personal Information
         </Link>
       </div>
 
-      <p className="mb-3 text-slate-400">Our Other Tools</p>
+      <p className="mb-3 text-slate-600">Our Other Tools</p>
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-4">
         {sisterSites.map((site) => (
           <a
@@ -78,10 +78,10 @@ export default function Footer() {
         ))}
       </div>
 
-      <p className="mt-4 text-slate-400">
+      <p className="mt-4 text-slate-600">
         &copy; {new Date().getFullYear()} Medical Bill Reader. All rights reserved.
       </p>
-      <p className="mt-1 text-slate-400">
+      <p className="mt-1 text-slate-600">
         Built by{" "}
         <a href="https://automation-services-eta.vercel.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-700 dark:hover:text-slate-300">
           Jason Ramirez

@@ -53,7 +53,7 @@ export default function AccessibilityPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Accessibility Statement
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
           Last Updated: March 2026
         </p>
 
@@ -121,8 +121,8 @@ export default function AccessibilityPage() {
             any accessibility barriers or have suggestions for improvement, please contact us:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li>Email: <a href="mailto:support@medicalbillreader.com" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">support@medicalbillreader.com</a></li>
-            <li>Contact form: <Link href="/contact" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">Contact page</Link></li>
+            <li>Email: <a href="mailto:support@medicalbillreader.com" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">support@medicalbillreader.com</a></li>
+            <li>Contact form: <Link href="/contact" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">Contact page</Link></li>
           </ul>
           <p>
             We try to respond to accessibility feedback within 5 business days.

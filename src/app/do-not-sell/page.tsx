@@ -53,7 +53,7 @@ export default function DoNotSellPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Do Not Sell or Share My Personal Information
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
           Your rights under the California Consumer Privacy Act (CCPA/CPRA) and other state privacy laws
         </p>
 
@@ -91,7 +91,7 @@ export default function DoNotSellPage() {
             <li>
               <strong>Global Privacy Control (GPC):</strong> Enable GPC in your browser. We automatically
               honor GPC signals as a valid opt-out request under CCPA/CPRA. Learn more at{" "}
-              <a href="https://globalprivacycontrol.org/" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline" target="_blank" rel="noopener noreferrer">
+              <a href="https://globalprivacycontrol.org/" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline" target="_blank" rel="noopener noreferrer">
                 globalprivacycontrol.org
               </a>.
             </li>
@@ -101,11 +101,11 @@ export default function DoNotSellPage() {
             </li>
             <li>
               <strong>Contact us directly:</strong> Email{" "}
-              <a href="mailto:support@medicalbillreader.com" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+              <a href="mailto:support@medicalbillreader.com" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
                 support@medicalbillreader.com
               </a>{" "}
               or visit our{" "}
-              <Link href="/contact" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+              <Link href="/contact" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
                 Contact page
               </Link>{" "}
               to submit an opt-out request. We respond within 15 business days.
@@ -131,9 +131,9 @@ export default function DoNotSellPage() {
             location.
           </p>
 
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-8">
+          <p className="text-sm text-slate-700 dark:text-slate-300 mt-8">
             For complete details about our data practices, see our{" "}
-            <Link href="/privacy" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+            <Link href="/privacy" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
               Privacy Policy
             </Link>.
           </p>

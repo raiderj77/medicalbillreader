@@ -30,7 +30,7 @@ function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
         {text}{" "}
         <Link
           href="/methodology"
-          className="underline font-medium hover:text-teal-700 dark:hover:text-teal-100"
+          className="underline font-medium hover:text-teal-800 dark:hover:text-teal-100"
         >
           How this works
         </Link>
@@ -198,7 +198,7 @@ export default function BillAnalyzer() {
             </div>
             <button
               onClick={reset}
-              className="no-print text-sm text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
+              className="no-print text-sm text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
             >
               Analyze Another Bill
             </button>
@@ -229,7 +229,7 @@ export default function BillAnalyzer() {
                 return (
                   <li
                     key={i}
-                    className="text-slate-600 dark:text-slate-400 ml-4 list-disc"
+                    className="text-slate-600 dark:text-slate-600 ml-4 list-disc"
                   >
                     {line.replace("- ", "")}
                   </li>
@@ -239,7 +239,7 @@ export default function BillAnalyzer() {
               return (
                 <p
                   key={i}
-                  className="text-slate-600 dark:text-slate-400 leading-relaxed"
+                  className="text-slate-600 dark:text-slate-600 leading-relaxed"
                 >
                   {line}
                 </p>
@@ -291,7 +291,7 @@ export default function BillAnalyzer() {
                 });
               }}
               id="copy-btn"
-              className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Copy Summary
             </button>
@@ -299,7 +299,7 @@ export default function BillAnalyzer() {
               type="button"
               onClick={() => window.print()}
               title="Print your analysis or save it as a PDF"
-              className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Print or Save PDF
             </button>
@@ -331,7 +331,7 @@ export default function BillAnalyzer() {
                 }
               }}
               id="share-btn"
-              className="px-4 py-2 text-sm font-medium text-teal-600 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Share
             </button>
@@ -351,7 +351,7 @@ export default function BillAnalyzer() {
         <button
           type="button"
           aria-describedby="upload-formats upload-privacy"
-          className={`w-full rounded-xl border-2 border-dashed p-7 text-center transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600 sm:p-12 ${
+          className={`w-full rounded-xl border-2 border-dashed p-7 text-center transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 sm:p-12 ${
             isDragging
               ? "border-teal-400 bg-teal-50 dark:bg-teal-900/20"
               : "border-slate-300 dark:border-slate-600 hover:border-teal-400 hover:bg-slate-50 dark:hover:bg-slate-700"
@@ -368,10 +368,10 @@ export default function BillAnalyzer() {
           <p className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">
             Drop your bill here or click to upload
           </p>
-          <p id="upload-formats" className="mb-3 text-sm text-slate-500 dark:text-slate-400">
+          <p id="upload-formats" className="mb-3 text-sm text-slate-700 dark:text-slate-300">
             JPEG, PNG, WebP, or PDF · 10 MB maximum
           </p>
-          <p id="upload-privacy" className="mx-auto max-w-md text-xs text-slate-500 dark:text-slate-400">
+          <p id="upload-privacy" className="mx-auto max-w-md text-xs text-slate-700 dark:text-slate-300">
             Your document is transmitted securely to Anthropic solely to
             generate the analysis. Medical Bill Reader does not intentionally
             save bill documents in its own database or use them for advertising.
@@ -407,14 +407,14 @@ export default function BillAnalyzer() {
                 <p className="break-words font-medium text-slate-800 dark:text-slate-200">
                   {file.name}
                 </p>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-slate-600">
                   {(file.size / 1024).toFixed(0)} KB
                 </p>
               </div>
             </div>
             <button
               onClick={reset}
-              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-200"
             >
               Remove
             </button>
@@ -433,7 +433,7 @@ export default function BillAnalyzer() {
 
           {/* Upload privacy notice */}
           <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-700 dark:text-slate-300">
               🔒 Your document will be transmitted securely to Anthropic solely
               to generate this analysis. It is not sold or shared for
               advertising, and Medical Bill Reader does not intentionally store
@@ -448,7 +448,7 @@ export default function BillAnalyzer() {
               {needsUpgrade && (
                 <Link
                   href="/pricing"
-                  className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-teal-600 px-4 py-2 font-semibold text-white hover:bg-teal-700"
+                  className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-teal-700 px-4 py-2 font-semibold text-white hover:bg-teal-800"
                 >
                   See analysis options
                 </Link>
@@ -460,7 +460,7 @@ export default function BillAnalyzer() {
             onClick={handleSubmit}
             disabled={loading}
             aria-busy={loading}
-            className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
+            className="w-full bg-teal-700 hover:bg-teal-800 disabled:bg-teal-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-3">

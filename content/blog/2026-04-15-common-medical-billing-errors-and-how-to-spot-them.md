@@ -1,104 +1,74 @@
 ---
 title: "Common Medical Billing Errors and How to Spot Them"
 date: "2026-04-15"
+modified: "2026-07-16"
 slug: "common-medical-billing-errors-and-how-to-spot-them"
-description: "Learn the 7 most common medical billing errors and how to identify them on your bill using our free tool."
+description: "Learn seven billing issues to check on an itemized medical bill and where to get authoritative help if something looks wrong."
 status: published
 tags: [medical-billing, billing-errors, patient-rights]
+keywords: [medical billing errors, itemized medical bill, duplicate medical charges, No Surprises Act]
 ---
 
 # Common Medical Billing Errors and How to Spot Them
 
-## What are medical billing errors?
+Medical bills can be difficult to interpret. A useful review starts by comparing the provider's itemized bill with your Explanation of Benefits (EOB), checking that the dates and services match your records, and asking the provider or insurer to explain anything you do not recognize. The Centers for Medicare & Medicaid Services (CMS) publishes a [step-by-step guide to checking a medical bill for errors](https://www.cms.gov/medical-bill-rights/help/guides/bill-errors).
 
-Medical billing errors are mistakes on hospital or provider bills that result in patients being charged incorrectly. Industry experts and patient advocacy groups estimate that a significant percentage of medical bills contain at least one error, though exact figures vary by study and setting. These errors range from simple typos to systematic upcoding that inflates charges by hundreds or thousands of dollars.
+## Seven issues worth checking
 
-If you have ever looked at a medical bill and felt confused by the charges, you are not alone. The Consumer Financial Protection Bureau reported in 2022 that approximately 43 million Americans had medical debt on their credit reports, and billing errors contribute to this problem when patients pay incorrect charges or when disputed bills go to collections.
+### 1. Duplicate line items
 
-## Why do billing errors happen?
+The same service may appear more than once. Compare the service date, description, code, quantity, and amount. Similar-looking entries are not automatically duplicates, so ask the billing office to explain them before drawing a conclusion.
 
-Medical billing is complex. A single hospital visit can generate dozens of individual charge codes across multiple departments. The transition from ICD-9 to ICD-10 coding expanded the number of diagnosis codes from approximately 13,000 to over 68,000, dramatically increasing the chance of miscoding.
+### 2. A code or description that does not match your records
 
-Common causes include:
+CPT and HCPCS codes describe services and supplies, while ICD-10-CM codes describe diagnoses. Compare the bill with your visit summary or other records. A code lookup can help you understand a label, but it cannot prove whether the coding was correct without the underlying clinical and billing context.
 
-- **Manual data entry mistakes** during registration or charge capture
-- **Upcoding** where a provider bills for a more expensive service than what was performed
-- **Unbundling** where services that should be billed under a single code are split into separate charges
-- **Duplicate billing** for the same service, especially after transfers between departments
-- **Incorrect patient information** such as wrong insurance ID or date of birth
+### 3. A service level that needs clarification
 
-## The 7 most common errors on medical bills
+Some visits use codes that reflect time, complexity, or medical decision-making. If a description appears inconsistent with the care you remember, ask the provider which documentation supported the code. Do not assume that a higher-level code is an error based only on visit length.
 
-### 1. Duplicate charges
+### 4. Separate charges that may be related
 
-Duplicate charges occur when the same procedure or service appears more than once on your bill. Patient advocacy groups report that duplicate charges are among the most frequently found billing errors. This happens frequently during hospital stays when shift changes result in the same test being entered twice.
+Multiple services can legitimately be billed on the same date. In other cases, billing rules may group related services. Ask the provider or insurer whether the listed services should be billed separately; the answer depends on the service, payer, setting, and coding rules.
 
-**How to spot it:** Look for identical line items with the same date of service and CPT code. If you see the same charge listed twice, flag it immediately.
+### 5. A possible surprise-billing protection issue
 
-### 2. Incorrect CPT or diagnosis codes
+Federal No Surprises Act protections apply to many emergency services and certain non-emergency services provided by out-of-network clinicians at in-network facilities. They do not cover every bill or situation. CMS explains the scope of these protections and how to get help in its [No Surprises Act consumer guidance](https://www.cms.gov/medical-bill-rights/know-your-rights/using-insurance).
 
-Current Procedural Terminology (CPT) codes identify specific medical procedures. When the wrong code is used, you may be charged for a procedure you never received. For example, a 15-minute office visit (CPT 99213) billed as a 40-minute comprehensive visit (CPT 99215) can result in a significantly higher charge.
+### 6. Incorrect patient or insurance information
 
-**How to spot it:** Request an itemized bill and cross-reference each CPT code with the services you actually received. Our free bill reader tool can help decode these codes instantly.
+Check the patient name, insurer, member or subscriber ID, group number, and dates of service. If something is wrong, contact the provider and insurer and ask how to correct the claim.
 
-### 3. Upcoding
+### 7. A service or quantity you do not recognize
 
-Upcoding is when a provider bills for a more expensive service or procedure than what was actually provided. The HHS Office of Inspector General has consistently identified upcoding as one of the top sources of improper Medicare payments.
+Compare the bill with your appointment records, discharge documents, medication list, and EOB. A description may be unfamiliar even when the charge is legitimate, so request an explanation rather than treating it as proof of an error.
 
-**How to spot it:** Compare the complexity level of your visit with the code billed. Emergency room visits are particularly prone to upcoding ,  if a straightforward ER visit for a minor issue is billed at the highest severity level (CPT 99285), that warrants a closer look.
+## What to do if something looks wrong
 
-### 4. Unbundled charges
+1. **Ask for an itemized bill** if you only received a summary.
+2. **Compare it with your EOB and records.** CMS explains the main fields in its guide to [reading a medical bill](https://www.cms.gov/medical-bill-rights/help/guides/how-to-read-bill).
+3. **Contact the provider's billing office** and identify the specific line you want explained. Keep notes of the date, representative, and answer.
+4. **Contact your insurer** if the issue involves claim processing, coverage, network status, or the amount assigned to you.
+5. **Follow the appeal or complaint instructions that apply to your situation.** Deadlines and agencies vary. Your EOB or plan documents should identify the appeal deadline, and [HealthCare.gov explains the general appeal process](https://www.healthcare.gov/appeal-insurance-company-decision/appeals/).
 
-Some procedures include related services that should be billed together under a single bundled code. Unbundling splits these into separate line items, inflating the total. For example, a surgical procedure that includes standard prep work should not have the prep billed as a separate charge.
+## What Medical Bill Reader can and cannot do
 
-**How to spot it:** Look for multiple charges on the same date that seem related to a single procedure. If you had surgery, you should not see separate charges for standard surgical supplies that are typically included.
-
-### 5. Balance billing errors
-
-Balance billing occurs when an out-of-network provider bills you for the difference between their charge and what your insurance paid. Under the No Surprises Act (effective January 1, 2022), balance billing is illegal for emergency services and certain non-emergency services at in-network facilities.
-
-**How to spot it:** If you received emergency care or treatment at an in-network hospital, you should not see balance bills from individual providers. If you do, this may be an illegal charge under federal law.
-
-### 6. Incorrect patient information
-
-Wrong insurance ID numbers, misspelled names, or incorrect dates of birth can cause claims to be denied entirely, leaving you with the full bill. The Healthcare Financial Management Association (HFMA) has identified incorrect demographic and insurance information as a leading cause of claim denials.
-
-**How to spot it:** Check the top section of every bill and EOB for your correct name, date of birth, insurance ID, and group number. Even a single digit error can result in denial.
-
-### 7. Charges for services not rendered
-
-This includes being billed for tests that were ordered but cancelled, medications that were prescribed but never administered, or room charges for days after discharge.
-
-**How to spot it:** Keep a personal log during any hospital stay noting tests, medications, and procedures. Compare this against your itemized bill line by line.
-
-## How to dispute a medical billing error
-
-If you find an error on your bill, take these steps:
-
-1. **Request an itemized bill.** By law, you are entitled to a detailed breakdown of all charges. General summary bills are not sufficient for error detection.
-2. **Contact the billing department.** Call the provider's billing office and reference the specific line items in question. Document the date, time, and name of everyone you speak with.
-3. **File a formal dispute in writing.** Send a written dispute via certified mail. Include copies of your itemized bill with the errors highlighted and any supporting documentation.
-4. **Contact your insurance company.** If the error involves insurance processing, file a complaint with your insurer. They have a financial incentive to correct overbilling.
-5. **File a complaint with your state.** If the provider does not resolve the issue, file a complaint with your state's Department of Insurance or Attorney General's office.
-
-## Use our free tool to decode your bill
-
-Medical bills are deliberately complex, but they do not have to be. Upload your medical bill or EOB to our free Medical Bill Reader tool, and we will break down every charge, identify potential errors, and explain your costs in plain language. No signup required, and your documents are processed privately in your browser.
+Medical Bill Reader sends a supported PDF or image to Anthropic's API and returns an AI-generated plain-language report. It may help you organize unfamiliar terms and identify items to ask about. It cannot determine that a charge is legally or clinically incorrect, replace your insurer or provider, or guarantee that it will identify every issue. Remove information you do not want to submit, review the site's privacy policy, and verify the report against your original documents.
 
 ## FAQ
 
 ### How common are medical billing errors?
 
-Estimates vary widely depending on the study and methodology. Patient advocacy organizations have cited error rates as high as 80%, while more conservative insurance industry estimates are lower. The key takeaway is that billing errors are common enough that reviewing your itemized bill is always worthwhile.
+Published estimates use different definitions, data sets, and settings, so a single universal error rate is not a sound basis for judging an individual bill. CMS recommends checking the basic information, dates, services, and totals and contacting the provider or insurer about discrepancies.
 
-### Can medical billing errors affect my credit score?
+### Can a billing issue affect my credit?
 
-Yes. If an incorrect charge goes to collections, it can appear on your credit report. The three major credit bureaus (Equifax, Experian, TransUnion) stopped reporting paid medical collections starting in July 2022, and stopped reporting medical collections under $500 starting in 2023. However, larger erroneous charges that go unpaid can still be reported and can still cause damage , a 2025 federal rule that would have banned this was struck down in court.
+Medical-debt reporting rules, bureau policies, and state protections can change. If a disputed bill has reached collections, use current guidance from the [Consumer Financial Protection Bureau](https://www.consumerfinance.gov/ask-cfpb/category-medical-debt/) and consider qualified legal or consumer-assistance help for your situation.
 
-### How long do I have to dispute a medical bill?
+### How long do I have to dispute or appeal?
 
-Most states allow 30-180 days to dispute charges, but timelines vary. Federal law requires insurers to have an internal appeals process. Check your state's specific statute of limitations for medical debt disputes.
+There is no single deadline for every medical bill or insurance appeal. Check the bill, EOB, plan documents, and applicable state or federal process promptly. For applicable internal insurance appeals, HealthCare.gov says the notice must explain the deadline and filing method.
 
 ### Should I hire a medical billing advocate?
 
-For large hospital bills, a professional medical billing advocate can be worthwhile. They typically charge a percentage of the savings they find. For smaller bills, using a free tool like Medical Bill Reader to understand your charges is a good first step before deciding whether professional help is needed.
+That depends on the amount, complexity, and help available through your insurer, provider, employer, or nonprofit services. Before hiring anyone, confirm their credentials, fees, scope, and whether payment depends on the outcome.

@@ -12,8 +12,8 @@ const tiers = [
     description: "Try it out with one free bill analysis per month.",
     features: [
       "1 bill or EOB per month",
-      "Full plain-English report",
-      "Potential billing error flags",
+      "AI-generated report",
+      "Patterns flagged for verification",
       "No credit card required",
     ],
     limitations: [],
@@ -30,9 +30,9 @@ const tiers = [
     description:
       "Perfect for an occasional confusing bill. No subscription required.",
     features: [
-      "Unlimited bills, pay per analysis",
-      "Full plain-English report",
-      "Potential billing error flags",
+      "One analysis per purchase",
+      "AI-generated report",
+      "Patterns flagged for verification",
     ],
     limitations: [],
     cta: "Buy Single Analysis",
@@ -50,8 +50,8 @@ const tiers = [
       "Best value if you or your family deal with medical bills regularly.",
     features: [
       "Up to 44 bills and EOBs per month",
-      "Full plain-English report",
-      "Potential billing error flags",
+      "AI-generated report",
+      "Patterns flagged for verification",
       "Cancel anytime",
     ],
     limitations: [],
@@ -132,10 +132,10 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
-            Medical Bill Reader explains any bill or EOB in plain English ,
-            choose a plan that fits how often you deal with medical bills.
+            Each plan uses the same AI-assisted report for supported bills and EOBs;
+            choose based on the number of analyses you expect to use.
           </p>
-          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
             Start with a free analysis. Upgrade when you need more. No hidden
             fees.
           </p>
@@ -169,14 +169,14 @@ export default function PricingPage() {
                 </span>
                 {tier.period && (
                   <span
-                    className={`text-sm ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                    className={`text-sm ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
                   >
                     {tier.period}
                   </span>
                 )}
               </div>
               <p
-                className={`text-sm mb-6 ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                className={`text-sm mb-6 ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
               >
                 {tier.description}
               </p>
@@ -184,7 +184,7 @@ export default function PricingPage() {
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2 text-sm">
                     <svg
-                      className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? "text-teal-400" : "text-teal-600"}`}
+                      className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? "text-teal-400" : "text-teal-800"}`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -215,7 +215,7 @@ export default function PricingPage() {
                   href={tier.href}
                   className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors ${
                     tier.highlighted
-                      ? "bg-teal-500 text-white hover:bg-teal-600"
+                      ? "bg-teal-700 text-white hover:bg-teal-800"
                       : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
                   }`}
                 >
@@ -229,7 +229,7 @@ export default function PricingPage() {
                   disabled={loading === tier.priceType}
                   className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 ${
                     tier.highlighted
-                      ? "bg-teal-500 text-white hover:bg-teal-600"
+                      ? "bg-teal-700 text-white hover:bg-teal-800"
                       : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
                   }`}
                 >
@@ -238,7 +238,7 @@ export default function PricingPage() {
               )}
               {tier.checkoutNote && (
                 <p
-                  className={`mt-3 text-xs leading-relaxed ${tier.highlighted ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+                  className={`mt-3 text-xs leading-relaxed ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
                 >
                   {tier.checkoutNote}
                 </p>
@@ -250,7 +250,7 @@ export default function PricingPage() {
         <div className="mt-8 text-center">
           <button
             onClick={handleBillingPortal}
-            className="text-sm font-semibold text-teal-700 dark:text-teal-300 underline underline-offset-4"
+            className="text-sm font-semibold text-teal-800 dark:text-teal-300 underline underline-offset-4"
           >
             Manage or cancel an existing subscription
           </button>
@@ -266,7 +266,7 @@ export default function PricingPage() {
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
                 I have one confusing bill right now
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-700 dark:text-slate-300">
                 Start with the <strong>Free</strong> plan. You get one full
                 analysis per month at no cost , no credit card required. If you
                 have already used your free analysis this month, the{" "}
@@ -278,7 +278,7 @@ export default function PricingPage() {
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
                 I get medical bills occasionally
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-700 dark:text-slate-300">
                 The <strong>Pay Per Bill</strong> plan is ideal. Pay $4.99 only
                 when you need an analysis , no subscription, no commitment.
                 Perfect for the occasional ER bill, EOB, or unexpected charge.
@@ -288,7 +288,7 @@ export default function PricingPage() {
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
                 I manage medical bills for myself or my family regularly
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-700 dark:text-slate-300">
                 The <strong>Monthly Plan</strong> at $49 per month is the best
                 value if you review more than 10 bills a month, for example if
                 you are managing ongoing treatment or caring for family members.
@@ -306,14 +306,13 @@ export default function PricingPage() {
           </h2>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Every Medical Bill Reader plan , including the free tier , gives
-              you access to the full analysis engine. There are no feature gates
-              or stripped-down versions.
+              Each plan uses the same analysis route, supported file types, and
+              report fields. Usage limits differ by plan.
             </p>
             <ul className="grid sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -326,11 +325,11 @@ export default function PricingPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Full AI-powered bill and EOB analysis
+                AI-generated bill or EOB report
               </li>
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -343,11 +342,11 @@ export default function PricingPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Plain-English charge breakdown
+                Structured visible-charge summary
               </li>
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -360,11 +359,11 @@ export default function PricingPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Potential billing error flags
+                Patterns flagged for verification
               </li>
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -377,11 +376,11 @@ export default function PricingPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Clear next-step guidance
+                General verification suggestions
               </li>
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -398,7 +397,7 @@ export default function PricingPage() {
               </li>
               <li className="flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-teal-600 flex-shrink-0"
+                  className="w-4 h-4 text-teal-800 flex-shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -411,7 +410,7 @@ export default function PricingPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Secure, encrypted processing
+                HTTPS transmission to the application
               </li>
             </ul>
           </div>
@@ -426,7 +425,7 @@ export default function PricingPage() {
             {[
               {
                 q: "Can I try before I buy?",
-                a: "Yes. The free tier gives you one full bill analysis per month with no credit card required. The analysis is identical to paid plans , same AI, same report, same features.",
+                a: "Yes. The free tier provides one analysis per month without a credit card. It uses the same report fields and supported file types as paid access.",
               },
               {
                 q: "How does pay-per-bill work?",
@@ -438,7 +437,7 @@ export default function PricingPage() {
               },
               {
                 q: "How many bills can I analyze on the Monthly Plan?",
-                a: "Up to 44 bills or EOBs per month, more than one per day. That covers the vast majority of people managing ongoing care or a family's medical bills. If you need more, contact us about a higher-volume plan.",
+                a: "The monthly entitlement is capped at 44 analyses per billing month. No higher-volume plan is currently published.",
               },
               {
                 q: "Is there a refund policy?",
@@ -453,10 +452,10 @@ export default function PricingPage() {
                 key={q}
                 className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 group"
               >
-                <summary className="px-5 py-3 cursor-pointer font-medium text-slate-900 dark:text-slate-100 hover:text-teal-600 dark:hover:text-teal-400 transition-colors list-none flex justify-between items-center text-sm">
+                <summary className="px-5 py-3 cursor-pointer font-medium text-slate-900 dark:text-slate-100 hover:text-teal-800 dark:hover:text-teal-400 transition-colors list-none flex justify-between items-center text-sm">
                   {q}
                   <svg
-                    className="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4"
+                    className="w-4 h-4 text-slate-600 group-open:rotate-180 transition-transform flex-shrink-0 ml-4"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -470,7 +469,7 @@ export default function PricingPage() {
                     />
                   </svg>
                 </summary>
-                <div className="px-5 pb-3 text-slate-500 dark:text-slate-400 text-sm">
+                <div className="px-5 pb-3 text-slate-700 dark:text-slate-300 text-sm">
                   {a}
                 </div>
               </details>

@@ -3,7 +3,7 @@
 > A free-to-start AI-powered tool that helps patients understand their medical bills, insurance EOBs, and healthcare charges in plain language. Built for anyone confused by medical billing codes, charges, or insurance statements.
 
 ## Main Tools
-- [Medical Bill Analyzer](https://medicalbillreader.com): Upload a medical bill image or PDF and get a plain-English explanation of every charge, potential errors flagged, and clear next steps.
+- [Medical Bill Analyzer](https://medicalbillreader.com): Upload a supported medical bill or EOB for an AI-generated report of visible billing codes, charges, insurance fields, and patterns to verify.
 
 ## Pricing
 - Free: 1 bill or EOB per month
@@ -24,11 +24,10 @@
 - [Disclaimer](https://medicalbillreader.com/disclaimer): Medical, financial, and legal disclaimer
 
 ## Privacy Approach
-- Uploaded medical bills are processed in memory and deleted immediately after analysis
-- No bill content is stored, logged, or retained
+- Uploaded medical bills pass through application memory and are sent to Anthropic to generate the report
+- Medical Bill Reader does not intentionally write bill content or results to its own database; infrastructure providers process data under their own terms
 - Health data is never passed to advertising systems
-- Non-personalized ads only on analysis pages
-- Cookiebot CMP for cookie consent (IAB TCF v2.2)
+- Optional analytics stays off until the visitor consents and receives no bill content
 
 ## Blog
 - [Blog](https://medicalbillreader.com/blog): Guides on reading medical bills, understanding billing codes, spotting errors, and navigating insurance EOBs

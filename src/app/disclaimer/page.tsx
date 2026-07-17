@@ -53,7 +53,7 @@ export default function DisclaimerPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Disclaimer
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
           Last Updated: March 2026
         </p>
 
@@ -126,19 +126,19 @@ export default function DisclaimerPage() {
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Questions</h2>
           <p>
             If you have questions about this disclaimer, please visit our{" "}
-            <Link href="/contact" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+            <Link href="/contact" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
               Contact page
             </Link>{" "}
             or email us at support@medicalbillreader.com.
           </p>
 
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-8">
+          <p className="text-sm text-slate-700 dark:text-slate-300 mt-8">
             See also:{" "}
-            <Link href="/terms" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+            <Link href="/terms" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
               Terms of Service
             </Link>
             {" | "}
-            <Link href="/privacy" className="text-teal-600 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
+            <Link href="/privacy" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">
               Privacy Policy
             </Link>
           </p>

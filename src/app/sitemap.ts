@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const markdownBlogEntries: MetadataRoute.Sitemap = getAllMarkdownPosts().map(
     (post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: post.date ? new Date(post.date) : new Date(),
+      lastModified: post.modified ? new Date(post.modified) : undefined,
       changeFrequency: "monthly",
       priority: 0.7,
     })
@@ -16,80 +16,67 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     ...markdownBlogEntries,
     {
       url: `${baseUrl}/methodology`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/codes-explained`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/stats`,
-      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.6,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/cookies`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/accessibility`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/do-not-sell`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
     },

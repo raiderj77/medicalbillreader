@@ -70,9 +70,9 @@ export default function MethodologyPage() {
 
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 mb-6"
+        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-6"
       >
-        <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400">Home</Link>
+        <Link href="/" className="hover:text-teal-800 dark:hover:text-teal-400">Home</Link>
         <span aria-hidden="true">/</span>
         <span className="text-gray-600 dark:text-gray-300">Methodology</span>
       </nav>
@@ -81,7 +81,7 @@ export default function MethodologyPage() {
         Methodology: How Medical Bill Reader Works
       </h1>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
         Last updated: {TODAY}. Built by an experienced web professional.
       </p>
 
@@ -162,7 +162,7 @@ export default function MethodologyPage() {
         <p>
           For a glossary of the specific code systems and abbreviations the
           analyzer references, see the{" "}
-          <Link href="/codes-explained" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             codes explained
           </Link>{" "}
           page.
@@ -268,7 +268,7 @@ export default function MethodologyPage() {
             CMS (Centers for Medicare and Medicaid Services):{" "}
             <a
               href="https://www.cms.gov/"
-              className="text-teal-600 dark:text-teal-400 hover:underline"
+              className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
@@ -280,7 +280,7 @@ export default function MethodologyPage() {
             American Medical Association, CPT code overview:{" "}
             <a
               href="https://www.ama-assn.org/practice-management/cpt"
-              className="text-teal-600 dark:text-teal-400 hover:underline"
+              className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
@@ -292,7 +292,7 @@ export default function MethodologyPage() {
             HHS, federal No Surprises Act resources:{" "}
             <a
               href="https://www.cms.gov/nosurprises"
-              className="text-teal-600 dark:text-teal-400 hover:underline"
+              className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
@@ -304,7 +304,7 @@ export default function MethodologyPage() {
             Patient Advocate Foundation, billing resources:{" "}
             <a
               href="https://www.patientadvocate.org/explore-our-resources/understanding-healthcare-bills/"
-              className="text-teal-600 dark:text-teal-400 hover:underline"
+              className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
@@ -316,7 +316,7 @@ export default function MethodologyPage() {
             Anthropic, Claude model and API documentation:{" "}
             <a
               href="https://docs.anthropic.com/"
-              className="text-teal-600 dark:text-teal-400 hover:underline"
+              className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
             >
@@ -326,15 +326,15 @@ export default function MethodologyPage() {
           </li>
           <li>
             Related guides on this site:{" "}
-            <Link href="/blog" className="text-teal-600 dark:text-teal-400 hover:underline">
+            <Link href="/blog" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
               blog
             </Link>
             ,{" "}
-            <Link href="/codes-explained" className="text-teal-600 dark:text-teal-400 hover:underline">
+            <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
               codes explained
             </Link>
             ,{" "}
-            <Link href="/stats" className="text-teal-600 dark:text-teal-400 hover:underline">
+            <Link href="/stats" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
               extraction stats
             </Link>
             .

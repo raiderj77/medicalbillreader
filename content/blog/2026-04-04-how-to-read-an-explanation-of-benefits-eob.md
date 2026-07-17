@@ -1,12 +1,13 @@
 ---
 title: "How to Read an Explanation of Benefits (EOB)"
 date: "2026-04-04"
+modified: "2026-07-16"
 slug: "how-to-read-an-explanation-of-benefits-eob"
 description: "A plain-language guide to reading an Explanation of Benefits statement: the components, the codes (ICD-10, CPT, HCPCS, NDC), common errors to watch for, and how patient responsibility is calculated."
 keywords: ["explanation of benefits", "EOB", "how to read an EOB", "medical billing", "patient responsibility", "CPT codes", "ICD-10"]
 status: published
-author: "Your Friendly Developer"
-reviewer: "Your Friendly Developer"
+author: "Jason Ramirez"
+reviewer: "Jason Ramirez"
 ---
 
 # How to Read an Explanation of Benefits (EOB): A Guide for Medical Bill Readers
@@ -108,13 +109,13 @@ A: Most insurers provide an online member portal with a claims history that lets
 A: Compare the EOB carefully with the itemized bill from the provider. Confirm dates, codes, and the math between charges, allowed amount, plan payment, and patient responsibility.
 
 **Q: What should I do if I disagree with the EOB?**
-A: Call the insurer's member services line and ask them to walk through the reason codes. If the issue stands, file a written appeal following the instructions on the EOB itself. Most plans give you 180 days from the date of the EOB to appeal.
+A: Call the insurer's member services line and ask them to walk through the reason codes. If the issue stands, follow the appeal instructions and deadline on the EOB or plan notice. HealthCare.gov says applicable internal appeals generally must be filed within 180 days of receiving the denial notice, but you should follow the deadline for your specific plan and situation.
 
 **Q: How do I dispute a charge on my EOB?**
 A: Start with the provider's billing office to confirm the charge is correct. If the issue is with how the insurer processed it, contact insurer member services or file an appeal.
 
 **Q: Can I appeal a denied claim?**
-A: Yes. Every insurer is required to provide an appeals process. The EOB will state the appeal deadline and where to send the appeal.
+A: Many health-plan denials can be appealed. The denial notice should explain the available process, deadline, and where to send the appeal. Different rules can apply to different coverage types and decisions.
 
 **Q: Can I use my EOB for tax purposes?**
 A: EOBs help document medical expenses, but the deductibility of those expenses depends on your specific tax situation. Consult a tax professional.

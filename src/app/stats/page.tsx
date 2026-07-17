@@ -78,9 +78,9 @@ export default function StatsPage() {
 
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 mb-6"
+        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-6"
       >
-        <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400">Home</Link>
+        <Link href="/" className="hover:text-teal-800 dark:hover:text-teal-400">Home</Link>
         <span aria-hidden="true">/</span>
         <span className="text-gray-600 dark:text-gray-300">Stats</span>
       </nav>
@@ -89,7 +89,7 @@ export default function StatsPage() {
         What We&apos;ve Seen on Real Medical Bills
       </h1>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
         Last updated: {TODAY}
       </p>
 
@@ -126,7 +126,7 @@ export default function StatsPage() {
         </h2>
         {hasData ? (
           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-            <p className="text-4xl font-bold text-teal-600 dark:text-teal-400 mb-1">
+            <p className="text-4xl font-bold text-teal-800 dark:text-teal-300 mb-1">
               {snapshot.totalAnalyses.toLocaleString()}
             </p>
             <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -177,7 +177,7 @@ export default function StatsPage() {
             </table>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-600">
             No file type data yet for the current deploy window.
           </p>
         )}
@@ -192,7 +192,7 @@ export default function StatsPage() {
           system at least once. Detected by regex over the response text, so
           treat these as approximate. For definitions of each code system, see
           the{" "}
-          <Link href="/codes-explained" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             codes explained
           </Link>{" "}
           page.
@@ -219,7 +219,7 @@ export default function StatsPage() {
             </table>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-600">
             No code mention data yet for the current deploy window.
           </p>
         )}
@@ -242,7 +242,7 @@ export default function StatsPage() {
             </p>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-600">
             Awaiting first analyses to compute issue flag rate.
           </p>
         )}
@@ -258,25 +258,25 @@ export default function StatsPage() {
           written to any store. Only the per-deploy in-memory counters above
           are kept, and they reset on the next deploy. For details on how
           uploads are handled end to end, see{" "}
-          <Link href="/methodology" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/methodology" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             the methodology page
           </Link>
           .
         </p>
       </section>
 
-      <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400">
+      <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-600">
         <p>
           Related:{" "}
-          <Link href="/methodology" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/methodology" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             Methodology
           </Link>
           {" · "}
-          <Link href="/codes-explained" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             Codes explained
           </Link>
           {" · "}
-          <Link href="/" className="text-teal-600 dark:text-teal-400 hover:underline">
+          <Link href="/" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
             Analyze a bill
           </Link>
         </p>

@@ -9,6 +9,7 @@ export interface MarkdownPost {
   slug: string;
   title: string;
   date: string;
+  modified: string;
   description: string;
   keywords: string[];
   excerpt: string;
@@ -39,6 +40,10 @@ function getExcerpt(content: string, description: string): string {
   return firstPara.replace(/[*_`[\]]/g, "").slice(0, 200);
 }
 
+function stripLeadingTitle(content: string): string {
+  return content.replace(/^\s*#\s+[^\n]+\n+/, "");
+}
+
 export function getAllMarkdownPosts(): MarkdownPost[] {
   if (!fs.existsSync(BLOG_DIR)) return [];
 
@@ -54,6 +59,7 @@ export function getAllMarkdownPosts(): MarkdownPost[] {
         slug,
         title: (data.title as string) || "",
         date: (data.date as string) || "",
+        modified: (data.modified as string) || (data.date as string) || "",
         description: (data.description as string) || "",
         keywords: parseKeywords(data.keywords),
         excerpt: getExcerpt(content, (data.description as string) || ""),
@@ -98,12 +104,13 @@ export async function getMarkdownPost(
   const processed = await remark()
     .use(remarkGfm)
     .use(html, { sanitize: false })
-    .process(content);
+    .process(stripLeadingTitle(content));
 
   return {
     slug,
     title: (data.title as string) || "",
     date: (data.date as string) || "",
+    modified: (data.modified as string) || (data.date as string) || "",
     description: (data.description as string) || "",
     keywords: parseKeywords(data.keywords),
     excerpt: getExcerpt(content, (data.description as string) || ""),

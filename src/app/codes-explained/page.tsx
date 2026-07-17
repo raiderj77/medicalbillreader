@@ -292,9 +292,9 @@ export default function CodesExplainedPage() {
 
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 mb-6"
+        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-6"
       >
-        <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400">Home</Link>
+        <Link href="/" className="hover:text-teal-800 dark:hover:text-teal-400">Home</Link>
         <span aria-hidden="true">/</span>
         <span className="text-gray-600 dark:text-gray-300">Codes Explained</span>
       </nav>
@@ -303,7 +303,7 @@ export default function CodesExplainedPage() {
         Medical Billing Codes Explained
       </h1>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
         Last updated: {TODAY}. Built by an experienced web professional.
       </p>
 
@@ -319,7 +319,7 @@ export default function CodesExplainedPage() {
       </div>
 
       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-10">
-        Every line on a medical bill is paired with one or more codes. The
+        Many lines on a medical bill are paired with one or more codes. The
         codes tell the insurer what was done, why it was done, where it
         happened, and which item or drug was involved. The sections below
         define each code system in plain English, give an example, point to
@@ -329,7 +329,7 @@ export default function CodesExplainedPage() {
 
       <div className="grid lg:grid-cols-[220px_1fr] gap-8">
         <aside className="lg:sticky lg:top-6 self-start">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300 mb-3">
             On this page
           </h2>
           <ul className="space-y-2 text-sm">
@@ -337,7 +337,7 @@ export default function CodesExplainedPage() {
               <li key={c.slug}>
                 <a
                   href={`#${c.slug}`}
-                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                 >
                   {c.shortName}
                 </a>
@@ -346,7 +346,7 @@ export default function CodesExplainedPage() {
             <li>
               <a
                 href="#abbreviations"
-                className="text-teal-600 dark:text-teal-400 hover:underline"
+                className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               >
                 EOB abbreviations
               </a>
@@ -367,7 +367,7 @@ export default function CodesExplainedPage() {
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                 <strong>{c.oneLine}</strong>
               </p>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-3">
+              <p className="text-gray-600 dark:text-gray-600 text-sm leading-relaxed mb-3">
                 {c.usedFor}
               </p>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
@@ -377,7 +377,7 @@ export default function CodesExplainedPage() {
                 <span className="font-semibold">Lookup:</span>{" "}
                 <a
                   href={c.lookup.href}
-                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
@@ -405,7 +405,7 @@ export default function CodesExplainedPage() {
                   <dt className="font-semibold text-gray-900 dark:text-gray-100">
                     {a.term}
                   </dt>
-                  <dd className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+                  <dd className="text-sm text-gray-600 dark:text-gray-600 leading-relaxed mt-1">
                     {a.meaning}
                   </dd>
                 </div>
@@ -414,17 +414,17 @@ export default function CodesExplainedPage() {
           </section>
 
           <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-gray-600 dark:text-gray-600">
               Related:{" "}
-              <Link href="/methodology" className="text-teal-600 dark:text-teal-400 hover:underline">
+              <Link href="/methodology" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
                 Methodology
               </Link>
               {" · "}
-              <Link href="/blog" className="text-teal-600 dark:text-teal-400 hover:underline">
+              <Link href="/blog" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
                 Blog
               </Link>
               {" · "}
-              <Link href="/" className="text-teal-600 dark:text-teal-400 hover:underline">
+              <Link href="/" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
                 Analyze a bill
               </Link>
               .
