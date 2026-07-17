@@ -7,7 +7,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 export const metadata: Metadata = {
   title: "Medical Bill Reader — Understand Your Bill",
   description:
-    "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+    "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
   keywords:
     "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
   alternates: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Medical Bill Reader — Understand Your Bill",
     description:
-      "Upload your medical bill and get a free plain-English explanation of every charge. We flag potential errors and tell you exactly what to do next.",
+      "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -27,7 +27,6 @@ export const metadata: Metadata = {
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  dateModified: new Date().toISOString().substring(0,10),
   itemListElement: [
     {
       "@type": "ListItem",
@@ -41,14 +40,13 @@ const breadcrumbJsonLd = {
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  dateModified: new Date().toISOString().substring(0,10),
   mainEntity: [
     {
       "@type": "Question",
       name: "What is Medical Bill Reader?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical Bill Reader is a free AI-powered tool that explains medical bills in plain English. Upload your bill and the tool identifies CPT codes, ICD-10 codes, and HCPCS codes, explains what each charge is for, flags potential billing errors, and breaks down insurance columns like allowed amount and patient responsibility.",
+        text: "Medical Bill Reader generates an AI-assisted report from a supported medical bill or EOB. It attempts to identify billing codes, charges, insurance fields, and patterns that may be worth verifying against the source document.",
       },
     },
     {
@@ -64,7 +62,7 @@ const faqJsonLd = {
       name: "What medical billing codes does the tool explain?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The tool explains CPT codes (procedure codes), ICD-10 codes (diagnosis codes), and HCPCS codes (supplies and services). These codes appear on Explanation of Benefits (EOB) documents and itemized medical bills. Understanding them helps you verify charges and identify potential errors before paying.",
+        text: "The tool attempts to identify CPT, ICD-10-CM, and HCPCS codes when they are legible in the uploaded document. AI output can be incomplete or incorrect, so verify each finding against the original bill, EOB, and insurer or provider records.",
       },
     },
     {
@@ -72,7 +70,7 @@ const faqJsonLd = {
       name: "Can Medical Bill Reader detect billing errors?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only ,  consult a medical billing advocate or your insurance company to dispute any specific charge.",
+        text: "The tool may flag patterns such as apparent duplicates or code combinations for review. A flag is not proof of a billing error. Confirm it with the provider or insurer before taking action.",
       },
     },
     {
@@ -108,7 +106,7 @@ export default function Home() {
             </span>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <span className="text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
+            <span className="text-xs text-slate-700 dark:text-slate-300 sm:text-sm">
               <span className="sm:hidden">1 free/month</span>
               <span className="hidden sm:inline">1 free analysis/month · No account needed</span>
             </span>
@@ -120,27 +118,27 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         {/* Hero */}
         <div className="mb-8 text-center sm:mb-12">
-          <div className="inline-block bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-teal-200 dark:border-teal-700">
+          <div className="inline-block bg-teal-50 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-teal-200 dark:border-teal-700">
             Free Medical Bill Explainer — No Sign-Up Required
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
             Finally Understand<br />Your Medical Bill
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">
-            Last updated: March 16, 2026
+          <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">
+            Last reviewed: July 16, 2026
           </p>
-          <p className="mx-auto max-w-2xl text-lg text-slate-500 dark:text-slate-400 sm:text-xl">
+          <p className="mx-auto max-w-2xl text-lg text-slate-700 dark:text-slate-300 sm:text-xl">
             Medical Bill Reader helps you understand confusing medical bills and insurance
             EOBs in plain language — no medical degree required. Upload a photo or PDF and
-            get every charge explained, potential errors flagged, and clear next steps.
+            receive an AI-generated report of visible charges, codes, insurance fields, and items to verify.
           </p>
           <a
             href="#analyzer"
-            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600"
+            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
           >
             Start free analysis
           </a>
-          <p className="text-sm text-slate-400 dark:text-slate-500 mt-4">
+          <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
             Built by an experienced web professional
           </p>
         </div>
@@ -157,8 +155,8 @@ export default function Home() {
         <AnswerBlock
           what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
           who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
-          bottomLine="Upload your medical bill for a free line-by-line explanation. Results are informational only and not financial or medical advice."
-          lastUpdated="2026-03-20"
+          bottomLine="Upload a supported medical bill for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
+          lastUpdated="2026-07-16"
         />
 
         {/* GEO Content Sections (server-rendered) */}
@@ -170,10 +168,10 @@ export default function Home() {
               How does AI medical bill analysis work?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              Upload your medical bill or EOB document ,  the AI reads each line item, identifies the billing codes, and explains what each charge means in plain English within seconds.
+              Upload a supported medical bill or EOB and the AI attempts to organize legible line items, billing codes, and insurance fields into a plain-language report.
             </p>
-            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              When you upload a file, it is sent over encrypted HTTPS through our server to Anthropic solely to generate the analysis. Medical Bill Reader does not intentionally save the document in its own database. The tool supports JPEG, PNG, WebP, and PDF formats, including multi-page EOB documents. The analysis covers CPT codes (procedures), ICD-10 codes (diagnoses), and HCPCS codes (supplies and services), giving you a line-by-line breakdown of what you were charged for and why. Medical billing errors have been estimated by patient advocacy groups like the Medical Billing Advocates of America to affect as many as 80% of medical bills, though estimates vary by study and methodology ,  understanding your bill before you pay is one of the most impactful steps you can take.
+            <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+              Files are sent over encrypted HTTPS through the application to Anthropic solely to generate the requested report. Medical Bill Reader does not intentionally save the document in its own database. The tool accepts JPEG, PNG, WebP, and PDF files up to 10 MB. AI output can omit or misread text, so compare every important finding with the original document.
             </p>
           </div>
 
@@ -185,8 +183,8 @@ export default function Home() {
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
               The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
             </p>
-            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              Inaccurate medical bills have been estimated to cost Americans $88 billion, according to the Consumer Financial Protection Bureau. Additionally, on bills over $10,000, reported overcharges have averaged around $1,300 per bill, according to an Equifax survey reported by ABC News. Summary statements from hospitals often mask these errors; requesting an itemized bill (not just the summary) is the best way to detect duplicate or incorrect charges before disputing them with your provider or insurer. Americans spent over $550 billion out-of-pocket on medical costs in 2024, according to CMS National Health Expenditure data, making accurate bill review one of the most impactful personal finance actions available.
+            <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+              CMS advises comparing the provider bill with the Explanation of Benefits, checking that the services match what you received, and contacting the provider or insurer when amounts do not match. An AI flag is only a prompt to verify the source records; it does not establish that a charge is wrong.
             </p>
           </div>
 
@@ -196,10 +194,10 @@ export default function Home() {
               What do CPT codes mean on a medical bill?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              CPT (Current Procedural Terminology) codes are 5-digit numbers that identify specific medical procedures. Each code corresponds to a standard procedure with a defined cost range that insurers use to determine reimbursement.
+              CPT (Current Procedural Terminology) codes identify medical procedures and services. The code alone does not establish what you should owe because payment depends on the claim, network, plan, and other billing details.
             </p>
-            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              CPT codes are maintained and updated annually by the American Medical Association (AMA). As a patient, you have the right to request an itemized bill that lists every CPT code billed during your visit ,  your provider is required to provide one. Mismatched or incorrect CPT codes are one of the most common sources of overbilling: a code for a more complex procedure than what was performed (known as upcoding) can result in significant overcharges that go undetected if you only review the summary statement.
+            <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+              CPT is maintained by the American Medical Association. CMS recommends comparing the bill and EOB with the care and supplies you received, and asking the provider or insurer about anything that does not match. Use the report to locate items for that review, not as a payment determination.
             </p>
           </div>
 
@@ -211,8 +209,8 @@ export default function Home() {
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
               Bills are processed over encrypted HTTPS and transmitted to Anthropic solely for your requested explanation. They are not sold or used for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database.
             </p>
-            <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-              No account is required and no login is needed ,  your bill is never associated with an identity. Medical data is never passed to advertising systems; ads on this site run in non-personalized mode on analysis pages specifically to prevent any health information from reaching ad networks.
+            <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+              No account or login is required. The document itself may contain identifying and health information, so review the Privacy Policy before uploading. Bill content is not sent to analytics or advertising systems; Anthropic and infrastructure providers process data under their own terms.
             </p>
           </div>
 
@@ -229,32 +227,32 @@ export default function Home() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="https://www.cms.gov/medicare/billing/medicarebillingforms"
-                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  href="https://www.cms.gov/medical-bill-rights/help/guides/how-to-read-bill"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  CMS (Centers for Medicare &amp; Medicaid Services) ,  Understanding Your Medical Bill
+                  CMS ,  How to Read Your Medical Bill
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.patientadvocate.org/explore-our-resources/understanding-healthcare-bills/"
-                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  href="https://www.cms.gov/medical-bill-rights/help/guides/bill-errors"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  Patient Advocate Foundation ,  Medical Billing Resources
+                  CMS ,  Check Your Medical Bill for Errors
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.ama-assn.org/practice-management/cpt/cpt-overview-and-code-approval"
-                  className="text-teal-600 dark:text-teal-400 hover:underline"
+                  href="https://www.healthcare.gov/appeal-insurance-company-decision/appeals/"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
                   rel="nofollow noopener noreferrer"
                 >
-                  American Medical Association ,  CPT Code Overview
+                  HealthCare.gov ,  How to Appeal an Insurance Decision
                 </a>
               </li>
             </ul>
@@ -267,22 +265,22 @@ export default function Home() {
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
             <div className="text-4xl mb-3">📤</div>
             <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">Upload Your Bill</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Take a photo or upload a PDF of any medical bill, EOB, or hospital statement.
+            <p className="text-sm text-slate-700 dark:text-slate-300">
+              Choose a supported JPEG, PNG, WebP, or PDF file up to 10 MB.
             </p>
           </div>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
             <div className="text-4xl mb-3">🤖</div>
             <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">AI Reads It</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Our AI scans every line item, code, and charge ,  the same way a billing expert would.
+            <p className="text-sm text-slate-700 dark:text-slate-300">
+              Claude AI attempts to identify legible line items, codes, and insurance fields.
             </p>
           </div>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 text-center">
             <div className="text-4xl mb-3">💬</div>
             <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-2">Get Plain English</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              You get a clear breakdown of every charge, plus flags for anything that looks unusual.
+            <p className="text-sm text-slate-700 dark:text-slate-300">
+              Review the structured report and verify important items against the bill and EOB.
             </p>
           </div>
         </div>
@@ -292,17 +290,17 @@ export default function Home() {
           <div>
             <div className="text-2xl mb-1">🔒</div>
             <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">No bill database</p>
-            <p className="text-xs text-slate-400">Not intentionally saved by us</p>
+            <p className="text-xs text-slate-600">Not intentionally saved by us</p>
           </div>
           <div>
             <div className="text-2xl mb-1">🆓</div>
             <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Free to try</p>
-            <p className="text-xs text-slate-400">1 per month, no account</p>
+            <p className="text-xs text-slate-600">1 per month, no account</p>
           </div>
           <div>
             <div className="text-2xl mb-1">⚡</div>
-            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">30 seconds</p>
-            <p className="text-xs text-slate-400">Fast results</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">10 MB</p>
+            <p className="text-xs text-slate-600">Maximum file size</p>
           </div>
         </div>
 
@@ -314,31 +312,31 @@ export default function Home() {
           <div className="space-y-4">
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What is Medical Bill Reader?</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                Medical Bill Reader is a free AI-powered tool that explains medical bills in plain English. Upload your bill and the tool identifies CPT codes, ICD-10 codes, and HCPCS codes, explains what each charge is for, flags potential billing errors, and breaks down insurance columns like allowed amount and patient responsibility.
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                Medical Bill Reader generates an AI-assisted report from a supported medical bill or EOB. It attempts to identify visible codes, charges, insurance fields, and patterns that may be worth verifying.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data kept private?</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                 Documents are transmitted securely to Anthropic solely for analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store them in its own database. See the Privacy Policy for infrastructure and retention details.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What medical billing codes does the tool explain?</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                The tool explains CPT codes (procedure codes), ICD-10 codes (diagnosis codes), and HCPCS codes (supplies and services). These codes appear on Explanation of Benefits (EOB) documents and itemized medical bills. Understanding them helps you verify charges and identify potential errors before paying.
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                The tool attempts to identify CPT, ICD-10-CM, and HCPCS codes when they are legible. Verify each code and description against the original document and provider or insurer records.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader detect billing errors?</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                The tool flags common billing patterns that may indicate errors, such as duplicate charges, unbundled procedures, and charges inconsistent with your diagnosis codes. However, results are informational only ,  consult a medical billing advocate or your insurance company to dispute any specific charge.
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                The tool may flag patterns such as apparent duplicates or code combinations for review. A flag is not proof of an error. Confirm it with the provider or insurer before taking action.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is Medical Bill Reader a substitute for professional advice?</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                 No. Medical Bill Reader provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a certified medical billing advocate.
               </p>
             </div>

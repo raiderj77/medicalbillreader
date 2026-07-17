@@ -28,7 +28,7 @@ const contactFaqJsonLd = {
       name: "How do I get help understanding my medical bill?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The fastest way to understand your medical bill is to use our free tool on the homepage. Upload a photo or PDF of your bill and our AI will explain every charge in plain English within about 30 seconds. If you run into any issues with the tool or have questions about your results, email us at support@medicalbillreader.com and we will help you out.",
+        text: "Use the homepage tool to request an AI-generated report from a supported medical bill or EOB. The report can be incomplete or incorrect. For technical questions, email support@medicalbillreader.com without attaching a bill or other health information.",
       },
     },
     {
@@ -41,10 +41,10 @@ const contactFaqJsonLd = {
     },
     {
       "@type": "Question",
-      name: "How long does it take to get a response?",
+      name: "What should I include in a support request?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "We typically respond to general support inquiries within 1-2 business days. Privacy and data deletion requests are processed within the legally required timeframes, which is usually 45 days under laws like the CCPA and GDPR. If your matter is time-sensitive, mention it in the subject line and we will do our best to respond sooner.",
+        text: "Include the file type, file size, browser, device, and exact error message. Do not attach a medical bill or include health information in email.",
       },
     },
   ],
@@ -86,7 +86,7 @@ export default function ContactPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">Contact Us</h1>
-        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
+        <p className="text-sm text-gray-700 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           <section>
@@ -97,10 +97,9 @@ export default function ContactPage() {
               Medical Bill Reader is a free AI-powered tool that helps patients
               understand confusing medical bills and insurance Explanations of
               Benefits in plain language. You upload a photo or PDF of your bill,
-              and our AI reads every charge, translates procedure codes and
-              medical jargon into straightforward explanations, flags potential
-              billing errors, and suggests clear next steps so you know exactly
-              what you owe and why.
+              and the AI attempts to organize visible charges, codes, and
+              insurance fields into a report. AI output can be incomplete or
+              incorrect and does not determine what you legally owe.
             </p>
           </section>
 
@@ -140,7 +139,7 @@ export default function ContactPage() {
             <p>
               <a
                 href="mailto:support@medicalbillreader.com"
-                className="text-teal-600 hover:text-teal-800 underline font-semibold"
+                className="text-teal-800 hover:text-teal-800 underline font-semibold"
               >
                 support@medicalbillreader.com
               </a>
@@ -163,9 +162,8 @@ export default function ContactPage() {
               <li>Any error messages you saw during the upload or analysis process.</li>
             </ul>
             <p>
-              Including these details upfront helps us diagnose the problem
-              without needing to send follow-up questions, which means you get
-              a resolution faster.
+              Do not attach the bill or include patient, diagnosis, treatment,
+              account, or other health information in the email.
             </p>
           </section>
 
@@ -192,36 +190,21 @@ export default function ContactPage() {
             <p>
               <a
                 href="mailto:privacy@medicalbillreader.com"
-                className="text-teal-600 hover:text-teal-800 underline font-semibold"
+                className="text-teal-800 hover:text-teal-800 underline font-semibold"
               >
                 privacy@medicalbillreader.com
               </a>
             </p>
             <p>
-              We respond to all privacy requests within 45 days as required by
-              applicable law. For full details on how we collect, use, and
+              Response timing depends on the request and applicable law. For full details on how we collect, use, and
               protect your information, see our{" "}
               <Link
                 href="/privacy"
-                className="text-teal-600 hover:text-teal-800 underline"
+                className="text-teal-800 hover:text-teal-800 underline"
               >
                 Privacy Policy
               </Link>
               .
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-              Expected Response Times for Inquiries
-            </h2>
-            <p>
-              We aim to respond to all general inquiries within 1-2 business
-              days. Privacy and data deletion requests are handled within the
-              timeframes required by your state or country&apos;s privacy laws,
-              typically within 45 days. If your request is urgent, please
-              include the word &quot;urgent&quot; in the subject line and we
-              will prioritize it accordingly.
             </p>
           </section>
 
@@ -233,12 +216,12 @@ export default function ContactPage() {
             <div className="space-y-4 mt-4">
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How do I get help understanding my medical bill?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                   The fastest way to understand your medical bill is to use our
                   free tool on the{" "}
-                  <Link href="/" className="text-teal-600 hover:text-teal-800 underline">homepage</Link>.
-                  Upload a photo or PDF of your bill and our AI will explain
-                  every charge in plain English within about 30 seconds. If you
+                  <Link href="/" className="text-teal-800 hover:text-teal-800 underline">homepage</Link>.
+                  Upload a supported bill or EOB and review the AI-generated
+                  report against the original document. If you
                   run into any issues with the tool or have questions about your
                   results, email us at support@medicalbillreader.com and we will
                   help you out.
@@ -246,9 +229,9 @@ export default function ContactPage() {
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data safe if I contact you?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                   Yes. We never ask you to send your medical bill via email.
-                  Bills are only processed through our secure upload tool on the
+                  Bills are only processed through the website upload flow on the
                   website, where they pass through application memory and are transmitted to Anthropic solely for analysis. If you contact us by email, please do not attach
                   medical bills or documents containing sensitive health
                   information. Our support team handles inquiries without
@@ -256,14 +239,11 @@ export default function ContactPage() {
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How long does it take to get a response?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                  We typically respond to general support inquiries within 1-2
-                  business days. Privacy and data deletion requests are
-                  processed within the legally required timeframes, which is
-                  usually 45 days under laws like the CCPA and GDPR. If your
-                  matter is time-sensitive, mention it in the subject line and
-                  we will do our best to respond sooner.
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What should I include in a support request?</h3>
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                  Include the file type, file size, browser, device, and exact
+                  error message. Do not attach a bill or include health
+                  information in email.
                 </p>
               </div>
             </div>

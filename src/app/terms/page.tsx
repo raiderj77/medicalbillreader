@@ -53,7 +53,7 @@ export default function TermsPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Terms of Service
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">
+        <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
           Effective Date: January 1, 2026 | Last Reviewed: March 2026
         </p>
 
@@ -150,7 +150,7 @@ export default function TermsPage() {
               Your use of the Service is also governed by our{" "}
               <Link
                 href="/privacy"
-                className="text-teal-600 hover:text-teal-800 underline"
+                className="text-teal-800 hover:text-teal-800 underline"
               >
                 Privacy Policy
               </Link>
@@ -280,14 +280,14 @@ export default function TermsPage() {
               us at{" "}
               <a
                 href="mailto:support@medicalbillreader.com"
-                className="text-teal-600 hover:text-teal-800 underline"
+                className="text-teal-800 hover:text-teal-800 underline"
               >
                 support@medicalbillreader.com
               </a>{" "}
               or visit our{" "}
               <Link
                 href="/contact"
-                className="text-teal-600 hover:text-teal-800 underline"
+                className="text-teal-800 hover:text-teal-800 underline"
               >
                 Contact page
               </Link>

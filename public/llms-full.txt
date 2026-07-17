@@ -3,11 +3,11 @@
 > Medical Bill Reader helps patients understand confusing medical bills. Upload your bill and get plain-English explanations of CPT codes, ICD-10 codes, HCPCS codes, charges, and insurance columns.
 
 ## What This Tool Does
-- Explains medical billing codes in plain language
-- Identifies CPT, ICD-10, and HCPCS codes
-- Clarifies insurance columns (allowed amount, patient responsibility, adjustments)
-- Flags potential billing errors
-- Processes everything privately ,  bills are deleted immediately after analysis
+- Attempts to explain legible medical billing codes in plain language
+- Attempts to identify CPT, ICD-10-CM, and HCPCS codes
+- Organizes visible insurance fields such as allowed amount, patient responsibility, and adjustments
+- Flags patterns for verification; a flag is not proof of a billing error
+- Sends the supported document to Anthropic to generate the requested report
 
 ## Main Pages
 - [Home](https://medicalbillreader.com): Upload and analyze your medical bill
@@ -16,7 +16,7 @@
 - [Contact](https://medicalbillreader.com/contact): Get in touch
 
 ## Privacy & Data Handling
-Medical bills contain sensitive personal and health information. All uploaded documents are deleted immediately after analysis. No bill contents are logged or stored. Analysis happens server-side via secure API.
+Medical bills can contain sensitive personal and health information. Files pass through application memory and are sent to Anthropic to generate the report. Medical Bill Reader does not intentionally write bill content or results to its own database. Anthropic, Vercel, and other infrastructure providers process data under their own terms; see the Privacy Policy before uploading.
 
 ## Disclaimer
 This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your provider and insurance company.

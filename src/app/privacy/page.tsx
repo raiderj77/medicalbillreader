@@ -83,9 +83,9 @@ export default function PrivacyPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Privacy Policy</h1>
-        <p className="text-sm text-gray-500 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
-        <p className="text-sm text-slate-500 mb-8">
-          Effective Date: January 1, 2026 | Last Reviewed: March 2026
+        <p className="text-sm text-gray-700 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
+        <p className="text-sm text-slate-700 mb-8">
+          Effective Date: January 1, 2026 | Last Reviewed: July 16, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
               <li>To comply with legal obligations.</li>
             </ul>
             <p>
-              <strong>Lawful Basis (GDPR):</strong> We process data based on (a) your consent when you upload a medical bill, (b) our legitimate interest in operating and improving the service, and (c) legal compliance obligations.
+              <strong>Lawful Basis (where GDPR applies):</strong> Depending on the processing activity, we rely on your consent, our legitimate interests in operating and securing the service, or compliance with legal obligations.
             </p>
           </section>
 
@@ -135,7 +135,7 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-2">
               <li><strong>Our storage:</strong> Medical Bill Reader does not intentionally write uploaded bill images or PDFs to its own database. Documents pass through server memory while the request is processed.</li>
               <li><strong>No Logging of Bill Contents:</strong> The text, codes, charges, and other contents of your medical bills are never logged, stored in databases, or written to server logs.</li>
-              <li><strong>Anthropic API disclosure:</strong> The complete uploaded image or PDF is transmitted to Anthropic solely to generate the requested analysis. Anthropic processes API data under its <a href="https://www.anthropic.com/legal/commercial-terms" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Commercial Terms</a> and <a href="https://privacy.anthropic.com/" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Privacy Center</a>. Retention depends on the API service configuration and contractual terms in effect.</li>
+              <li><strong>Anthropic API disclosure:</strong> The complete uploaded image or PDF is transmitted to Anthropic solely to generate the requested analysis. Anthropic processes API data under its <a href="https://www.anthropic.com/legal/commercial-terms" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Commercial Terms</a> and <a href="https://privacy.anthropic.com/" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Privacy Center</a>. Retention depends on the API service configuration and contractual terms in effect.</li>
               <li><strong>No Advertising Use:</strong> Your medical bill data, health information, and analysis results are never shared with advertising systems, ad networks, or used for ad targeting.</li>
               <li><strong>Browser-Session Only:</strong> Your bill preview and analysis results exist only in your browser session and are cleared when you close or refresh the page.</li>
             </ul>
@@ -163,8 +163,8 @@ export default function PrivacyPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li><strong>Uploaded Medical Bills:</strong> Not intentionally stored in Medical Bill Reader&apos;s own database. Provider-side processing and retention depend on the applicable Anthropic, Vercel, and infrastructure configuration and terms.</li>
               <li><strong>Analysis Results:</strong> Exist only in your browser session ,  not stored on our servers.</li>
-              <li><strong>Server Logs:</strong> Retained for up to 30 days for security and debugging, then automatically deleted. Logs do not contain medical bill contents.</li>
-              <li><strong>Analytics Data:</strong> Retained per Google Analytics default settings (up to 14 months).</li>
+              <li><strong>Operational Logs:</strong> Vercel and other infrastructure providers may retain request metadata under the active configuration, plan, and their terms. Application security logs are designed not to contain bill content, base64 data, or model output.</li>
+              <li><strong>Analytics Data:</strong> If you opt in, limited usage data is retained according to the active Google Analytics property settings and Google&apos;s terms.</li>
               <li><strong>Privacy Preference:</strong> The first-party consent cookie expires after 180 days.</li>
             </ul>
           </section>
@@ -175,14 +175,14 @@ export default function PrivacyPage() {
 
             <p>
               If you are a California resident, the California Consumer Privacy Act (CCPA) as amended
-              by the California Privacy Rights Act (CPRA) grants you specific rights regarding your
-              personal information. These rights are effective as of January 1, 2026.
+              by the California Privacy Rights Act (CPRA) may grant you specific rights regarding your
+              personal information, subject to the law&apos;s scope and exceptions.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Information We Collect</h3>
             <p>In the past 12 months we have collected the following categories of personal information:</p>
             <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Identifiers:</strong> IP address, email address (if account created), browser type, device identifiers.</li>
+              <li><strong>Identifiers:</strong> IP address, browser type, and device or request identifiers processed by the website and its infrastructure providers.</li>
               <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
               <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis are transmitted to Anthropic. Medical Bill Reader does not intentionally store them in its own database or log their contents.</li>
             </ul>
@@ -210,11 +210,11 @@ export default function PrivacyPage() {
               For Washington State residents, the My Health My Data Act provides additional protections
               for consumer health data. Medical bill information constitutes consumer health data under
               this law. We comply with WA MHMDA by: processing health data only to provide the
-              requested service; not selling consumer health data; not sharing health data with
-              third parties for advertising; and deleting health data immediately after processing.
+              requested service; not selling consumer health data; and not sharing bill content with
+              third parties for advertising. Medical Bill Reader does not intentionally retain bill documents in its own database; provider-side processing and retention depend on the applicable service configuration and terms.
               Washington residents have the right to access, delete, and withdraw consent for
               processing of their consumer health data by contacting us via the{' '}
-              <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+              <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Maryland Online Data Privacy Act (MD MODPA)</h3>
@@ -223,7 +223,7 @@ export default function PrivacyPage() {
               prohibits the sale of sensitive data including health information. We do not sell
               medical bill data or any health-related information. Maryland residents have the right
               to access, delete, correct, opt out of processing, and exercise portability of their personal data by
-              contacting us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+              contacting us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
             </p>
             <p>
               We honor the Global Privacy Control (GPC) browser signal as a universal opt-out of targeted advertising, data sale, and data sharing. When your browser sends a GPC signal, we automatically suppress all non-essential cookies and data collection.
@@ -259,12 +259,12 @@ export default function PrivacyPage() {
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Do Not Sell or Share My Personal Information</h3>
             <p>
               We do not sell personal information or health data. To keep optional analytics off, use a{' '}
-              <a href="https://globalprivacycontrol.org/" className="text-teal-600 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Global Privacy Control (GPC)</a>-enabled
-              browser, or contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+              <a href="https://globalprivacycontrol.org/" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Global Privacy Control (GPC)</a>-enabled
+              browser, or contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
             </p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">How to Submit a Request</h3>
-            <p>Contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>. We will respond within 45 days. Identity verification may be required.</p>
+            <p>Contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>. Response timing depends on the request and applicable law. Identity verification may be required.</p>
 
             <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Retention</h3>
             <p>Medical Bill Reader does not intentionally retain bill documents in its own database. Analysis results remain in the active browser session. Stripe retains payment records under its terms. Anthropic, Vercel, Redis, and other infrastructure providers may retain request metadata or processed data according to their service configuration, contracts, and legal obligations. We do not promise zero retention where those provider settings have not been contractually verified.</p>
@@ -275,7 +275,7 @@ export default function PrivacyPage() {
             <h2 id="state-heading" className="text-xl font-bold text-slate-800">8. Additional U.S. State Privacy Rights</h2>
             <p>
               Residents of the following states have privacy rights similar to California&apos;s CCPA/CPRA.
-              To exercise your rights, contact us via the <Link href="/contact" className="text-teal-600 hover:text-teal-800 underline">Contact page</Link>.
+              To exercise your rights, contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
               We will respond within the timeframe required by your state&apos;s law.
             </p>
             <div className="overflow-x-auto mt-4">
@@ -352,7 +352,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-slate-800">12. Children&apos;s Privacy</h2>
             <p>
-              Our service is not directed at children under 16. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us and we will promptly delete it.
+              Our service is not directed at children under 16. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us so we can review and address the request under applicable law and provider processes.
             </p>
           </section>
 
@@ -370,13 +370,13 @@ export default function PrivacyPage() {
             <div className="space-y-4 mt-4">
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-2">How is my uploaded medical bill data handled?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-700 text-sm leading-relaxed">
                   Your document is transmitted to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store it in its own database. Infrastructure providers process data under their applicable terms and retention practices.
                 </p>
               </div>
               <div className="bg-white rounded-xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-800 mb-2">How can I request deletion of my personal data?</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">
+                <p className="text-slate-700 text-sm leading-relaxed">
                   Medical Bill Reader does not intentionally retain bill documents in its own database. For questions or privacy requests concerning other data, email privacy@medicalbillreader.com. Provider-side records may be subject to the provider&apos;s own deletion process and legal obligations.
                 </p>
               </div>

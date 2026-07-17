@@ -45,13 +45,13 @@ export default function BlogIndexPage() {
       <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
         Medical Billing Guides &amp; Resources
       </h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+      <p className="text-gray-600 dark:text-gray-600 mb-8 max-w-2xl">
         Practical, plain-language guides to help you understand medical bills,
         insurance claims, billing codes, and your rights as a patient.
       </p>
 
       {posts.length === 0 ? (
-        <p className="text-gray-400 dark:text-gray-500">No guides published yet.</p>
+        <p className="text-gray-600 dark:text-gray-300">No guides published yet.</p>
       ) : (
         <div className="space-y-6">
           {posts.map((post) => (
@@ -60,23 +60,24 @@ export default function BlogIndexPage() {
               href={`/blog/${post.slug}`}
               className="block p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-teal-300 dark:hover:border-teal-600 hover:shadow-md transition-all group"
             >
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors mb-1">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-teal-800 dark:group-hover:text-teal-400 transition-colors mb-1">
                 {post.title}
               </h2>
               {post.excerpt && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
+                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-2">
                   {post.excerpt}
                 </p>
               )}
               {post.date && (
                 <time
                   dateTime={post.date}
-                  className="text-xs text-gray-400 dark:text-gray-500"
+                  className="text-xs text-gray-600 dark:text-gray-300"
                 >
                   {new Date(post.date).toLocaleDateString("en-US", {
                     month: "long",
                     day: "numeric",
                     year: "numeric",
+                    timeZone: "UTC",
                   })}
                 </time>
               )}

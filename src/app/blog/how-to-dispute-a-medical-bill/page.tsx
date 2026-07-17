@@ -114,13 +114,13 @@ export default function DisputeMedicalBillPage() {
       <main id="main-content" className="bg-slate-50 px-4 py-10 dark:bg-slate-950">
         <article className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm sm:p-10 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
           <header>
-            <p className="text-sm font-semibold text-teal-700 dark:text-teal-300">
+            <p className="text-sm font-semibold text-teal-800 dark:text-teal-300">
               Medical bill guidance
             </p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
               How to Dispute a Medical Bill
             </h1>
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-sm text-slate-700 dark:text-slate-300">
               Last reviewed July 12, 2026
             </p>
             <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
@@ -147,7 +147,7 @@ export default function DisputeMedicalBillPage() {
                 those records solely because the underlying bill is unpaid. See
                 the{" "}
                 <a
-                  className="font-medium text-teal-700 underline dark:text-teal-300"
+                  className="font-medium text-teal-800 underline dark:text-teal-300"
                   href="https://www.hhs.gov/hipaa/for-individuals/medical-records/index.html"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -230,7 +230,7 @@ export default function DisputeMedicalBillPage() {
               </div>
               <p className="mt-4">
                 You can use{" "}
-                <Link className="font-medium text-teal-700 underline dark:text-teal-300" href="/">
+                <Link className="font-medium text-teal-800 underline dark:text-teal-300" href="/">
                   Medical Bill Reader
                 </Link>{" "}
                 to organize the document into plain-language questions. Its output
@@ -260,7 +260,7 @@ export default function DisputeMedicalBillPage() {
                   in-network facilities, and air ambulances. It does not cover every
                   bill or every plan. CMS offers a{" "}
                   <a
-                    className="font-medium text-teal-700 underline dark:text-teal-300"
+                    className="font-medium text-teal-800 underline dark:text-teal-300"
                     href="https://www.cms.gov/medical-bill-rights/help/submit-a-complaint"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -276,7 +276,7 @@ export default function DisputeMedicalBillPage() {
                   estimate and the initial bill is dated within the last 120
                   calendar days. Review the complete{" "}
                   <a
-                    className="font-medium text-teal-700 underline dark:text-teal-300"
+                    className="font-medium text-teal-800 underline dark:text-teal-300"
                     href="https://www.cms.gov/medical-bill-rights/help/dispute-a-bill"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -426,7 +426,7 @@ export default function DisputeMedicalBillPage() {
                 {sources.map((source) => (
                   <li key={source.href}>
                     <a
-                      className="font-medium text-teal-700 underline dark:text-teal-300"
+                      className="font-medium text-teal-800 underline dark:text-teal-300"
                       href={source.href}
                       rel="noopener noreferrer"
                       target="_blank"

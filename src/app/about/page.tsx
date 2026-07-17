@@ -49,7 +49,7 @@ const aboutFaqJsonLd = {
       name: "How does the AI bill analysis tool work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "You upload a photo or PDF of your medical bill. Our AI reads every line item, procedure code, and charge, then translates them into plain English. It also flags potential billing errors like duplicate charges or upcoding and suggests clear next steps you can take.",
+        text: "You upload a supported medical bill or EOB. The AI attempts to organize legible line items, codes, and insurance fields into a report and may identify patterns to verify. It can miss or misread information.",
       },
     },
   ],
@@ -61,7 +61,7 @@ const organizationJsonLd = {
   name: "Medical Bill Reader",
   url: "https://medicalbillreader.com",
   description:
-    "AI-powered medical bill analysis tool that helps patients understand confusing medical bills and insurance EOBs in plain language.",
+    "AI-assisted tool that organizes visible billing codes, charges, and insurance fields from supported medical bills and EOBs.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
@@ -114,17 +114,17 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           About Medical Bill Reader
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-4 text-center">Last updated: March 16, 2026</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
 
         <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-6">
           Hi. I&apos;m Jason Ramirez. This is why I built this.
         </p>
 
         <AnswerBlock
-          what="A free AI tool that reads medical bills, explains every charge in plain English, and flags potential billing errors."
+          what="A free-to-start AI tool that attempts to organize visible medical-bill charges, codes, and insurance fields into a plain-language report."
           who="Patients, families, and caregivers who want to understand confusing medical bills or insurance EOBs before paying."
-          bottomLine="Upload any medical bill for a free line-by-line explanation ,  results are for informational purposes only and not financial or medical advice."
-          lastUpdated="2026-03-20"
+          bottomLine="Upload a supported file for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
+          lastUpdated="2026-07-16"
         />
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -136,27 +136,22 @@ export default function AboutPage() {
             <p>
               Medical Bill Reader helps you understand confusing medical bills and
               insurance Explanations of Benefits (EOBs) in plain language ,  no medical
-              degree required. Our free AI-powered tool reads your bill, breaks down
-              every charge, flags potential billing errors, and suggests clear next
-              steps so you know exactly what you owe and why.
+              degree required. The AI attempts to organize visible charges, billing
+              codes, and insurance fields, and may flag patterns for you to verify.
             </p>
             <p>
               Medical billing in the United States is notoriously complex. A single
               hospital visit can generate multiple bills from different providers, each
               filled with procedure codes, diagnostic codes, and insurance adjustments
-              that are nearly impossible for the average person to decipher. Medical
+              that can be difficult to interpret. Medical
               Bill Reader was built to change that. We believe every patient deserves
-              to understand what they are being charged for and whether those charges
-              are accurate.
+              to understand what they are being charged for and where to ask questions.
             </p>
             <p>
-              Our AI analyzes your bill line by line, translating cryptic codes and
-              medical jargon into straightforward explanations. It identifies common
-              billing mistakes like duplicate charges, upcoding, unbundling, and
-              charges for services that may not have been provided. After the analysis,
-              you receive a clear, organized summary with actionable advice on
-              disputing errors, negotiating balances, or contacting your insurance
-              company.
+              The AI attempts to read visible bill content and return a structured
+              summary. It may flag apparent duplicates or code combinations for
+              review, but it cannot determine that a charge is wrong. Users should
+              confirm important items with the provider or insurer.
             </p>
           </section>
 
@@ -171,15 +166,12 @@ export default function AboutPage() {
               after a doctor visit or hospital stay, families trying to understand what
               their insurance actually covered, individuals reviewing an Explanation of
               Benefits from their insurer and struggling to match it against provider
-              bills, uninsured or underinsured patients trying to verify whether their
-              charges are fair, caregivers managing medical bills for aging parents or
-              family members, and anyone who simply wants a second opinion on whether
-              their medical bill is accurate before paying.
+              bills, uninsured or underinsured patients reviewing charges, and
+              caregivers managing medical bills for family members.
             </p>
             <p>
-              Whether your bill is a simple office visit copay or a complex hospital
-              stay with dozens of line items, Medical Bill Reader can help you make
-              sense of it.
+              Report quality depends on document clarity, layout, and complexity. AI
+              output can be incomplete or incorrect.
             </p>
           </section>
 
@@ -189,13 +181,10 @@ export default function AboutPage() {
               How to Use Medical Bill Reader
             </h2>
             <p>
-              Using Medical Bill Reader is simple and takes less than a minute. First,
-              take a photo of your medical bill or save it as a PDF. Next, visit our
-              homepage and upload the image or PDF using the drag-and-drop area or the
-              file picker. Then click &quot;Explain My Bill&quot; and wait about 30 seconds
-              while our AI reads and analyzes every line. Finally, review your
-              plain-English explanation, which includes a breakdown of each charge,
-              flags for potential errors, and suggestions for next steps.
+              Take a photo of your medical bill or save it as a supported file. Next,
+              upload it through the homepage file picker and keep the page open while
+              the request runs. Review the returned report against the original bill
+              and EOB before relying on any item.
             </p>
             <p>
               No account is required for the free tier. Your bill is transmitted to Anthropic solely for analysis and is not intentionally stored in Medical Bill Reader&apos;s own database.
@@ -236,20 +225,19 @@ export default function AboutPage() {
               </li>
               <li>
                 <strong>Out-of-Pocket Maximum:</strong> The most you will pay in a
-                calendar year for covered services. Once you reach this limit, your
-                insurance covers 100% of remaining costs for the rest of the year. This
+                plan year for covered, in-network services. Once you reach this limit, your
+                plan generally covers remaining covered, in-network costs for that plan year. This
                 amount includes your deductible, copays, and coinsurance.
               </li>
               <li>
                 <strong>Copay:</strong> A fixed dollar amount you pay for a specific
                 service, such as $30 for a doctor visit or $15 for a prescription. Copays
-                are set by your insurance plan and do not vary by provider.
+                are set by your insurance plan and can depend on the service and network status.
               </li>
               <li>
                 <strong>Allowed Amount:</strong> The maximum amount your insurance plan
-                will pay for a covered service. If your provider charges more than the
-                allowed amount, you may be responsible for the difference (known as
-                balance billing).
+                recognizes for a covered service. Whether an amount above it is your
+                responsibility depends on network status, plan terms, and applicable protections.
               </li>
             </ul>
           </section>
@@ -260,11 +248,9 @@ export default function AboutPage() {
               Why Understanding Your Medical Bill Matters
             </h2>
             <p>
-              Medical billing errors are far more common than most people realize.
-              Studies have found that a significant percentage of medical bills contain
-              errors, ranging from duplicate charges and incorrect codes to charges for
-              services never rendered. These mistakes can cost patients hundreds or even
-              thousands of dollars.
+              CMS recommends checking that the services and supplies on the provider
+              bill match what you received and comparing the amount with the
+              Explanation of Benefits.
             </p>
             <p>
               Understanding your bill is the first step toward catching these errors.
@@ -275,10 +261,8 @@ export default function AboutPage() {
               a payment plan, or apply for financial assistance.
             </p>
             <p>
-              Medical debt is the leading cause of personal bankruptcy in the United
-              States. By helping patients understand and verify their bills, Medical
-              Bill Reader aims to reduce the financial burden of healthcare and
-              empower people to take control of their medical expenses.
+              Medical Bill Reader is intended to make that review easier to organize.
+              It does not replace the provider, insurer, or a qualified billing advocate.
             </p>
           </section>
 
@@ -290,14 +274,14 @@ export default function AboutPage() {
             <div className="space-y-4 mt-4">
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader and why?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                   Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. He built it after seeing how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How does the AI bill analysis tool work?</h3>
-                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                  You upload a photo or PDF of your medical bill. Our AI reads every line item, procedure code, and charge, then translates them into plain English. It also flags potential billing errors like duplicate charges or upcoding and suggests clear next steps you can take.
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+                  You upload a supported medical bill or EOB. The AI attempts to organize legible line items, codes, and insurance fields into a report and may identify patterns to verify. It can miss or misread information.
                 </p>
               </div>
             </div>
@@ -309,7 +293,7 @@ export default function AboutPage() {
           </section>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-500 dark:text-slate-400">
+        <div className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300">
           <p className="font-medium text-slate-700 dark:text-slate-300">Jason Ramirez</p>
           <p>Your Friendly Developer LLC</p>
         </div>

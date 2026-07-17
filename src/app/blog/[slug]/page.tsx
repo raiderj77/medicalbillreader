@@ -28,6 +28,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.description || undefined,
       publishedTime: post.date,
+      modifiedTime: post.modified,
       url: `https://medicalbillreader.com/blog/${post.slug}`,
     },
     twitter: {
@@ -55,7 +56,7 @@ export default async function BlogPostPage({
     headline: post.title,
     description: post.description || undefined,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.modified,
     url: `https://medicalbillreader.com/blog/${post.slug}`,
     mainEntityOfPage: `https://medicalbillreader.com/blog/${post.slug}`,
     author: {
@@ -111,18 +112,18 @@ export default async function BlogPostPage({
       {/* Breadcrumbs */}
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 mb-6"
+        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-6"
       >
         <Link
           href="/"
-          className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+          className="hover:text-teal-800 dark:hover:text-teal-400 transition-colors"
         >
           Home
         </Link>
         <span aria-hidden="true">/</span>
         <Link
           href="/blog"
-          className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+          className="hover:text-teal-800 dark:hover:text-teal-400 transition-colors"
         >
           Blog
         </Link>
@@ -138,18 +139,19 @@ export default async function BlogPostPage({
       </h1>
 
       {/* Meta row */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-6 text-sm text-gray-500 dark:text-gray-400">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-6 text-sm text-gray-700 dark:text-gray-300">
         {post.date && (
           <time dateTime={post.date}>
             {new Date(post.date).toLocaleDateString("en-US", {
               month: "long",
               day: "numeric",
               year: "numeric",
+              timeZone: "UTC",
             })}
           </time>
         )}
         <span aria-hidden="true">&middot;</span>
-        <Link href="/about" className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+        <Link href="/about" className="hover:text-teal-800 dark:hover:text-teal-400 transition-colors">
           Jason Ramirez
         </Link>
         <span>, Founder of Your Friendly Developer</span>
@@ -185,7 +187,7 @@ export default async function BlogPostPage({
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  className="text-teal-600 dark:text-teal-400 hover:underline text-sm"
+                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline text-sm"
                 >
                   {p.title}
                 </Link>
@@ -197,7 +199,7 @@ export default async function BlogPostPage({
       <div className="mt-8 text-center">
         <Link
           href="/"
-          className="inline-block px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+          className="inline-block px-6 py-3 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition-colors font-medium"
         >
           Try Medical Bill Reader Free →
         </Link>
