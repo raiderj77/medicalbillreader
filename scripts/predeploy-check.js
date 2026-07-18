@@ -179,6 +179,24 @@ check("Security headers", () => {
   }
 });
 
+check("Maintained external references", () => {
+  const files = [
+    "content/blog/2026-04-15-common-medical-billing-errors-and-how-to-spot-them.md",
+    "src/app/codes-explained/page.tsx",
+    "src/app/methodology/page.tsx",
+  ];
+  const content = files.map((file) => readFileSync(resolve(ROOT, file), "utf-8")).join("\n");
+  const retiredUrls = [
+    "consumerfinance.gov/ask-cfpb/category-medical-debt",
+    "patientadvocate.org/explore-our-resources/understanding-healthcare-bills",
+    'href: "https://www.cms.gov/medicare/coding-billing"',
+  ];
+  for (const retiredUrl of retiredUrls) {
+    if (content.includes(retiredUrl)) fail(`Retired external destination remains: ${retiredUrl}`);
+  }
+  if (!retiredUrls.some((retiredUrl) => content.includes(retiredUrl))) pass("Retired external destinations are absent");
+});
+
 // ---------------------------------------------------------------------------
 // Summary
 // ---------------------------------------------------------------------------

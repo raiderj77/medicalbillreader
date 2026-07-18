@@ -301,9 +301,9 @@ export default function MethodologyPage() {
             .
           </li>
           <li>
-            Patient Advocate Foundation, billing resources:{" "}
+            Patient Advocate Foundation, Medical Billing Tip Sheet:{" "}
             <a
-              href="https://www.patientadvocate.org/explore-our-resources/understanding-healthcare-bills/"
+              href="https://education.patientadvocate.org/wp-content/uploads/2023/11/Medical-Billing-Tip-Sheet.pdf"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
               rel="nofollow noopener noreferrer"
