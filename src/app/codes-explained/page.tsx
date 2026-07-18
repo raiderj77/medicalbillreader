@@ -154,7 +154,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       "Modifier 50: bilateral procedure. Modifier 25: significant, separately identifiable evaluation and management service on the same day as a procedure.",
     lookup: {
       label: "CMS modifier reference",
-      href: "https://www.cms.gov/medicare/coding-billing",
+      href: "https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-faq-library",
     },
     watchFor:
       "Inappropriate use of modifier 25 to bill an evaluation and management visit on top of a procedure when the visit was not separately identifiable. This is a frequent source of overbilling.",

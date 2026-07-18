@@ -63,7 +63,7 @@ Published estimates use different definitions, data sets, and settings, so a sin
 
 ### Can a billing issue affect my credit?
 
-Medical-debt reporting rules, bureau policies, and state protections can change. If a disputed bill has reached collections, use current guidance from the [Consumer Financial Protection Bureau](https://www.consumerfinance.gov/ask-cfpb/category-medical-debt/) and consider qualified legal or consumer-assistance help for your situation.
+Medical-debt reporting rules, bureau policies, and state protections can change. If a disputed bill has reached collections, use current guidance from the [Consumer Financial Protection Bureau](https://www.consumerfinance.gov/rules-policy/medical-debt/) and consider qualified legal or consumer-assistance help for your situation.
 
 ### How long do I have to dispute or appeal?
 
