@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { trackConversion } from "@/lib/analytics";
+import { readJsonResponse } from "@/lib/read-json-response";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   const text =
@@ -121,7 +122,9 @@ export default function BillAnalyzer() {
           method: "POST",
         });
         if (!accessResponse.ok) {
-          const accessData = await accessResponse.json();
+          const accessData = await readJsonResponse<{ error?: string }>(
+            accessResponse,
+          );
           throw new Error(
             accessData.error || "Free analysis access is unavailable.",
           );
@@ -132,7 +135,9 @@ export default function BillAnalyzer() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: preview, fileType: file.type }),
       });
-      const data = await res.json();
+      const data = await readJsonResponse<{ error?: string; result?: string }>(
+        res,
+      );
       if (!res.ok) {
         if (res.status === 401) {
           setNeedsUpgrade(true);
@@ -140,8 +145,12 @@ export default function BillAnalyzer() {
             "Your free analysis has already been used. Choose a paid option to analyze another bill.",
           );
         }
-        throw new Error(data.error || "Something went wrong");
+        const fallbackError = isPaid
+          ? "The analysis could not be completed. Your paid credit was not used. Please wait two minutes and try again."
+          : "The analysis could not be completed. Please wait two minutes and try again.";
+        throw new Error(data.error || fallbackError);
       }
+      if (!data.result) throw new Error("The analysis service returned an incomplete response. Please try again.");
       setResult(data.result);
       trackConversion("analysis_delivered");
 

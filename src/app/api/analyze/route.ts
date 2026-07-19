@@ -6,9 +6,12 @@ import { enforceRateLimit } from "@/lib/rate-limit";
 import { StoreUnavailableError } from "@/lib/redis";
 import { clientIp, safeSecurityLog } from "@/lib/security";
 import { readLimitedJson, UploadValidationError, validateUpload } from "@/lib/upload-validation";
+import { fetchWithTimeout, RequestTimeoutError } from "@/lib/fetch-with-timeout";
 
-export const maxDuration = 30;
+export const maxDuration = 120;
 export const runtime = "nodejs";
+
+const ANTHROPIC_TIMEOUT_MS = 100_000;
 
 function errorResponse(error: string, status: number) {
   return NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
@@ -35,11 +38,11 @@ export async function POST(request: NextRequest) {
       ? { type: "document", source: { type: "base64", media_type: upload.mediaType, data: upload.data } }
       : { type: "image", source: { type: "base64", media_type: upload.mediaType, data: upload.data } };
 
-    const aiResponse = await fetch("https://api.anthropic.com/v1/messages", {
+    const aiResponse = await fetchWithTimeout("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 2000, temperature: 0, messages: [{ role: "user", content: [{ type: "text", text: BILL_ANALYSIS_INSTRUCTIONS }, { type: "text", text: buildBillAnalysisPrompt() }, fileContent] }] }),
-    });
+    }, ANTHROPIC_TIMEOUT_MS);
 
     if (!aiResponse.ok) {
       const failure = (await aiResponse.json().catch(() => null)) as { error?: { type?: string } } | null;
@@ -64,6 +67,10 @@ export async function POST(request: NextRequest) {
     if (reservation) { try { await releaseEntitlement(reservation); } catch { safeSecurityLog("entitlement_release_failed"); } }
     if (error instanceof UploadValidationError) return errorResponse(error.message, 400);
     if (error instanceof StoreUnavailableError) return errorResponse("Analysis access is temporarily unavailable.", 503);
+    if (error instanceof RequestTimeoutError) {
+      safeSecurityLog("anthropic_request_timeout");
+      return errorResponse("The analysis service took too long. Your paid credit was not used. Please wait two minutes and try again.", 504);
+    }
     safeSecurityLog("analysis_route_failed");
     return errorResponse("The analysis could not be completed. Your paid credit was not used.", 500);
   }

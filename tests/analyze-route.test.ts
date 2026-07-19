@@ -6,6 +6,7 @@ vi.mock("@/lib/entitlement", () => ({ reserveRequestEntitlement: entitlement.res
 vi.mock("@/lib/rate-limit", () => ({ enforceRateLimit: vi.fn().mockResolvedValue(true) }));
 vi.mock("@/lib/analysis-stats", () => ({ recordAnalysis: vi.fn() }));
 import { POST } from "@/app/api/analyze/route";
+import { RequestTimeoutError } from "@/lib/fetch-with-timeout";
 
 const validBody = { image: "data:image/png;base64,iVBORw0KGgo=", fileType: "image/png" };
 const reservation = { kind: "paid" as const, key: "paid:key", reservationId: "reservation", externalId: "cs_paid" };
@@ -49,6 +50,18 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 500 }));
     const response = await POST(request(validBody));
     expect(response.status).toBe(502);
+    expect(entitlement.release).toHaveBeenCalledWith(reservation);
+    expect(entitlement.commit).not.toHaveBeenCalled();
+  });
+
+  it("returns JSON and releases the paid credit when the AI request times out", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new RequestTimeoutError());
+    const response = await POST(request(validBody));
+    expect(response.status).toBe(504);
+    expect(await response.json()).toEqual({
+      error: "The analysis service took too long. Your paid credit was not used. Please wait two minutes and try again.",
+    });
     expect(entitlement.release).toHaveBeenCalledWith(reservation);
     expect(entitlement.commit).not.toHaveBeenCalled();
   });
