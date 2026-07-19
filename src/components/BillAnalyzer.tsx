@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { trackConversion } from "@/lib/analytics";
+import {
+  analysisFailureCategory,
+  trackConversion,
+  type AnalysisFailureCategory,
+  type AnalysisFailureStage,
+} from "@/lib/analytics";
 import { readJsonResponse } from "@/lib/read-json-response";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
@@ -68,7 +73,9 @@ export default function BillAnalyzer() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("payment") === "success") {
       setJustPaid(true);
-      trackConversion("purchase_completed");
+      trackConversion("purchase_completed", {
+        plan: hasActiveSubscriptionCookie() ? "subscription" : "per-use",
+      });
       router.replace("/", { scroll: false });
     }
   }, [router]);
@@ -111,17 +118,45 @@ export default function BillAnalyzer() {
   const handleSubmit = async () => {
     if (!file || !preview) return;
 
-    const isPaid = justPaid || hasActiveSubscriptionCookie();
+    const accessType = justPaid
+      ? "per-use"
+      : hasActiveSubscriptionCookie()
+        ? "subscription"
+        : "free";
+    const isPaid = accessType !== "free";
+    let activeStage: AnalysisFailureStage = isPaid
+      ? "analysis"
+      : "entitlement";
+    let failureTracked = false;
+    const trackFailure = (
+      failureStage: AnalysisFailureStage,
+      failureCategory: AnalysisFailureCategory,
+    ) => {
+      trackConversion("analysis_failed", {
+        access_type: accessType,
+        failure_stage: failureStage,
+        failure_category: failureCategory,
+      });
+      failureTracked = true;
+    };
 
     setLoading(true);
     setError(null);
     setNeedsUpgrade(false);
+    trackConversion("analysis_started", {
+      access_type: accessType,
+      file_type: file.type,
+    });
     try {
       if (!isPaid) {
         const accessResponse = await fetch("/api/entitlement/free", {
           method: "POST",
         });
         if (!accessResponse.ok) {
+          trackFailure(
+            "entitlement",
+            analysisFailureCategory(accessResponse.status),
+          );
           const accessData = await readJsonResponse<{ error?: string }>(
             accessResponse,
           );
@@ -129,6 +164,7 @@ export default function BillAnalyzer() {
             accessData.error || "Free analysis access is unavailable.",
           );
         }
+        activeStage = "analysis";
       }
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -139,10 +175,16 @@ export default function BillAnalyzer() {
         res,
       );
       if (!res.ok) {
+        const failureCategory = analysisFailureCategory(res.status);
+        trackFailure("analysis", failureCategory);
         if (res.status === 401) {
           setNeedsUpgrade(true);
+          trackConversion("upgrade_prompt_viewed", {
+            access_type: accessType,
+            failure_category: failureCategory,
+          });
           throw new Error(
-            "Your free analysis has already been used. Choose a paid option to analyze another bill.",
+            "No analysis credit is currently available. Choose an analysis option to continue.",
           );
         }
         const fallbackError = isPaid
@@ -150,14 +192,23 @@ export default function BillAnalyzer() {
           : "The analysis could not be completed. Please wait two minutes and try again.";
         throw new Error(data.error || fallbackError);
       }
-      if (!data.result) throw new Error("The analysis service returned an incomplete response. Please try again.");
+      if (!data.result) {
+        trackFailure("analysis", "incomplete_response");
+        throw new Error(
+          "The analysis service returned an incomplete response. Please try again.",
+        );
+      }
       setResult(data.result);
-      trackConversion("analysis_delivered");
+      trackConversion("analysis_delivered", {
+        access_type: accessType,
+        file_type: file.type,
+      });
 
       if (justPaid) {
         setJustPaid(false);
       }
     } catch (err: unknown) {
+      if (!failureTracked) trackFailure(activeStage, "network");
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
