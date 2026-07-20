@@ -7,15 +7,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Submit to IndexNow
+        with:
+          fetch-depth: 2
+      - name: Determine changed public URLs
+        id: urls
+        shell: bash
         run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+          if [[ "$BEFORE" =~ ^0+$ ]] || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            CHANGED_FILES=$(git show --pretty="" --name-only "$AFTER")
+          else
+            CHANGED_FILES=$(git diff --name-only "$BEFORE" "$AFTER")
+          fi
+          URL_LIST=$(printf '%s\n' "$CHANGED_FILES" | node scripts/indexnow-urls.mjs)
+          echo "url_list=$URL_LIST" >> "$GITHUB_OUTPUT"
+          echo "Submitting: $URL_LIST"
+      - name: Submit to IndexNow
+        env:
+          URL_LIST: ${{ steps.urls.outputs.url_list }}
+        run: |
+          PAYLOAD=$(jq -n \
+            --arg host "medicalbillreader.com" \
+            --arg key "1af58049462445718b7a9a3fbd66f393" \
+            --arg keyLocation "https://medicalbillreader.com/1af58049462445718b7a9a3fbd66f393.txt" \
+            --argjson urlList "$URL_LIST" \
+            '{host: $host, key: $key, keyLocation: $keyLocation, urlList: $urlList}')
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.indexnow.org/indexnow" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "host": "medicalbillreader.com",
-              "key": "1af58049462445718b7a9a3fbd66f393",
-              "keyLocation": "https://medicalbillreader.com/1af58049462445718b7a9a3fbd66f393.txt",
-              "urlList": ["https://medicalbillreader.com/"]
-            }')
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "$PAYLOAD")
           echo "IndexNow response: $RESPONSE"
-          exit 0
+          [[ "$RESPONSE" == "200" || "$RESPONSE" == "202" ]]

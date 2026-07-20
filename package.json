@@ -10,6 +10,7 @@
     "lint:content": "node scripts/content-lint.js",
     "lint:predeploy": "node scripts/predeploy-check.js",
     "test": "vitest run",
+    "test:indexnow": "node --test tests/indexnow-urls.node.mjs",
     "prebuild": "npm run lint:predeploy && npm run lint:content"
   },
   "dependencies": {
