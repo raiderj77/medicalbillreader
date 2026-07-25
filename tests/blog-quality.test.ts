@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getAllMarkdownPosts, getMarkdownPost } from "@/lib/blog-markdown";
+import {
+  getAllMarkdownPosts,
+  getMarkdownPost,
+  renderMarkdownContent,
+} from "@/lib/blog-markdown";
 
 describe("published medical billing guides", () => {
   it("keeps the page template as the only H1", async () => {
@@ -12,6 +16,22 @@ describe("published medical billing guides", () => {
   it("provides a substantive description for every guide", () => {
     for (const post of getAllMarkdownPosts()) {
       expect(post.description.length).toBeGreaterThanOrEqual(80);
+      expect(post.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
     }
+  });
+
+  it("sanitizes embedded HTML and dangerous link protocols", async () => {
+    const rendered = await renderMarkdownContent(
+      [
+        "Safe paragraph.",
+        "",
+        "<script>alert('unsafe')</script>",
+        "",
+        "[unsafe link](javascript:alert('unsafe'))",
+      ].join("\n")
+    );
+
+    expect(rendered).not.toMatch(/<script|javascript:/i);
+    expect(rendered).toContain("Safe paragraph.");
   });
 });
