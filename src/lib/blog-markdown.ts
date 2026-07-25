@@ -20,9 +20,24 @@ export interface MarkdownPostWithContent extends MarkdownPost {
 }
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
+const SAFE_BLOG_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 function slugFromFilename(filename: string): string {
   return filename.replace(/\.md$/, "").replace(/^\d{4}-\d{2}-\d{2}-/, "");
+}
+
+function safeBlogSlug(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const slug = value.trim();
+  return SAFE_BLOG_SLUG.test(slug) ? slug : null;
+}
+
+function slugForPost(filename: string, frontmatterSlug: unknown): string | null {
+  const candidate =
+    typeof frontmatterSlug === "string" && frontmatterSlug.trim()
+      ? frontmatterSlug
+      : slugFromFilename(filename);
+  return safeBlogSlug(candidate);
 }
 
 function parseKeywords(raw: unknown): string[] {
@@ -54,7 +69,8 @@ export function getAllMarkdownPosts(): MarkdownPost[] {
     .map((filename) => {
       const raw = fs.readFileSync(path.join(BLOG_DIR, filename), "utf-8");
       const { data, content } = matter(raw);
-      const slug: string = (data.slug as string) || slugFromFilename(filename);
+      const slug = slugForPost(filename, data.slug);
+      if (!slug) return null;
       return {
         slug,
         title: (data.title as string) || "",
@@ -65,6 +81,7 @@ export function getAllMarkdownPosts(): MarkdownPost[] {
         excerpt: getExcerpt(content, (data.description as string) || ""),
       };
     })
+    .filter((post): post is MarkdownPost => post !== null)
     .filter((p) => {
       if (!p.title || seen.has(p.slug)) return false;
       seen.add(p.slug);
@@ -82,6 +99,8 @@ export async function getMarkdownPost(
   slug: string
 ): Promise<MarkdownPostWithContent | null> {
   if (!fs.existsSync(BLOG_DIR)) return null;
+  const safeRequestedSlug = safeBlogSlug(slug);
+  if (!safeRequestedSlug) return null;
 
   const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".md"));
 
@@ -89,8 +108,8 @@ export async function getMarkdownPost(
   for (const filename of files) {
     const raw = fs.readFileSync(path.join(BLOG_DIR, filename), "utf-8");
     const { data } = matter(raw);
-    const fileSlug = (data.slug as string) || slugFromFilename(filename);
-    if (fileSlug === slug) {
+    const fileSlug = slugForPost(filename, data.slug);
+    if (fileSlug === safeRequestedSlug) {
       foundFile = filename;
       break;
     }
@@ -101,19 +120,21 @@ export async function getMarkdownPost(
   const raw = fs.readFileSync(path.join(BLOG_DIR, foundFile), "utf-8");
   const { data, content } = matter(raw);
 
-  const processed = await remark()
-    .use(remarkGfm)
-    .use(html, { sanitize: false })
-    .process(stripLeadingTitle(content));
+  const htmlContent = await renderMarkdownContent(stripLeadingTitle(content));
 
   return {
-    slug,
+    slug: safeRequestedSlug,
     title: (data.title as string) || "",
     date: (data.date as string) || "",
     modified: (data.modified as string) || (data.date as string) || "",
     description: (data.description as string) || "",
     keywords: parseKeywords(data.keywords),
     excerpt: getExcerpt(content, (data.description as string) || ""),
-    htmlContent: processed.toString(),
+    htmlContent,
   };
+}
+
+export async function renderMarkdownContent(content: string): Promise<string> {
+  const processed = await remark().use(remarkGfm).use(html).process(content);
+  return processed.toString();
 }
