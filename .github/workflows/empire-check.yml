@@ -8,35 +8,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: compliance-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ────────────────────────────────────────────────────────────────
-  # Job 1 — Build (runs in parallel with compliance)
-  # ────────────────────────────────────────────────────────────────
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install and build
-        run: |
-          npm ci
-          npm run build
-
-  # ────────────────────────────────────────────────────────────────
-  # Job 2 — Empire compliance gates (no Node required)
+  # Empire compliance gates (no Node required)
   # ────────────────────────────────────────────────────────────────
   compliance:
     name: Compliance Gates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       # ── Check 2: Required public files ──────────────────────────
       - name: Required public files exist

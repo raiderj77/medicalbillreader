@@ -67,12 +67,12 @@ export default function BillAnalyzer() {
   // immediately so it can't be reused by submitting a second bill without
   // paying again. The server independently verifies and consumes the real
   // entitlement via an httpOnly cookie, this is only a UX gate.
-  const [justPaid, setJustPaid] = useState(false);
+  const justPaidRef = useRef(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("payment") === "success") {
-      setJustPaid(true);
+      justPaidRef.current = true;
       trackConversion("purchase_completed", {
         plan: hasActiveSubscriptionCookie() ? "subscription" : "per-use",
       });
@@ -118,7 +118,7 @@ export default function BillAnalyzer() {
   const handleSubmit = async () => {
     if (!file || !preview) return;
 
-    const accessType = justPaid
+    const accessType = justPaidRef.current
       ? "per-use"
       : hasActiveSubscriptionCookie()
         ? "subscription"
@@ -204,8 +204,8 @@ export default function BillAnalyzer() {
         file_type: file.type,
       });
 
-      if (justPaid) {
-        setJustPaid(false);
+      if (justPaidRef.current) {
+        justPaidRef.current = false;
       }
     } catch (err: unknown) {
       if (!failureTracked) trackFailure(activeStage, "network");
