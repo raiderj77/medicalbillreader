@@ -1,0 +1,10 @@
+# This single-owner repository does not require self-review, but ownership is
+# explicit and the branch ruleset requires a pull request plus a passing build.
+* @raiderj77
+
+/src/app/api/analyze/ @raiderj77
+/src/app/api/checkout/ @raiderj77
+/src/app/api/stripe/ @raiderj77
+/src/lib/upload-validation.ts @raiderj77
+/src/lib/rate-limit.ts @raiderj77
+/.github/ @raiderj77

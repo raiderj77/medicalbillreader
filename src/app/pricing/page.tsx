@@ -89,7 +89,7 @@ export default function PricingPage() {
 
       const data = await response.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         trackConversion("payment_failed", { plan });
         alert(data.error || "Failed to start checkout.");
@@ -105,7 +105,7 @@ export default function PricingPage() {
   const handleBillingPortal = async () => {
     const response = await fetch("/api/billing-portal", { method: "POST" });
     const data = (await response.json()) as { url?: string; error?: string };
-    if (data.url) window.location.href = data.url;
+    if (data.url) window.location.assign(data.url);
     else alert(data.error || "Subscription management is unavailable.");
   };
 
