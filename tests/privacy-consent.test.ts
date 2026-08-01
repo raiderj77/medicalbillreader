@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   CONSENT_COOKIE_MAX_AGE,
@@ -40,5 +40,40 @@ describe("privacy consent", () => {
     expect(trackingCode).not.toContain("googlesyndication.com");
     expect(trackingCode).not.toContain("clarity.ms");
     expect(control).toContain("googletagmanager.com/gtag/js");
+  });
+
+  it("keeps the health referrer policy consistent in every deployment config", () => {
+    const nextConfig = readFileSync(
+      join(process.cwd(), "next.config.ts"),
+      "utf8",
+    );
+    const vercelConfig = JSON.parse(
+      readFileSync(join(process.cwd(), "vercel.json"), "utf8"),
+    ) as {
+      headers: Array<{
+        headers: Array<{ key: string; value: string }>;
+      }>;
+    };
+    const referrerPolicies = vercelConfig.headers
+      .flatMap((rule) => rule.headers)
+      .filter((header) => header.key === "Referrer-Policy")
+      .map((header) => header.value);
+
+    expect(nextConfig).toContain('value: "no-referrer"');
+    expect(referrerPolicies.length).toBeGreaterThan(0);
+    expect(referrerPolicies.every((value) => value === "no-referrer")).toBe(
+      true,
+    );
+  });
+
+  it("uses the supported Next.js proxy convention for GPC propagation", () => {
+    const proxyPath = join(process.cwd(), "src/proxy.ts");
+    const middlewarePath = join(process.cwd(), "src/middleware.ts");
+
+    expect(existsSync(proxyPath)).toBe(true);
+    expect(existsSync(middlewarePath)).toBe(false);
+    expect(readFileSync(proxyPath, "utf8")).toContain(
+      "export function proxy(request: NextRequest)",
+    );
   });
 });
