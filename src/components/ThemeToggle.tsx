@@ -22,14 +22,14 @@ export default function ThemeToggle() {
     document.documentElement.classList.add(next)
   }
 
-  if (!mounted) return <button aria-label="Toggle color scheme" className="w-9 h-9 rounded-lg" disabled />
+  if (!mounted) return <button aria-label="Toggle color scheme" className="h-11 w-11 rounded-lg" disabled />
 
   return (
     <button
       onClick={toggle}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      className="w-9 h-9 rounded-lg flex items-center justify-center text-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+      className="flex h-11 w-11 items-center justify-center rounded-lg text-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
     >
       {theme === 'light' ? '\u{1F319}' : '\u{2600}\u{FE0F}'}
     </button>

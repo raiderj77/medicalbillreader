@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
   description:
-    "Plain-English glossary of medical billing code systems and abbreviations: CPT, HCPCS, ICD-10-CM, ICD-10-PCS, NDC, DRG, modifiers, place of service, revenue codes, and the EOB acronyms that appear on every bill.",
+    "Plain-English glossary of common medical billing code systems and abbreviations, with authoritative lookup links and questions to verify.",
   keywords: [
     "medical billing codes",
     "CPT codes explained",
@@ -20,14 +20,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
     description:
-      "Plain-English definitions of every code type and abbreviation that appears on a medical bill.",
+      "Plain-English definitions of common code types and abbreviations that may appear on a medical bill or EOB.",
     url: "https://medicalbillreader.com/codes-explained",
     type: "article",
   },
 };
 
 const PAGE_URL = "https://medicalbillreader.com/codes-explained";
-const TODAY = new Date().toISOString().substring(0, 10);
+const LAST_REVIEWED = "2026-08-02";
 
 type CodeSystem = {
   slug: string;
@@ -46,16 +46,17 @@ const CODE_SYSTEMS: CodeSystem[] = [
     name: "CPT (Current Procedural Terminology)",
     shortName: "CPT",
     oneLine:
-      "Five-digit codes that identify clinical procedures and services performed by clinicians.",
+      "Five-character codes maintained by the AMA that identify medical procedures and services.",
     usedFor:
-      "CPT is the main code set used to bill outpatient procedures, office visits, surgeries, lab tests, and imaging. Insurers use the code to decide reimbursement, and providers use it to describe what was done.",
-    example: "CPT 99213: established patient office visit, 20 to 29 minutes.",
+      "CPT is widely used to describe professional and outpatient procedures, visits, tests, and imaging. Payment and coverage also depend on documentation, payer rules, setting, modifiers, contracts, and the plan.",
+    example:
+      "CPT 99213: an established-patient office or other outpatient visit. Time is one permitted selection method in applicable circumstances; medical decision-making can also determine the level.",
     lookup: {
       label: "AMA CPT overview",
       href: "https://www.ama-assn.org/practice-management/cpt",
     },
     watchFor:
-      "Upcoding (a more complex code than the visit warranted), unbundling (billing component services separately when they should be combined), and codes that do not match the documented diagnosis.",
+      "Ask what documentation and payer rule support an unfamiliar code or combination. A bill alone cannot establish upcoding, unbundling, or whether the code was supported.",
   },
   {
     slug: "hcpcs",
@@ -72,7 +73,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.cms.gov/medicare/coding-billing/healthcare-common-procedure-system",
     },
     watchFor:
-      "Equipment billed at a purchase price when it should have been a rental, and unspecified-drug codes (J3490, J3590) that obscure what was actually administered.",
+      "If equipment is unfamiliar, ask whether it was rented or purchased and which benefit rule applied. For an unclassified drug code, ask for the drug name, quantity, and supporting detail.",
   },
   {
     slug: "icd-10-cm",
@@ -81,7 +82,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
     oneLine:
       "Diagnosis codes that describe the patient's condition or the reason for the visit.",
     usedFor:
-      "ICD-10-CM is the diagnosis side of the bill. It tells the insurer why a service was needed. CPT says what was done; ICD-10-CM says why. Insurers cross-check the two to decide whether a service was medically necessary under your plan.",
+      "ICD-10-CM describes diagnoses, symptoms, and reasons for encounters. Payers may use diagnosis information with procedure codes, documentation, coverage rules, and plan terms when processing a claim.",
     example:
       "ICD-10-CM E11.9: type 2 diabetes mellitus without complications.",
     lookup: {
@@ -89,7 +90,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.cms.gov/medicare/coding-billing/icd-10-codes",
     },
     watchFor:
-      "Diagnosis codes that do not match the procedures billed, which can lead to denied claims or accusations of upcoded diagnoses to justify higher-paying procedures.",
+      "If a diagnosis label is unfamiliar or appears inconsistent with your records, ask the provider to explain it. The code and bill alone do not prove the diagnosis or coding was wrong.",
   },
   {
     slug: "icd-10-pcs",
@@ -106,24 +107,24 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.cms.gov/medicare/coding-billing/icd-10-codes",
     },
     watchFor:
-      "These codes drive DRG assignment for inpatient billing, so a single different character can change the dollar amount substantially. Request your itemized inpatient bill if anything looks off.",
+      "A character can change the procedure represented and may affect claim classification. Ask the hospital or payer to explain any unfamiliar code; do not infer an error from the code alone.",
   },
   {
     slug: "ndc",
     name: "NDC (National Drug Code)",
     shortName: "NDC",
     oneLine:
-      "A unique 10 or 11-digit identifier for a specific drug, including manufacturer, product, and package size.",
+      "The current FDA-assigned NDC is a unique 10-digit, three-segment number identifying the labeler, product, and trade package size.",
     usedFor:
-      "Pharmacies and clinics use NDC codes to bill medications. The code identifies the exact product, not just the active ingredient, so two NDCs can refer to the same drug from different manufacturers.",
+      "Current FDA formats are 4-4-2, 5-3-2, or 5-4-1. Some reimbursement transactions display a HIPAA-standard 11-digit form created by padding a segment with a leading zero. FDA's uniform 12-digit format takes effect March 7, 2033.",
     example:
-      "NDC 0002-7510: a specific manufacturer-and-package code for a particular medication.",
+      "Neutral 4-4-2 format example: 0000-0000-00 (labeler-product-package). This illustrates the 10-digit, three-segment format and is not a drug lookup.",
     lookup: {
-      label: "FDA National Drug Code Directory",
-      href: "https://www.fda.gov/drugs/drug-approvals-and-databases/national-drug-code-directory",
+      label: "FDA National Drug Code format",
+      href: "https://www.fda.gov/drugs/electronic-drug-registration-and-listing-system-edrls/national-drug-code-format",
     },
     watchFor:
-      "Brand-name NDCs billed when a generic equivalent was approved and dispensed, and quantity errors that multiply the per-unit price.",
+      "Confirm which NDC format the document uses, then compare the labeler, product, package, and quantity with the source record. Ask the provider, pharmacy, or payer to explain a mismatch rather than treating it as proof of an incorrect charge.",
   },
   {
     slug: "drg",
@@ -132,7 +133,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
     oneLine:
       "A classification used to set a fixed payment amount for an inpatient hospital stay, based on diagnoses and procedures.",
     usedFor:
-      "Medicare and many private insurers pay hospitals a single DRG-based amount per admission rather than itemizing every charge. The DRG is determined by the principal diagnosis, secondary diagnoses, procedures, age, sex, and discharge status.",
+      "Medicare uses MS-DRGs for many inpatient prospective payments, and some other payers use DRG-based methods. The assigned group can depend on diagnoses, procedures, patient characteristics, discharge status, and payer-specific rules.",
     example:
       "MS-DRG 470: major hip and knee joint replacement without major complications.",
     lookup: {
@@ -140,7 +141,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.cms.gov/medicare/payment/prospective-payment-systems/acute-inpatient-pps/ms-drg-classifications-and-software",
     },
     watchFor:
-      "Hospital itemized bills can show charges that look enormous individually because the insurer pays a flat DRG amount regardless of the line-item totals. Compare the EOB to the itemized bill to see what the plan actually paid.",
+      "Itemized charges and the plan's calculated payment can differ substantially. Compare the EOB with the itemized bill and ask the hospital or payer which payment method applied.",
   },
   {
     slug: "modifiers",
@@ -157,7 +158,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-faq-library",
     },
     watchFor:
-      "Inappropriate use of modifier 25 to bill an evaluation and management visit on top of a procedure when the visit was not separately identifiable. This is a frequent source of overbilling.",
+      "A modifier can materially affect processing. Ask which circumstance and documentation supported an unfamiliar modifier; the bill alone cannot show whether its use was appropriate.",
   },
   {
     slug: "place-of-service",
@@ -166,15 +167,15 @@ const CODE_SYSTEMS: CodeSystem[] = [
     oneLine:
       "Two-digit codes that indicate where the service was delivered.",
     usedFor:
-      "Insurers reimburse the same procedure differently depending on the setting. Place of Service 11 is an office; 22 is on-campus outpatient hospital; 21 is inpatient hospital. Hospital-based clinics often bill at facility rates even when the visit looks like an office visit.",
+      "Payers can process the same procedure differently by setting. Under the CMS code set, Place of Service 11 is office, 22 is on-campus outpatient hospital, and 21 is inpatient hospital. Other payment and facility-charge rules vary.",
     example:
-      "POS 22: a clinic visit at an outpatient department of a hospital, billed at facility rates rather than office rates.",
+      "POS 22: on-campus outpatient hospital under the CMS place-of-service code set.",
     lookup: {
       label: "CMS Place of Service code set",
       href: "https://www.cms.gov/medicare/coding-billing/place-of-service-codes/code-sets",
     },
     watchFor:
-      "Facility-rate billing for a visit at a hospital-owned clinic that you assumed was a regular office visit. The same CPT code paid at POS 22 can cost substantially more than at POS 11.",
+      "If the setting differs from what you expected, ask whether a facility charge or different payment rule applied and compare the EOB with advance notices and the provider bill.",
   },
   {
     slug: "revenue-codes",
@@ -191,7 +192,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
       href: "https://www.nubc.org/",
     },
     watchFor:
-      "Charges grouped under revenue codes that do not match the visit you actually had, and pharmacy revenue codes with no NDC detail to verify what was administered.",
+      "Ask about a department category that does not match your records or a pharmacy category that lacks enough detail to identify what was administered.",
   },
 ];
 
@@ -201,23 +202,23 @@ const ABBREVIATIONS: { term: string; meaning: string }[] = [
   { term: "AOB", meaning: "Assignment of Benefits, an authorization that lets the provider receive payment directly from the insurer." },
   { term: "DOS", meaning: "Date of Service, the date the care was actually delivered." },
   { term: "POS", meaning: "Place of Service code, indicating where care was delivered (office, outpatient hospital, inpatient hospital, etc.)." },
-  { term: "PCP", meaning: "Primary Care Provider, your designated lead doctor. Some plans require referrals through the PCP." },
-  { term: "PPO", meaning: "Preferred Provider Organization, a plan that pays out-of-network providers at a reduced rate without requiring referrals." },
-  { term: "HMO", meaning: "Health Maintenance Organization, a plan that requires care from in-network providers and usually a referral from a PCP." },
-  { term: "EPO", meaning: "Exclusive Provider Organization, similar to an HMO but typically no PCP referral required." },
-  { term: "POS plan", meaning: "Point of Service plan, a hybrid that lets you go out of network at a higher cost." },
-  { term: "Deductible", meaning: "What you pay out of pocket before the insurer starts paying covered expenses." },
-  { term: "Copay", meaning: "A fixed dollar amount you pay per visit or service." },
-  { term: "Coinsurance", meaning: "A percentage of the allowed amount you owe after the deductible is met." },
-  { term: "OOP max", meaning: "Out-of-pocket maximum, the cap on what you can be required to pay in covered costs in a plan year." },
-  { term: "Allowable / Allowed Amount", meaning: "The maximum the insurer treats as eligible for payment for a given service. Charges above the allowable are typically the provider's write-off (in network) or your responsibility (out of network)." },
-  { term: "Adjustment / Write-off", meaning: "A reduction the provider agreed to under the network contract. You do not owe this amount." },
-  { term: "N/C (Non-covered)", meaning: "The service is not covered under your plan, in part or in full." },
+  { term: "PCP", meaning: "Primary Care Provider. A plan may designate a PCP and may require referrals for some services; check the plan." },
+  { term: "PPO", meaning: "Preferred Provider Organization. Network, referral, and out-of-network benefits depend on the specific plan." },
+  { term: "HMO", meaning: "Health Maintenance Organization. Network and referral rules depend on the plan and exceptions." },
+  { term: "EPO", meaning: "Exclusive Provider Organization. Network and referral rules depend on the plan." },
+  { term: "POS plan", meaning: "Point of Service plan. In-network, referral, and out-of-network terms depend on the plan." },
+  { term: "Deductible", meaning: "The amount a member pays for covered services before the plan pays for services subject to the deductible; some benefits may apply before it is met." },
+  { term: "Copay", meaning: "A fixed amount a plan may apply as cost sharing for a covered visit, service, or item; the amount and conditions depend on the plan." },
+  { term: "Coinsurance", meaning: "Plan-calculated percentage cost sharing for a covered service under the plan's terms, often applied to the allowed amount after an applicable deductible." },
+  { term: "OOP max", meaning: "Out-of-pocket maximum, a plan-year limit on eligible cost sharing for covered services. Check what the plan excludes." },
+  { term: "Allowable / Allowed Amount", meaning: "The amount the plan treats as eligible when calculating benefits. It is not always the amount the plan pays or the amount the patient legally owes." },
+  { term: "Adjustment / Write-off", meaning: "A reduction or adjustment shown during claim processing. Ask the provider and plan whether the patient owes any part of it." },
+  { term: "N/C (Non-covered)", meaning: "A label that may indicate the plan treated all or part of an item as non-covered. Check the reason code, plan terms, and appeal notice." },
   { term: "N/A", meaning: "Not applicable, often used in EOB columns where a value would not make sense for that line." },
   { term: "Pending", meaning: "The claim has not finished processing yet." },
   { term: "Paid", meaning: "The insurer has paid its portion of the claim." },
-  { term: "Denied", meaning: "The insurer has refused to pay, with a reason code that should appear on the EOB." },
-  { term: "Appealed", meaning: "A formal request to the insurer to reconsider a denial. Most plans give you 180 days from the EOB date." },
+  { term: "Denied", meaning: "The plan did not pay all or part of a claim. The notice should identify the reason and applicable review or appeal instructions." },
+  { term: "Appealed", meaning: "A formal request to reconsider an adverse benefit decision. Follow the deadline and method in the plan's notice." },
 ];
 
 export default function CodesExplainedPage() {
@@ -237,11 +238,12 @@ export default function CodesExplainedPage() {
     description:
       "Plain-English glossary of medical billing code systems and abbreviations.",
     datePublished: "2026-04-26",
-    dateModified: TODAY,
+    dateModified: LAST_REVIEWED,
     author: {
-      "@type": "Organization",
-      name: "Medical Bill Reader",
-      url: "https://medicalbillreader.com",
+      "@type": "Person",
+      name: "Jason Ramirez",
+      jobTitle: "Founder of Your Friendly Developer",
+      url: "https://medicalbillreader.com/about",
     },
     publisher: {
       "@type": "Organization",
@@ -276,7 +278,7 @@ export default function CodesExplainedPage() {
   };
 
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+    <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -304,7 +306,16 @@ export default function CodesExplainedPage() {
       </h1>
 
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-        Last updated: {TODAY}. Built by an experienced web professional.
+        Last reviewed: August 2, 2026. Written by{" "}
+        <Link href="/about" className="underline underline-offset-2">
+          Jason Ramirez
+        </Link>
+        , a web professional and product founder, not a certified coder or
+        billing specialist. See the{" "}
+        <Link href="/editorial-policy" className="underline underline-offset-2">
+          editorial policy
+        </Link>
+        .
       </p>
 
       <div
@@ -320,11 +331,12 @@ export default function CodesExplainedPage() {
 
       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-10">
         Many lines on a medical bill are paired with one or more codes. The
-        codes tell the insurer what was done, why it was done, where it
-        happened, and which item or drug was involved. The sections below
-        define each code system in plain English, give an example, point to
-        an authoritative lookup, and call out the most common mistakes to
-        watch for.
+        submitted codes may represent a reported service, diagnosis or reason
+        for an encounter, setting, item, or drug. A code on a bill does not by
+        itself prove what occurred, whether documentation supports it, or what
+        the plan should cover. The sections below define each code system in
+        plain English, give an example, point to an authoritative lookup, and
+        suggest questions to verify.
       </p>
 
       <div className="grid lg:grid-cols-[220px_1fr] gap-8">
@@ -367,7 +379,7 @@ export default function CodesExplainedPage() {
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                 <strong>{c.oneLine}</strong>
               </p>
-              <p className="text-gray-600 dark:text-gray-600 text-sm leading-relaxed mb-3">
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 {c.usedFor}
               </p>
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
@@ -405,7 +417,7 @@ export default function CodesExplainedPage() {
                   <dt className="font-semibold text-gray-900 dark:text-gray-100">
                     {a.term}
                   </dt>
-                  <dd className="text-sm text-gray-600 dark:text-gray-600 leading-relaxed mt-1">
+                  <dd className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-1">
                     {a.meaning}
                   </dd>
                 </div>
@@ -414,7 +426,7 @@ export default function CodesExplainedPage() {
           </section>
 
           <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-600 dark:text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Related:{" "}
               <Link href="/methodology" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
                 Methodology

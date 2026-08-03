@@ -28,19 +28,19 @@ jobs:
           # Files may live in public/ (Next.js layout) OR at repo root (flat static sites).
           # We accept either location.
           FAILED=0
-          for STEM in ads robots llms; do
+          for STEM in robots llms; do
             if [ -f "public/${STEM}.txt" ]; then
               echo "✓ public/${STEM}.txt"
             elif [ -f "${STEM}.txt" ]; then
               echo "✓ ${STEM}.txt (root)"
             else
-              echo "::error::MISSING — ${STEM}.txt required at public/${STEM}.txt or ./${STEM}.txt. Empire Standard requires this on every site."
+              echo "::error::MISSING — ${STEM}.txt required at public/${STEM}.txt or ./${STEM}.txt."
               FAILED=1
             fi
           done
           [ "$FAILED" -eq 0 ] || exit 1
 
-      # ── Check 3: AdSense publisher ID ───────────────────────────
+      # ── Check 3: Validate ads.txt only when one is published ───
       - name: AdSense publisher ID in ads.txt
         run: |
           ADS_FILE=""
@@ -48,7 +48,7 @@ jobs:
           elif [ -f ads.txt ]; then ADS_FILE="ads.txt"
           fi
           if [ -z "$ADS_FILE" ]; then
-            echo "::warning::Skipping AdSense check — ads.txt missing (caught above)"
+            echo "ℹ No ads.txt published; advertising must remain disabled."
             exit 0
           fi
           if ! grep -qF "pub-7171402107622932" "$ADS_FILE"; then
@@ -100,11 +100,8 @@ jobs:
           fi
           echo "✓ IndexNow key file: $KEY_FILE"
 
-      # ── Check 6: Author byline policy (updated 2026-05-11) ─────
-      # Policy: "Jason Ramirez" + CADC-II credential is the canonical author
-      # entity across the entire Empire portfolio. One author = stronger EEAT
-      # and AI-citation signal than 11 anonymous publishers. This check now
-      # WARNS if the name is missing rather than failing if present.
+      # ── Check 6: Medical Bill Reader author policy ──────────────
+      # A truthful named author is useful; unrelated credentials are not.
       - name: Author byline present (informational)
         env:
           REPO: ${{ github.repository }}
@@ -121,7 +118,12 @@ jobs:
 
           MATCHES=$(grep -rl "Jason Ramirez" "${SEARCH_DIRS[@]}" 2>/dev/null | wc -l || echo 0)
           if [ "$MATCHES" -eq 0 ]; then
-            echo "::warning::No 'Jason Ramirez' byline found. Per portfolio policy, author byline + CADC-II credential should appear on author pages and in post frontmatter for EEAT."
+            echo "::warning::No 'Jason Ramirez' byline found on this named-author YMYL site."
           else
-            echo "✓ Author byline present in $MATCHES file(s) (portfolio policy: name + credential everywhere)"
+            echo "✓ Author byline present in $MATCHES file(s)."
+          fi
+
+          if grep -rEi "CADC-?II|certified alcohol.*drug counselor" "${SEARCH_DIRS[@]}" >/dev/null 2>&1; then
+            echo "::error::Unrelated behavioral-health credential found in Medical Bill Reader public content."
+            exit 1
           fi

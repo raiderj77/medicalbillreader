@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medical Bill Reader
 
-## Getting Started
+Medical Bill Reader is a privacy-conscious, U.S.-focused web application that turns a supported medical-bill or EOB image/PDF into a plain-language, AI-generated summary of visible fields, charges, codes, and items to verify.
 
-First, run the development server:
+It is informational only. It does not determine what someone owes, prove a billing error, or provide medical, financial, insurance, coding, or legal advice. Use synthetic, non-health files for development and testing.
+
+## Local development
+
+Requirements: Node.js 20.9 or newer.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Do not copy example secrets into a deployed environment. Configure required values through the hosting provider and never print secret values during validation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Release checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test
+npm run lint
+npx tsc --noEmit --incremental false
+npm run test:indexnow
+npm run build
+npm audit --omit=dev
+git diff --check
+```
 
-## Learn More
+Before release, read `CLAUDE.md`, `EMPIRE_BUILD_STANDARDS.md`, the public privacy and consumer-health-data notices, and `docs/revenue-verification.md`. Do not enable advertising or third-party analytics without a separate privacy, policy, and account-readiness review.
 
-To learn more about Next.js, take a look at the following resources:
+## Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The production site is hosted on Vercel at `https://medicalbillreader.com`. Stripe handles payment data, Anthropic processes uploaded documents for the requested report, and Upstash supports privacy-minimized security and entitlement state. See the public policy pages for current disclosures and retention limits.

@@ -47,7 +47,8 @@ export async function verifiedStripePriceId(
   const recurringIsValid =
     type === "per-use"
       ? price.recurring === null
-      : price.recurring?.interval === "month";
+      : price.recurring?.interval === "month" &&
+        price.recurring.interval_count === 1;
   if (
     !price.active ||
     price.unit_amount !== expected.amount ||
@@ -59,10 +60,7 @@ export async function verifiedStripePriceId(
   return id;
 }
 
-// Realistic worst-case per-analysis cost (Opus 4, a 30-page hospitalization
-// itemized bill plus the cached instructions block at full price, max
-// output) is about $0.11. 44/month keeps a genuine ~90% margin on the $49
-// subscription even if every analysis that month hit that worst case,
-// comfortably inside the 85-95% target instead of sitting right at the 85%
-// floor.
+// This is the published product limit and is enforced server-side. Revisit it
+// whenever the model, token limit, Stripe price, or observed unit cost changes;
+// do not rely on a hard-coded margin estimate in source comments.
 export const SUBSCRIPTION_MONTHLY_CAP = 44;

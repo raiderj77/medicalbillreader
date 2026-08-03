@@ -2,7 +2,7 @@
 
 > **Read this file before making ANY changes to ANY Empire site.**
 > This is the single source of truth for all development, compliance, and deployment decisions across the Empire portfolio.
-> Last updated: March 13, 2026
+> Last updated: August 2, 2026
 
 ---
 
@@ -30,7 +30,7 @@
 
 ## 1. Empire Overview
 
-The Empire is a portfolio of 7 websites: 5 utility tools (ad-supported via Google AdSense) and 2 micro-SaaS properties. All run Next.js on Vercel.
+The Empire is a portfolio of independently evaluated utility and micro-SaaS websites. Monetization is chosen per property; an AdSense account does not make every site or every page suitable for ads. Most current properties run Next.js on Vercel.
 
 ### Shared Configuration
 
@@ -54,7 +54,7 @@ Sites: flipmycase.com, creatorrevenuecalculator.com
 **Tier 2 ,  YMYL-Adjacent**: Tier 1 + legal disclaimers, document privacy, enhanced data handling disclosures.
 Sites: contractextract.com, 524tracker.com
 
-**Tier 3 ,  Full YMYL**: Tier 2 + health data privacy (GDPR Article 9, WA MHMDA, MD MODPA), crisis resources on every page, licensed professional review attribution, Cookiebot CMP, non-personalized ad consideration, AAA accessibility consideration for cognitive accessibility.
+**Tier 3 ,  Full YMYL**: Tier 2 + applicable consumer-health-data privacy, exact author/reviewer credentials and limitations, primary-source claim review, sensitive-event telemetry restrictions, accessible consent, and enhanced cognitive accessibility. Crisis resources are required where the content or instrument can surface self-harm or acute-risk needs, not on unrelated medical-billing pages. Claim professional review only when a real qualified reviewer completed and can stand behind it. A Google-certified CMP is an advertising gate where Google policy requires one; it is not a reason to load advertising or tracking on sensitive pages.
 Sites: mindchecktools.com, medicalbillreader.com
 
 **Tier 4 ,  Micro-SaaS**: Additional API security, document upload handling/deletion policies, freemium model compliance, upload privacy notices.
@@ -64,8 +64,8 @@ A site can be in multiple tiers (e.g., medicalbillreader.com is both Tier 3 and 
 
 ### Required Files (Every Site)
 
-Every Empire site must have these files in `public/`:
-- `ads.txt` ,  AdSense authorized sellers
+Every Empire site must have these discovery files where applicable:
+- `ads.txt` ,  required only for a property that is authorized or actively being prepared to sell programmatic ads; every seller and optional directive must match the actual account relationship
 - `robots.txt` ,  Crawler configuration including AI crawlers (template in Section 15)
 - `sitemap.xml` ,  Auto-generated, submitted to Google and Bing
 - `llms.txt` ,  LLM-friendly site summary in Markdown (format in Section 11)
@@ -148,12 +148,12 @@ Every Empire site must have these pages:
 ### medicalbillreader.com
 - **Type**: Micro-SaaS | **Tier**: Full YMYL + Micro-SaaS
 - **Purpose**: Medical bill analysis and explanation
-- **Monetization**: Freemium model + AdSense on marketing pages
+- **Monetization**: Freemium Stripe purchases. Programmatic ads are disabled until the site is account-approved, an appropriate consent platform is configured, and placement is restricted to nonsensitive editorial/marketing pages.
 - **Attribution**: "Built by an experienced web professional"
 - **Schema Types**: Organization, WebSite, SoftwareApplication, BreadcrumbList
 - **Required Disclaimer**: "This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice."
-- **Health Data Privacy**: Medical bills contain sensitive personal and health information. Delete immediately after analysis. No logging bill contents. Visible privacy notice during upload. HIPAA-adjacent sensitivity. See Section 12.
-- **Special Rules**: Identify CPT, ICD-10, HCPCS codes in plain language. Flag potential billing errors. Explain insurance columns (allowed amount, patient responsibility). Always caveat as informational only.
+- **Health Data Privacy**: Medical bills contain sensitive personal and health information. The application must not persist or log bill contents, but its processor retention must be disclosed precisely; do not claim immediate deletion when a processor applies a default retention window. Require a visible, affirmative processing notice before upload. See Section 12.
+- **Special Rules**: Attempt to explain legible CPT, ICD-10, and HCPCS codes and visible insurance columns in plain language. Surface ambiguous patterns only as questions to verify; never diagnose, determine coverage or medical necessity, accuse a party of fraud/coding misconduct, promise savings, or present the result as a certified audit or professional advice.
 - **Security**: Use `Referrer-Policy: no-referrer` on analysis pages.
 
 ### 524tracker.com
@@ -227,10 +227,10 @@ public/
 
 ## 4. AdSense & Monetization
 
-### ads.txt (CRITICAL ,  incorrect ads.txt breaks ALL revenue)
+### ads.txt (CRITICAL for sites that actually sell ads)
 - Serve at root: `https://domain.com/ads.txt`
 - Content: `google.com, pub-7171402107622932, DIRECT, f08c47fec0942fa0`
-- Include `OWNERDOMAIN` and `MANAGERDOMAIN` directives per IAB ads.txt v1.1 spec
+- Use `OWNERDOMAIN` only when it identifies the domain that owns the inventory. Use `MANAGERDOMAIN` only when a separate company is the primary or exclusive monetization manager; never point it back at the publisher merely to fill the field.
 - Must be accessible via HTTPS with 200 status code
 - Validate in AdSense dashboard ads.txt management tool after any changes
 
@@ -255,7 +255,7 @@ public/
 - **Google Consent Mode v2**: Mandatory for all sites. Configure all 6 parameters: `ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`, `functionality_storage`, `personalization_storage`.
 - **Google-certified CMP with IAB TCF v2.2**: Required for serving personalized ads to EEA/UK/Switzerland users. Without it, Google stops serving personalized ads entirely.
 - **GPP National v2**: Supported since September 2025 for US state privacy compliance across AdSense (covers CA, CO, CT, FL, VA).
-- **YMYL sites**: Consider implementing non-personalized ads on health screening and medical bill analysis pages to avoid privacy concerns with sensitive health data.
+- **YMYL sites**: Non-personalized ads can still use cookies or identifiers. Do not load ads or ad measurement on a medical-bill analyzer, results, upload, pricing, checkout, account, contact, privacy-request, or other sensitive/transactional page. Any future ads belong only on nonsensitive editorial/marketing pages after account approval, policy review, a suitable CMP, and a page-specific security-header review.
 
 ### Amazon Associates
 - Tag: `ytearnings-20`
@@ -329,10 +329,10 @@ E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness
 - Show demonstrated use of tools and products discussed
 
 ### Expertise
-- Display author credentials (degrees, certifications, licenses) on every content page
+- Display the author or reviewer and only the qualifications that are truthful and relevant to that page
 - Create dedicated author bio pages with professional background and links
 - Add Person schema on author pages (see Section 8)
-- **YMYL sites**: Content MUST be authored or reviewed by licensed professionals with credentials clearly displayed
+- **YMYL sites**: Use current primary sources, disclose the author/reviewer scope and limits, and claim professional review only when a real qualified professional completed and can stand behind it
 
 ### Authoritativeness
 - Build Organization structured data on homepage (see Section 8)
@@ -357,9 +357,9 @@ E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness
 - Anonymize any case studies
 
 ### YMYL Requirements for medicalbillreader.com
-- Results are estimates, not financial or medical advice
-- Explain calculation methodology transparently
-- Healthcare billing expertise with verifiable credentials
+- Results describe visible document content and questions to verify; they do not determine errors, coverage, legal obligations, or amounts owed and are not medical, financial, insurance, coding, or legal advice
+- Explain the document-processing method, source limits, uncertainty, retention, and verification steps transparently; do not imply that the tool calculates a fair or owed amount
+- Identify the real author/editor and their actual credentials and limits. Never invent healthcare billing, coding, legal, or clinical credentials; use primary sources and professional review where a claim requires that expertise.
 - Cite authoritative sources (CMS, insurance industry standards)
 - Clear privacy disclosures for medical billing data
 
@@ -372,7 +372,7 @@ E-E-A-T stands for Experience, Expertise, Authoritativeness, and Trustworthiness
 
 ## 8. Structured Data (JSON-LD)
 
-Google's preferred format is JSON-LD. It helps search engines understand page content for rich results AND helps AI systems extract information for answers. Even deprecated rich result types (FAQPage, HowTo) still help AI parsing.
+Use JSON-LD when it accurately describes visible content and a relevant consumer can use it. Structured data can help machines understand a page, but it does not create authority or justify deprecated or ineligible markup.
 
 ### Implementation Rules
 - Use **JSON-LD format exclusively** (Google-preferred, easiest to maintain)
@@ -594,7 +594,9 @@ Also create `/llms-full.txt` with full site documentation in Markdown ,  reduces
 
 ## 12. Privacy & Consent
 
-### GDPR (EU/EEA Users) ,  Privacy Policy Must Include
+### GDPR and UK GDPR (when the service offers to, targets, or monitors people there)
+
+Do not claim broad GDPR/UK compliance by default. Either define and enforce a narrower service territory or complete a counsel-reviewed data map, processor-contract review, and notice covering:
 - Identity and contact details of data controller (and DPO if applicable)
 - Lawful basis for each type of processing
 - Categories of personal data collected
@@ -702,19 +704,8 @@ Referrer-Policy: strict-origin-when-cross-origin
 
 For health content pages (mindchecktools.com, medicalbillreader.com), use `Referrer-Policy: no-referrer` to prevent health page URLs from leaking to third parties.
 
-### Content Security Policy (AdSense-Compatible)
-AdSense requires `unsafe-eval` ,  this is a known trade-off.
-```
-Content-Security-Policy:
-  object-src 'none';
-  script-src 'nonce-{random}' 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;
-  base-uri 'none';
-  report-uri https://your-report-collector/
-```
-
-- `strict-dynamic` allows nonce-trusted scripts to load their dependencies
-- Apply nonce to ALL `<script>` tags including AdSense code
-- Use `Content-Security-Policy-Report-Only` first to test before enforcing
+### Content Security Policy
+Start from a narrow, enforced policy: `default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, `form-action 'self'`, and explicit host allowlists for any approved third-party scripts or connections. Do not add blanket `https:`, `http:`, or `unsafe-eval` allowances as a generic AdSense prerequisite. If ads are later approved for an eligible page, test the smallest page-specific policy in report-only mode before enforcement and keep sensitive pages on the stricter policy.
 
 ### Permissions-Policy
 ```
@@ -723,9 +714,7 @@ Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 Disable all browser features not used by your tools. `interest-cohort=()` opts out of Google's Topics API.
 
 ### Cross-Origin Headers
-- Do NOT enable strict COEP/COOP on pages running AdSense ,  they break ad rendering
-- Use `Cross-Origin-Opener-Policy: unsafe-none` on pages with ads that open cross-origin popups
-- Safe to use `Cross-Origin-Resource-Policy: same-origin` on non-ad pages
+- Prefer `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Resource-Policy: same-origin` on pages without cross-origin embeds. Reassess only the eligible marketing pages if an approved ad integration demonstrates a documented compatibility need; do not weaken sensitive pages globally.
 
 ### TLS
 - TLS 1.2 minimum required by all modern browsers
@@ -851,15 +840,15 @@ Run through this EVERY time before deploying:
 
 1. `npm run build` completes without errors
 2. `npm run lint` passes (if configured)
-3. `ads.txt` present at `public/ads.txt` with correct publisher ID
+3. If the property is authorized to sell ads, `ads.txt` is reachable and every seller/directive matches the real account relationship; otherwise no ad code is present
 4. `robots.txt` present at `public/robots.txt` with AI crawler rules
 5. `llms.txt` present at `public/llms.txt` and current
 6. All legal pages render: `/privacy`, `/terms`, `/about`, `/contact`
-7. Cross-site links present in footer (5 sister sites)
+7. Footer links are useful and topically relevant; sensitive YMYL sites do not use sitewide portfolio cross-links merely for SEO
 8. Security headers configured in `vercel.json` or `next.config.js`
 9. Structured data validates (spot-check with Rich Results Test)
-10. No personal name exposed anywhere in public-facing content
-11. YMYL sites: Crisis resources visible, health disclaimers present
+10. Public names, roles, and credentials follow the site-specific attribution policy and do not reuse unrelated credentials
+11. YMYL sites: relevant disclaimers are visible; crisis resources appear where content or an instrument can surface self-harm or acute-risk needs
 12. Mobile responsive: test at 320px width
 
 ---
@@ -868,12 +857,12 @@ Run through this EVERY time before deploying:
 
 Things Claude Code must NEVER do on ANY Empire site:
 
-1. **Never expose the site owner's personal name** in any code, content, comments, metadata, or configuration ,  EXCEPT on the About page, blog post bylines, and Article/Person schema of YMYL sites where Google's E-E-A-T scrutiny requires a verifiable named author with credentials. YMYL sites and their attribution: [mindchecktools.com](http://mindchecktools.com) (Jason Ramirez, CADC-II), [524tracker.com](http://524tracker.com) (Jason Ramirez, Founder of Your Friendly Developer), [taxbreaktools.com](http://taxbreaktools.com) (Jason Ramirez, Founder of Your Friendly Developer), [contractextract.com](http://contractextract.com) (Jason Ramirez, Founder of Your Friendly Developer), [medicalbillreader.com](http://medicalbillreader.com) (Jason Ramirez, Founder of Your Friendly Developer). Tool pages, calculator pages, OG tags on non-author pages, and footers across all sites use generic credentials only ("Built by an experienced web professional with a focus on [domain]").
-2. **Never modify ads.txt** unless explicitly asked ,  incorrect ads.txt stops ALL ad revenue
+1. **Use personal names and credentials only under the site-specific attribution policy.** Named authorship may appear on relevant About, byline, editorial, schema, and footer surfaces when it is truthful and useful. Never reuse a credential from an unrelated domain. Medical Bill Reader identifies Jason Ramirez as a web professional and product founder, not as a clinician, attorney, insurer, certified medical coder, or billing specialist. MindCheckTools may use CADC-II only within its verified behavioral-health scope.
+2. **Never modify ads.txt casually.** When monetization readiness is in scope, verify the account relationship, change only the necessary seller/directive, and validate the served file before enabling ad code.
 3. **Never remove legal pages** (privacy policy, terms of service) ,  creates legal exposure
 4. **Never hardcode API keys** in any file ,  use environment variables exclusively
 5. **Never push directly to main** without testing that `npm run build` succeeds
-6. **Never remove sister site cross-links** from the footer
+6. **Never require sister-site cross-links.** Keep them only when they are genuinely useful to that audience and do not weaken YMYL trust, topical focus, or user privacy.
 7. **Never remove or weaken security headers** (HSTS, CSP, X-Frame-Options, etc.)
 8. **Never remove accessibility features** (alt text, ARIA attributes, focus indicators, skip nav links, lang attribute)
 9. **Never remove llms.txt** or AI crawler rules from robots.txt

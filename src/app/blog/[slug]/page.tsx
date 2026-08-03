@@ -99,7 +99,7 @@ export default async function BlogPostPage({
   };
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <main id="main-content" className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
@@ -150,6 +150,17 @@ export default async function BlogPostPage({
             })}
           </time>
         )}
+        {post.modified && post.modified !== post.date && (
+          <time dateTime={post.modified}>
+            Last reviewed{" "}
+            {new Date(post.modified).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              timeZone: "UTC",
+            })}
+          </time>
+        )}
         <span aria-hidden="true">&middot;</span>
         <Link href="/about" className="hover:text-teal-800 dark:hover:text-teal-400 transition-colors">
           Jason Ramirez
@@ -157,14 +168,24 @@ export default async function BlogPostPage({
         <span>, Founder of Your Friendly Developer</span>
       </div>
 
+      <p className="-mt-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
+        Jason is a web professional and product founder, not a medical, legal,
+        insurance, coding, or billing professional. See the{" "}
+        <Link href="/editorial-policy" className="underline underline-offset-2">
+          editorial policy
+        </Link>
+        .
+      </p>
+
       {/* Medical disclaimer */}
       <div
         role="note"
         className="mb-8 px-4 py-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 text-sm text-amber-800 dark:text-amber-300"
       >
         <strong>Disclaimer:</strong> This content is for informational purposes
-        only and does not constitute medical or financial advice. Always consult
-        a qualified professional for advice specific to your situation.
+        only and does not constitute medical, legal, insurance, or financial
+        advice. Verify current rules with the official source and a qualified
+        professional for your situation.
       </div>
 
       {/* Rendered markdown content */}

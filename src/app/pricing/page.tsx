@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { trackConversion } from "@/lib/analytics";
+import { readJsonResponse } from "@/lib/read-json-response";
 
 const tiers = [
   {
     name: "Free",
     price: "$0",
     period: "",
-    description: "Try it out with one free bill analysis per month.",
+    description:
+      "Try one free bill analysis per browser per UTC calendar month.",
     features: [
-      "1 bill or EOB per month",
+      "1 bill or EOB per browser per UTC calendar month",
       "AI-generated report",
       "Patterns flagged for verification",
       "No credit card required",
@@ -39,7 +40,7 @@ const tiers = [
     href: null,
     highlighted: true,
     checkoutNote:
-      "Secure checkout on Stripe. After payment, you return to the bill analyzer to upload one bill or EOB.",
+      "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start the one analysis.",
     priceType: "per-use",
   },
   {
@@ -49,7 +50,7 @@ const tiers = [
     description:
       "Best value if you or your family deal with medical bills regularly.",
     features: [
-      "Up to 44 bills and EOBs per month",
+      "Up to 44 bills and EOBs per UTC calendar month",
       "AI-generated report",
       "Patterns flagged for verification",
       "Cancel anytime",
@@ -59,27 +60,33 @@ const tiers = [
     href: null,
     highlighted: false,
     checkoutNote:
-      "Secure checkout on Stripe. After payment, you return to the bill analyzer with monthly access enabled.",
+      "Secure checkout on Stripe. Access is enabled in this browser and renewed after each verified successful use. Keep the Stripe receipt and contact support if you clear site data or change devices.",
     priceType: "subscription",
   },
 ];
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const paymentState = new URLSearchParams(window.location.search).get("payment");
-    if (paymentState === "error") {
-      trackConversion("payment_failed");
-    } else if (paymentState === "cancelled") {
-      trackConversion("checkout_cancelled");
-    }
+    queueMicrotask(() => {
+      if (paymentState === "error") {
+        setStatusMessage(
+          "We could not verify that checkout completed, so no analysis access was enabled. If you see a charge, contact support.",
+        );
+      } else if (paymentState === "cancelled") {
+        setStatusMessage("Checkout was canceled. No new access was enabled.");
+      }
+    });
   }, []);
 
   const handleCheckout = async (priceType: string) => {
-    const plan = priceType === "subscription" ? "subscription" : "per-use";
-    trackConversion("checkout_started", { plan });
+    if (loading) return;
     setLoading(priceType);
+    setStatusMessage(null);
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
@@ -87,26 +94,40 @@ export default function PricingPage() {
         body: JSON.stringify({ priceType }),
       });
 
-      const data = await response.json();
-      if (data.url) {
+      const data = await readJsonResponse<{ url?: string; error?: string }>(
+        response,
+      );
+      if (response.ok && data.url) {
         window.location.assign(data.url);
       } else {
-        trackConversion("payment_failed", { plan });
-        alert(data.error || "Failed to start checkout.");
+        setStatusMessage(data.error || "Checkout could not be started.");
       }
     } catch {
-      trackConversion("payment_failed", { plan });
-      alert("Something went wrong. Please try again.");
+      setStatusMessage("Checkout could not be started. Please try again.");
     } finally {
       setLoading(null);
     }
   };
 
   const handleBillingPortal = async () => {
-    const response = await fetch("/api/billing-portal", { method: "POST" });
-    const data = (await response.json()) as { url?: string; error?: string };
-    if (data.url) window.location.assign(data.url);
-    else alert(data.error || "Subscription management is unavailable.");
+    if (portalLoading) return;
+    setPortalLoading(true);
+    setStatusMessage(null);
+    try {
+      const response = await fetch("/api/billing-portal", { method: "POST" });
+      const data = await readJsonResponse<{ url?: string; error?: string }>(
+        response,
+      );
+      if (response.ok && data.url) window.location.assign(data.url);
+      else
+        setStatusMessage(
+          data.error || "Subscription management is unavailable.",
+        );
+    } catch {
+      setStatusMessage("Subscription management is unavailable.");
+    } finally {
+      setPortalLoading(false);
+    }
   };
 
   return (
@@ -140,6 +161,15 @@ export default function PricingPage() {
             fees.
           </p>
         </div>
+
+        {statusMessage && (
+          <div
+            className="mx-auto mb-8 max-w-3xl rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+            role="status"
+          >
+            {statusMessage}
+          </div>
+        )}
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {tiers.map((tier) => (
@@ -226,7 +256,8 @@ export default function PricingPage() {
                   onClick={() =>
                     tier.priceType && handleCheckout(tier.priceType)
                   }
-                  disabled={loading === tier.priceType}
+                  disabled={loading !== null}
+                  aria-busy={loading === tier.priceType}
                   className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 ${
                     tier.highlighted
                       ? "bg-teal-700 text-white hover:bg-teal-800"
@@ -250,9 +281,13 @@ export default function PricingPage() {
         <div className="mt-8 text-center">
           <button
             onClick={handleBillingPortal}
-            className="text-sm font-semibold text-teal-800 dark:text-teal-300 underline underline-offset-4"
+            disabled={portalLoading}
+            aria-busy={portalLoading}
+            className="min-h-11 px-3 text-sm font-semibold text-teal-800 underline underline-offset-4 disabled:cursor-not-allowed disabled:opacity-60 dark:text-teal-300"
           >
-            Manage or cancel an existing subscription
+            {portalLoading
+              ? "Opening subscription management..."
+              : "Manage or cancel an existing subscription"}
           </button>
         </div>
 
@@ -268,8 +303,9 @@ export default function PricingPage() {
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
                 Start with the <strong>Free</strong> plan. You get one full
-                analysis per month at no cost , no credit card required. If you
-                have already used your free analysis this month, the{" "}
+                analysis per browser per UTC calendar month at no cost, subject
+                to network abuse controls. No credit card is required. If you
+                have already used this browser&apos;s free analysis this month, the{" "}
                 <strong>Pay Per Bill</strong> option at $4.99 is the most
                 economical choice for a single bill.
               </p>
@@ -292,8 +328,8 @@ export default function PricingPage() {
                 The <strong>Monthly Plan</strong> at $49 per month is the best
                 value if you review more than 10 bills a month, for example if
                 you are managing ongoing treatment or caring for family members.
-                It includes up to 44 analyses per month (more than one a day).
-                Cancel anytime with no penalty.
+                It includes up to 44 analyses per UTC calendar month. Cancel
+                anytime with no penalty.
               </p>
             </div>
           </div>
@@ -425,7 +461,7 @@ export default function PricingPage() {
             {[
               {
                 q: "Can I try before I buy?",
-                a: "Yes. The free tier provides one analysis per month without a credit card. It uses the same report fields and supported file types as paid access.",
+                a: "Yes. The free tier provides one analysis per browser per UTC calendar month without a credit card, subject to network abuse controls. It uses the same report fields and supported file types as paid access.",
               },
               {
                 q: "How does pay-per-bill work?",
@@ -437,11 +473,11 @@ export default function PricingPage() {
               },
               {
                 q: "How many bills can I analyze on the Monthly Plan?",
-                a: "The monthly entitlement is capped at 44 analyses per billing month. No higher-volume plan is currently published.",
+                a: "The monthly entitlement is capped at 44 analyses per UTC calendar month and resets when the UTC month changes. No higher-volume plan is currently published.",
               },
               {
                 q: "Is there a refund policy?",
-                a: "Yes. If you are unsatisfied with a pay-per-bill analysis, contact us within 24 hours for a full refund. Monthly subscriptions can be cancelled at any time but are not refunded for partial months.",
+                a: "Yes. If you are unsatisfied with a pay-per-bill analysis, contact us within 24 hours of delivery for a full refund. Monthly subscriptions can be cancelled at any time but are not refunded for partial months.",
               },
               {
                 q: "Do you store my bill or EOB after analyzing it?",
@@ -483,12 +519,13 @@ export default function PricingPage() {
             <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
               Money-Back Guarantee
             </h2>
-            <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-              We stand behind the quality of every analysis. If you are not
-              satisfied with a pay-per-bill result, contact us within 24 hours
-              for a full refund , no questions asked. For monthly subscribers,
-              you can cancel anytime and your access continues through the end
-              of your billing period.
+             <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
+               We stand behind the quality of every analysis. If you are not
+               satisfied with a pay-per-bill result, contact us within 24 hours
+               of delivery for a full refund. We may request the minimum Stripe
+               transaction detail needed to locate the payment. For monthly
+               subscribers, you can cancel anytime and your access continues
+               through the end of your billing period.
             </p>
           </div>
         </section>

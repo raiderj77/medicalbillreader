@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service ,  Medical Bill Reader",
+  title: "Terms of Service | Medical Bill Reader",
   description:
     "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
   keywords: "terms of service, medical bill reader, terms and conditions, user agreement",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Terms of Service ,  Medical Bill Reader",
+    title: "Terms of Service | Medical Bill Reader",
     description: "Terms of Service for MedicalBillReader.com. Understand the terms and conditions governing your use of our medical bill analysis tool.",
     url: "https://medicalbillreader.com/terms",
     siteName: "Medical Bill Reader",
@@ -54,7 +54,7 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Effective Date: January 1, 2026 | Last Reviewed: March 2026
+          Effective Date: August 2, 2026 | Last Reviewed: August 2, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -67,6 +67,15 @@ export default function TermsPage() {
               Service&quot;), you agree to be bound by these Terms of Service.
               If you do not agree to these terms, do not use the Service.
             </p>
+            <p>
+              The Service is intended and offered only to people located in the
+              United States and U.S. territories. It is not offered or marketed
+              to people in the European Economic Area, United Kingdom, or
+              Switzerland. Do not use the analyzer or submit personal data if you
+              are outside the United States or its territories. Nothing in this
+              geographic limitation waives a consumer protection that cannot
+              lawfully be waived.
+            </p>
           </section>
 
           <section>
@@ -77,8 +86,10 @@ export default function TermsPage() {
               Medical Bill Reader is an AI-powered tool that helps consumers
               understand their medical bills, insurance Explanations of Benefits
               (EOBs), and healthcare charges. The Service analyzes uploaded
-              medical bill images or PDFs and provides plain-English explanations
-              of charges, billing codes, and potential errors.
+               medical bill images or PDFs and provides a plain-English,
+               AI-generated report of visible charges, billing fields, and items
+               to verify. It cannot determine from the document alone that a
+               charge, code, coverage decision, or amount is correct or incorrect.
             </p>
           </section>
 
@@ -108,11 +119,15 @@ export default function TermsPage() {
               4. Pricing and Billing
             </h2>
             <ul className="list-disc ml-6 space-y-1">
-              <li>Free tier users may analyze up to 1 medical bill or EOB per month.</li>
+              <li>The free tier provides up to 1 medical bill or EOB analysis per browser per UTC calendar month, subject to network abuse controls. Clearing browser data does not authorize abuse or automated use.</li>
               <li>Pay-per-bill customers receive one analysis per purchase ($4.99).</li>
-              <li>Monthly subscribers ($49/month) may analyze up to 44 bills or EOBs per calendar month, which resets on the first of each month regardless of billing date.</li>
+              <li>Monthly subscribers ($49/month) may analyze up to 44 bills or EOBs per UTC calendar month, which resets when the UTC month changes regardless of billing date.</li>
               <li>Payments are processed securely through Stripe. We do not store your payment card details.</li>
               <li>Monthly subscriptions can be cancelled at any time and remain active through the end of the current billing period.</li>
+              <li>If a pay-per-bill result is unsatisfactory, contact support within 24 hours of delivery for the published full-refund guarantee. We may request the minimum transaction detail needed to locate the payment.</li>
+              <li>Single-analysis and subscription access is browser-bound through essential cookies containing authenticated, encrypted entitlement tokens. The tokens do not expose raw Stripe identifiers. The single-analysis token lasts up to 24 hours; subscription access may last up to 400 days and is reverified before use. Clearing site data or changing devices can require support-assisted recovery. Keep the Stripe receipt and do not email a medical bill.</li>
+              <li>Monthly charges are not prorated or refunded for a partial month except where applicable law requires otherwise.</li>
+              <li>If the analysis service fails before delivering a report, the application is designed not to consume the paid credit.</li>
             </ul>
           </section>
 
@@ -126,6 +141,11 @@ export default function TermsPage() {
               <li>
                 Upload only medical bills and related documents that you are
                 authorized to access.
+              </li>
+              <li>
+                Remove identifiers that are not needed for the explanation. Do
+                not use the public service on behalf of a HIPAA covered entity or
+                where a business associate agreement is required.
               </li>
               <li>
                 Not attempt to reverse-engineer, disassemble, or disrupt the
@@ -161,15 +181,24 @@ export default function TermsPage() {
                 Medical Bill Reader does not intentionally store uploaded bill documents in its own database.
               </li>
               <li>
-                Documents are transmitted to Anthropic solely to generate an analysis; infrastructure providers may process request data under their own terms and retention practices.
+                 Documents are transmitted to Anthropic to generate an analysis;
+                 infrastructure providers process request data under their terms.
+                 Anthropic states that standard commercial API inputs and outputs
+                 are automatically deleted within 30 days, but policy-enforcement,
+                 legal, and other published exceptions can be longer. Anthropic
+                 says policy-flagged inputs and outputs may be retained for up to
+                 two years and associated classification scores for up to seven
+                 years.
               </li>
               <li>
                 Analysis results exist only in your browser session and are not
                 stored server-side.
               </li>
               <li>
-                Bill images are sent to Anthropic&apos;s Claude API for
-                processing. Anthropic does not use API inputs for model training.
+                 By default, Anthropic says commercial API inputs and outputs are
+                 not used for model training unless the customer opts in or
+                 submits feedback. We do not claim that this public service has a
+                 zero-data-retention agreement or Business Associate Agreement.
               </li>
             </ul>
           </section>
@@ -203,7 +232,7 @@ export default function TermsPage() {
               8. Limitation of Liability
             </h2>
             <p>
-              To the fullest extent permitted by law, MedicalBillReader.com and
+               To the fullest extent permitted by law, MedicalBillReader.com and
               its operators shall not be liable for any indirect, incidental,
               special, consequential, or punitive damages arising from your use
               of the Service, including but not limited to errors in analysis,
@@ -213,9 +242,10 @@ export default function TermsPage() {
             <p>
               The Service is provided &quot;as is&quot; and &quot;as
               available&quot; without warranties of any kind, either express or
-              implied, including but not limited to implied warranties of
+               implied, including but not limited to implied warranties of
               merchantability, fitness for a particular purpose, or
-              non-infringement.
+               non-infringement. Nothing in these Terms limits rights or remedies
+               that cannot lawfully be limited.
             </p>
           </section>
 
@@ -264,10 +294,9 @@ export default function TermsPage() {
               12. Governing Law
             </h2>
             <p>
-              These Terms of Service are governed by and construed in accordance
-              with the laws of the United States. Any disputes arising from these
-              terms or your use of the Service shall be resolved in the
-              appropriate courts.
+               Applicable law governs these Terms. Nothing in this section waives
+               mandatory consumer protections or a forum right that cannot
+               lawfully be waived.
             </p>
           </section>
 

@@ -5,7 +5,24 @@ const stripe = vi.hoisted(() => ({
   subscriptions: { retrieve: vi.fn() },
   billingPortal: { sessions: { create: vi.fn() } },
 }));
+const rateLimit = vi.hoisted(() => ({ enforce: vi.fn() }));
+const browserAccess = vi.hoisted(() => ({
+  fromRequest: vi.fn(),
+  open: vi.fn(),
+  seal: vi.fn(),
+  bindingCookie: vi.fn(),
+}));
 vi.mock("@/lib/stripe", () => ({ getStripe: () => stripe }));
+vi.mock("@/lib/rate-limit", () => ({
+  enforceRateLimit: rateLimit.enforce,
+}));
+vi.mock("@/lib/stripe-browser-access", () => ({
+  BROWSER_BINDING_COOKIE: "mbr_browser_binding",
+  browserBindingCookieValue: browserAccess.bindingCookie,
+  browserBindingFromRequest: browserAccess.fromRequest,
+  openStripeAccess: browserAccess.open,
+  sealStripeAccess: browserAccess.seal,
+}));
 
 import { POST } from "@/app/api/billing-portal/route";
 
@@ -21,27 +38,65 @@ describe("POST /api/billing-portal", () => {
     vi.clearAllMocks();
     process.env.STRIPE_SECRET_KEY = "sk_test_configured";
     process.env.NEXT_PUBLIC_SITE_URL = "https://medicalbillreader.com";
+    rateLimit.enforce.mockResolvedValue(true);
+    browserAccess.fromRequest.mockReturnValue("browser-binding");
+    browserAccess.open.mockReturnValue("sub_verified");
+    browserAccess.seal.mockReturnValue("renewed-subscription-token");
+    browserAccess.bindingCookie.mockReturnValue("signed-browser-binding");
   });
 
   it("rejects browser requests without a server-issued subscription cookie", async () => {
-    expect((await POST(request())).status).toBe(401);
+    const response = await POST(request());
+    expect(response.status).toBe(401);
+    expect(response.headers.get("cache-control")).toBe("no-store");
     expect(stripe.billingPortal.sessions.create).not.toHaveBeenCalled();
+  });
+
+  it("rejects forged or stale opaque subscription tokens before Stripe", async () => {
+    browserAccess.open.mockReturnValue(null);
+    expect((await POST(request("mbr_sub_id=forged-token"))).status).toBe(401);
+    expect(stripe.subscriptions.retrieve).not.toHaveBeenCalled();
   });
 
   it("creates a portal only for a verified Medical Bill Reader subscription", async () => {
     stripe.subscriptions.retrieve.mockResolvedValue({
+      id: "sub_verified",
       customer: "cus_verified",
+      status: "active",
       metadata: { mbr_entitlement: "subscription" },
     });
     stripe.billingPortal.sessions.create.mockResolvedValue({
       url: "https://billing.stripe.com/session/test",
     });
 
-    const response = await POST(request("mbr_sub_id=sub_verified"));
+    const response = await POST(request("mbr_sub_id=opaque-subscription-token"));
     expect(response.status).toBe(200);
+    expect(browserAccess.open).toHaveBeenCalledWith(
+      "opaque-subscription-token",
+      "subscription",
+      "browser-binding",
+    );
     expect(stripe.billingPortal.sessions.create).toHaveBeenCalledWith({
       customer: "cus_verified",
       return_url: "https://medicalbillreader.com/pricing",
     });
+    const cookie = response.headers.get("set-cookie") || "";
+    expect(cookie).toContain("mbr_sub_id=renewed-subscription-token");
+    expect(cookie).toContain("mbr_sub_active=1");
+    expect(cookie).toContain("mbr_browser_binding=signed-browser-binding");
+    expect(cookie).toContain("Max-Age=34560000");
+  });
+
+  it("rate-limits portal creation before any Stripe call", async () => {
+    rateLimit.enforce.mockResolvedValue(false);
+
+    const response = await POST(
+      request("mbr_sub_id=opaque-subscription-token"),
+    );
+
+    expect(response.status).toBe(429);
+    expect(browserAccess.open).not.toHaveBeenCalled();
+    expect(stripe.subscriptions.retrieve).not.toHaveBeenCalled();
+    expect(stripe.billingPortal.sessions.create).not.toHaveBeenCalled();
   });
 });

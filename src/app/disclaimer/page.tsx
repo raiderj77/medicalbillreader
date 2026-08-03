@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer ,  Medical Bill Reader",
+  title: "Disclaimer | Medical Bill Reader",
   description:
     "Medical disclaimer for MedicalBillReader.com. This tool provides general explanations of medical billing codes and charges for informational purposes only.",
   keywords: "disclaimer, medical bill reader, not medical advice, not financial advice, informational only",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Disclaimer ,  Medical Bill Reader",
+    title: "Disclaimer | Medical Bill Reader",
     description: "Medical disclaimer for MedicalBillReader.com. This tool is for informational purposes only.",
     url: "https://medicalbillreader.com/disclaimer",
     siteName: "Medical Bill Reader",
@@ -54,7 +54,7 @@ export default function DisclaimerPage() {
           Disclaimer
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Last Updated: March 2026
+          Last Updated: August 2, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300">
@@ -103,8 +103,9 @@ export default function DisclaimerPage() {
             Medical billing is complex and varies by provider, insurance plan, state, and individual
             circumstances. We make no representations or warranties about the accuracy, completeness,
             or reliability of any analysis provided by this tool. The tool identifies common billing
-            codes (CPT, ICD-10, HCPCS) and explains them in plain language, but codes and their
-            meanings can change and may have context-specific interpretations.
+             may attempt to identify codes such as CPT, ICD-10-CM, or HCPCS when
+             they are legible, but a label alone cannot establish coding accuracy,
+             coverage, medical necessity, or what you legally owe.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Limitation of Liability</h2>

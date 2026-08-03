@@ -1,15 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import {
-  analysisFailureCategory,
-  trackConversion,
-  type AnalysisFailureCategory,
-  type AnalysisFailureStage,
-} from "@/lib/analytics";
-import { readJsonResponse } from "@/lib/read-json-response";
+import { requestAnalysisWithAccessFallback } from "@/lib/analyze-access";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   const text =
@@ -46,10 +40,68 @@ function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   );
 }
 
-function hasActiveSubscriptionCookie(): boolean {
+function hasSubscriptionAccessHint(): boolean {
   return document.cookie
     .split("; ")
     .some((c) => c.trim() === "mbr_sub_active=1");
+}
+
+function renderAnalysisResult(value: string): ReactNode[] {
+  const lines = value.split("\n");
+  const nodes: ReactNode[] = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    if (!line) continue;
+
+    if (line.startsWith("## ")) {
+      nodes.push(
+        <h3
+          key={`heading-${index}`}
+          className="mt-6 text-lg font-bold text-slate-800 first:mt-0 dark:text-slate-100"
+        >
+          {line.slice(3)}
+        </h3>,
+      );
+      continue;
+    }
+
+    if (line.startsWith("- ")) {
+      const bullets: string[] = [];
+      while (index < lines.length && lines[index].trim().startsWith("- ")) {
+        bullets.push(lines[index].trim().slice(2));
+        index += 1;
+      }
+      index -= 1;
+      nodes.push(
+        <ul
+          key={`list-${index}`}
+          className="ml-5 list-disc space-y-2 text-slate-700 dark:text-slate-300"
+        >
+          {bullets.map((bullet, bulletIndex) => (
+            <li key={`${index}-${bulletIndex}`}>{bullet}</li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+
+    const isLabel = line.startsWith("**") && line.endsWith("**");
+    nodes.push(
+      <p
+        key={`paragraph-${index}`}
+        className={
+          isLabel
+            ? "mt-4 font-semibold text-slate-800 dark:text-slate-200"
+            : "leading-relaxed text-slate-700 dark:text-slate-300"
+        }
+      >
+        {isLabel ? line.replace(/\*\*/g, "") : line}
+      </p>,
+    );
+  }
+
+  return nodes;
 }
 
 export default function BillAnalyzer() {
@@ -61,7 +113,9 @@ export default function BillAnalyzer() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   // One-time hint that we just came back from a successful per-use checkout.
   // Consumed by the first analysis attempt and stripped from the URL
   // immediately so it can't be reused by submitting a second bill without
@@ -73,12 +127,14 @@ export default function BillAnalyzer() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("payment") === "success") {
       justPaidRef.current = true;
-      trackConversion("purchase_completed", {
-        plan: hasActiveSubscriptionCookie() ? "subscription" : "per-use",
-      });
       router.replace("/", { scroll: false });
     }
   }, [router]);
+
+  useEffect(() => {
+    if (!result) return;
+    requestAnimationFrame(() => resultHeadingRef.current?.focus());
+  }, [result]);
 
   const handleFile = (f: File) => {
     const allowed = [
@@ -96,14 +152,13 @@ export default function BillAnalyzer() {
       return;
     }
     setFile(f);
-    trackConversion("upload_started", { file_type: f.type });
+    setPrivacyAcknowledged(false);
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target?.result as string);
-      trackConversion("upload_completed", { file_type: f.type });
     };
     reader.readAsDataURL(f);
   };
@@ -116,99 +171,51 @@ export default function BillAnalyzer() {
   };
 
   const handleSubmit = async () => {
-    if (!file || !preview) return;
+    if (!file || !preview || !privacyAcknowledged) return;
 
-    const accessType = justPaidRef.current
-      ? "per-use"
-      : hasActiveSubscriptionCookie()
-        ? "subscription"
-        : "free";
-    const isPaid = accessType !== "free";
-    let activeStage: AnalysisFailureStage = isPaid
-      ? "analysis"
-      : "entitlement";
-    let failureTracked = false;
-    const trackFailure = (
-      failureStage: AnalysisFailureStage,
-      failureCategory: AnalysisFailureCategory,
-    ) => {
-      trackConversion("analysis_failed", {
-        access_type: accessType,
-        failure_stage: failureStage,
-        failure_category: failureCategory,
-      });
-      failureTracked = true;
-    };
+    const hasPaidAccessHint =
+      justPaidRef.current || hasSubscriptionAccessHint();
 
     setLoading(true);
     setError(null);
     setNeedsUpgrade(false);
-    trackConversion("analysis_started", {
-      access_type: accessType,
-      file_type: file.type,
-    });
     try {
-      if (!isPaid) {
-        const accessResponse = await fetch("/api/entitlement/free", {
-          method: "POST",
-        });
-        if (!accessResponse.ok) {
-          trackFailure(
-            "entitlement",
-            analysisFailureCategory(accessResponse.status),
-          );
-          const accessData = await readJsonResponse<{ error?: string }>(
-            accessResponse,
-          );
-          throw new Error(
-            accessData.error || "Free analysis access is unavailable.",
-          );
-        }
-        activeStage = "analysis";
-      }
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: preview, fileType: file.type }),
-      });
-      const data = await readJsonResponse<{ error?: string; result?: string }>(
-        res,
-      );
+      const { response: res, data, freeAccessError } =
+        await requestAnalysisWithAccessFallback(
+          fetch,
+          {
+          image: preview,
+          fileType: file.type,
+          processingAcknowledged: privacyAcknowledged,
+          },
+          hasPaidAccessHint,
+        );
       if (!res.ok) {
-        const failureCategory = analysisFailureCategory(res.status);
-        trackFailure("analysis", failureCategory);
         if (res.status === 401) {
+          if (freeAccessError) {
+            throw new Error(freeAccessError);
+          }
           setNeedsUpgrade(true);
-          trackConversion("upgrade_prompt_viewed", {
-            access_type: accessType,
-            failure_category: failureCategory,
-          });
           throw new Error(
             "No analysis credit is currently available. Choose an analysis option to continue.",
           );
         }
-        const fallbackError = isPaid
+        const fallbackError = hasPaidAccessHint
           ? "The analysis could not be completed. Your paid credit was not used. Please wait two minutes and try again."
           : "The analysis could not be completed. Please wait two minutes and try again.";
         throw new Error(data.error || fallbackError);
       }
       if (!data.result) {
-        trackFailure("analysis", "incomplete_response");
         throw new Error(
           "The analysis service returned an incomplete response. Please try again.",
         );
       }
       setResult(data.result);
-      trackConversion("analysis_delivered", {
-        access_type: accessType,
-        file_type: file.type,
-      });
 
       if (justPaidRef.current) {
         justPaidRef.current = false;
       }
     } catch (err: unknown) {
-      if (!failureTracked) trackFailure(activeStage, "network");
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
@@ -221,6 +228,7 @@ export default function BillAnalyzer() {
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
+    setPrivacyAcknowledged(false);
   };
 
   if (result) {
@@ -247,64 +255,29 @@ export default function BillAnalyzer() {
         </div>
 
         <div className="p-8">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 rounded-lg flex items-center justify-center text-xl">
                 ✅
               </div>
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">
+              <h2
+                ref={resultHeadingRef}
+                tabIndex={-1}
+                className="text-xl font-bold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-700 dark:text-slate-100"
+              >
                 Your Medical Bill Explained Simply
               </h2>
             </div>
             <button
+              type="button"
               onClick={reset}
-              className="no-print text-sm text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
+              className="no-print min-h-11 text-sm text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 font-medium border border-teal-200 dark:border-teal-700 px-4 py-2 rounded-lg"
             >
               Analyze Another Bill
             </button>
           </div>
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            {result.split("\n").map((line, i) => {
-              if (line.startsWith("## ")) {
-                return (
-                  <h2
-                    key={i}
-                    className="text-lg font-bold text-slate-800 dark:text-slate-100 mt-6 mb-2"
-                  >
-                    {line.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (line.startsWith("**") && line.endsWith("**")) {
-                return (
-                  <p
-                    key={i}
-                    className="font-semibold text-slate-700 dark:text-slate-300 mt-4"
-                  >
-                    {line.replace(/\*\*/g, "")}
-                  </p>
-                );
-              }
-              if (line.startsWith("- ")) {
-                return (
-                  <li
-                    key={i}
-                    className="text-slate-600 dark:text-slate-600 ml-4 list-disc"
-                  >
-                    {line.replace("- ", "")}
-                  </li>
-                );
-              }
-              if (line.trim() === "") return <br key={i} />;
-              return (
-                <p
-                  key={i}
-                  className="text-slate-600 dark:text-slate-600 leading-relaxed"
-                >
-                  {line}
-                </p>
-              );
-            })}
+          <div className="space-y-3">
+            {renderAnalysisResult(result)}
           </div>
 
           {/* Disclaimer */}
@@ -327,6 +300,7 @@ export default function BillAnalyzer() {
           {/* Action Buttons */}
           <div className="no-print mt-6 flex flex-wrap gap-3">
             <button
+              type="button"
               onClick={() => {
                 const text = result
                   .split("\n")
@@ -351,7 +325,7 @@ export default function BillAnalyzer() {
                 });
               }}
               id="copy-btn"
-              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="min-h-11 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Copy Summary
             </button>
@@ -359,25 +333,25 @@ export default function BillAnalyzer() {
               type="button"
               onClick={() => window.print()}
               title="Print your analysis or save it as a PDF"
-              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="min-h-11 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Print or Save PDF
             </button>
             <button
+              type="button"
               onClick={() => {
                 if (typeof navigator !== "undefined" && navigator.share) {
                   navigator
                     .share({
-                      title: "Medical Bill Analysis",
-                      text: "I analyzed my medical bill at MedicalBillReader.com",
-                      url: window.location.href,
+                      title: "Medical Bill Reader",
+                      text: "A privacy-conscious tool for explaining visible medical-bill and EOB fields.",
+                      url: "https://medicalbillreader.com/",
                     })
                     .catch(() => {});
                 } else {
                   navigator.clipboard
                     .writeText(
-                      "I analyzed my medical bill at MedicalBillReader.com " +
-                        window.location.href,
+                      "Medical Bill Reader: a privacy-conscious tool for explaining visible medical-bill and EOB fields. https://medicalbillreader.com/",
                     )
                     .then(() => {
                       const btn = document.getElementById("share-btn");
@@ -391,7 +365,7 @@ export default function BillAnalyzer() {
                 }
               }}
               id="share-btn"
-              className="px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+              className="min-h-11 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
             >
               Share
             </button>
@@ -474,7 +448,7 @@ export default function BillAnalyzer() {
             </div>
             <button
               onClick={reset}
-              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200"
             >
               Remove
             </button>
@@ -496,10 +470,52 @@ export default function BillAnalyzer() {
             <p className="text-xs text-slate-700 dark:text-slate-300">
               🔒 Your document will be transmitted securely to Anthropic solely
               to generate this analysis. It is not sold or shared for
-              advertising, and Medical Bill Reader does not intentionally store
-              the document in its own database. Infrastructure providers may
-              process limited request data under their own terms.
+               advertising, and Medical Bill Reader does not intentionally store
+               the document in its own database. Infrastructure providers may
+               process request data under their terms. Anthropic&apos;s published
+               policy says standard API inputs and outputs are automatically
+               deleted within 30 days, but content flagged by automated trust and
+               safety systems may be retained for up to two years and associated
+               classification scores for up to seven years. Legal and other
+               published exceptions may also apply. Medical Bill Reader does not
+               claim a zero-data-retention agreement or Business Associate
+               Agreement. Read{" "}
+               <a
+                 href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="font-semibold text-teal-800 underline dark:text-teal-300"
+               >
+                 Anthropic&apos;s retention policy
+               </a>{" "}
+               and our{" "}
+               <Link
+                href="/consumer-health-data-privacy"
+                className="font-semibold text-teal-800 underline dark:text-teal-300"
+              >
+                Consumer Health Data Privacy Notice
+              </Link>
+              .
             </p>
+          </div>
+
+          <div className="mb-5 rounded-lg border border-teal-200 bg-teal-50 p-4 dark:border-teal-800 dark:bg-teal-950/30">
+            <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-slate-800 dark:text-slate-200">
+              <input
+                type="checkbox"
+                checked={privacyAcknowledged}
+                onChange={(event) =>
+                  setPrivacyAcknowledged(event.currentTarget.checked)
+                }
+                className="mt-1 h-5 w-5 shrink-0 accent-teal-700"
+              />
+              <span>
+                I consent to this document being sent to Anthropic to generate
+                the report I requested. I reviewed the privacy notice and
+                removed identifiers I do not want processed. Medical Bill Reader
+                is a direct-to-consumer tool, not a HIPAA-covered service.
+              </span>
+            </label>
           </div>
 
           {error && (
@@ -518,9 +534,10 @@ export default function BillAnalyzer() {
 
           <button
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !privacyAcknowledged}
             aria-busy={loading}
-            className="w-full bg-teal-700 hover:bg-teal-800 disabled:bg-teal-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
+            aria-describedby="upload-privacy"
+            className="w-full bg-teal-700 hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-3">
@@ -528,6 +545,7 @@ export default function BillAnalyzer() {
                   className="animate-spin h-5 w-5"
                   viewBox="0 0 24 24"
                   fill="none"
+                  aria-hidden="true"
                 >
                   <circle
                     className="opacity-25"

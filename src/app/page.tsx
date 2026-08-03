@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import BillAnalyzer from "@/components/BillAnalyzer";
 import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
@@ -54,7 +55,7 @@ const faqJsonLd = {
       name: "Is my medical bill data kept private?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Uploaded documents are transmitted to Anthropic solely to generate the requested analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Processing and retention by infrastructure providers are governed by their applicable terms.",
+        text: "Uploaded documents are transmitted to Anthropic to generate the requested analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Anthropic's standard API policy provides automatic deletion within 30 days, but policy-enforcement, legal, and other published exceptions can be longer. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated classification scores for up to seven years. Medical Bill Reader does not claim zero-data-retention terms or a Business Associate Agreement. Redact identifiers you do not need explained before uploading.",
       },
     },
     {
@@ -70,7 +71,7 @@ const faqJsonLd = {
       name: "Can Medical Bill Reader detect billing errors?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The tool may flag patterns such as apparent duplicates or code combinations for review. A flag is not proof of a billing error. Confirm it with the provider or insurer before taking action.",
+        text: "The tool may identify apparent duplicate lines, mismatches, or unfamiliar fields for review. It cannot determine from a bill alone that coding, coverage, or a charge is wrong. Confirm every concern with the provider or insurer before taking action.",
       },
     },
     {
@@ -78,7 +79,7 @@ const faqJsonLd = {
       name: "Is Medical Bill Reader a substitute for professional advice?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Medical Bill Reader provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a certified medical billing advocate.",
+        text: "No. Medical Bill Reader provides general explanations of visible medical-billing fields, codes, and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a qualified medical billing advocate.",
       },
     },
   ],
@@ -107,8 +108,8 @@ export default function Home() {
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <span className="text-xs text-slate-700 dark:text-slate-300 sm:text-sm">
-              <span className="sm:hidden">1 free/month</span>
-              <span className="hidden sm:inline">1 free analysis/month · No account needed</span>
+              <span className="sm:hidden">1 free/browser</span>
+              <span className="hidden sm:inline">1 free analysis/browser/month · No account needed</span>
             </span>
             <ThemeToggle />
           </div>
@@ -122,14 +123,14 @@ export default function Home() {
             Free Medical Bill Explainer — No Sign-Up Required
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
-            Finally Understand<br />Your Medical Bill
+            Make Sense of<br />Your Medical Bill
           </h1>
           <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">
-            Last reviewed: July 16, 2026
+            Last reviewed: August 2, 2026
           </p>
           <p className="mx-auto max-w-2xl text-lg text-slate-700 dark:text-slate-300 sm:text-xl">
-            Medical Bill Reader helps you understand confusing medical bills and insurance
-            EOBs in plain language — no medical degree required. Upload a photo or PDF and
+            Medical Bill Reader helps consumers review confusing medical bills and insurance
+            EOBs in plain language. Upload a photo or PDF and
             receive an AI-generated report of visible charges, codes, insurance fields, and items to verify.
           </p>
           <a
@@ -139,9 +140,47 @@ export default function Home() {
             Start free analysis
           </a>
           <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
-            Built by an experienced web professional
+            Built by{" "}
+            <Link href="/about" className="font-medium underline">
+              Jason Ramirez
+            </Link>
+            , an experienced web professional. See our{" "}
+            <Link href="/editorial-policy" className="font-medium underline">
+              editorial standards
+            </Link>
+            .
           </p>
         </div>
+
+        <section
+          aria-labelledby="health-data-notice-heading"
+          className="mb-6 rounded-2xl border-2 border-teal-300 bg-teal-50 p-5 text-left dark:border-teal-800 dark:bg-teal-950/30 sm:p-6"
+        >
+          <h2
+            id="health-data-notice-heading"
+            className="text-lg font-bold text-slate-950 dark:text-white"
+          >
+            Before you upload a bill or EOB
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-800 dark:text-slate-200">
+            Remove names, member IDs, account numbers, dates of birth, addresses,
+            barcodes, and other identifiers you do not need explained. The file
+            is sent to Anthropic to create the report. Anthropic&apos;s standard
+            API policy provides automatic deletion within 30 days, but
+            policy-enforcement, legal, and other published exceptions can be
+            longer. Policy-flagged inputs and outputs may be retained for up to
+            two years and associated classification scores for up to seven
+            years. Medical Bill Reader does not claim zero-data-retention terms
+            or a Business Associate Agreement and is a direct-to-consumer tool,
+            not a HIPAA-covered service.
+          </p>
+          <Link
+            href="/consumer-health-data-privacy"
+            className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-white px-4 py-2 text-sm font-bold text-teal-900 underline shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:bg-slate-900 dark:text-teal-200"
+          >
+            Read the Consumer Health Data Privacy Notice
+          </Link>
+        </section>
 
         {/* Disclaimer ,  server-rendered, visible before tool */}
         <div className="mb-6">
@@ -153,10 +192,10 @@ export default function Home() {
 
         {/* Answer Block (server-rendered) */}
         <AnswerBlock
-          what="An AI tool that decodes medical bills, explains CPT and ICD-10 codes, flags potential errors, and translates charges into plain English."
+          what="An AI-assisted tool that organizes legible medical-bill fields, explains unfamiliar terms, and identifies specific items to verify."
           who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
           bottomLine="Upload a supported medical bill for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
-          lastUpdated="2026-07-16"
+          lastUpdated="2026-08-02"
         />
 
         {/* GEO Content Sections (server-rendered) */}
@@ -181,7 +220,7 @@ export default function Home() {
               What are the most common medical billing errors?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              The most common medical billing errors include duplicate charges, upcoding, unbundled procedures, charges for services not rendered, and incorrect patient or insurance information.
+               Common issues worth checking include apparent duplicate line items, incorrect patient or insurance information, missing payments, and services or quantities you do not recognize. Coding questions require the underlying records and payer rules.
             </p>
             <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
               CMS advises comparing the provider bill with the Explanation of Benefits, checking that the services match what you received, and contacting the provider or insurer when amounts do not match. An AI flag is only a prompt to verify the source records; it does not establish that a charge is wrong.
@@ -203,14 +242,14 @@ export default function Home() {
 
           {/* Section 4 ,  Upload safety */}
           <div>
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
-              Is it safe to upload a medical bill?
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
+                What happens to my data when I upload a medical bill?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-              Bills are processed over encrypted HTTPS and transmitted to Anthropic solely for your requested explanation. They are not sold or used for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database.
+               Bills are transmitted over encrypted HTTPS through the application to Anthropic for your requested explanation. They are not sold or used for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database.
             </p>
             <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-              No account or login is required. The document itself may contain identifying and health information, so review the Privacy Policy before uploading. Bill content is not sent to analytics or advertising systems; Anthropic and infrastructure providers process data under their own terms.
+               No account or login is required. The document may contain identifying, health, insurance, and financial information. Redact fields you do not need explained and read the Consumer Health Data Privacy Notice before uploading. Bill content, filenames, report text, and analysis activity are not sent to analytics or advertising systems; Anthropic and infrastructure providers process data under their terms.
             </p>
           </div>
 
@@ -230,7 +269,7 @@ export default function Home() {
                   href="https://www.cms.gov/medical-bill-rights/help/guides/how-to-read-bill"
                   className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
-                  rel="nofollow noopener noreferrer"
+                   rel="noopener noreferrer"
                 >
                   CMS ,  How to Read Your Medical Bill
                 </a>
@@ -240,7 +279,7 @@ export default function Home() {
                   href="https://www.cms.gov/medical-bill-rights/help/guides/bill-errors"
                   className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
-                  rel="nofollow noopener noreferrer"
+                   rel="noopener noreferrer"
                 >
                   CMS ,  Check Your Medical Bill for Errors
                 </a>
@@ -250,7 +289,7 @@ export default function Home() {
                   href="https://www.healthcare.gov/appeal-insurance-company-decision/appeals/"
                   className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
                   target="_blank"
-                  rel="nofollow noopener noreferrer"
+                   rel="noopener noreferrer"
                 >
                   HealthCare.gov ,  How to Appeal an Insurance Decision
                 </a>
@@ -295,7 +334,7 @@ export default function Home() {
           <div>
             <div className="text-2xl mb-1">🆓</div>
             <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm">Free to try</p>
-            <p className="text-xs text-slate-600">1 per month, no account</p>
+            <p className="text-xs text-slate-600">1/browser/month, no account</p>
           </div>
           <div>
             <div className="text-2xl mb-1">⚡</div>
@@ -319,7 +358,7 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data kept private?</h3>
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                Documents are transmitted securely to Anthropic solely for analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store them in its own database. See the Privacy Policy for infrastructure and retention details.
+                Documents are transmitted securely to Anthropic for analysis. They are not sold or shared for advertising, and Medical Bill Reader does not intentionally store them in its own database. Anthropic&apos;s standard API policy provides automatic deletion within 30 days, with longer policy-enforcement, legal, and other published exceptions. Policy-flagged inputs and outputs may be retained for up to two years and associated classification scores for up to seven years. Medical Bill Reader does not claim zero-data-retention terms or a Business Associate Agreement. Redact identifiers you do not need explained and see the Consumer Health Data Privacy Notice for details.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -331,13 +370,13 @@ export default function Home() {
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader detect billing errors?</h3>
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                The tool may flag patterns such as apparent duplicates or code combinations for review. A flag is not proof of an error. Confirm it with the provider or insurer before taking action.
+                 The tool may identify apparent duplicate lines, mismatches, or unfamiliar fields for review. It cannot determine from a bill alone that coding, coverage, or a charge is wrong. Confirm every concern with the provider or insurer before taking action.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is Medical Bill Reader a substitute for professional advice?</h3>
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                No. Medical Bill Reader provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a certified medical billing advocate.
+                No. Medical Bill Reader provides general explanations of visible medical-billing fields, codes, and charges for informational purposes only. It is not financial or medical advice. For billing disputes, contact your healthcare provider, insurance company, or a qualified medical billing advocate.
               </p>
             </div>
           </div>

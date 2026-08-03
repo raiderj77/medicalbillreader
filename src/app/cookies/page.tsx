@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy ,  Medical Bill Reader",
+  title: "Cookie Policy | Medical Bill Reader",
   description:
     "Cookie policy for MedicalBillReader.com. Learn about the cookies we use, why we use them, and how to control them.",
   keywords: "cookie policy, cookies, medical bill reader, tracking, analytics cookies",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Cookie Policy ,  Medical Bill Reader",
+    title: "Cookie Policy | Medical Bill Reader",
     description: "Cookie policy for MedicalBillReader.com. Learn about the cookies we use, why we use them, and how to control them.",
     url: "https://medicalbillreader.com/cookies",
     siteName: "Medical Bill Reader",
@@ -54,7 +54,7 @@ export default function CookiesPage() {
           Cookie Policy
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Effective: January 1, 2026 | Last Updated: March 2026
+          Effective: August 2, 2026 | Last Updated: August 2, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300">
@@ -77,50 +77,54 @@ export default function CookiesPage() {
             These cookies are strictly necessary for the website to function. They include:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Privacy preference:</strong> A first-party cookie stores whether you allowed optional analytics so we do not ask you repeatedly. It expires after 180 days.</li>
+            <li><strong>Legacy privacy preference:</strong> If your browser still has an older analytics-choice cookie, the site changes an old opt-in value to essential-only. No optional tracking is enabled by that cookie.</li>
             <li><strong>Theme preference:</strong> Stores your light/dark mode preference in localStorage (not a cookie, but similar local storage).</li>
-            <li><strong>Analysis entitlements:</strong> Signed HttpOnly cookies identify a paid, subscription, or anonymous free-tier allowance. They contain opaque identifiers, not bill content. The anonymous free tier is enforced per cookie; clearing or blocking cookies can affect enforcement, and shared devices share the same browser allowance. Short-lived hashed IP counters are also used for abuse prevention.</li>
+            <li><strong>Analysis entitlements:</strong> HttpOnly cookies hold signed or opaque access values that the server verifies before use. They do not contain bill content or payment-card data. A single-analysis cookie lasts up to 24 hours. A subscription cookie can last up to 400 days and is renewed after verified successful use; Stripe status is checked on each analysis. Clearing cookies or changing browsers can remove access, and shared devices share the same browser allowance. Privacy-minimized network counters are also used for abuse prevention.</li>
           </ul>
 
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Analytics Cookies</h3>
           <p>
-            We use analytics cookies only with your consent to understand how visitors use our site.
-            These cookies collect information in an aggregated, anonymous form.
+            We do not currently load Google Analytics, advertising pixels, or
+            other third-party analytics code on any page, and the site does not
+            set third-party analytics or advertising cookies.
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Google Analytics:</strong> Collects anonymous usage data (pages visited, time on site, referral source). Set only after you grant consent via our cookie banner.</li>
+            <li><strong>Current status:</strong> Third-party analytics and advertising tracking are disabled for every visitor.</li>
           </ul>
 
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Cookie Consent</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Optional Tracking</h2>
           <p>
-            Our first-party privacy control asks for your permission before Google Analytics loads.
-            Optional analytics remains blocked unless you opt in.
+            Because no optional analytics or advertising tracking is active, the
+            site does not display a tracking-consent banner. An older saved
+            analytics choice cannot re-enable Google Analytics.
           </p>
           <p>
-            We use an <strong>opt-in model</strong> for every visitor: optional analytics does not load
-            until you give affirmative consent. We also honor Global Privacy Control (GPC) signals
-            automatically by keeping optional analytics off.
+            Global Privacy Control signals are consistent with the current
+            default: no personal information is sold or shared for cross-context
+            behavioral advertising, and no optional tracking loads.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">How to Control Cookies</h2>
           <p>You can manage cookies in several ways:</p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Privacy choices:</strong> Use the banner that appears on your first visit. You can change your preference at any time with the Privacy choices button in the bottom-left corner.</li>
             <li><strong>Browser settings:</strong> Most browsers let you block or delete cookies. Check your browser&apos;s help documentation for instructions.</li>
-            <li><strong>Global Privacy Control:</strong> Enable GPC in your browser to automatically signal your opt-out preference.</li>
-            <li><strong>Opt out of Google ads personalization:</strong> Visit <a href="https://adssettings.google.com" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
+            <li><strong>Global Privacy Control:</strong> You may enable GPC in your browser. The service already keeps sale, sharing for behavioral advertising, and optional tracking off.</li>
           </ul>
           <p>
-            Disabling essential cookies may prevent parts of the website from functioning correctly.
-            Disabling analytics cookies will not affect your ability to use the medical
-            bill analysis tool.
+            Disabling essential cookies may prevent free or paid access, theme
+            preferences, and other parts of the website from functioning correctly.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Health Data and Cookies</h2>
           <p>
-            Medical bill content is never stored in cookies, localStorage, or any client-side storage.
-            Uploaded bills pass through server memory and are transmitted to Anthropic solely for analysis. Medical Bill Reader does not intentionally store them in its own database.
-            No health data is ever passed to advertising or analytics systems.
+            Medical bill content is not stored in cookies or localStorage. The
+            selected preview and generated report remain in the active page&apos;s
+            memory until you remove them, refresh, navigate away, or close the
+            page. Uploaded bills pass through server memory and are transmitted
+            to Anthropic for analysis. Medical Bill Reader does not intentionally
+            store them in its own database. Filenames, bill content, report text,
+            upload and analysis activity, and payment state are not passed to
+            advertising or analytics systems.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Changes to This Policy</h2>

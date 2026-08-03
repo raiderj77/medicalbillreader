@@ -38,7 +38,7 @@ No live-mode Stripe value or production Vercel variable was changed.
 - duplicate webhook events are processed once
 - failed webhook processing releases its lock so Stripe can retry
 - billing portal sessions require a server-issued subscription cookie
-- conversion analytics discard all fields except event name, plan type, and MIME type
+- no Google Analytics conversion events are sent; authoritative purchase and refund evidence comes from Stripe
 
 ## Live production checks completed
 
@@ -52,7 +52,7 @@ Using a synthetic document containing no medical or identifying information:
 - the production refund webhook accepted the signed event and revoked the paid entitlement
 - the $49 subscription button opened a live Stripe Checkout for “Medical Bill Reader Monthly” at exactly $49 per month with a 44-analysis description
 - the $49 Checkout was exited through its cancellation URL without entering payment information, creating a charge, or granting an entitlement
-- the expired Cookiebot dependency was replaced; Google Analytics stays unloaded until explicit opt-in and loads after consent
+- the expired Cookiebot dependency was removed; Google Analytics is now disabled site-wide for the strict-YMYL release
 - Microsoft Clarity session recording and the inactive AdSense loader were removed to reduce health-data privacy risk
 
 ## Stripe sandbox matrix completed
@@ -72,7 +72,7 @@ Using Stripe sandbox cards and a generated image containing no patient or medica
 - a full test refund generated a real `refund.created` event
 - the signed refund event was accepted, marked the PaymentIntent refunded, and a duplicate delivery was safely acknowledged without processing twice
 - local logs contained neither the synthetic document marker nor base64 upload data
-- all six conversion event names are covered by automated tests, and analytics discard unapproved identity, bill, diagnosis, account, and upload-text fields
+- automated tests prevent third-party analytics from running on analyzer, pricing, checkout, contact, and privacy-sensitive routes
 
 Expired, unrelated, malformed, and concurrent entitlement cases remain covered by the automated suite because Stripe does not offer a practical dashboard flow for every adversarial state.
 
@@ -84,6 +84,6 @@ Medical Bill Reader's revenue-verification milestone is complete:
 - the $4.99 live purchase-delivery-refund path was verified
 - the $49 path was verified in Stripe sandbox through delivery, cap enforcement, portal access, cancellation, and post-cancellation denial
 - the live $49 product mapping and cancellation return were verified without an unnecessary charge
-- the six allow-listed conversion events are wired and covered by automated privacy tests
+- revenue events are not forwarded to Google Analytics; use Stripe records for purchase, subscription, cancellation, and refund verification
 
-Google Analytics reports only consented traffic, so dashboard counts will be lower than total visits by design. Receipt of every conversion event in the production Analytics dashboard depends on future users performing those actions after opting in; no traffic or conversion claim should be made until that data exists.
+Third-party analytics is disabled for the strict-YMYL release. Do not infer traffic or conversion counts from an unavailable analytics dashboard, and do not re-enable analytics or forward sensitive funnel events without a new privacy review and regression tests. Revenue claims require current Stripe or other authoritative transaction evidence.

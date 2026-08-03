@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Methodology: How Medical Bill Reader Works",
   description:
-    "How Medical Bill Reader analyzes uploaded medical bills: which AI model powers it, what codes and charges it identifies, how bill data is handled and deleted, and what the tool cannot do.",
+    "How Medical Bill Reader processes uploaded bills, what the AI is asked to organize, how providers handle data, and what the tool cannot determine.",
   keywords: [
     "medical bill reader methodology",
     "how medical bill AI works",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 const PAGE_URL = "https://medicalbillreader.com/methodology";
-const TODAY = new Date().toISOString().substring(0, 10);
+const LAST_REVIEWED = "2026-08-02";
 
 export default function MethodologyPage() {
   const articleSchema = {
@@ -34,11 +34,12 @@ export default function MethodologyPage() {
     description:
       "How Medical Bill Reader analyzes uploaded medical bills, which AI model powers it, what it identifies, how bill data is handled, and its honest limits.",
     datePublished: "2026-04-26",
-    dateModified: TODAY,
+    dateModified: LAST_REVIEWED,
     author: {
-      "@type": "Organization",
-      name: "Medical Bill Reader",
-      url: "https://medicalbillreader.com",
+      "@type": "Person",
+      name: "Jason Ramirez",
+      jobTitle: "Founder of Your Friendly Developer",
+      url: "https://medicalbillreader.com/about",
     },
     publisher: {
       "@type": "Organization",
@@ -58,7 +59,7 @@ export default function MethodologyPage() {
   };
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+    <main id="main-content" className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -82,7 +83,16 @@ export default function MethodologyPage() {
       </h1>
 
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-        Last updated: {TODAY}. Built by an experienced web professional.
+        Last reviewed: August 2, 2026. Written by{" "}
+        <Link href="/about" className="underline underline-offset-2">
+          Jason Ramirez
+        </Link>
+        , a web professional and product founder, not a medical, legal,
+        insurance, coding, or billing professional. See the{" "}
+        <Link href="/editorial-policy" className="underline underline-offset-2">
+          editorial policy
+        </Link>
+        .
       </p>
 
       <div
@@ -104,9 +114,13 @@ export default function MethodologyPage() {
           Medical Bill Reader accepts an uploaded medical bill or Explanation
           of Benefits document, sends it to an AI model for analysis, and
           returns a plain-English breakdown organized into five sections: what
-          the bill is for, a breakdown of the charges, what you owe, potential
-          issues to review, and what to do next. The output is a written
-          explanation, not a diagnosis or a payment decision.
+          the document appears to be, visible charges and insurance fields,{" "}
+          <strong>Amounts Shown</strong>, items to verify, and questions and
+          next steps. The amounts section reports only clearly labeled figures
+          visible in the
+          document. It does not determine a final amount due or establish what
+          the user legally owes. The output is a written explanation, not a
+          diagnosis or a payment decision.
         </p>
 
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-3">
@@ -115,7 +129,7 @@ export default function MethodologyPage() {
         <p>
           The analyzer calls the Anthropic Claude API. The current model is{" "}
           <code className="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-sm">
-            claude-opus-4-7
+            claude-sonnet-4-6
           </code>
           , Anthropic&apos;s general-purpose multimodal model. The API request
           is made server-side from a Next.js API route. The Anthropic API key
@@ -123,13 +137,13 @@ export default function MethodologyPage() {
           client code.
         </p>
         <p>
-          The model receives the uploaded file (image or PDF) and a single
-          prompt instructing it to act as a medical billing expert and
-          structure its response under the five fixed section headings above.
-          The model uses its general training to recognize billing codes,
-          common charge patterns, and typical EOB layouts. It does not look up
-          codes against a live database, does not read your insurance plan
-          documents, and does not have access to your medical history.
+          The model receives the uploaded file (image or PDF) plus a system
+          instruction that treats document text as untrusted data and limits
+          the response to five fixed sections. It is told to act as a cautious
+          document explainer, not as a clinician, insurer, attorney, coder, or
+          billing specialist. It does not look up codes against a live
+          authoritative database, read your plan documents, or access records
+          beyond the file you submit.
         </p>
 
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-3">
@@ -152,11 +166,11 @@ export default function MethodologyPage() {
             responsibility (deductible, coinsurance, copay).
           </li>
           <li>
-            <strong>Patterns that may indicate billing errors</strong>:
-            duplicate line items, charges inconsistent with the listed
-            diagnosis, suspected unbundling of services, or charges for
-            services not commonly delivered together. These are pattern
-            observations from the AI, not certified findings.
+            <strong>Items to verify</strong>: exact-looking duplicates, visible
+            mismatches, missing or unclear fields, unfamiliar services, or
+            figures that do not reconcile from the document alone. These are
+            questions, not findings that a charge, code, coverage decision, or
+            party is wrong.
           </li>
         </ul>
         <p>
@@ -189,22 +203,42 @@ export default function MethodologyPage() {
             server-side either.
           </li>
           <li>
-            <strong>No identifiers stored</strong>: the application does not
-            require an account, does not capture your name, and does not link
-            uploads to a user identity.
+            <strong>No application profile</strong>: the free analyzer does not
+            require an account. A bill can still contain names, identifiers,
+            and health information, so users are asked to redact unnecessary
+            identifiers before submitting it.
           </li>
           <li>
-            <strong>No advertising data flow</strong>: bill content is never
-            passed to any advertising system, analytics provider, or
-            third-party tracker. Analysis pages use a strict referrer policy
-            so that page URLs cannot leak to third parties.
+            <strong>No advertising or analytics data flow</strong>: the
+            analyzer does not load advertising or analytics code and does not
+            emit upload, analysis, report, or payment events to those systems.
+            The site also uses a no-referrer policy.
           </li>
           <li>
-            <strong>Anthropic processing</strong>: the file is processed by
-            Anthropic&apos;s API to produce the response. Per Anthropic&apos;s
-            published policies, API inputs and outputs are not used to train
-            their models by default. Refer to Anthropic&apos;s data usage and
-            retention policy for the current details.
+             <strong>Anthropic processing</strong>: the file is processed by
+             Anthropic&apos;s API to produce the response. Per Anthropic&apos;s
+             published standard commercial API policy, inputs and outputs are
+             not used to train models by default and are automatically deleted
+             from Anthropic&apos;s systems within 30 days. Anthropic says inputs
+             and outputs flagged by automated trust and safety systems may be
+             retained for up to two years and associated classification scores
+             for up to seven years; legal, policy-enforcement, customer-controlled
+             service, and agreed-term exceptions may also apply. This site does
+             not claim a zero-data-retention agreement or Business Associate
+             Agreement. Review{" "}
+             <a
+               href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
+             >
+               Anthropic&apos;s retention policy
+             </a>{" "}
+             and the{" "}
+             <Link href="/consumer-health-data-privacy" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
+              Consumer Health Data Privacy Notice
+            </Link>{" "}
+            before uploading.
           </li>
         </ul>
 
@@ -224,9 +258,10 @@ export default function MethodologyPage() {
             handwriting, or heavily redacted documents.
           </li>
           <li>
-            The model cannot detect every form of billing fraud or error.
-            Sophisticated upcoding, unbundling, or balance-billing issues
-            often require a billing advocate to confirm.
+            The model cannot determine fraud, upcoding, unbundling, medical
+            necessity, coverage, or legal compliance from a bill alone. Those
+            questions require the underlying records, payer rules, and a
+            qualified professional.
           </li>
           <li>
             The tool does not have access to the contracted reimbursement rate
@@ -248,16 +283,13 @@ export default function MethodologyPage() {
           Why this matters
         </h2>
         <p>
-          Medical billing errors are common and costly. Patient advocacy
-          organizations and academic studies have for years documented
-          significant error rates on hospital and provider statements,
-          alongside widespread confusion about what charges mean and which
-          ones can be appealed. Patients have rights they often do not know
-          about: the right to an itemized bill, the right to appeal a denied
-          claim, and protections under the federal No Surprises Act for
-          certain out-of-network charges. The goal of this tool is to lower
-          the barrier to reading what is actually on a bill so those rights
-          can be used.
+          Bills and EOBs can be difficult to compare. Official CMS guidance
+          recommends checking that listed services and supplies match what was
+          received and comparing the provider bill with the EOB. Separate
+          appeal and No Surprises Act protections may apply depending on the
+          plan and bill. The tool&apos;s limited goal is to organize visible
+          information into questions a user can verify with the provider,
+          insurer, or qualified adviser.
         </p>
 
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-3">
@@ -270,7 +302,7 @@ export default function MethodologyPage() {
               href="https://www.cms.gov/"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
-              rel="nofollow noopener noreferrer"
+              rel="noopener noreferrer"
             >
               cms.gov
             </a>
@@ -282,7 +314,7 @@ export default function MethodologyPage() {
               href="https://www.ama-assn.org/practice-management/cpt"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
-              rel="nofollow noopener noreferrer"
+              rel="noopener noreferrer"
             >
               ama-assn.org/practice-management/cpt
             </a>
@@ -294,7 +326,7 @@ export default function MethodologyPage() {
               href="https://www.cms.gov/nosurprises"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
-              rel="nofollow noopener noreferrer"
+              rel="noopener noreferrer"
             >
               cms.gov/nosurprises
             </a>
@@ -306,7 +338,7 @@ export default function MethodologyPage() {
               href="https://education.patientadvocate.org/wp-content/uploads/2023/11/Medical-Billing-Tip-Sheet.pdf"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
-              rel="nofollow noopener noreferrer"
+              rel="noopener noreferrer"
             >
               patientadvocate.org
             </a>
@@ -318,7 +350,7 @@ export default function MethodologyPage() {
               href="https://docs.anthropic.com/"
               className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
               target="_blank"
-              rel="nofollow noopener noreferrer"
+              rel="noopener noreferrer"
             >
               docs.anthropic.com
             </a>
@@ -332,10 +364,6 @@ export default function MethodologyPage() {
             ,{" "}
             <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
               codes explained
-            </Link>
-            ,{" "}
-            <Link href="/stats" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
-              extraction stats
             </Link>
             .
           </li>

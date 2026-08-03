@@ -1,7 +1,6 @@
 /**
  * content-lint.js ,  Content compliance linter for medicalbillreader.com
  * Scans src/**\/*.{tsx,ts} for:
- *   - Personal name exposure (site owner)
  *   - Medical/financial advice claims (flags direct claims, not disclaimers)
  * Exit code 1 on failure, 0 on pass.
  */
@@ -39,23 +38,6 @@ function getFiles(dir, extensions) {
 // ---------------------------------------------------------------------------
 // Rules
 // ---------------------------------------------------------------------------
-
-/**
- * Check for personal name exposure.
- * The site owner's name must never appear in public content or code.
- */
-function checkPersonalName(file, lines) {
-  const namePattern = /\bJason\s+Ramirez\b/i;
-  // Policy updated 2026-05-11: name allowed in byline metadata (frontmatter + schema).
-  const bylineLinePattern = /^\s*(author|reviewer|author_name|byline)\s*:/i;
-  const schemaNamePattern = /"name"\s*:\s*"Jason Ramirez/i;
-  for (let i = 0; i < lines.length; i++) {
-    if (!namePattern.test(lines[i])) continue;
-    if (bylineLinePattern.test(lines[i])) continue;
-    if (schemaNamePattern.test(lines[i])) continue;
-    fail(file, i + 1, "Personal name detected in body/prose ,  name is only allowed in byline metadata");
-  }
-}
 
 /**
  * Check for direct medical/financial advice claims.
@@ -98,14 +80,15 @@ function checkMedicalFinancialAdviceClaims(file, lines) {
 console.log("🏥 Medical Bill Reader content lint\n");
 
 const srcFiles = getFiles(resolve(ROOT, "src"), [".tsx", ".ts"]);
+const contentFiles = getFiles(resolve(ROOT, "content"), [".md"]);
+const files = [...srcFiles, ...contentFiles];
 
-console.log(`  Scanning ${srcFiles.length} source files...\n`);
+console.log(`  Scanning ${files.length} source and editorial files...\n`);
 
-for (const file of srcFiles) {
+for (const file of files) {
   const content = readFileSync(file, "utf-8");
   const lines = content.split("\n");
 
-  // checkPersonalName disabled per YMYL named-author exception (EMPIRE_BUILD_STANDARDS Section 7)
   checkMedicalFinancialAdviceClaims(file, lines);
 }
 
