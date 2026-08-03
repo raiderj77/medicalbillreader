@@ -1,6 +1,6 @@
 /**
  * predeploy-check.js ,  Empire Build Standards compliance check for medicalbillreader.com
- * Validates: ads.txt, robots.txt, llms.txt, legal pages, cross-site links, security headers
+ * Validates: ads.txt, robots.txt, llms.txt, legal pages, YMYL footer isolation, security headers
  * Exit code 1 on failure, 0 on pass.
  */
 
@@ -43,6 +43,11 @@ check("ads.txt", () => {
     pass("OWNERDOMAIN directive present");
   } else {
     fail("OWNERDOMAIN directive missing from ads.txt");
+  }
+  if (/MANAGERDOMAIN/i.test(content)) {
+    fail("MANAGERDOMAIN must not be declared without a separate monetization manager");
+  } else {
+    pass("No unsupported MANAGERDOMAIN directive");
   }
 });
 
@@ -111,7 +116,14 @@ check("llms.txt", () => {
 // 4. Legal pages (privacy, terms)
 // ---------------------------------------------------------------------------
 check("Legal pages", () => {
-  const pages = ["privacy", "terms"];
+  const pages = [
+    "privacy",
+    "consumer-health-data-privacy",
+    "terms",
+    "disclaimer",
+    "editorial-policy",
+    "contact",
+  ];
   for (const page of pages) {
     const tsx = resolve(ROOT, `src/app/${page}/page.tsx`);
     const jsx = resolve(ROOT, `src/app/${page}/page.jsx`);
@@ -124,9 +136,9 @@ check("Legal pages", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Cross-site sister links
+// 5. YMYL footer isolation
 // ---------------------------------------------------------------------------
-check("Cross-site links", () => {
+check("YMYL footer isolation", () => {
   const footerPath = resolve(ROOT, "src/components/Footer.tsx");
   if (!existsSync(footerPath)) return fail("Footer.tsx not found");
   const footer = readFileSync(footerPath, "utf-8");
@@ -141,9 +153,9 @@ check("Cross-site links", () => {
   ];
   for (const site of sisterSites) {
     if (footer.includes(site)) {
-      pass(`Link to ${site}`);
+      fail(`Unrelated sitewide portfolio link remains: ${site}`);
     } else {
-      fail(`Missing cross-site link to ${site} in Footer`);
+      pass(`No unrelated footer link to ${site}`);
     }
   }
 });
@@ -176,6 +188,16 @@ check("Security headers", () => {
     } else {
       fail(`${header} missing from next.config`);
     }
+  }
+  if (configContent.includes("'unsafe-eval'")) {
+    fail("Content-Security-Policy still allows unsafe-eval");
+  } else {
+    pass("Content-Security-Policy excludes unsafe-eval");
+  }
+  if (configContent.includes("script-src 'self' 'unsafe-inline' https: http:")) {
+    fail("Content-Security-Policy still allows scripts from every HTTP(S) host");
+  } else {
+    pass("Content-Security-Policy uses an explicit script host allowlist");
   }
 });
 

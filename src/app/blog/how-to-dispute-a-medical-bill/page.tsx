@@ -8,6 +8,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
   },
+  openGraph: {
+    title: "How to Dispute a Medical Bill: Steps and Letter Template",
+    description:
+      "A careful, source-backed guide to checking and disputing a medical bill, including a privacy-conscious letter template and official help resources.",
+    url: "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
+    siteName: "Medical Bill Reader",
+    type: "article",
+    publishedTime: "2026-03-28",
+    modifiedTime: "2026-08-02",
+  },
 };
 
 const sources = [
@@ -75,10 +85,12 @@ const articleJsonLd = {
   description:
     "A source-backed guide to checking and disputing a medical bill, with a privacy-conscious letter template.",
   datePublished: "2026-03-28",
-  dateModified: "2026-07-12",
+  dateModified: "2026-08-02",
   author: {
-    "@type": "Organization",
-    name: "Medical Bill Reader",
+    "@type": "Person",
+    name: "Jason Ramirez",
+    jobTitle: "Founder of Your Friendly Developer",
+    url: "https://medicalbillreader.com/about",
   },
   publisher: {
     "@type": "Organization",
@@ -121,7 +133,22 @@ export default function DisputeMedicalBillPage() {
               How to Dispute a Medical Bill
             </h1>
             <p className="mt-3 text-sm text-slate-700 dark:text-slate-300">
-              Last reviewed July 12, 2026
+              Last reviewed August 2, 2026
+            </p>
+            <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+              By{" "}
+              <Link className="underline underline-offset-2" href="/about">
+                Jason Ramirez
+              </Link>
+              , a web professional and product founder, not a medical, legal,
+              insurance, coding, or billing professional. See the{" "}
+              <Link
+                className="underline underline-offset-2"
+                href="/editorial-policy"
+              >
+                editorial policy
+              </Link>
+              .
             </p>
             <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
               This guide provides general educational information, not medical,
@@ -372,6 +399,26 @@ export default function DisputeMedicalBillPage() {
                 Use the deadlines printed on your own notice rather than relying on
                 a general article.
               </p>
+              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100">
+                <strong>Current federal-process notice:</strong> HealthCare.gov
+                states that, as of July 1, 2026, the HHS-administered Federal
+                External Review Process is temporarily unavailable for people who
+                live in Alabama, Florida, Georgia, Texas, Wisconsin, or a U.S.
+                territory other than Puerto Rico when their plan or issuer uses
+                that process. Check the current{" "}
+                <a
+                  href="https://www.healthcare.gov/appeal-insurance-company-decision/external-review/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline underline-offset-2"
+                >
+                  HealthCare.gov external-review notice
+                </a>{" "}
+                and your plan&apos;s instructions. HealthCare.gov says HHS will
+                provide more information about deadline extensions for eligible
+                requests. If the plan does not use the HHS-administered process,
+                follow the external-review instructions in the plan&apos;s notice.
+              </div>
             </section>
 
             <section>
@@ -419,7 +466,7 @@ export default function DisputeMedicalBillPage() {
                 Primary sources
               </h2>
               <p className="mt-3 text-sm">
-                Last reviewed July 12, 2026. Official guidance can change; check the
+                Last reviewed August 2, 2026. Official guidance can change; check the
                 linked source before relying on a deadline or eligibility rule.
               </p>
               <ul className="mt-3 list-disc space-y-2 pl-6">

@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement ,  Medical Bill Reader",
+  title: "Accessibility Statement | Medical Bill Reader",
   description:
-    "Accessibility statement for MedicalBillReader.com. Our commitment to WCAG 2.1 AA compliance and making medical bill analysis accessible to everyone.",
+    "Accessibility statement for MedicalBillReader.com, including its WCAG target, current measures, known limitations, and feedback channel.",
   keywords: "accessibility, WCAG, medical bill reader, accessible, screen reader, disability",
   alternates: {
     canonical: "https://medicalbillreader.com/accessibility",
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Accessibility Statement ,  Medical Bill Reader",
-    description: "Accessibility statement for MedicalBillReader.com. Our commitment to WCAG 2.1 AA compliance.",
+    title: "Accessibility Statement | Medical Bill Reader",
+    description: "Medical Bill Reader's accessibility target, current measures, known limitations, and feedback channel.",
     url: "https://medicalbillreader.com/accessibility",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -54,65 +54,66 @@ export default function AccessibilityPage() {
           Accessibility Statement
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Last Updated: March 2026
+          Last Updated: August 2, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300">
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Our Commitment</h2>
           <p>
-            Medical Bill Reader is committed to ensuring digital accessibility for people with
-            disabilities. We continually improve the user experience for everyone and apply
-            relevant accessibility standards so that all users can access and understand their
-            medical billing information.
+            Medical Bill Reader works to improve digital accessibility for people
+            with disabilities. Accessibility is an ongoing engineering and content
+            requirement, and feedback about barriers is welcomed.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Conformance Status</h2>
           <p>
-            We target conformance with the{" "}
-            <strong>Web Content Accessibility Guidelines (WCAG) 2.1 Level AA</strong>. These
-            guidelines explain how to make web content more accessible to people with a wide
-            range of disabilities, including visual, auditory, physical, speech, cognitive, and
-            neurological disabilities.
+            The site targets the{" "}
+            <strong>Web Content Accessibility Guidelines (WCAG) 2.2 Level AA</strong>.
+            This is a development target, not a certification or claim that every
+            page and workflow fully conforms. Medical Bill Reader has not completed
+            an independent WCAG conformance audit.
           </p>
           <p>
-            As a Tier 3 YMYL (Your Money or Your Life) site handling sensitive medical billing
-            data, we also consider AAA criteria for cognitive accessibility where feasible, given
-            that our users may include vulnerable populations navigating stressful financial
-            situations.
+            Because medical billing can be stressful and cognitively demanding, the
+            site also aims for plain language, predictable navigation, and restrained
+            interfaces where practical.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Measures We Take</h2>
           <ul className="list-disc ml-6 space-y-1">
-            <li>Semantic HTML structure throughout the site</li>
-            <li>Skip-to-main-content link on every page</li>
-            <li>Keyboard navigation support for all interactive elements</li>
-            <li>ARIA labels and roles where semantic HTML is insufficient</li>
-            <li>Color contrast ratios meeting or exceeding 4.5:1 for normal text and 3:1 for large text</li>
-            <li>Responsive design that reflows at 320px width without horizontal scrolling</li>
-            <li>Text resizable to 200% without loss of content or functionality</li>
-            <li>Visible focus indicators on all interactive elements</li>
-            <li>Descriptive link text and meaningful page titles</li>
-            <li>Form inputs with visible labels (not placeholder-only)</li>
-            <li>Analysis results announced to screen readers via ARIA live regions</li>
-            <li>Dark mode support to reduce eye strain</li>
+            <li>Semantic landmarks, headings, lists, and native controls in current templates</li>
+            <li>A global skip-to-main-content link with matching main-content targets</li>
+            <li>Visible labels for the upload and processing-acknowledgement controls</li>
+            <li>Keyboard-operable native controls and visible focus styles in the core workflow</li>
+            <li>Descriptive page titles, link text, and form error messages</li>
+            <li>
+              After a report is delivered, focus moves to its titled result heading
+              so keyboard and screen-reader users are taken to the new content
+            </li>
           </ul>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Known Limitations</h2>
           <p>
-            While we strive for full WCAG 2.1 AA compliance, we are aware of the following limitations:
+            Current limitations and areas needing continued verification include:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Uploaded bill images:</strong> AI-generated analysis text is accessible, but the original uploaded bill image may not have alt text since it is user-provided content.</li>
-            <li><strong>PDF rendering:</strong> Some uploaded PDF bills may not be fully accessible in their original format. Our AI analysis output is always provided as accessible HTML text.</li>
-            <li><strong>Third-party analytics:</strong> Google Analytics loads only after a visitor opts in and does not add interactive controls to the medical bill analysis workflow.</li>
+            <li><strong>Uploaded bill images:</strong> A user-provided image may not include an equivalent text alternative. The generated report is rendered as browser text but can still contain AI errors.</li>
+            <li><strong>PDF source documents:</strong> An uploaded PDF may not be accessible in its original form; Medical Bill Reader does not remediate the source PDF.</li>
+            <li><strong>Assistive-technology coverage:</strong> The site has not been comprehensively tested across every browser, screen reader, magnifier, voice-control product, and input method.</li>
           </ul>
-
-          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">European Accessibility Act</h2>
           <p>
-            The European Accessibility Act (EAA) took effect on June 28, 2025, requiring digital
-            services offered to EU consumers to meet accessibility requirements. Medical Bill Reader
-            is committed to meeting these requirements, including publishing this accessibility
-            statement and maintaining WCAG 2.1 AA conformance.
+            <strong>Analytics:</strong> Third-party analytics is disabled
+            site-wide. Medical Bill Reader does not load Google Analytics or send
+            site-usage data to it.
+          </p>
+
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Geographic Scope</h2>
+          <p>
+            Medical Bill Reader is intended and offered only to people in the
+            United States and U.S. territories. It is not offered or marketed to
+            people in the European Economic Area, United Kingdom, or Switzerland.
+            This statement describes a voluntary accessibility target and does not
+            claim certification or compliance with a foreign accessibility regime.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Feedback and Contact</h2>
@@ -125,7 +126,8 @@ export default function AccessibilityPage() {
             <li>Contact form: <Link href="/contact" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline">Contact page</Link></li>
           </ul>
           <p>
-            We try to respond to accessibility feedback within 5 business days.
+            We review accessibility feedback as it is received. Response times can
+            vary; do not include a medical bill or other sensitive document in email.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Technical Specifications</h2>
@@ -139,14 +141,16 @@ export default function AccessibilityPage() {
             <li>JavaScript / Next.js (server-side rendered)</li>
           </ul>
           <p>
-            These technologies are relied upon for conformance with WCAG 2.1 AA.
+            These technologies support the accessibility target but do not establish
+            conformance by themselves.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Assessment Method</h2>
           <p>
-            Medical Bill Reader assesses accessibility through a combination of automated testing
-            tools (Lighthouse, axe-core), manual keyboard and screen reader testing, and ongoing
-            review during development.
+            Current assessment consists of automated build and source checks plus
+            developer review during changes. It does not represent a completed
+            independent accessibility audit or comprehensive screen-reader test
+            matrix.
           </p>
         </div>
       </div>

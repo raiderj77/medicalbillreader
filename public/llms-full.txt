@@ -1,25 +1,61 @@
-# Medical Bill Reader
+# Medical Bill Reader: detailed site facts
 
-> Medical Bill Reader helps patients understand confusing medical bills. Upload your bill and get plain-English explanations of CPT codes, ICD-10 codes, HCPCS codes, charges, and insurance columns.
+Last reviewed: 2026-08-02
 
-## What This Tool Does
-- Attempts to explain legible medical billing codes in plain language
-- Attempts to identify CPT, ICD-10-CM, and HCPCS codes
-- Organizes visible insurance fields such as allowed amount, patient responsibility, and adjustments
-- Flags patterns for verification; a flag is not proof of a billing error
-- Sends the supported document to Anthropic to generate the requested report
+## What the service is
 
-## Main Pages
-- [Home](https://medicalbillreader.com): Upload and analyze your medical bill
-- [About](https://medicalbillreader.com/about): How the tool works and our approach
-- [Privacy Policy](https://medicalbillreader.com/privacy): How we handle your data
-- [Contact](https://medicalbillreader.com/contact): Get in touch
+Medical Bill Reader is a direct-to-consumer, AI-assisted document explainer for supported PDFs and images of medical bills and insurance Explanations of Benefits. It is designed to organize legible, visible information into a five-section report: document overview, visible charges and codes, visible patient-responsibility figures, items to verify, and next questions.
 
-## Privacy & Data Handling
-Medical bills can contain sensitive personal and health information. Files pass through application memory and are sent to Anthropic to generate the report. Medical Bill Reader does not intentionally write bill content or results to its own database. Anthropic, Vercel, and other infrastructure providers process data under their own terms; see the Privacy Policy before uploading.
+The report is not a certified coding or billing audit. It does not establish that a bill, code, coverage decision, or party is correct or incorrect. It is not medical, legal, insurance, coding, tax, credit, debt, or financial advice.
 
-## Disclaimer
-This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your provider and insurance company.
+## Important limitations
 
-## About
-Built by an experienced web professional. For questions visit the contact page.
+- AI can misread scans, handwriting, tables, redactions, codes, and amounts.
+- The service has no access to clinical records, contracts, plan documents, authoritative live code databases, payer rules, or state-specific facts unless they are visibly present in the submitted document.
+- The service cannot determine fraud, upcoding, unbundling, medical necessity, coverage, legal compliance, savings, dispute outcomes, or deadlines from a bill alone.
+- Users should compare the report with the original document and verify important items with the provider, insurer, official agency, or a qualified professional.
+
+## Data flow
+
+1. The user selects a supported file in the browser.
+2. Before submission, the user must acknowledge Anthropic processing and is asked to redact unnecessary identifiers.
+3. The file travels over HTTPS to a Vercel-hosted API route.
+4. The route validates type and size, enforces a server-side entitlement and rate limits, and sends the document to Anthropic's commercial API with a system-level untrusted-document boundary.
+5. The report returns to the browser. The application does not intentionally write the bill or report to its own database or object storage.
+
+Anthropic's published standard commercial API policy states that inputs and outputs are not used for model training by default and are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal, policy-enforcement, customer-controlled-service, and agreed-term exceptions may also apply. Medical Bill Reader does not claim a zero-data-retention agreement, HIPAA-covered status, or a Business Associate Agreement. See [Anthropic's published retention policy](https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data), the [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy), and the [Privacy Policy](https://medicalbillreader.com/privacy).
+
+## Analytics, advertising, and payments
+
+Third-party analytics is disabled site-wide. Medical Bill Reader does not load Google Analytics or send page views, device or referral data, upload activity, analysis activity, report content, payment state, or conversion events to Google.
+
+No advertising code currently loads. A direct Google seller line remains in ads.txt for account readiness, but future ads require account approval, an appropriate consent platform, and placement only on nonsensitive editorial or marketing pages.
+
+Stripe hosts checkout and billing-portal pages. The application uses server-verified checkout and subscription identifiers for entitlement and does not collect card details itself. See [Pricing](https://medicalbillreader.com/pricing) and [Terms](https://medicalbillreader.com/terms).
+
+## Pricing
+
+- Free: one analysis per browser per UTC calendar month, subject to network abuse controls.
+- Single analysis: $4.99.
+- Monthly plan: $49 per month for up to 44 analyses per UTC calendar month.
+- The published single-analysis refund guarantee is limited to one request made within 24 hours of delivery; details and statutory rights are in the Terms.
+
+## Authorship and editorial controls
+
+Jason Ramirez is publicly identified as the founder and author. His stated credential is web and product experience. He is not presented as a clinician, attorney, insurer, certified medical coder, or billing specialist. The [Editorial Policy](https://medicalbillreader.com/editorial-policy) requires primary-source review, visible authorship and scope, claim-level restraint, correction handling, and commercial independence.
+
+## Canonical resources
+
+- [Home and analyzer](https://medicalbillreader.com/)
+- [About](https://medicalbillreader.com/about)
+- [Methodology](https://medicalbillreader.com/methodology)
+- [Editorial Policy](https://medicalbillreader.com/editorial-policy)
+- [Medical Billing Codes Explained](https://medicalbillreader.com/codes-explained)
+- [Medical Billing Guides](https://medicalbillreader.com/blog)
+- [How to Dispute a Medical Bill](https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill)
+- [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy)
+- [Privacy Policy](https://medicalbillreader.com/privacy)
+- [Terms](https://medicalbillreader.com/terms)
+- [Disclaimer](https://medicalbillreader.com/disclaimer)
+- [Accessibility](https://medicalbillreader.com/accessibility)
+- [Contact](https://medicalbillreader.com/contact)

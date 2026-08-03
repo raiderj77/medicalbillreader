@@ -1,7 +1,7 @@
 ---
 title: "Common Medical Billing Errors and How to Spot Them"
 date: "2026-04-15"
-modified: "2026-07-16"
+modified: "2026-08-02"
 slug: "common-medical-billing-errors-and-how-to-spot-them"
 description: "Learn seven billing issues to check on an itemized medical bill and where to get authoritative help if something looks wrong."
 status: published

@@ -19,7 +19,8 @@ function hasMagic(bytes: Buffer, type: AllowedFileType): boolean {
 }
 export function validateUpload(payload: unknown): { mediaType: AllowedFileType; data: string } {
   if (!payload || typeof payload !== "object") throw new UploadValidationError("Upload request is malformed.");
-  const { image, fileType } = payload as Record<string, unknown>;
+  const { image, fileType, processingAcknowledged } = payload as Record<string, unknown>;
+  if (processingAcknowledged !== true) throw new UploadValidationError("You must acknowledge the document processing notice before analysis.");
   if (typeof image !== "string" || typeof fileType !== "string") throw new UploadValidationError("A file and file type are required.");
   if (!ALLOWED_FILE_TYPES.includes(fileType as AllowedFileType)) throw new UploadValidationError("Only JPEG, PNG, WebP, and PDF files are supported.");
   const match = image.match(/^data:([^;,]+);base64,([A-Za-z0-9+/]*={0,2})$/);

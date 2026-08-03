@@ -4,7 +4,7 @@ import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
 
 export const metadata: Metadata = {
-  title: "About Jason Ramirez ,  Medical Bill Reader",
+  title: "About Jason Ramirez | Medical Bill Reader",
   description:
     "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "About Jason Ramirez ,  Medical Bill Reader",
+    title: "About Jason Ramirez | Medical Bill Reader",
     description: "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
     url: "https://medicalbillreader.com/about",
     siteName: "Medical Bill Reader",
@@ -38,10 +38,10 @@ const aboutFaqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Who built Medical Bill Reader and why?",
+      name: "Who built Medical Bill Reader, and what is his scope?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. He built it after seeing how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.",
+        text: "Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. His professional background is web and product development, not medicine, insurance, law, certified coding, or medical billing. The product attempts to organize visible bill and EOB fields into a plain-language report that users must verify.",
       },
     },
     {
@@ -114,17 +114,27 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           About Medical Bill Reader
         </h1>
-        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 2, 2026</p>
 
         <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-6">
-          Hi. I&apos;m Jason Ramirez. This is why I built this.
+          Hi. I&apos;m Jason Ramirez. Here is my role and the product&apos;s scope.
+        </p>
+
+        <p className="mb-6 rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          My professional background is web and product development. I am not a
+          clinician, attorney, insurer, financial adviser, certified medical
+          coder, or billing specialist. The site&apos;s{" "}
+          <Link href="/editorial-policy" className="underline underline-offset-2">
+            editorial policy
+          </Link>{" "}
+          explains how source-backed content and corrections are handled.
         </p>
 
         <AnswerBlock
           what="A free-to-start AI tool that attempts to organize visible medical-bill charges, codes, and insurance fields into a plain-language report."
           who="Patients, families, and caregivers who want to understand confusing medical bills or insurance EOBs before paying."
           bottomLine="Upload a supported file for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
-          lastUpdated="2026-07-16"
+          lastUpdated="2026-08-02"
         />
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -135,17 +145,17 @@ export default function AboutPage() {
             </h2>
             <p>
               Medical Bill Reader helps you understand confusing medical bills and
-              insurance Explanations of Benefits (EOBs) in plain language ,  no medical
-              degree required. The AI attempts to organize visible charges, billing
+              insurance Explanations of Benefits (EOBs) in plain language. The
+              AI attempts to organize visible charges, billing
               codes, and insurance fields, and may flag patterns for you to verify.
             </p>
             <p>
               Medical billing in the United States is notoriously complex. A single
               hospital visit can generate multiple bills from different providers, each
               filled with procedure codes, diagnostic codes, and insurance adjustments
-              that can be difficult to interpret. Medical
-              Bill Reader was built to change that. We believe every patient deserves
-              to understand what they are being charged for and where to ask questions.
+              that can be difficult to interpret. Medical Bill Reader attempts to
+              organize visible fields into a more readable report and identify
+              questions the user can verify with the provider or health plan.
             </p>
             <p>
               The AI attempts to read visible bill content and return a structured
@@ -187,7 +197,16 @@ export default function AboutPage() {
               and EOB before relying on any item.
             </p>
             <p>
-              No account is required for the free tier. Your bill is transmitted to Anthropic solely for analysis and is not intentionally stored in Medical Bill Reader&apos;s own database.
+              No account is required for the free tier. Your bill is transmitted
+              to Anthropic for the requested report and is not intentionally
+              stored in Medical Bill Reader&apos;s own database. Anthropic&apos;s
+              published standard commercial API retention is up to 30 days,
+              subject to account, policy, safety, and legal exceptions. Remove
+              unnecessary identifiers and read the{" "}
+              <Link href="/consumer-health-data-privacy" className="underline underline-offset-2">
+                Consumer Health Data Privacy Notice
+              </Link>{" "}
+              before uploading.
             </p>
           </section>
 
@@ -197,42 +216,50 @@ export default function AboutPage() {
               Common Medical Billing Terms Explained
             </h2>
             <p>
-              Medical bills are full of specialized terminology. Here are some of the
-              most common terms you will encounter and what they actually mean:
+              Medical bills use specialized terminology. These general definitions
+              can help you locate fields to verify against the bill, EOB, and plan
+              documents; they do not determine coverage or what you legally owe:
             </p>
             <ul className="list-disc ml-6 space-y-2">
               <li>
-                <strong>CPT Codes (Current Procedural Terminology):</strong> Five-digit
-                codes assigned to every medical procedure or service performed. For
-                example, CPT code 99213 represents a standard office visit. These codes
-                determine how much your provider bills for each service.
+                <strong>CPT Codes (Current Procedural Terminology):</strong> A copyrighted
+                code set maintained by the American Medical Association and used to
+                report many professional services and procedures. A reported code does
+                not by itself prove what occurred, medical necessity, coverage, or the
+                amount a patient owes. Verify a current descriptor through an authorized
+                source rather than relying on an informal summary.
               </li>
               <li>
-                <strong>EOB (Explanation of Benefits):</strong> A document your insurance
-                company sends after processing a claim. It shows what the provider
-                charged, what the insurance paid, and what you still owe. An EOB is not a
-                bill ,  it is a summary of how your claim was handled.
+                <strong>EOB (Explanation of Benefits):</strong> A statement from a
+                health plan describing how it processed a claim. It may show the billed
+                amount, allowed amount, plan payment, adjustments, and the plan&apos;s
+                calculated patient responsibility. An EOB is not a provider bill and
+                does not by itself establish the amount you legally owe; compare it with
+                the provider&apos;s bill and plan documents.
               </li>
               <li>
-                <strong>Deductible:</strong> The amount you must pay out of pocket each
-                year before your insurance starts covering costs. For example, with a
-                $1,500 deductible, you pay the first $1,500 of covered services yourself.
+                <strong>Deductible:</strong> The amount a plan member generally pays for
+                covered services that are subject to the deductible before the plan
+                begins paying its share. Some services may be covered before the
+                deductible is met, and not every payment counts toward it; check the plan.
               </li>
               <li>
-                <strong>Coinsurance:</strong> The percentage of costs you share with your
-                insurance after meeting your deductible. If your plan has 20% coinsurance,
-                you pay 20% of covered charges and your insurer pays 80%.
+                <strong>Coinsurance:</strong> A percentage of the plan&apos;s allowed
+                amount that a member may owe for a covered service, often after an
+                applicable deductible. The percentage and calculation depend on the
+                plan, service, and network rules and are not automatically based on the
+                provider&apos;s billed charge.
               </li>
               <li>
-                <strong>Out-of-Pocket Maximum:</strong> The most you will pay in a
-                plan year for covered, in-network services. Once you reach this limit, your
-                plan generally covers remaining covered, in-network costs for that plan year. This
-                amount includes your deductible, copays, and coinsurance.
+                <strong>Out-of-Pocket Maximum:</strong> A plan-year limit on eligible
+                cost sharing for covered care under the plan&apos;s terms. Premiums,
+                non-covered services, and some out-of-network amounts may not count.
+                Check the plan for what counts and what happens after the limit is met.
               </li>
               <li>
-                <strong>Copay:</strong> A fixed dollar amount you pay for a specific
-                service, such as $30 for a doctor visit or $15 for a prescription. Copays
-                are set by your insurance plan and can depend on the service and network status.
+                <strong>Copay:</strong> A fixed amount a plan may require as cost
+                sharing for a covered service. The amount and whether it applies depend
+                on the service, network status, and plan terms.
               </li>
               <li>
                 <strong>Allowed Amount:</strong> The maximum amount your insurance plan
@@ -253,8 +280,8 @@ export default function AboutPage() {
               Explanation of Benefits.
             </p>
             <p>
-              Understanding your bill is the first step toward catching these errors.
-              When you know what each charge means, you can verify that the services
+              Understanding the visible fields can help you ask more specific
+              questions. When you know what each charge label means, you can verify that the services
               listed match what you actually received. You can compare your provider
               bill against your insurance EOB to make sure the numbers align. And you
               can make informed decisions about whether to dispute a charge, negotiate
@@ -273,9 +300,13 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 mt-4">
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader and why?</h3>
+                <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader, and what is his scope?</h3>
                 <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                  Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. He built it after seeing how many patients struggle to understand confusing medical bills. The goal is to make medical billing transparent and accessible to everyone, regardless of their medical or insurance knowledge.
+                  Medical Bill Reader was built by Jason Ramirez, Founder of Your
+                  Friendly Developer. His professional background is web and product
+                  development, not medicine, insurance, law, certified coding, or
+                  medical billing. The product attempts to organize visible bill and
+                  EOB fields into a plain-language report that users must verify.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">

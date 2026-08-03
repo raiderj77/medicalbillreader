@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contact ,  Medical Bill Reader",
+  title: "Contact | Medical Bill Reader",
   description:
     "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
   keywords: "contact medical bill reader, support, feedback, privacy request",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Contact ,  Medical Bill Reader",
+    title: "Contact | Medical Bill Reader",
     description: "Get in touch with the MedicalBillReader team for questions, privacy requests, or feedback about our medical bill analysis tool.",
     url: "https://medicalbillreader.com/contact",
     siteName: "Medical Bill Reader",
@@ -36,7 +36,7 @@ const contactFaqJsonLd = {
       name: "Is my medical bill data safe if I contact you?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Never send a medical bill by email. Documents submitted through the upload tool pass through application memory and are transmitted to Anthropic solely for analysis; Medical Bill Reader does not intentionally store them in its own database. Infrastructure providers process data under their applicable terms.",
+        text: "Do not send a medical bill or health information by email. Documents submitted through the upload tool pass through application memory and are transmitted to Anthropic for the requested analysis; Medical Bill Reader does not intentionally store them in its own database. Anthropic and infrastructure providers apply their disclosed retention terms.",
       },
     },
     {
@@ -86,7 +86,7 @@ export default function ContactPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">Contact Us</h1>
-        <p className="text-sm text-gray-700 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 2, 2026</p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           <section>
@@ -94,12 +94,10 @@ export default function ContactPage() {
               The MedicalBillReader team is here to help. Whether you have a
               question about how the tool works, want to report a problem, or
               need to submit a privacy-related request, we are happy to assist.
-              Medical Bill Reader is a free AI-powered tool that helps patients
-              understand confusing medical bills and insurance Explanations of
-              Benefits in plain language. You upload a photo or PDF of your bill,
-              and the AI attempts to organize visible charges, codes, and
-              insurance fields into a report. AI output can be incomplete or
-              incorrect and does not determine what you legally owe.
+              Medical Bill Reader is a free-to-start AI-assisted tool that
+              organizes visible fields from supported medical bills and
+              insurance Explanations of Benefits. AI output can be incomplete
+              or incorrect and does not determine what you legally owe.
             </p>
           </section>
 
@@ -115,17 +113,17 @@ export default function ContactPage() {
               We also welcome general feedback about the user experience,
               suggestions for new features, and questions about what file
               formats are supported. If you are unsure whether Medical Bill
-              Reader can handle a specific type of document, such as an
-              itemized hospital statement, a dental bill, or a pharmacy receipt,
-              feel free to ask before uploading.
+              Reader supports a file type or size, you can ask before uploading.
+              Do not describe diagnoses, treatments, providers, account details,
+              or other health information in the message.
             </p>
             <p>
               Please note that we cannot provide medical advice, financial
               advice, or help you dispute a specific charge with your provider.
-              Our tool is designed to explain your bill in plain English and
-              flag potential errors, but any disputes or negotiations should be
-              directed to your healthcare provider&apos;s billing department or
-              your insurance company.
+              The tool can organize visible information into questions to
+              verify, but it cannot determine that a charge is wrong. Direct
+              disputes or negotiations to your provider, insurer, or a
+              qualified adviser.
             </p>
           </section>
 
@@ -172,20 +170,21 @@ export default function ContactPage() {
               Privacy and Data Deletion Requests
             </h2>
             <p>
-              We take your privacy seriously. Medical Bill Reader processes
-              uploaded bills in memory and transmits them to Anthropic solely for
-              analysis. We do not intentionally store your bill images or PDFs in
-              our own database, and the contents of your medical bills are not
-              logged, saved to a database, or shared with advertising networks.
-              Your analysis results exist only in your browser session and
-              disappear when you close or refresh the page.
+              Medical Bill Reader processes uploaded bills in application
+              memory and transmits them to Anthropic for the requested report.
+              We do not intentionally write bill files or report text to our own
+              database, logs, or advertising systems. Anthropic&apos;s published
+              standard commercial API policy provides automatic deletion within
+              30 days, subject to account, policy, safety, and legal exceptions;
+              this site does not claim zero-data retention. Your displayed
+              report remains in page memory until you reset, refresh, close, or
+              navigate away.
             </p>
             <p>
               If you have questions about how your data is handled, want to
               request deletion of any personal information we may hold such as
               server logs or analytics data, or need to exercise your rights
-              under privacy laws such as the CCPA, GDPR, or state health data
-              laws, email us at:
+              under applicable privacy or consumer-health-data law, email us at:
             </p>
             <p>
               <a
@@ -203,6 +202,13 @@ export default function ContactPage() {
                 className="text-teal-800 hover:text-teal-800 underline"
               >
                 Privacy Policy
+              </Link>
+              {" "}and{" "}
+              <Link
+                href="/consumer-health-data-privacy"
+                className="text-teal-800 hover:text-teal-800 underline"
+              >
+                Consumer Health Data Privacy Notice
               </Link>
               .
             </p>
@@ -222,20 +228,20 @@ export default function ContactPage() {
                   <Link href="/" className="text-teal-800 hover:text-teal-800 underline">homepage</Link>.
                   Upload a supported bill or EOB and review the AI-generated
                   report against the original document. If you
-                  run into any issues with the tool or have questions about your
-                  results, email us at support@medicalbillreader.com and we will
-                  help you out.
+                  run into a technical issue, email us at
+                  support@medicalbillreader.com without including the bill,
+                  report, or health information.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Is my medical bill data safe if I contact you?</h3>
                 <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                  Yes. We never ask you to send your medical bill via email.
-                  Bills are only processed through the website upload flow on the
-                  website, where they pass through application memory and are transmitted to Anthropic solely for analysis. If you contact us by email, please do not attach
-                  medical bills or documents containing sensitive health
-                  information. Our support team handles inquiries without
-                  needing access to your actual bill data.
+                  Do not send a medical bill or health information by email.
+                  Bills submitted through the upload flow pass through
+                  application memory and are transmitted to Anthropic for the
+                  requested report. Anthropic and infrastructure providers apply
+                  the retention terms described in the privacy notices. Technical
+                  support does not need the bill or generated report.
                 </p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">

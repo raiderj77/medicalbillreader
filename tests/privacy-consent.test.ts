@@ -28,7 +28,7 @@ describe("privacy consent", () => {
     expect(cookie).toContain("SameSite=Lax");
   });
 
-  it("does not restore the broken CMP, ad loader, or session recorder", () => {
+  it("keeps all optional tracking disabled and renders no consent banner", () => {
     const layout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8");
     const control = readFileSync(
       join(process.cwd(), "src/components/PrivacyConsent.tsx"),
@@ -36,10 +36,29 @@ describe("privacy consent", () => {
     );
     const trackingCode = `${layout}\n${control}`;
 
-    expect(trackingCode).not.toContain("consent.cookiebot.com");
-    expect(trackingCode).not.toContain("googlesyndication.com");
-    expect(trackingCode).not.toContain("clarity.ms");
-    expect(control).toContain("googletagmanager.com/gtag/js");
+    for (const tracker of [
+      "consent.cookiebot.com",
+      "googlesyndication.com",
+      "googletagmanager.com",
+      "clarity.ms",
+      "dataLayer",
+      "window.gtag",
+    ]) {
+      expect(trackingCode).not.toContain(tracker);
+    }
+    expect(control).not.toContain("Allow analytics");
+    expect(control).not.toContain("Privacy choices");
+    expect(control).toContain("return null");
+    expect(control).toContain('createPrivacyConsentCookie("essential")');
+  });
+
+  it("does not permit Google tracking origins in deployment policies", () => {
+    const policies = ["next.config.ts", "vercel.json"]
+      .map((path) => readFileSync(join(process.cwd(), path), "utf8"))
+      .join("\n");
+
+    expect(policies).not.toContain("googletagmanager.com");
+    expect(policies).not.toContain("google-analytics.com");
   });
 
   it("keeps the health referrer policy consistent in every deployment config", () => {
@@ -66,14 +85,11 @@ describe("privacy consent", () => {
     );
   });
 
-  it("uses the supported Next.js proxy convention for GPC propagation", () => {
+  it("does not persist GPC when all optional tracking is already disabled", () => {
     const proxyPath = join(process.cwd(), "src/proxy.ts");
     const middlewarePath = join(process.cwd(), "src/middleware.ts");
 
-    expect(existsSync(proxyPath)).toBe(true);
+    expect(existsSync(proxyPath)).toBe(false);
     expect(existsSync(middlewarePath)).toBe(false);
-    expect(readFileSync(proxyPath, "utf8")).toContain(
-      "export function proxy(request: NextRequest)",
-    );
   });
 });

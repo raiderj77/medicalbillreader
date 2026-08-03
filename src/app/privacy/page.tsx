@@ -1,401 +1,375 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+const PAGE_URL = "https://medicalbillreader.com/privacy";
+
 export const metadata: Metadata = {
-  title: "Privacy Policy ,  Medical Bill Reader",
+  title: "Privacy Policy",
   description:
-    "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
-  keywords: "privacy policy, medical bill reader, data privacy, CCPA, GDPR, health data",
-  alternates: {
-    canonical: "https://medicalbillreader.com/privacy",
-  },
-  robots: "index, follow, max-snippet:-1",
+    "How Medical Bill Reader handles uploads, reports, request metadata, payments, essential cookies, and privacy requests. Third-party analytics is disabled.",
+  alternates: { canonical: PAGE_URL },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Privacy Policy ,  Medical Bill Reader",
-    description: "Privacy policy for MedicalBillReader.com. Learn how we handle your data, medical bills, and personal information.",
-    url: "https://medicalbillreader.com/privacy",
+    title: "Privacy Policy — Medical Bill Reader",
+    description:
+      "How Medical Bill Reader handles uploads, reports, request metadata, payments, essential cookies, and privacy requests.",
+    url: PAGE_URL,
     siteName: "Medical Bill Reader",
     type: "website",
   },
 };
 
-const privacyFaqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How is my uploaded medical bill data handled?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Your document is transmitted to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Anthropic, Vercel, and infrastructure providers process data under their applicable terms and retention practices.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How can I request deletion of my personal data?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Medical Bill Reader does not intentionally retain bill documents in its own database. Infrastructure providers may retain limited data under their applicable terms. For a privacy request, email privacy@medicalbillreader.com.",
-      },
-    },
-  ],
-};
-
-const breadcrumbJsonLd = {
+const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
-    { "@type": "ListItem", position: 2, name: "Privacy Policy", item: "https://medicalbillreader.com/privacy" },
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://medicalbillreader.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Privacy Policy",
+      item: PAGE_URL,
+    },
   ],
 };
 
 export default function PrivacyPage() {
   return (
-    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <main
+      id="main-content"
+      className="min-h-screen bg-slate-50 px-4 py-10 dark:bg-slate-950"
+    >
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(privacyFaqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      {/* Answer capsule ,  must be first visible text for GEO/AI scrapers */}
-      <div className="max-w-3xl mx-auto px-6 pt-8">
-        <p className="text-lg text-slate-700 leading-relaxed mb-0 bg-white border border-slate-200 rounded-lg p-5">
-          MedicalBillReader.com is committed to protecting your privacy. This policy explains how uploaded documents are transmitted to Anthropic for analysis, how our hosting and infrastructure providers process requests, and the choices available to you. We do not sell bill data or intentionally store bill documents in our own database.
-        </p>
-      </div>
+      <article className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 text-slate-700 shadow-sm sm:p-10 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+        <nav aria-label="Breadcrumb" className="mb-6 text-sm">
+          <Link
+            href="/"
+            className="font-medium text-teal-800 underline dark:text-teal-300"
+          >
+            Home
+          </Link>{" "}
+          <span aria-hidden="true">/</span> Privacy Policy
+        </nav>
 
-      {/* Nav */}
-      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🩺</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
-              MedicalBillReader
-            </span>
-          </Link>
-        </div>
-      </nav>
+        <header>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
+            Privacy Policy
+          </h1>
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+            Effective August 2, 2026 · Last reviewed August 2, 2026
+          </p>
+          <p className="mt-6 rounded-xl border border-teal-200 bg-teal-50 p-5 leading-7 text-slate-900 dark:border-teal-900 dark:bg-teal-950/40 dark:text-slate-100">
+            Medical Bill Reader does not sell uploaded bill data or use it for
+            advertising. A supported file is sent through the application to
+            Anthropic to create the report you request. We do not intentionally
+            write the document or report to our own database, but service
+            providers process data under their configurations, contracts, and
+            legal obligations.
+          </p>
+        </header>
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">Privacy Policy</h1>
-        <p className="text-sm text-gray-700 mt-1 mb-4 text-center">Last reviewed: July 16, 2026</p>
-        <p className="text-sm text-slate-700 mb-8">
-          Effective Date: January 1, 2026 | Last Reviewed: July 16, 2026
-        </p>
-
-        <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
-          {/* Data Controller */}
+        <div className="mt-10 space-y-9 leading-7">
           <section>
-            <h2 className="text-xl font-bold text-slate-800">1. Who We Are</h2>
-            <p>
-              MedicalBillReader.com (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is operated by an experienced web professional. We provide an AI-powered tool that helps consumers understand their medical bills. This Privacy Policy describes how we collect, use, and protect your information when you use our website and services.
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              1. Who operates the service
+            </h2>
+            <p className="mt-3">
+              MedicalBillReader.com is operated by Jason Ramirez. For privacy
+              questions or requests, email{" "}
+              <a
+                href="mailto:privacy@medicalbillreader.com"
+                className="font-medium text-teal-800 underline dark:text-teal-300"
+              >
+                privacy@medicalbillreader.com
+              </a>
+              . Do not send medical bills, diagnoses, member IDs, account
+              numbers, or other sensitive documents through ordinary email.
             </p>
-            <p>
-              For privacy-related inquiries, contact us at: <strong>privacy@medicalbillreader.com</strong>
+            <p className="mt-3">
+              The service is intended and offered only to people located in the
+              United States and U.S. territories. It is not offered or marketed
+              to people in the European Economic Area, United Kingdom, or
+              Switzerland. If you are located outside the United States or its
+              territories, do not use the analyzer or submit personal data. This
+              geographic scope does not waive rights under a law that otherwise
+              applies.
             </p>
           </section>
 
-          {/* Categories of Data Collected */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">2. Categories of Personal Data We Collect</h2>
-            <p>We collect the following categories of personal data:</p>
-            <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Uploaded Medical Bills</strong> ,  Images or PDFs you upload for analysis. These may contain sensitive personal and health information including patient names, dates of service, diagnoses, procedure codes (CPT, ICD-10, HCPCS), and billing amounts.</li>
-              <li><strong>Device &amp; Browser Information</strong> ,  IP address, browser type, operating system, and device identifiers collected automatically via server logs and analytics.</li>
-              <li><strong>Usage Data</strong> ,  Pages visited, features used, timestamps, and interaction patterns.</li>
-              <li><strong>Cookies &amp; Tracking Technologies</strong> ,  Optional website usage data collected only after you consent to analytics.</li>
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              2. Information processed
+            </h2>
+            <ul className="mt-3 list-disc space-y-3 pl-6">
+              <li>
+                <strong>Uploads:</strong> the image or PDF you choose, which may
+                contain names, dates, providers, diagnoses, procedure codes,
+                insurance details, account identifiers, and charges.
+              </li>
+              <li>
+                <strong>Generated report:</strong> the AI response derived from
+                the submitted document.
+              </li>
+              <li>
+                <strong>Request and security data:</strong> IP address and other
+                request metadata processed by hosting infrastructure, plus
+                HMAC-protected rate-limit and entitlement tokens stored in
+                Upstash. The application does not put bill content or report text
+                in those keys.
+              </li>
+              <li>
+                <strong>Payments:</strong> payment, customer, subscription, and
+                transaction information processed by Stripe. Full card numbers
+                go directly to Stripe and are not handled by our application.
+              </li>
+              <li>
+                <strong>Support and privacy requests:</strong> the email address
+                and message content you choose to send.
+              </li>
+              <li>
+                <strong>Third-party analytics:</strong> disabled site-wide. The
+                current site does not load Google Analytics or send page views,
+                device or referral information, upload activity, analysis
+                activity, report content, payment state, or conversion events to
+                Google.
+              </li>
             </ul>
           </section>
 
-          {/* How We Use Data */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">3. How We Use Your Data</h2>
-            <ul className="list-disc ml-6 space-y-1">
-              <li>To analyze your uploaded medical bills and provide plain-English explanations.</li>
-              <li>To operate, maintain, and improve our website and services.</li>
-              <li>To understand aggregate website usage when you opt in to analytics.</li>
-              <li>To comply with legal obligations.</li>
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              3. How information is used
+            </h2>
+            <ul className="mt-3 list-disc space-y-2 pl-6">
+              <li>Generate and display the bill or EOB report you request.</li>
+              <li>Enforce free, paid, and subscription usage limits.</li>
+              <li>Process payments, refunds, and subscription management.</li>
+              <li>Prevent abuse, investigate failures, and secure the service.</li>
+              <li>Respond to support, correction, and privacy requests.</li>
             </ul>
-            <p>
-              <strong>Lawful Basis (where GDPR applies):</strong> Depending on the processing activity, we rely on your consent, our legitimate interests in operating and securing the service, or compliance with legal obligations.
-            </p>
           </section>
 
-          {/* Medical Bill Data ,  Critical Section */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">4. Medical Bill Data ,  How We Handle Your Health Information</h2>
-            <p>
-              We treat all uploaded medical bills with the highest level of sensitivity. Medical bills may contain protected health information and are handled with HIPAA-adjacent care, even though MedicalBillReader.com is not a HIPAA-covered entity.
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              4. Health data and the analyzer
+            </h2>
+            <p className="mt-3">
+              The analyzer is a direct-to-consumer service, not a HIPAA covered
+              entity or business associate service. It does not offer a business
+              associate agreement for public use. Before uploading, remove names,
+              addresses, dates of birth, member IDs, account numbers, barcodes,
+              and other identifiers that are not needed for the explanation.
             </p>
-            <ul className="list-disc ml-6 space-y-2">
-              <li><strong>Our storage:</strong> Medical Bill Reader does not intentionally write uploaded bill images or PDFs to its own database. Documents pass through server memory while the request is processed.</li>
-              <li><strong>No Logging of Bill Contents:</strong> The text, codes, charges, and other contents of your medical bills are never logged, stored in databases, or written to server logs.</li>
-              <li><strong>Anthropic API disclosure:</strong> The complete uploaded image or PDF is transmitted to Anthropic solely to generate the requested analysis. Anthropic processes API data under its <a href="https://www.anthropic.com/legal/commercial-terms" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Commercial Terms</a> and <a href="https://privacy.anthropic.com/" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Privacy Center</a>. Retention depends on the API service configuration and contractual terms in effect.</li>
-              <li><strong>No Advertising Use:</strong> Your medical bill data, health information, and analysis results are never shared with advertising systems, ad networks, or used for ad targeting.</li>
-              <li><strong>Browser-Session Only:</strong> Your bill preview and analysis results exist only in your browser session and are cleared when you close or refresh the page.</li>
-            </ul>
-            <p>
-              During upload, we display a notice that the document will be transmitted to Anthropic and not used for advertising.
-            </p>
-            <p>
-              <strong>Important:</strong> Analysis results are estimates for informational purposes only. They do not constitute medical advice, financial advice, or a professional billing review.
+            <p className="mt-3">
+              See the prominently linked{" "}
+              <Link
+                href="/consumer-health-data-privacy"
+                className="font-medium text-teal-800 underline dark:text-teal-300"
+              >
+                Consumer Health Data Privacy Notice
+              </Link>{" "}
+              for data categories, processors, retention, and rights specific to
+              consumer health data.
             </p>
           </section>
 
-          {/* Third Parties */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">5. Third Parties We Share Data With</h2>
-            <ul className="list-disc ml-6 space-y-2">
-              <li><strong>Anthropic (Claude API)</strong> ,  Uploaded bill images/text are sent to Anthropic for AI-powered analysis. Anthropic processes data under their API terms and does not use API inputs for model training.</li>
-              <li><strong>Google Analytics</strong> ,  If you opt in, this service receives limited website usage data. We do not send medical bill contents or analysis results to it.</li>
-              <li><strong>Vercel</strong> ,  Our hosting provider routes and executes server requests. Vercel may process request metadata and operational logs according to our configuration, plan, and Vercel&apos;s terms. We configure application logs not to include bill content, base64 data, or model output.</li>
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              5. Service providers and disclosures
+            </h2>
+            <ul className="mt-3 list-disc space-y-3 pl-6">
+              <li>
+                 <strong>Anthropic:</strong> receives the supported document and
+                 returns the report through its commercial API. Anthropic states
+                 that standard API inputs and outputs are automatically deleted
+                 from its backend within 30 days, except when a service has longer
+                 customer-controlled retention, different agreed terms apply, or
+                 retention is needed for policy enforcement or law. Anthropic&apos;s
+                 published policy says inputs and outputs flagged by its automated
+                 trust and safety systems may be retained for up to two years and
+                 associated classification scores for up to seven years. By
+                 default, Anthropic says commercial API inputs and outputs are not
+                 used to train its models unless the customer opts in or submits
+                 feedback. Medical Bill Reader does not claim a zero-data-retention
+                 agreement or Business Associate Agreement. See{" "}
+                 <a
+                   href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="font-semibold text-teal-800 underline dark:text-teal-300"
+                 >
+                   Anthropic&apos;s published retention policy
+                 </a>
+                 .
+              </li>
+              <li>
+                <strong>Vercel:</strong> hosts and routes the application and may
+                process request metadata and operational logs. Application logs
+                use fixed event categories and are designed not to include bill
+                content, base64 data, filenames, report text, Stripe IDs, or raw
+                provider error objects.
+              </li>
+              <li>
+                <strong>Upstash:</strong> stores pseudonymous security,
+                rate-limit, entitlement, and webhook-deduplication keys, not the
+                document or report.
+              </li>
+              <li>
+                <strong>Stripe:</strong> processes hosted Checkout, payment,
+                subscription, refund, and billing-portal data.
+              </li>
+              <li>
+                <strong>Third-party analytics:</strong> disabled. Google Analytics
+                is not a current service provider for site-usage measurement, and
+                the application does not send analytics data to it.
+              </li>
             </ul>
-          </section>
-
-          {/* Data Retention */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">6. Data Retention Periods</h2>
-            <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Uploaded Medical Bills:</strong> Not intentionally stored in Medical Bill Reader&apos;s own database. Provider-side processing and retention depend on the applicable Anthropic, Vercel, and infrastructure configuration and terms.</li>
-              <li><strong>Analysis Results:</strong> Exist only in your browser session ,  not stored on our servers.</li>
-              <li><strong>Operational Logs:</strong> Vercel and other infrastructure providers may retain request metadata under the active configuration, plan, and their terms. Application security logs are designed not to contain bill content, base64 data, or model output.</li>
-              <li><strong>Analytics Data:</strong> If you opt in, limited usage data is retained according to the active Google Analytics property settings and Google&apos;s terms.</li>
-              <li><strong>Privacy Preference:</strong> The first-party consent cookie expires after 180 days.</li>
-            </ul>
-          </section>
-
-          {/* California Privacy Rights ,  CCPA/CPRA Jan 2026 + State Health Laws */}
-          <section id="california-privacy" aria-labelledby="california-heading">
-            <h2 id="california-heading" className="text-xl font-bold text-slate-800">7. California Privacy Rights (CCPA/CPRA)</h2>
-
-            <p>
-              If you are a California resident, the California Consumer Privacy Act (CCPA) as amended
-              by the California Privacy Rights Act (CPRA) may grant you specific rights regarding your
-              personal information, subject to the law&apos;s scope and exceptions.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Information We Collect</h3>
-            <p>In the past 12 months we have collected the following categories of personal information:</p>
-            <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Identifiers:</strong> IP address, browser type, and device or request identifiers processed by the website and its infrastructure providers.</li>
-              <li><strong>Internet or network activity:</strong> Pages visited, tool usage patterns, time on site.</li>
-              <li><strong>Health and medical information:</strong> Medical bill documents submitted for analysis are transmitted to Anthropic. Medical Bill Reader does not intentionally store them in its own database or log their contents.</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Sensitive Personal Information ,  Medical Bill Data</h3>
-            <p>
-              As of January 1, 2026, California law defines health and medical information as sensitive
-              personal information requiring heightened protections. Medical bills you upload contain
-              sensitive health information including patient names, diagnosis codes (ICD-10), procedure
-              codes (CPT/HCPCS), provider information, and financial data.
-            </p>
-            <p>
-              <strong>Medical Bill Reader treats all uploaded bill data as sensitive personal
-              information.</strong> Specifically:
-            </p>
-            <ul className="list-disc ml-6 space-y-1">
-              <li>Bill documents pass through application memory and are not intentionally written to Medical Bill Reader&apos;s own database</li>
-              <li>We do not store, log, index, or retain bill content after your session ends</li>
-              <li>Bill content is not sold or shared for advertising; it is disclosed to Anthropic and infrastructure providers as needed to deliver the analysis</li>
-              <li>Medical bill content and analysis results are not sent to analytics or advertising systems</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Washington My Health My Data Act (WA MHMDA)</h3>
-            <p>
-              For Washington State residents, the My Health My Data Act provides additional protections
-              for consumer health data. Medical bill information constitutes consumer health data under
-              this law. We comply with WA MHMDA by: processing health data only to provide the
-              requested service; not selling consumer health data; and not sharing bill content with
-              third parties for advertising. Medical Bill Reader does not intentionally retain bill documents in its own database; provider-side processing and retention depend on the applicable service configuration and terms.
-              Washington residents have the right to access, delete, and withdraw consent for
-              processing of their consumer health data by contacting us via the{' '}
-              <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Maryland Online Data Privacy Act (MD MODPA)</h3>
-            <p>
-              For Maryland residents, the Maryland Online Data Privacy Act (enforcement effective April 1, 2026)
-              prohibits the sale of sensitive data including health information. We do not sell
-              medical bill data or any health-related information. Maryland residents have the right
-              to access, delete, correct, opt out of processing, and exercise portability of their personal data by
-              contacting us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
-            </p>
-            <p>
-              We honor the Global Privacy Control (GPC) browser signal as a universal opt-out of targeted advertising, data sale, and data sharing. When your browser sends a GPC signal, we automatically suppress all non-essential cookies and data collection.
-            </p>
-            <p>
-              To exercise your MODPA rights, contact us at the email above. We respond to MODPA requests within 45 days.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Minimization</h3>
-            <p>
-              We collect only the minimum personal information necessary to operate this service.
-              Medical bill documents pass through application memory and are not intentionally stored in our own database. Provider-side processing and retention are governed by the applicable Anthropic, Vercel, and infrastructure terms and configuration.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">How We Use Your Information</h3>
-            <ul className="list-disc ml-6 space-y-1">
-              <li>To perform medical bill analysis using AI processing</li>
-              <li>To analyze aggregate site traffic via analytics (no health data included)</li>
-              <li>To maintain site security and prevent fraud</li>
-            </ul>
-            <p>We do not sell your personal information. We do not use health or medical bill content for advertising targeting under any circumstances.</p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Your Rights as a California Resident</h3>
-            <ul className="list-disc ml-6 space-y-1">
-              <li><strong>Right to Know:</strong> Request disclosure of personal information collected in the past 12 months.</li>
-              <li><strong>Right to Delete:</strong> Request deletion of personal information we control. Medical Bill Reader does not intentionally store bill documents in its own database.</li>
-              <li><strong>Right to Correct:</strong> Request correction of inaccurate personal information such as account details.</li>
-              <li><strong>Right to Opt-Out:</strong> Opt out of optional analytics. We honor Global Privacy Control (GPC) signals automatically.</li>
-              <li><strong>Right to Limit Use of Sensitive Information:</strong> You have the right to limit our use of your sensitive personal information (including health data) to only what is necessary to provide the service you requested.</li>
-              <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of these rights.</li>
-            </ul>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Do Not Sell or Share My Personal Information</h3>
-            <p>
-              We do not sell personal information or health data. To keep optional analytics off, use a{' '}
-              <a href="https://globalprivacycontrol.org/" className="text-teal-800 hover:text-teal-800 underline" target="_blank" rel="noopener noreferrer">Global Privacy Control (GPC)</a>-enabled
-              browser, or contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
-            </p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">How to Submit a Request</h3>
-            <p>Contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>. Response timing depends on the request and applicable law. Identity verification may be required.</p>
-
-            <h3 className="text-lg font-semibold text-slate-800 mt-4">Data Retention</h3>
-            <p>Medical Bill Reader does not intentionally retain bill documents in its own database. Analysis results remain in the active browser session. Stripe retains payment records under its terms. Anthropic, Vercel, Redis, and other infrastructure providers may retain request metadata or processed data according to their service configuration, contracts, and legal obligations. We do not promise zero retention where those provider settings have not been contractually verified.</p>
-          </section>
-
-          {/* Additional U.S. State Privacy Rights */}
-          <section id="state-privacy" aria-labelledby="state-heading">
-            <h2 id="state-heading" className="text-xl font-bold text-slate-800">8. Additional U.S. State Privacy Rights</h2>
-            <p>
-              Residents of the following states have privacy rights similar to California&apos;s CCPA/CPRA.
-              To exercise your rights, contact us via the <Link href="/contact" className="text-teal-800 hover:text-teal-800 underline">Contact page</Link>.
-              We will respond within the timeframe required by your state&apos;s law.
-            </p>
-            <div className="overflow-x-auto mt-4">
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-300">
-                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">State</th>
-                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">Law</th>
-                    <th className="text-left py-2 pr-4 font-semibold text-slate-800">Effective</th>
-                    <th className="text-left py-2 font-semibold text-slate-800">Key Rights</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Colorado</td><td className="py-2 pr-4">CPA</td><td className="py-2 pr-4">Jul 2023</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Connecticut</td><td className="py-2 pr-4">CTDPA</td><td className="py-2 pr-4">Jul 2023</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Virginia</td><td className="py-2 pr-4">VCDPA</td><td className="py-2 pr-4">Jan 2023</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Texas</td><td className="py-2 pr-4">TDPSA</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Florida</td><td className="py-2 pr-4">FDBR</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Montana</td><td className="py-2 pr-4">MTCPA</td><td className="py-2 pr-4">Oct 2024</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Oregon</td><td className="py-2 pr-4">OCPA</td><td className="py-2 pr-4">Jul 2024</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Tennessee</td><td className="py-2 pr-4">TIPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Minnesota</td><td className="py-2 pr-4">MNDPA</td><td className="py-2 pr-4">Jul 2025</td><td className="py-2">Access, delete, correct, opt-out, portability</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Maryland</td><td className="py-2 pr-4">MODPA</td><td className="py-2 pr-4">Apr 2026</td><td className="py-2">Access, delete, correct, opt-out, portability; honors GPC; bans sale of sensitive data</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Indiana</td><td className="py-2 pr-4">IDCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Kentucky</td><td className="py-2 pr-4">KYCPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                  <tr className="border-b border-slate-200"><td className="py-2 pr-4">Rhode Island</td><td className="py-2 pr-4">RIDPA</td><td className="py-2 pr-4">Jan 2026</td><td className="py-2">Access, delete, correct, opt-out</td></tr>
-                </tbody>
-              </table>
-            </div>
             <p className="mt-4">
-              We honor Global Privacy Control (GPC) signals from all states that require it.
-              We do not sell personal information to third parties. We do not engage in targeted
-              advertising using sensitive personal information.
+              We may also disclose information when required by law, to protect
+              the service or users, or as part of a business transaction subject
+              to applicable safeguards and notice requirements.
             </p>
           </section>
 
-          {/* GDPR Article 9 */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">9. Special Category Health Data (GDPR Article 9)</h2>
-            <p>
-              Under GDPR Article 9, medical and health-related data constitutes &quot;special category&quot; personal data requiring explicit consent and additional safeguards. When you upload a medical bill:
-            </p>
-            <ul className="list-disc ml-6 space-y-1">
-              <li>We process health data solely based on your explicit consent given at the time of upload.</li>
-              <li>Processing is limited to the specific purpose of bill analysis.</li>
-              <li>Medical Bill Reader does not intentionally store bill documents in its own database; provider-side retention is governed by applicable service terms and configuration.</li>
-              <li>We implement appropriate technical and organizational safeguards.</li>
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              6. Retention
+            </h2>
+            <ul className="mt-3 list-disc space-y-3 pl-6">
+              <li>
+                <strong>Document and report in our application:</strong> held in
+                memory for the request and active browser page; not intentionally
+                written to our database.
+              </li>
+              <li>
+                 <strong>Anthropic API:</strong> up to 30 days under the standard
+                 policy, subject to the longer policy-enforcement, legal,
+                 customer-controlled-service, and agreed-term exceptions described
+                 above. Policy-flagged inputs and outputs may be retained for up to
+                 two years and associated classification scores for up to seven
+                 years. We do not claim that this public service has zero data
+                 retention or a Business Associate Agreement.
+              </li>
+              <li>
+                <strong>Rate-limit and entitlement keys:</strong> generally one
+                minute to 40 days. A pseudonymous pay-per-use replay-prevention
+                key may be retained for up to 370 days. Temporary reservations
+                expire after about 10 minutes; webhook deduplication keys expire
+                after 30 days.
+              </li>
+              <li>
+                <strong>Payment records:</strong> retained by Stripe and, where
+                applicable, by us for payment, accounting, refund, dispute,
+                fraud-prevention, and legal obligations.
+              </li>
+              <li>
+                <strong>Analytics:</strong> third-party analytics is disabled, so
+                the current site sends no new site-usage data to Google Analytics.
+              </li>
+              <li>
+                <strong>Provider metadata and logs:</strong> follows the active
+                provider configuration, plan, contract, and legal obligations.
+              </li>
             </ul>
           </section>
 
-          {/* HIPAA-Adjacent Sensitivity */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">10. HIPAA-Adjacent Sensitivity</h2>
-            <p>
-              While MedicalBillReader.com is not a HIPAA-covered entity or business associate, we recognize that medical bills contain the same types of sensitive health information protected under HIPAA. We voluntarily adopt HIPAA-adjacent security and privacy practices, including not intentionally storing bill documents in our own database, not logging bill contents, and restricting access to data processing systems.
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              7. Cookies and controls
+            </h2>
+            <p className="mt-3">
+              Essential cookies carry signed free-use authorization, an
+              authenticated browser binding, and encrypted paid or subscription
+              entitlement tokens. The paid tokens are bound to the browser-binding
+              cookie and do not expose raw Stripe identifiers. A theme choice may
+              be stored in localStorage. Third-party analytics is disabled, so the
+              current site does not load Google Analytics, set Google Analytics
+              cookies, or display an analytics-consent banner. See the{" "}
+              <Link
+                href="/cookies"
+                className="font-medium text-teal-800 underline dark:text-teal-300"
+              >
+                Cookie Policy
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="/do-not-sell"
+                className="font-medium text-teal-800 underline dark:text-teal-300"
+              >
+                Do Not Sell or Share page
+              </Link>
+              .
             </p>
           </section>
 
-          {/* Cookies */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">11. Cookies &amp; Tracking</h2>
-            <p>
-              Essential cookies support security, entitlements, and your privacy preference. Google
-              Analytics loads only after you affirmatively opt in. Uploaded bill content and analysis
-              results are not sent to Google Analytics.
-            </p>
-            <p>
-              You can change your choice at any time with the Privacy choices button. A Global Privacy
-              Control signal automatically keeps optional analytics off.
-            </p>
-          </section>
-
-          {/* Children */}
-          <section>
-            <h2 className="text-xl font-bold text-slate-800">12. Children&apos;s Privacy</h2>
-            <p>
-              Our service is not directed at children under 16. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, contact us so we can review and address the request under applicable law and provider processes.
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              8. Advertising
+            </h2>
+            <p className="mt-3">
+              Google AdSense code is not currently loaded by the site. If
+              advertising is introduced later, this policy and any legally
+              required consent tooling must be updated before activation. Ads may
+              not appear on the
+              analyzer, checkout, pricing, account-management, report, contact,
+              or privacy pages, and document content or sensitive activity may
+              not be used for ad targeting.
             </p>
           </section>
 
-          {/* Changes */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">13. Changes to This Policy</h2>
-            <p>
-              We may update this Privacy Policy periodically. Material changes will be posted on this page with an updated &quot;Last Updated&quot; date. Your continued use of the service after changes constitutes acceptance.
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              9. Privacy rights
+            </h2>
+            <p className="mt-3">
+              Depending on where you live and whether a law applies, you may have
+              rights to know, access, correct, delete, or receive a copy of
+              personal data, withdraw consent, limit certain uses of sensitive
+              data, or appeal a denied request. We do not sell personal data or
+              use bill data for targeted advertising. Email the privacy address
+              above with the subject “Privacy Request.” We may need to verify your
+              identity. To appeal, reply with the subject “Privacy Request
+              Appeal.” Response timing and exceptions follow applicable law.
             </p>
           </section>
 
-          {/* FAQ */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">Frequently Asked Questions About Your Privacy</h2>
-            <div className="space-y-4 mt-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">How is my uploaded medical bill data handled?</h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
-                  Your document is transmitted to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store it in its own database. Infrastructure providers process data under their applicable terms and retention practices.
-                </p>
-              </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
-                <h3 className="font-semibold text-slate-800 mb-2">How can I request deletion of my personal data?</h3>
-                <p className="text-slate-700 text-sm leading-relaxed">
-                  Medical Bill Reader does not intentionally retain bill documents in its own database. For questions or privacy requests concerning other data, email privacy@medicalbillreader.com. Provider-side records may be subject to the provider&apos;s own deletion process and legal obligations.
-                </p>
-              </div>
-            </div>
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              10. Security and incidents
+            </h2>
+            <p className="mt-3">
+              Safeguards include HTTPS, restrictive response headers, upload type
+              and size validation, rate limiting, signed free-use authorization,
+              browser-bound authenticated paid and subscription entitlement
+              tokens, Stripe webhook signature verification, and category-only
+              security logs. No service can promise absolute security. We will
+              investigate incidents and provide notices when required by
+              applicable breach-notification law.
+            </p>
           </section>
 
-          {/* Contact */}
           <section>
-            <h2 className="text-xl font-bold text-slate-800">14. Contact Us</h2>
-            <p>
-              For privacy inquiries, data requests, or questions about this policy:
-            </p>
-            <p>
-              <strong>Email:</strong> privacy@medicalbillreader.com
+            <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+              11. Children and changes
+            </h2>
+            <p className="mt-3">
+              The service is not directed to children under 13. A parent or
+              guardian should manage a minor&apos;s bill and remove unnecessary
+              identifiers before upload. We will update the effective date when
+              this policy changes materially and provide additional notice when
+              required.
             </p>
           </section>
         </div>
-
-      </div>
+      </article>
     </main>
   );
 }

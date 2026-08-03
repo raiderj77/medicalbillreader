@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import Footer from "@/components/Footer";
 import PrivacyConsent from "@/components/PrivacyConsent";
 import "./globals.css";
@@ -80,7 +79,7 @@ const webAppJsonLd = {
   author: {
     "@type": "Person",
     name: "Jason Ramirez",
-    jobTitle: "Founder of Your Friendly Developer",
+    jobTitle: "Web Professional and Product Founder",
     url: "https://medicalbillreader.com/about",
   },
   offers: {
@@ -108,23 +107,6 @@ export default function RootLayout({
     } catch(e) {}
   })();
 ` }} />
-        <Script
-          id="consent-mode"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: `
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'granted',
-    wait_for_update: 500
-  });
-` }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -138,7 +120,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
         />
       </head>
-      <body>
+      <body className="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-teal-700 focus:text-white focus:rounded">
           Skip to main content
         </a>

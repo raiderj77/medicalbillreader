@@ -28,7 +28,7 @@ describe("Stripe price mapping validation", () => {
       active: true,
       unit_amount: 4900,
       currency: "usd",
-      recurring: { interval: "month" },
+      recurring: { interval: "month", interval_count: 1 },
     } as never);
     await expect(verifiedStripePriceId("subscription")).resolves.toBe(
       "price_monthly",
@@ -44,6 +44,19 @@ describe("Stripe price mapping validation", () => {
       recurring: null,
     } as never);
     await expect(verifiedStripePriceId("per-use")).rejects.toThrow(
+      "Stripe price mapping is invalid",
+    );
+  });
+
+  it("rejects a multi-month recurring price advertised as monthly", async () => {
+    vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({
+      id: "price_monthly",
+      active: true,
+      unit_amount: 4900,
+      currency: "usd",
+      recurring: { interval: "month", interval_count: 3 },
+    } as never);
+    await expect(verifiedStripePriceId("subscription")).rejects.toThrow(
       "Stripe price mapping is invalid",
     );
   });

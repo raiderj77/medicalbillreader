@@ -1,40 +1,49 @@
 # CLAUDE.md - medicalbillreader.com
-# Claude Code reads this automatically.
 
-## IDENTITY
-Medical Bill Reader. Micro-SaaS product.
-Users upload medical bills or EOBs, Claude vision reads them, provides plain-English explanation, flags potential errors, suggests next steps.
-Revenue model: free MVP now, paid later ($9.99/bill or $14.99/month unlimited).
+## Identity
 
-## BEFORE DOING ANYTHING
-1. Read this file and EMPIRE_BUILD_STANDARDS.md first
-2. Show Jason a plan. Wait for approval.
-3. Explain step-by-step like Jason is 5.
+Medical Bill Reader is a U.S.-focused medical-bill and Explanation of Benefits (EOB) explainer. A visitor uploads a supported image or PDF and receives an AI-generated summary of visible charges, fields, codes, and items to verify. The service does not determine what someone legally owes, prove a billing error, or provide medical, financial, insurance, coding, or legal advice.
 
-## TIER 1: CLAUDE.md, EMPIRE_BUILD_STANDARDS.md, src/app/layout.tsx, src/app/page.tsx
-## TIER 2: src/app/api/ (Claude vision pipeline), src/app/components/, public/
-## TIER 3 (Never): node_modules/, .next/, .git/, .env files
+Current access model:
 
-## TECH STACK
-- Next.js App Router, TypeScript, Tailwind CSS
-- Claude API (vision) for bill reading
-- Stripe (future payment integration)
-- Vercel hosting (deploy pending)
+- Free: up to one analysis per browser per UTC calendar month, subject to abuse controls.
+- Single analysis: $4.99.
+- Subscription: $49 per month for up to 44 analyses per UTC calendar month.
 
-## IMPORTANT RULES
-- No personal name on any public page
-- This is NOT medical advice ,  always disclaim
-- CADC-II credentials do NOT apply here ,  pure AI product, no healthcare authority claimed
-- All bill processing must be secure
-- Never store uploaded bills longer than needed for analysis
-- Privacy policy must clearly explain data handling
+## Before changing the product
 
-## WORKFLOW: AUDIT > PLAN > EXECUTE > REVIEW > STANDARDS > DEPLOY > VERIFY
+1. Read this file and `EMPIRE_BUILD_STANDARDS.md`.
+2. Inspect the current worktree, tests, public policy pages, and production configuration relevant to the change.
+3. Execute routine, authorized repository remediation and verify it. Stop for owner decisions involving payments, accounts, domains, secrets, external outreach, or a material change to the business model.
+4. Never inspect, upload, log, or report real medical bills or sensitive user data during testing. Use synthetic, non-health test data only.
 
-## STATUS
-- Scaffolded locally with working MVP
-- Domain purchased (medicalbillreader.com)
-- NOT yet deployed to Vercel
-- Needs: Vercel deployment, SEO content, schema markup, legal pages
+## Stack and deployment
 
-## DO NOT: Push without approval. Ignore standards. Claim this provides medical advice. Use CADC-II credentials for this product.
+- Next.js App Router, TypeScript, React, and Tailwind CSS.
+- Anthropic commercial API for document explanation.
+- Stripe Checkout, subscriptions, refunds, and customer portal.
+- Upstash Redis for privacy-minimized security, rate-limit, entitlement, and replay-prevention state.
+- Vercel production hosting at `medicalbillreader.com`.
+
+## Non-negotiable product rules
+
+- Treat all health and billing content as strict YMYL content. Use current primary sources, visible review dates, qualified language, and claim-level restraint.
+- Uploaded documents must not be intentionally written to the application database or included in analytics or logs.
+- Clearly disclose Anthropic processing and published retention exceptions. Do not claim HIPAA coverage, a BAA, or zero-data retention unless current account terms have been independently verified.
+- Do not reproduce unlicensed CPT descriptors, publish unsupported typical-price claims, or generate scaled thin code pages.
+- Advertising and third-party analytics remain disabled unless a later, separately verified privacy and policy review authorizes them.
+- Keep legal, privacy, editorial, accessibility, contact, and methodology pages accurate and linked.
+
+## Public attribution
+
+Jason Ramirez may remain publicly identified as founder and author. Describe him accurately as a web professional and product founder. He is not a clinician, attorney, insurer, certified medical coder, or billing specialist. Do not attach CADC-II or any unrelated credential to this product.
+
+## Current status
+
+- Production deployment, Stripe access paths, legal pages, technical SEO, schema, and source-backed editorial pages are implemented.
+- The current remediation branch tightens entitlement security, privacy boundaries, YMYL wording, accessibility, and release tests.
+- Revenue claims require Stripe or other authoritative evidence. Search or analytics access gaps are unknowns, not proof of zero traffic.
+
+## Workflow
+
+Audit -> implement -> test -> independent review -> commit -> push -> review checks -> deploy -> production verification.

@@ -1,36 +1,36 @@
-# medicalbillreader.com ,  Brand Voice
+# medicalbillreader.com - Brand Voice
 
-## Site Overview
-medicalbillreader.com is a free medical bill explanation tool.
-Users upload or paste a medical bill/EOB and get a plain-English breakdown of charges, codes, and what to dispute.
-Monetization: Google AdSense. pSEO content layer is the next priority.
-YMYL site ,  financial and health content requires care.
+## Site overview
 
-## Target Audience
-- Patients confused by medical bills or EOBs
-- Caregivers managing bills for a family member
-- People who suspect billing errors or overcharges
-- Uninsured/underinsured patients negotiating costs
+Medical Bill Reader is a U.S.-focused medical-bill and EOB explainer with a limited free tier plus paid single-analysis and subscription options. Visitors upload a supported image or PDF. The report summarizes visible charges, billing fields, codes, and items to verify; it does not decide what a person owes or prove what should be disputed.
+
+Advertising and third-party analytics are disabled for the strict-YMYL release. Do not make AdSense, programmatic SEO, or traffic growth the next priority unless content quality, privacy, policy, and account readiness have been separately verified.
+
+## Target audience
+
+- Patients trying to understand a U.S. medical bill or EOB.
+- Caregivers authorized to review a family member's document.
+- People preparing questions for a provider, insurer, or billing advocate.
+- Uninsured or underinsured consumers seeking official assistance resources.
 
 ## Tone
-- Empathetic and practical ,  medical billing is stressful
-- Empowering ,  "you have more options than you think"
-- Plain-language focused ,  translate medical and billing codes
-- Responsible ,  never give specific financial or legal advice
 
-## Messaging Framework
-- Lead with the pain: "Medical bills are confusing by design ,  here's how to read yours"
-- Normalize confusion and advocating for yourself
-- Always point to free resources (hospital financial assistance, CFPB, etc.)
+- Calm and empathetic: medical billing often arrives during a stressful event.
+- Plain and precise: define unfamiliar terms without oversimplifying plan-specific rules.
+- Actionable but restrained: suggest questions, records, and official resources rather than declaring an error or obligation.
+- Transparent: distinguish source-backed facts, document observations, uncertainty, and professional advice.
 
-## Voice Pillars
-1. **Empathetic** ,  bills arrive during stressful health events
-2. **Plain-English** ,  decode CPT codes, EOB terms, balance billing
-3. **Advocate-minded** ,  patients have rights; inform them
-4. **Responsible** ,  note when professional help (billing advocate) is warranted
+## Messaging framework
+
+- Lead with what the visitor can safely do: redact unnecessary identifiers, compare the report with the original document, and verify with the provider and plan.
+- Normalize questions without claiming that billing is intentionally confusing or wrong.
+- Prefer official resources such as CMS, HHS, HealthCare.gov, CFPB, IRS, FDA, and state regulators.
+- Never use fear, urgency, guaranteed savings, or adversarial language to drive conversion.
 
 ## Attribution
-No personal names. Use: "Published by the MedicalBillReader team"
 
-## YMYL Disclaimer (Required on Every Article)
-*This article is for informational purposes only and does not constitute financial, legal, or medical advice. For complex billing disputes, consult a qualified medical billing advocate or healthcare attorney.*
+Jason Ramirez may be named as founder and author. State the relevant scope: web professional and product founder, not a clinician, attorney, insurer, certified medical coder, or billing specialist. Never attach an unrelated credential to this site.
+
+## Required YMYL boundary
+
+Every guide must state that it is informational and not medical, financial, insurance, coding, or legal advice, and direct readers to verify a specific bill or deadline with the provider, plan, notice, regulator, or qualified professional.

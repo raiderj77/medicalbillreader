@@ -8,6 +8,15 @@ body {
   color: #171717;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #020617;
+  color: #f1f5f9;
+}
+
 
 @media print {
   nav, footer, .no-print { display: none !important; }
@@ -196,18 +205,19 @@ body {
   height: auto;
 }
 
-@media (prefers-color-scheme: dark) {
-  .prose-medical { color: #d1d5db; }
-  .prose-medical h1, .prose-medical h2, .prose-medical h3, .prose-medical h4 { color: #f9fafb; }
-  .prose-medical p { color: #d1d5db; }
-  .prose-medical a { color: #2dd4bf; }
-  .prose-medical a:hover { color: #5eead4; }
-  .prose-medical li { color: #d1d5db; }
-  .prose-medical strong { color: #f3f4f6; }
-  .prose-medical blockquote { border-left-color: #0f766e; color: #9ca3af; }
-  .prose-medical code { background-color: #374151; color: #e5e7eb; }
-  .prose-medical thead th { background-color: #374151; color: #f3f4f6; border-color: #4b5563; }
-  .prose-medical tbody td { border-color: #4b5563; color: #d1d5db; }
-  .prose-medical tbody tr:nth-child(even) td { background-color: #1f2937; }
-  .prose-medical hr { border-color: #374151; }
-}
+.dark .prose-medical { color: #d1d5db; }
+.dark .prose-medical h1,
+.dark .prose-medical h2,
+.dark .prose-medical h3,
+.dark .prose-medical h4 { color: #f9fafb; }
+.dark .prose-medical p { color: #d1d5db; }
+.dark .prose-medical a { color: #2dd4bf; }
+.dark .prose-medical a:hover { color: #5eead4; }
+.dark .prose-medical li { color: #d1d5db; }
+.dark .prose-medical strong { color: #f3f4f6; }
+.dark .prose-medical blockquote { border-left-color: #0f766e; color: #9ca3af; }
+.dark .prose-medical code { background-color: #374151; color: #e5e7eb; }
+.dark .prose-medical thead th { background-color: #374151; color: #f3f4f6; border-color: #4b5563; }
+.dark .prose-medical tbody td { border-color: #4b5563; color: #d1d5db; }
+.dark .prose-medical tbody tr:nth-child(even) td { background-color: #1f2937; }
+.dark .prose-medical hr { border-color: #374151; }

@@ -5,7 +5,7 @@ import { getAllMarkdownPosts } from "@/lib/blog-markdown";
 export const metadata: Metadata = {
   title: "Medical Billing Guides & Resources",
   description:
-    "Practical guides to understanding medical bills, insurance claims, billing codes, and your patient rights. Written by experienced web professionals.",
+    "Source-backed, clearly scoped guides to understanding medical bills, insurance claims, billing codes, and patient rights.",
   keywords: ["medical billing guides", "understand medical bill", "medical billing resources", "patient rights"],
   robots: { index: true, follow: true, googleBot: { "max-snippet": -1 } },
   alternates: { canonical: "https://medicalbillreader.com/blog" },
@@ -36,7 +36,7 @@ export default function BlogIndexPage() {
   };
 
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+    <main id="main-content" className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
@@ -45,9 +45,18 @@ export default function BlogIndexPage() {
       <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
         Medical Billing Guides &amp; Resources
       </h1>
-      <p className="text-gray-600 dark:text-gray-600 mb-8 max-w-2xl">
+      <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-2xl">
         Practical, plain-language guides to help you understand medical bills,
         insurance claims, billing codes, and your rights as a patient.
+      </p>
+      <p className="mb-8 max-w-2xl text-sm text-gray-600 dark:text-gray-300">
+        Written by Jason Ramirez, a web professional and product founder, not a
+        clinician, attorney, insurer, certified coder, or billing specialist.
+        Read the{" "}
+        <Link className="underline underline-offset-2" href="/editorial-policy">
+          editorial policy
+        </Link>
+        .
       </p>
 
       {posts.length === 0 ? (

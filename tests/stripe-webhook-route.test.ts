@@ -12,10 +12,15 @@ vi.mock("@/lib/stripe", () => ({ getStripe: () => stripe }));
 
 import { POST } from "@/app/api/stripe/webhook/route";
 
-function request(body = "signed-payload") {
+function request(body = "signed-payload", contentLength?: number) {
   return new NextRequest("https://medicalbillreader.com/api/stripe/webhook", {
     method: "POST",
-    headers: { "stripe-signature": "test-signature" },
+    headers: {
+      "stripe-signature": "test-signature",
+      ...(contentLength === undefined
+        ? {}
+        : { "content-length": String(contentLength) }),
+    },
     body,
   });
 }
@@ -36,6 +41,15 @@ describe("POST /api/stripe/webhook", () => {
     });
     const response = await POST(request());
     expect(response.status).toBe(400);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("rejects declared and streamed oversized bodies before signature verification", async () => {
+    expect((await POST(request("small", 256 * 1024 + 1))).status).toBe(413);
+    expect(
+      (await POST(request("x".repeat(256 * 1024 + 1)))).status,
+    ).toBe(413);
+    expect(stripe.webhooks.constructEvent).not.toHaveBeenCalled();
     expect(redis.command).not.toHaveBeenCalled();
   });
 

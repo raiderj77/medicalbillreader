@@ -1,36 +1,47 @@
 # Medical Bill Reader
 
-> A free-to-start AI-powered tool that helps patients understand their medical bills, insurance EOBs, and healthcare charges in plain language. Built for anyone confused by medical billing codes, charges, or insurance statements.
+> A direct-to-consumer, AI-assisted document explainer for supported medical bills and insurance Explanations of Benefits (EOBs). It organizes legible, visible information into plain-language sections and questions to verify. It is not a certified audit or medical, legal, insurance, coding, or financial advice.
 
-## Main Tools
-- [Medical Bill Analyzer](https://medicalbillreader.com): Upload a supported medical bill or EOB for an AI-generated report of visible billing codes, charges, insurance fields, and patterns to verify.
+Last reviewed: 2026-08-02
 
-## Pricing
-- Free: 1 bill or EOB per month
-- Pay Per Bill: $4.99 per bill
-- Monthly Plan: $49/month, up to 44 bills per month
+## Main tool
 
-## About
-- [About Us](https://medicalbillreader.com/about): How Medical Bill Reader works and who it helps
-- [Pricing](https://medicalbillreader.com/pricing): Free, pay-per-bill, and monthly plan options
-- [Privacy Policy](https://medicalbillreader.com/privacy): How we handle your data and medical bill information
-- [Terms of Service](https://medicalbillreader.com/terms): Terms and conditions for using the service
-- [Contact](https://medicalbillreader.com/contact): Get in touch with the Medical Bill Reader team
+- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month (subject to network abuse controls), a $4.99 single analysis, or a $49 monthly plan with up to 44 analyses per UTC calendar month.
+- The tool may organize visible codes, charges, adjustments, plan payments, and patient-responsibility fields.
+- It cannot determine fraud, upcoding, unbundling, medical necessity, coverage, legal compliance, or whether a charge is correct from a bill alone.
 
-## Legal & Compliance
-- [Cookie Policy](https://medicalbillreader.com/cookies): What cookies we use and how to control them
-- [Accessibility Statement](https://medicalbillreader.com/accessibility): WCAG 2.1 AA commitment and known limitations
-- [Do Not Sell](https://medicalbillreader.com/do-not-sell): CCPA/CPRA opt-out information
-- [Disclaimer](https://medicalbillreader.com/disclaimer): Medical, financial, and legal disclaimer
+## Privacy and processing
 
-## Privacy Approach
-- Uploaded medical bills pass through application memory and are sent to Anthropic to generate the report
-- Medical Bill Reader does not intentionally write bill content or results to its own database; infrastructure providers process data under their own terms
-- Health data is never passed to advertising systems
-- Optional analytics stays off until the visitor consents and receives no bill content
+- Remove unnecessary names, addresses, member IDs, account numbers, barcodes, and other identifiers before uploading.
+- The application forwards the supported document to Anthropic only after an affirmative processing acknowledgement.
+- Medical Bill Reader does not intentionally persist the bill or report in its own database or send upload, analysis, report, or payment events to advertising or analytics systems.
+- Anthropic's published standard commercial API policy states that inputs and outputs are not used for model training by default and are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal and other published exceptions may also apply. Medical Bill Reader does not claim zero-data-retention or HIPAA/BAA coverage.
+- [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy)
+- [Privacy Policy](https://medicalbillreader.com/privacy)
+- [Cookie Policy](https://medicalbillreader.com/cookies)
 
-## Blog
-- [Blog](https://medicalbillreader.com/blog): Guides on reading medical bills, understanding billing codes, spotting errors, and navigating insurance EOBs
+## Editorial trust
 
-## Disclaimer
-This tool provides general explanations of medical billing codes and charges for informational purposes only. It is not financial or medical advice. Always verify charges with your healthcare provider and insurance company.
+- [About Jason Ramirez](https://medicalbillreader.com/about): Founder and web professional. He is not presented as a clinician, attorney, insurer, certified coder, or medical-billing specialist.
+- [Editorial Policy](https://medicalbillreader.com/editorial-policy): Authorship, source hierarchy, AI-use boundaries, corrections, and commercial independence.
+- [Methodology](https://medicalbillreader.com/methodology): System behavior, data flow, prompt scope, and limitations.
+- [Disclaimer](https://medicalbillreader.com/disclaimer)
+
+## Source-backed guides
+
+- [Medical Billing Guides](https://medicalbillreader.com/blog)
+- [How to Read an Explanation of Benefits](https://medicalbillreader.com/blog/how-to-read-an-explanation-of-benefits-eob)
+- [Common Medical Billing Errors and How to Spot Them](https://medicalbillreader.com/blog/common-medical-billing-errors-and-how-to-spot-them)
+- [How to Dispute a Medical Bill](https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill)
+- [Medical Billing Codes Explained](https://medicalbillreader.com/codes-explained)
+
+## Current advertising status
+
+No advertising code currently loads on the site. Any future ads require account and consent readiness and are restricted to nonsensitive editorial or marketing pages, never the analyzer, upload, results, pricing, checkout, or privacy-request experience.
+
+## Contact and legal
+
+- [Contact](https://medicalbillreader.com/contact)
+- [Terms of Service](https://medicalbillreader.com/terms)
+- [Accessibility Statement](https://medicalbillreader.com/accessibility)
+- [Do Not Sell or Share](https://medicalbillreader.com/do-not-sell)

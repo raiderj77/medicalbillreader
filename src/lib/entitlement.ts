@@ -6,19 +6,29 @@ import {
   currentMonth,
   opaqueHash,
   randomToken,
+  safeSecurityLog,
   verifySignedValue,
 } from "./security";
 import { SUBSCRIPTION_MONTHLY_CAP } from "./stripe";
+import { isStripeId } from "./stripe-identifiers";
+import {
+  browserBindingFromRequest,
+  openStripeAccess,
+  validCheckoutNonceHash,
+} from "./stripe-browser-access";
 
-const RESERVE_SCRIPT = `redis.call('ZREMRANGEBYSCORE',KEYS[2],'-inf',ARGV[3]) local used=tonumber(redis.call('HGET',KEYS[1],'used') or '0') local reserved=redis.call('ZCARD',KEYS[2]) if used+reserved>=tonumber(ARGV[1]) then return 0 end redis.call('ZADD',KEYS[2],ARGV[4],ARGV[2]) if tonumber(ARGV[5])>0 then redis.call('EXPIRE',KEYS[1],ARGV[5]) end redis.call('EXPIRE',KEYS[2],600) return 1`;
+const RESERVE_SCRIPT = `redis.call('ZREMRANGEBYSCORE',KEYS[2],'-inf',ARGV[3]) local used=tonumber(redis.call('HGET',KEYS[1],'used') or '0') local reserved=redis.call('ZCARD',KEYS[2]) if used+reserved>=tonumber(ARGV[1]) then return 0 end redis.call('ZADD',KEYS[2],ARGV[4],ARGV[2]) redis.call('HSETNX',KEYS[1],'used',0) if tonumber(ARGV[5])>0 then redis.call('EXPIRE',KEYS[1],ARGV[5]) end redis.call('EXPIRE',KEYS[2],600) return 1`;
 const COMMIT_SCRIPT = `if redis.call('ZREM',KEYS[2],ARGV[1])==0 then return 0 end redis.call('HINCRBY',KEYS[1],'used',1) return 1`;
 const RELEASE_SCRIPT = `return redis.call('ZREM',KEYS[2],ARGV[1])`;
+const PAID_REPLAY_TTL_SECONDS = 60 * 60 * 24 * 370;
 
 export type EntitlementReservation = {
   kind: "paid" | "subscription" | "free";
   key: string;
   reservationId: string;
   externalId?: string;
+  accessToken?: string;
+  browserBinding?: string;
 };
 async function reserve(
   key: string,
@@ -26,6 +36,8 @@ async function reserve(
   kind: EntitlementReservation["kind"],
   externalId?: string,
   usageTtl = 60 * 60 * 24 * 40,
+  accessToken?: string,
+  browserBinding?: string,
 ): Promise<EntitlementReservation | null> {
   const reservationId = randomToken();
   const now = Date.now();
@@ -41,25 +53,55 @@ async function reserve(
     now + 2 * 60 * 1000,
     usageTtl,
   ]);
-  return accepted === 1 ? { kind, key, reservationId, externalId } : null;
+  return accepted === 1
+    ? { kind, key, reservationId, externalId, accessToken, browserBinding }
+    : null;
 }
 
 export async function reserveRequestEntitlement(
   request: NextRequest,
 ): Promise<EntitlementReservation | null> {
-  const paid = request.cookies.get("mbr_pending_use")?.value;
-  if (paid) {
-    if (!(await checkPerUseSessionAvailable(paid))) return null;
-    return reserve(`mbr:paid:${opaqueHash(paid)}`, 1, "paid", paid, 0);
+  const browserBinding = browserBindingFromRequest(request);
+  const paidToken = request.cookies.get("mbr_pending_use")?.value;
+  const paid =
+    browserBinding && paidToken
+      ? openStripeAccess(paidToken, "per-use", browserBinding)
+      : null;
+  if (
+    paid &&
+    (await checkPerUseSessionAvailable(paid))
+  ) {
+    const paidReservation = await reserve(
+      `mbr:paid:${opaqueHash(paid)}`,
+      1,
+      "paid",
+      paid,
+      PAID_REPLAY_TTL_SECONDS,
+      paidToken,
+      browserBinding || undefined,
+    );
+    if (paidReservation) return paidReservation;
   }
-  const subscription = request.cookies.get("mbr_sub_id")?.value;
-  if (subscription) {
-    if (!(await verifyActiveSubscription(subscription))) return null;
+  const subscriptionToken = request.cookies.get("mbr_sub_id")?.value;
+  const subscription =
+    browserBinding && subscriptionToken
+      ? openStripeAccess(subscriptionToken, "subscription", browserBinding)
+      : null;
+  if (
+    subscription &&
+    (await verifyActiveSubscription(subscription))
+  ) {
+    // An active subscription keeps priority over the free allowance, including
+    // when its monthly cap is exhausted. Inactive or stale subscription cookies
+    // fall through so they cannot mask an otherwise valid free entitlement.
     return reserve(
       `mbr:sub:${opaqueHash(subscription)}:${currentMonth()}`,
       SUBSCRIPTION_MONTHLY_CAP,
       "subscription",
       subscription,
+      60 * 60 * 24 * 40,
+      subscriptionToken,
+      browserBinding || undefined,
     );
   }
   const signedFree = request.cookies.get("mbr_free_entitlement")?.value;
@@ -112,6 +154,7 @@ export async function releaseEntitlement(
 export async function checkPerUseSessionAvailable(
   sessionId: string,
 ): Promise<boolean> {
+  if (!isStripeId(sessionId, "cs_")) return false;
   const stripe = getStripe();
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
@@ -149,8 +192,8 @@ export async function checkPerUseSessionAvailable(
       paymentIntent.metadata?.refunded !== "true" &&
       !refunded
     );
-  } catch (err) {
-    console.error("checkPerUseSessionAvailable error:", err);
+  } catch {
+    safeSecurityLog("stripe_per_use_check_failed");
     return false;
   }
 }
@@ -159,6 +202,7 @@ export async function checkPerUseSessionAvailable(
 // has actually succeeded, so a transient failure (e.g. the AI call erroring
 // out) does not burn the customer's paid credit.
 export async function consumePerUseSession(sessionId: string): Promise<void> {
+  if (!isStripeId(sessionId, "cs_")) return;
   const stripe = getStripe();
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
@@ -172,8 +216,8 @@ export async function consumePerUseSession(sessionId: string): Promise<void> {
         metadata: { ...paymentIntent.metadata, used: "true" },
       });
     }
-  } catch (err) {
-    console.error("consumePerUseSession error:", err);
+  } catch {
+    safeSecurityLog("stripe_per_use_consume_failed");
   }
 }
 
@@ -183,6 +227,7 @@ export async function consumePerUseSession(sessionId: string): Promise<void> {
 export async function verifyActiveSubscription(
   subscriptionId: string,
 ): Promise<boolean> {
+  if (!isStripeId(subscriptionId, "sub_")) return false;
   const stripe = getStripe();
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -190,15 +235,15 @@ export async function verifyActiveSubscription(
       subscription.metadata?.mbr_entitlement === "subscription" &&
       (subscription.status === "active" || subscription.status === "trialing")
     );
-  } catch (err) {
-    console.error("verifyActiveSubscription error:", err);
+  } catch {
+    safeSecurityLog("stripe_subscription_check_failed");
     return false;
   }
 }
 
 function currentMonthKey(): string {
   const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  return `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
 // Checks whether an active subscriber still has analyses left in their
@@ -211,6 +256,7 @@ export async function checkSubscriptionCapAvailable(
   subscriptionId: string,
   monthlyCap: number,
 ): Promise<boolean> {
+  if (!isStripeId(subscriptionId, "sub_")) return false;
   const stripe = getStripe();
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -220,8 +266,8 @@ export async function checkSubscriptionCapAvailable(
         ? parseInt(subscription.metadata?.usage_count || "0", 10)
         : 0;
     return usageCount < monthlyCap;
-  } catch (err) {
-    console.error("checkSubscriptionCapAvailable error:", err);
+  } catch {
+    safeSecurityLog("stripe_subscription_cap_check_failed");
     return false;
   }
 }
@@ -232,6 +278,7 @@ export async function checkSubscriptionCapAvailable(
 export async function incrementSubscriptionUsage(
   subscriptionId: string,
 ): Promise<void> {
+  if (!isStripeId(subscriptionId, "sub_")) return;
   const stripe = getStripe();
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
@@ -248,8 +295,8 @@ export async function incrementSubscriptionUsage(
         usage_count: String(usageCount + 1),
       },
     });
-  } catch (err) {
-    console.error("incrementSubscriptionUsage error:", err);
+  } catch {
+    safeSecurityLog("stripe_subscription_usage_update_failed");
   }
 }
 
@@ -258,17 +305,30 @@ export async function incrementSubscriptionUsage(
 // cookie to set.
 export async function classifyCompletedCheckout(
   sessionId: string,
+  checkoutNonce: string,
+  expectedPurchaseType: "per-use" | "subscription",
 ): Promise<
-  { type: "per-use" } | { type: "subscription"; subscriptionId: string } | null
+  | { type: "per-use" }
+  | { type: "subscription"; subscriptionId: string }
+  | { type: "unavailable" }
+  | null
 > {
+  if (
+    !isStripeId(sessionId, "cs_") ||
+    !validCheckoutNonceHash(checkoutNonce)
+  ) {
+    return null;
+  }
   const stripe = getStripe();
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (
       session.mode === "payment" &&
+      expectedPurchaseType === "per-use" &&
       session.payment_status === "paid" &&
       session.metadata?.mbr_entitlement === "per_use" &&
+      session.metadata?.mbr_checkout_nonce === checkoutNonce &&
       session.amount_total === 499 &&
       session.currency === "usd"
     ) {
@@ -277,6 +337,9 @@ export async function classifyCompletedCheckout(
 
     if (
       session.mode === "subscription" &&
+      expectedPurchaseType === "subscription" &&
+      session.metadata?.mbr_entitlement === "subscription" &&
+      session.metadata?.mbr_checkout_nonce === checkoutNonce &&
       typeof session.subscription === "string"
     ) {
       const subscription = await stripe.subscriptions.retrieve(
@@ -291,8 +354,8 @@ export async function classifyCompletedCheckout(
     }
 
     return null;
-  } catch (err) {
-    console.error("classifyCompletedCheckout error:", err);
-    return null;
+  } catch {
+    safeSecurityLog("stripe_checkout_classification_failed");
+    return { type: "unavailable" };
   }
 }
