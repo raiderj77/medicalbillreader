@@ -18,7 +18,17 @@ describe("legacy Search Console URL redirects", () => {
           permanent: true,
         },
         {
+          source: "/blog/medical-bill-statute-of-limitations",
+          destination: "/blog",
+          permanent: true,
+        },
+        {
           source: "/blog/medical-bill-after-insurance",
+          destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+          permanent: true,
+        },
+        {
+          source: "/blog/health-insurance-deductible-explained",
           destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
           permanent: true,
         },
