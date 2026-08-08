@@ -1,6 +1,30 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/blog/medical-bill-payment-plans",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/blog/medical-debt-collections-rights",
+        destination: "/blog",
+        permanent: true,
+      },
+      {
+        source: "/blog/medical-bill-after-insurance",
+        destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+        permanent: true,
+      },
+      {
+        source: "/blog/how-to-read-medical-bill",
+        destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
