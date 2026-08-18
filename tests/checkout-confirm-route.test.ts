@@ -154,7 +154,7 @@ describe("GET /api/checkout/confirm", () => {
 
     const retried = await GET(new NextRequest(url));
     expect(retried.headers.get("location")).toBe(
-      "https://medicalbillreader.com/?payment=success",
+      "https://medicalbillreader.com/?payment=success#analyzer",
     );
     expect(browserAccess.peekNonce).toHaveBeenCalledTimes(2);
     expect(browserAccess.completeNonce).toHaveBeenCalledOnce();

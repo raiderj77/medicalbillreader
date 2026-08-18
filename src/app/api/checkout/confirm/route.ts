@@ -66,7 +66,7 @@ function retryableConfirmation(
       : "Automatic retries are paused. Use the button below to try again.";
 
   return new NextResponse(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${automaticRetry}<title>Confirming payment | Medical Bill Reader</title></head><body><main><h1>We are still confirming your payment</h1><p>We could not finish confirming access just now. This confirmation URL remains available, and this retry has not consumed an analysis.</p><p>${statusMessage}</p><p><a href="${escapedRetryUrl}">Try payment confirmation again</a></p><p>If this continues, keep your Stripe receipt and contact support. Do not email a medical bill.</p></main></body></html>`,
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${automaticRetry}<title>Confirming payment | Medical Bill Reader</title></head><body><main><h1>We are still confirming your payment</h1><p>We could not finish confirming access just now. This confirmation URL remains available, and this retry has not consumed an analysis.</p><p>${statusMessage}</p><p><a href="${escapedRetryUrl}">Try payment confirmation again</a></p><p>If this continues, keep your Stripe receipt and <a href="/contact">contact support</a>. Do not email a medical bill.</p></main></body></html>`,
     {
       status: 503,
       headers: {
@@ -146,7 +146,7 @@ export async function GET(request: NextRequest) {
       return retryableConfirmation(sessionId, nonce, retryAttempt);
     }
 
-    const response = redirect("/?payment=success");
+    const response = redirect("/?payment=success#analyzer");
     if (result.type === "per-use") {
       response.cookies.set(
         "mbr_pending_use",

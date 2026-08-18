@@ -257,7 +257,10 @@ export default function DisputeMedicalBillPage() {
               </div>
               <p className="mt-4">
                 You can use{" "}
-                <Link className="font-medium text-teal-800 underline dark:text-teal-300" href="/">
+                <Link
+                  className="font-medium text-teal-800 underline dark:text-teal-300"
+                  href="/#analyzer"
+                >
                   Medical Bill Reader
                 </Link>{" "}
                 to organize the document into plain-language questions. Its output
