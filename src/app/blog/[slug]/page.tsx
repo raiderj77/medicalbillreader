@@ -219,7 +219,7 @@ export default async function BlogPostPage({
 
       <div className="mt-8 text-center">
         <Link
-          href="/"
+          href="/#analyzer"
           className="inline-block px-6 py-3 bg-teal-700 text-white rounded-lg hover:bg-teal-800 transition-colors font-medium"
         >
           Try Medical Bill Reader Free →

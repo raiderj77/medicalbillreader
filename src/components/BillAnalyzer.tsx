@@ -113,6 +113,7 @@ export default function BillAnalyzer() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
+  const [showCheckoutReturn, setShowCheckoutReturn] = useState(false);
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -127,7 +128,8 @@ export default function BillAnalyzer() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("payment") === "success") {
       justPaidRef.current = true;
-      router.replace("/", { scroll: false });
+      queueMicrotask(() => setShowCheckoutReturn(true));
+      router.replace("/#analyzer", { scroll: false });
     }
   }, [router]);
 
@@ -192,6 +194,8 @@ export default function BillAnalyzer() {
         );
       if (!res.ok) {
         if (res.status === 401) {
+          justPaidRef.current = false;
+          setShowCheckoutReturn(false);
           if (freeAccessError) {
             throw new Error(freeAccessError);
           }
@@ -215,6 +219,7 @@ export default function BillAnalyzer() {
       if (justPaidRef.current) {
         justPaidRef.current = false;
       }
+      setShowCheckoutReturn(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -228,6 +233,7 @@ export default function BillAnalyzer() {
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
+    setShowCheckoutReturn(false);
     setPrivacyAcknowledged(false);
   };
 
@@ -377,6 +383,19 @@ export default function BillAnalyzer() {
 
   return (
     <div id="analyzer" className="mb-8 scroll-mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8">
+      {showCheckoutReturn && (
+        <div
+          className="mb-5 rounded-lg border border-emerald-300 bg-emerald-50 p-4 text-sm text-emerald-950 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-100"
+          role="status"
+        >
+          <p className="font-semibold">Continue in the bill analyzer</p>
+          <p className="mt-1">
+            Select a bill or EOB to continue. If you selected a document before
+            checkout, choose it again. Any paid access is verified securely when
+            you submit.
+          </p>
+        </div>
+      )}
       <div className="mb-5">
         <VerificationBadge variant="pre" />
       </div>
@@ -384,7 +403,7 @@ export default function BillAnalyzer() {
         <>
         <button
           type="button"
-          aria-describedby="upload-formats upload-privacy"
+          aria-describedby="upload-formats upload-redaction upload-privacy"
           className={`w-full rounded-xl border-2 border-dashed p-7 text-center transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 sm:p-12 ${
             isDragging
               ? "border-teal-400 bg-teal-50 dark:bg-teal-900/20"
@@ -404,6 +423,11 @@ export default function BillAnalyzer() {
           </p>
           <p id="upload-formats" className="mb-3 text-sm text-slate-700 dark:text-slate-300">
             JPEG, PNG, WebP, or PDF · 10 MB maximum
+          </p>
+          <p id="upload-redaction" className="mx-auto mb-3 max-w-md text-xs font-medium text-slate-800 dark:text-slate-200">
+            Before choosing a file, remove names, member IDs, account numbers,
+            dates of birth, addresses, barcodes, and other identifiers you do
+            not need explained.
           </p>
           <p id="upload-privacy" className="mx-auto max-w-md text-xs text-slate-700 dark:text-slate-300">
             Your document is transmitted securely to Anthropic solely to

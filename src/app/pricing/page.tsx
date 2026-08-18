@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { readJsonResponse } from "@/lib/read-json-response";
 
 const tiers = [
@@ -19,7 +19,7 @@ const tiers = [
     ],
     limitations: [],
     cta: "Start Free",
-    href: "/",
+    href: "/#analyzer",
     highlighted: false,
     checkoutNote: null,
     priceType: null,
@@ -68,14 +68,24 @@ const tiers = [
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<ReactNode>(null);
 
   useEffect(() => {
     const paymentState = new URLSearchParams(window.location.search).get("payment");
     queueMicrotask(() => {
       if (paymentState === "error") {
         setStatusMessage(
-          "We could not verify that checkout completed, so no analysis access was enabled. If you see a charge, contact support.",
+          <>
+            We could not verify that checkout completed, so no analysis access
+            was enabled. If you see a charge,{" "}
+            <Link
+              href="/contact"
+              className="font-semibold underline underline-offset-2"
+            >
+              contact support
+            </Link>
+            .
+          </>,
         );
       } else if (paymentState === "cancelled") {
         setStatusMessage("Checkout was canceled. No new access was enabled.");
@@ -477,7 +487,20 @@ export default function PricingPage() {
               },
               {
                 q: "Is there a refund policy?",
-                a: "Yes. If you are unsatisfied with a pay-per-bill analysis, contact us within 24 hours of delivery for a full refund. Monthly subscriptions can be cancelled at any time but are not refunded for partial months.",
+                a: (
+                  <>
+                    Yes. If you are unsatisfied with a pay-per-bill analysis,{" "}
+                    <Link
+                      href="/contact"
+                      className="font-semibold text-teal-800 underline dark:text-teal-300"
+                    >
+                      contact us
+                    </Link>{" "}
+                    within 24 hours of delivery for a full refund. Monthly
+                    subscriptions can be cancelled at any time but are not
+                    refunded for partial months.
+                  </>
+                ),
               },
               {
                 q: "Do you store my bill or EOB after analyzing it?",
@@ -521,11 +544,17 @@ export default function PricingPage() {
             </h2>
              <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
                We stand behind the quality of every analysis. If you are not
-               satisfied with a pay-per-bill result, contact us within 24 hours
-               of delivery for a full refund. We may request the minimum Stripe
-               transaction detail needed to locate the payment. For monthly
-               subscribers, you can cancel anytime and your access continues
-               through the end of your billing period.
+               satisfied with a pay-per-bill result,{" "}
+               <Link
+                 href="/contact"
+                 className="font-semibold text-teal-800 underline dark:text-teal-300"
+               >
+                 contact us
+               </Link>{" "}
+               within 24 hours of delivery for a full refund. We may request the
+               minimum Stripe transaction detail needed to locate the payment.
+               For monthly subscribers, you can cancel anytime and your access
+               continues through the end of your billing period.
             </p>
           </div>
         </section>

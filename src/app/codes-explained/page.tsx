@@ -436,7 +436,10 @@ export default function CodesExplainedPage() {
                 Blog
               </Link>
               {" · "}
-              <Link href="/" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
+              <Link
+                href="/#analyzer"
+                className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
+              >
                 Analyze a bill
               </Link>
               .
