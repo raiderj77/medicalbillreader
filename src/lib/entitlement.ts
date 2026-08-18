@@ -1,4 +1,4 @@
-import { getStripe } from "./stripe";
+import { getStripe, PRICES, SUBSCRIPTION_MONTHLY_CAP } from "./stripe";
 import type Stripe from "stripe";
 import type { NextRequest } from "next/server";
 import { redisCommand } from "./redis";
@@ -9,7 +9,6 @@ import {
   safeSecurityLog,
   verifySignedValue,
 } from "./security";
-import { SUBSCRIPTION_MONTHLY_CAP } from "./stripe";
 import { isStripeId } from "./stripe-identifiers";
 import {
   browserBindingFromRequest,
@@ -21,6 +20,96 @@ const RESERVE_SCRIPT = `redis.call('ZREMRANGEBYSCORE',KEYS[2],'-inf',ARGV[3]) lo
 const COMMIT_SCRIPT = `if redis.call('ZREM',KEYS[2],ARGV[1])==0 then return 0 end redis.call('HINCRBY',KEYS[1],'used',1) return 1`;
 const RELEASE_SCRIPT = `return redis.call('ZREM',KEYS[2],ARGV[1])`;
 const PAID_REPLAY_TTL_SECONDS = 60 * 60 * 24 * 370;
+
+export class EntitlementTemporarilyUnavailableError extends Error {
+  constructor() {
+    super("Entitlement verification is temporarily unavailable");
+    this.name = "EntitlementTemporarilyUnavailableError";
+  }
+}
+
+async function hasAvailablePerUsePayment(
+  session: Stripe.Checkout.Session,
+  stripe: ReturnType<typeof getStripe>,
+): Promise<boolean> {
+  const validSession =
+    session.mode === "payment" &&
+    session.payment_status === "paid" &&
+    session.metadata?.mbr_entitlement === "per_use" &&
+    session.amount_total === PRICES.perUse.amount &&
+    session.currency === PRICES.perUse.currency;
+  if (!validSession) return false;
+
+  const paymentIntent = session.payment_intent;
+  if (!paymentIntent || typeof paymentIntent === "string") {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+
+  const validPayment =
+    paymentIntent.status === "succeeded" &&
+    paymentIntent.amount_received === PRICES.perUse.amount &&
+    paymentIntent.currency === PRICES.perUse.currency &&
+    paymentIntent.metadata?.mbr_entitlement === "per_use" &&
+    paymentIntent.metadata?.used !== "true";
+  if (!validPayment) return false;
+
+  const latestCharge = paymentIntent.latest_charge;
+  if (!latestCharge || typeof latestCharge === "string") {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  if (
+    typeof latestCharge.id !== "string" ||
+    !latestCharge.id.startsWith("ch_") ||
+    typeof latestCharge.refunded !== "boolean"
+  ) {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+
+  // Derive access from current Refund objects rather than webhook delivery or
+  // mutable metadata. A completed full refund revokes access; a full refund
+  // still in flight freezes access; terminal failures restore access only
+  // after the Charge also reports that it is not fully refunded.
+  let successfullyRefunded = 0;
+  let inFlightRefund = 0;
+  for await (const refund of stripe.refunds.list({
+    charge: latestCharge.id,
+    limit: 100,
+  })) {
+    if (!Number.isSafeInteger(refund.amount) || refund.amount <= 0) {
+      throw new EntitlementTemporarilyUnavailableError();
+    }
+    if (refund.status === "succeeded") {
+      successfullyRefunded += refund.amount;
+      if (successfullyRefunded >= PRICES.perUse.amount) return false;
+      continue;
+    }
+    if (
+      refund.status === "pending" ||
+      refund.status === "requires_action"
+    ) {
+      inFlightRefund += refund.amount;
+      continue;
+    }
+    if (
+      refund.status !== "failed" &&
+      refund.status !== "canceled"
+    ) {
+      throw new EntitlementTemporarilyUnavailableError();
+    }
+  }
+  if (successfullyRefunded + inFlightRefund >= PRICES.perUse.amount) {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  if (
+    latestCharge.refunded &&
+    successfullyRefunded < PRICES.perUse.amount
+  ) {
+    // The aggregate Charge and its current Refund objects disagree. Do not
+    // grant or permanently revoke access until Stripe returns a coherent view.
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  return true;
+}
 
 export type EntitlementReservation = {
   kind: "paid" | "subscription" | "free";
@@ -161,40 +250,11 @@ export async function checkPerUseSessionAvailable(
       expand: ["payment_intent.latest_charge"],
     });
 
-    if (
-      session.mode !== "payment" ||
-      session.payment_status !== "paid" ||
-      session.metadata?.mbr_entitlement !== "per_use" ||
-      session.amount_total !== 499 ||
-      session.currency !== "usd"
-    ) {
-      return false;
-    }
-
-    const paymentIntent = session.payment_intent as
-      Stripe.PaymentIntent | string | null;
-
-    if (!paymentIntent || typeof paymentIntent === "string") {
-      return false;
-    }
-
-    const latestCharge = paymentIntent.latest_charge;
-    const refunded =
-      typeof latestCharge === "object" && latestCharge !== null
-        ? latestCharge.refunded
-        : false;
-    return (
-      paymentIntent.status === "succeeded" &&
-      paymentIntent.amount_received === 499 &&
-      paymentIntent.currency === "usd" &&
-      paymentIntent.metadata?.mbr_entitlement === "per_use" &&
-      paymentIntent.metadata?.used !== "true" &&
-      paymentIntent.metadata?.refunded !== "true" &&
-      !refunded
-    );
-  } catch {
+    return await hasAvailablePerUsePayment(session, stripe);
+  } catch (error) {
     safeSecurityLog("stripe_per_use_check_failed");
-    return false;
+    if (error instanceof EntitlementTemporarilyUnavailableError) throw error;
+    throw new EntitlementTemporarilyUnavailableError();
   }
 }
 
@@ -321,16 +381,14 @@ export async function classifyCompletedCheckout(
   }
   const stripe = getStripe();
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["payment_intent.latest_charge"],
+    });
 
     if (
-      session.mode === "payment" &&
       expectedPurchaseType === "per-use" &&
-      session.payment_status === "paid" &&
-      session.metadata?.mbr_entitlement === "per_use" &&
       session.metadata?.mbr_checkout_nonce === checkoutNonce &&
-      session.amount_total === 499 &&
-      session.currency === "usd"
+      (await hasAvailablePerUsePayment(session, stripe))
     ) {
       return { type: "per-use" };
     }

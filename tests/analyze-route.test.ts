@@ -1,8 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-const entitlement = vi.hoisted(() => ({ reserve: vi.fn(), commit: vi.fn(), release: vi.fn() }));
-vi.mock("@/lib/entitlement", () => ({ reserveRequestEntitlement: entitlement.reserve, commitEntitlement: entitlement.commit, releaseEntitlement: entitlement.release }));
+const entitlement = vi.hoisted(() => ({
+  reserve: vi.fn(),
+  commit: vi.fn(),
+  release: vi.fn(),
+  TemporarilyUnavailableError: class extends Error {},
+}));
+vi.mock("@/lib/entitlement", () => ({
+  reserveRequestEntitlement: entitlement.reserve,
+  commitEntitlement: entitlement.commit,
+  releaseEntitlement: entitlement.release,
+  EntitlementTemporarilyUnavailableError:
+    entitlement.TemporarilyUnavailableError,
+}));
 vi.mock("@/lib/rate-limit", () => ({ enforceRateLimit: vi.fn().mockResolvedValue(true) }));
 vi.mock("@/lib/stripe-browser-access", () => ({
   BROWSER_BINDING_COOKIE: "mbr_browser_binding",
@@ -31,6 +42,25 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     const response = await POST(request({ ...validBody, freeTierRemaining: 1 }, "medical_bill_reader_usage=fake"));
     expect(response.status).toBe(401);
     expect(ai).not.toHaveBeenCalled();
+  });
+
+  it("returns a retryable response when paid entitlement verification is temporarily unavailable", async () => {
+    entitlement.reserve.mockRejectedValue(
+      new entitlement.TemporarilyUnavailableError(),
+    );
+    const ai = vi.spyOn(globalThis, "fetch");
+
+    const response = await POST(request(validBody));
+
+    expect(response.status).toBe(503);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(await response.json()).toEqual({
+      error:
+        "Paid analysis access is temporarily unavailable. Your credit was not used. Please wait and try again.",
+    });
+    expect(ai).not.toHaveBeenCalled();
+    expect(entitlement.commit).not.toHaveBeenCalled();
+    expect(entitlement.release).not.toHaveBeenCalled();
   });
 
   it.each([
