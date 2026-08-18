@@ -29,10 +29,6 @@ describe("POST /api/stripe/webhook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.STRIPE_WEBHOOK_SECRET = "whsec_test";
-    stripe.paymentIntents.retrieve.mockResolvedValue({
-      id: "pi_paid",
-      metadata: { mbr_entitlement: "per_use" },
-    });
   });
 
   it("rejects an invalid signature before processing", async () => {
@@ -53,39 +49,41 @@ describe("POST /api/stripe/webhook", () => {
     expect(redis.command).not.toHaveBeenCalled();
   });
 
-  it("processes a refund once and revokes the paid entitlement", async () => {
-    stripe.webhooks.constructEvent.mockReturnValue({
-      id: "evt_refund",
-      type: "refund.created",
-      data: { object: { payment_intent: "pi_paid" } },
-    });
-    redis.command
-      .mockResolvedValueOnce("OK")
-      .mockResolvedValueOnce("OK")
-      .mockResolvedValueOnce(null);
+  it.each([
+    [
+      "refund.created",
+      { payment_intent: "pi_paid", status: "pending", amount: 499 },
+    ],
+    [
+      "refund.updated",
+      { payment_intent: "pi_paid", status: "succeeded", amount: 499 },
+    ],
+    [
+      "refund.failed",
+      { payment_intent: "pi_paid", status: "failed", amount: 499 },
+    ],
+    [
+      "charge.refunded",
+      {
+        payment_intent: "pi_paid",
+        refunded: false,
+        amount_refunded: 100,
+      },
+    ],
+  ])(
+    "acknowledges signed %s events and duplicates without mutating entitlement state",
+    async (type, object) => {
+      stripe.webhooks.constructEvent.mockReturnValue({
+        id: "evt_refund",
+        type,
+        data: { object },
+      });
 
-    expect((await POST(request())).status).toBe(200);
-    expect(stripe.paymentIntents.update).toHaveBeenCalledWith("pi_paid", {
-      metadata: { mbr_entitlement: "per_use", refunded: "true" },
-    });
-
-    expect((await POST(request())).status).toBe(200);
-    expect(stripe.paymentIntents.update).toHaveBeenCalledTimes(1);
-  });
-
-  it("releases the idempotency lock when processing fails so Stripe can retry", async () => {
-    stripe.webhooks.constructEvent.mockReturnValue({
-      id: "evt_retry",
-      type: "charge.refunded",
-      data: { object: { payment_intent: "pi_paid" } },
-    });
-    redis.command.mockResolvedValueOnce("OK").mockResolvedValueOnce(1);
-    stripe.paymentIntents.retrieve.mockRejectedValue(new Error("temporary"));
-
-    expect((await POST(request())).status).toBe(500);
-    expect(redis.command).toHaveBeenLastCalledWith([
-      "DEL",
-      expect.stringContaining("mbr:stripe:event:"),
-    ]);
-  });
+      expect((await POST(request())).status).toBe(200);
+      expect((await POST(request())).status).toBe(200);
+      expect(stripe.paymentIntents.retrieve).not.toHaveBeenCalled();
+      expect(stripe.paymentIntents.update).not.toHaveBeenCalled();
+      expect(redis.command).not.toHaveBeenCalled();
+    },
+  );
 });

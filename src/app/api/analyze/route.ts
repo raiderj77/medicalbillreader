@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
-import { commitEntitlement, releaseEntitlement, reserveRequestEntitlement, type EntitlementReservation } from "@/lib/entitlement";
+import { commitEntitlement, EntitlementTemporarilyUnavailableError, releaseEntitlement, reserveRequestEntitlement, type EntitlementReservation } from "@/lib/entitlement";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import { StoreUnavailableError } from "@/lib/redis";
 import { clientIp, safeSecurityLog } from "@/lib/security";
@@ -130,6 +130,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (reservation) { try { await releaseEntitlement(reservation); } catch { safeSecurityLog("entitlement_release_failed"); } }
     if (error instanceof UploadValidationError) return errorResponse(error.message, 400);
+    if (error instanceof EntitlementTemporarilyUnavailableError) return errorResponse("Paid analysis access is temporarily unavailable. Your credit was not used. Please wait and try again.", 503);
     if (error instanceof StoreUnavailableError) return errorResponse("Analysis access is temporarily unavailable.", 503);
     if (error instanceof RequestTimeoutError) {
       safeSecurityLog("anthropic_request_timeout");
