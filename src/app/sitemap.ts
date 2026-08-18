@@ -54,13 +54,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-17"),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/consumer-health-data-privacy`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-17"),
       changeFrequency: "monthly",
       priority: 0.4,
     },

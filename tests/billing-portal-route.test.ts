@@ -63,6 +63,7 @@ describe("POST /api/billing-portal", () => {
       id: "sub_verified",
       customer: "cus_verified",
       status: "active",
+      cancel_at_period_end: true,
       metadata: { mbr_entitlement: "subscription" },
     });
     stripe.billingPortal.sessions.create.mockResolvedValue({
@@ -86,6 +87,72 @@ describe("POST /api/billing-portal", () => {
     expect(cookie).toContain("mbr_browser_binding=signed-browser-binding");
     expect(cookie).toContain("Max-Age=34560000");
   });
+
+  it.each(["canceled", "trialing"])(
+    "keeps portal access for a %s subscription without renewing entitlement cookies",
+    async (status) => {
+      stripe.subscriptions.retrieve.mockResolvedValue({
+        id: "sub_verified",
+        customer: "cus_verified",
+        status,
+        metadata: { mbr_entitlement: "subscription" },
+      });
+      stripe.billingPortal.sessions.create.mockResolvedValue({
+        url: "https://billing.stripe.com/session/test",
+      });
+
+      const response = await POST(
+        request("mbr_sub_id=opaque-subscription-token"),
+      );
+
+      expect(response.status).toBe(200);
+      expect(stripe.billingPortal.sessions.create).toHaveBeenCalledOnce();
+      expect(response.headers.get("set-cookie")).toBeNull();
+    },
+  );
+
+  it("keeps portal access while collection is paused without renewing entitlement cookies", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValue({
+      id: "sub_verified",
+      customer: "cus_verified",
+      status: "active",
+      pause_collection: { behavior: "void", resumes_at: null },
+      metadata: { mbr_entitlement: "subscription" },
+    });
+    stripe.billingPortal.sessions.create.mockResolvedValue({
+      url: "https://billing.stripe.com/session/test",
+    });
+
+    const response = await POST(
+      request("mbr_sub_id=opaque-subscription-token"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(stripe.billingPortal.sessions.create).toHaveBeenCalledOnce();
+    expect(response.headers.get("set-cookie")).toBeNull();
+  });
+
+  it.each([
+    [{}, "cus_verified"],
+    [{ mbr_entitlement: "subscription" }, null],
+  ])(
+    "rejects a subscription with invalid metadata or customer",
+    async (metadata, customer) => {
+      stripe.subscriptions.retrieve.mockResolvedValue({
+        id: "sub_verified",
+        customer,
+        status: "active",
+        metadata,
+      });
+
+      const response = await POST(
+        request("mbr_sub_id=opaque-subscription-token"),
+      );
+
+      expect(response.status).toBe(401);
+      expect(stripe.billingPortal.sessions.create).not.toHaveBeenCalled();
+    },
+  );
 
   it("rate-limits portal creation before any Stripe call", async () => {
     rateLimit.enforce.mockResolvedValue(false);

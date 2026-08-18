@@ -64,7 +64,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-            Effective August 2, 2026 · Last reviewed August 2, 2026
+            Effective August 2, 2026 · Last reviewed August 17, 2026
           </p>
           <p className="mt-6 rounded-xl border border-teal-200 bg-teal-50 p-5 leading-7 text-slate-900 dark:border-teal-900 dark:bg-teal-950/40 dark:text-slate-100">
             Medical Bill Reader does not sell uploaded bill data or use it for
@@ -219,8 +219,10 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Upstash:</strong> stores pseudonymous security,
-                rate-limit, entitlement, and webhook-deduplication keys, not the
-                document or report.
+                rate-limit, and entitlement keys, not the document or report.
+                The current code creates no new webhook-deduplication keys;
+                legacy keys from the prior design may remain until their
+                expiration.
               </li>
               <li>
                 <strong>Stripe:</strong> processes hosted Checkout, payment,
@@ -262,8 +264,9 @@ export default function PrivacyPage() {
                 <strong>Rate-limit and entitlement keys:</strong> generally one
                 minute to 40 days. A pseudonymous pay-per-use replay-prevention
                 key may be retained for up to 370 days. Temporary reservations
-                expire after about 10 minutes; webhook deduplication keys expire
-                after 30 days.
+                expire after about 10 minutes. No new webhook-deduplication keys
+                are created; legacy keys may remain for up to 30 days after
+                their last creation.
               </li>
               <li>
                 <strong>Payment records:</strong> retained by Stripe and, where

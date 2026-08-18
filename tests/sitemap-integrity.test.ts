@@ -33,6 +33,17 @@ describe("sitemap integrity", () => {
     expect(sampleReport?.lastModified).toEqual(new Date("2026-08-18"));
   });
 
+  it("keeps policy sitemap dates aligned with visible review dates", () => {
+    const entries = sitemap();
+    const privacy = entries.find((entry) => entry.url.endsWith("/privacy"));
+    const consumerHealth = entries.find((entry) =>
+      entry.url.endsWith("/consumer-health-data-privacy"),
+    );
+
+    expect(privacy?.lastModified).toEqual(new Date("2026-08-17"));
+    expect(consumerHealth?.lastModified).toEqual(new Date("2026-08-17"));
+  });
+
   it("does not manufacture a new legal-page modification date per request", () => {
     const disclaimer = sitemap().find((entry) =>
       entry.url.endsWith("/disclaimer"),

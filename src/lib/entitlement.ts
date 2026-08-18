@@ -281,9 +281,22 @@ export async function consumePerUseSession(sessionId: string): Promise<void> {
   }
 }
 
-// Confirms a subscription is still active. Called on every analysis so a
-// cancelled or past-due subscription stops working immediately, no local
-// record of billing status is kept anywhere.
+export function isEligibleMbrSubscription(
+  subscription: Stripe.Subscription,
+): boolean {
+  return (
+    subscription.metadata?.mbr_entitlement === "subscription" &&
+    subscription.status === "active" &&
+    subscription.pause_collection == null
+  );
+}
+
+// Confirms a paid subscription is active and collecting payment. Called on
+// every analysis so an immediately cancelled, past-due, or collection-paused
+// subscription stops working without a local copy of billing status. Full
+// monthly refunds must be paired with immediate Stripe cancellation; the
+// cancellation, not the refund event, removes access. Ordinary end-of-period
+// cancellation keeps Stripe status active until the paid period ends.
 export async function verifyActiveSubscription(
   subscriptionId: string,
 ): Promise<boolean> {
@@ -291,10 +304,7 @@ export async function verifyActiveSubscription(
   const stripe = getStripe();
   try {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    return (
-      subscription.metadata?.mbr_entitlement === "subscription" &&
-      (subscription.status === "active" || subscription.status === "trialing")
-    );
+    return isEligibleMbrSubscription(subscription);
   } catch {
     safeSecurityLog("stripe_subscription_check_failed");
     return false;
@@ -395,6 +405,7 @@ export async function classifyCompletedCheckout(
 
     if (
       session.mode === "subscription" &&
+      session.payment_status === "paid" &&
       expectedPurchaseType === "subscription" &&
       session.metadata?.mbr_entitlement === "subscription" &&
       session.metadata?.mbr_checkout_nonce === checkoutNonce &&
@@ -403,10 +414,7 @@ export async function classifyCompletedCheckout(
       const subscription = await stripe.subscriptions.retrieve(
         session.subscription,
       );
-      if (
-        subscription.metadata?.mbr_entitlement === "subscription" &&
-        (subscription.status === "active" || subscription.status === "trialing")
-      ) {
+      if (isEligibleMbrSubscription(subscription)) {
         return { type: "subscription", subscriptionId: subscription.id };
       }
     }

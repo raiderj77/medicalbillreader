@@ -27,7 +27,7 @@ npm audit --omit=dev
 git diff --check
 ```
 
-Before release, read `CLAUDE.md`, `EMPIRE_BUILD_STANDARDS.md`, the public privacy and consumer-health-data notices, and `docs/revenue-verification.md`. Do not enable advertising or third-party analytics without a separate privacy, policy, and account-readiness review.
+Before release, read `CLAUDE.md`, `EMPIRE_BUILD_STANDARDS.md`, the public privacy and consumer-health-data notices, `docs/revenue-verification.md`, and `docs/refund-operations.md`. Do not enable advertising or third-party analytics without a separate privacy, policy, and account-readiness review.
 
 ## Production
 
