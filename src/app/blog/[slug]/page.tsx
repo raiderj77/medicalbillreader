@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllMarkdownPosts, getMarkdownPost } from "@/lib/blog-markdown";
+import RelatedGuides from "@/components/RelatedGuides";
 
 export function generateStaticParams() {
   return getAllMarkdownPosts().map((post) => ({ slug: post.slug }));
@@ -47,8 +48,6 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = await getMarkdownPost(slug);
   if (!post) notFound();
-
-  const allPosts = getAllMarkdownPosts();
 
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -194,28 +193,7 @@ export default async function BlogPostPage({
         dangerouslySetInnerHTML={{ __html: post.htmlContent }}
       />
 
-      {/* Related posts */}
-      {allPosts.filter((p) => p.slug !== slug).length > 0 && (
-        <section className="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-            More Guides
-          </h2>
-          <div className="grid gap-3">
-            {allPosts
-              .filter((p) => p.slug !== slug)
-              .slice(0, 4)
-              .map((p) => (
-                <Link
-                  key={p.slug}
-                  href={`/blog/${p.slug}`}
-                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline text-sm"
-                >
-                  {p.title}
-                </Link>
-              ))}
-          </div>
-        </section>
-      )}
+      <RelatedGuides currentSlug={slug} />
 
       <div className="mt-8 text-center">
         <Link

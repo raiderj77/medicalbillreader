@@ -1,5 +1,9 @@
 import { readFileSync } from "node:fs";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import DisputeMedicalBillPage from "@/app/blog/how-to-dispute-a-medical-bill/page";
+import { DISPUTE_MEDICAL_BILL_GUIDE } from "@/lib/editorial-guides";
 
 function source(path: string): string {
   return readFileSync(path, "utf8");
@@ -36,9 +40,15 @@ describe("public YMYL and policy copy", () => {
     const dispute = source(
       "src/app/blog/how-to-dispute-a-medical-bill/page.tsx",
     );
+    const rendered = renderToStaticMarkup(
+      createElement(DisputeMedicalBillPage),
+    );
 
     expect(dispute).toContain("Last reviewed August 2, 2026");
-    expect(dispute).toContain('dateModified: "2026-08-02"');
+    expect(DISPUTE_MEDICAL_BILL_GUIDE.lastReviewedAt).toBe("2026-08-02");
+    expect(rendered).toContain(
+      '"dateModified":"2026-08-02"',
+    );
     expect(dispute).toContain("as of July 1, 2026");
     expect(dispute).toContain("HHS-administered Federal");
     expect(dispute).toContain("Alabama, Florida, Georgia");

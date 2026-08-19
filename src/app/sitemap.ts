@@ -1,36 +1,31 @@
 import type { MetadataRoute } from "next";
-import { getAllMarkdownPosts } from "@/lib/blog-markdown";
+import { getAllEditorialGuides } from "@/lib/editorial-guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://medicalbillreader.com";
 
-  const markdownBlogEntries: MetadataRoute.Sitemap = getAllMarkdownPosts().map(
-    (post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: post.modified ? new Date(post.modified) : undefined,
+  const editorialGuideEntries: MetadataRoute.Sitemap =
+    getAllEditorialGuides().map((guide) => ({
+      url: `${baseUrl}${guide.href}`,
+      lastModified: guide.lastReviewedAt
+        ? new Date(guide.lastReviewedAt)
+        : undefined,
       changeFrequency: "monthly",
       priority: 0.7,
-    })
-  );
+    }));
 
   return [
     {
       url: baseUrl,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-18"),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-18"),
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/blog/how-to-dispute-a-medical-bill`,
-      lastModified: new Date("2026-07-12"),
-      changeFrequency: "monthly",
-      priority: 0.7,
     },
     {
       url: `${baseUrl}/pricing`,
@@ -38,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    ...markdownBlogEntries,
+    ...editorialGuideEntries,
     {
       url: `${baseUrl}/methodology`,
       lastModified: new Date("2026-08-02"),

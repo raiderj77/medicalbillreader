@@ -3,6 +3,7 @@ import Link from "next/link";
 import BillAnalyzer from "@/components/BillAnalyzer";
 import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
+import HomepageGuideCluster from "@/components/HomepageGuideCluster";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
@@ -99,7 +100,7 @@ export default function Home() {
 
       {/* Nav */}
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-6 sm:py-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🩺</span>
             <span className="text-base font-bold tracking-tight text-slate-800 dark:text-slate-100 sm:text-lg">
@@ -107,9 +108,14 @@ export default function Home() {
             </span>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <span className="text-xs text-slate-700 dark:text-slate-300 sm:text-sm">
-              <span className="sm:hidden">1 free/browser</span>
-              <span className="hidden sm:inline">1 free analysis/browser/month · No account needed</span>
+            <Link
+              href="/blog"
+              className="inline-flex min-h-11 items-center px-1 text-sm font-semibold text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
+            >
+              Guides
+            </Link>
+            <span className="hidden text-xs text-slate-700 dark:text-slate-300 md:inline md:text-sm">
+              1 free analysis/browser/month · No account needed
             </span>
             <ThemeToggle />
           </div>
@@ -133,12 +139,20 @@ export default function Home() {
             EOBs in plain language. Upload a photo or PDF and
             receive an AI-generated report of visible charges, codes, insurance fields, and items to verify.
           </p>
-          <a
-            href="#analyzer"
-            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-          >
-            Start free analysis
-          </a>
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a
+              href="#analyzer"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
+            >
+              Start free analysis
+            </a>
+            <Link
+              href="/sample-medical-bill-report"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-700 bg-white px-6 py-3 text-base font-semibold text-teal-900 transition-colors hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 dark:bg-slate-900 dark:text-teal-200 dark:hover:bg-slate-800"
+            >
+              See a synthetic sample report
+            </Link>
+          </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
             Built by{" "}
             <Link href="/about" className="font-medium underline">
@@ -298,6 +312,8 @@ export default function Home() {
           </div>
 
         </section>
+
+        <HomepageGuideCluster />
 
         {/* How It Works (server-rendered) */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">

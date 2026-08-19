@@ -2,7 +2,7 @@
 
 > A direct-to-consumer, AI-assisted document explainer for supported medical bills and insurance Explanations of Benefits (EOBs). It organizes legible, visible information into plain-language sections and questions to verify. It is not a certified audit or medical, legal, insurance, coding, or financial advice.
 
-Last reviewed: 2026-08-02
+Last reviewed: 2026-08-18
 
 ## Main tool
 
@@ -29,6 +29,7 @@ Last reviewed: 2026-08-02
 
 ## Source-backed guides
 
+- [Synthetic Sample Medical Bill and EOB Report](https://medicalbillreader.com/sample-medical-bill-report): A fully fabricated, no-upload walkthrough of common bill and EOB fields, amount relationships, and questions to verify.
 - [Medical Billing Guides](https://medicalbillreader.com/blog)
 - [How to Read an Explanation of Benefits](https://medicalbillreader.com/blog/how-to-read-an-explanation-of-benefits-eob)
 - [Common Medical Billing Errors and How to Spot Them](https://medicalbillreader.com/blog/common-medical-billing-errors-and-how-to-spot-them)

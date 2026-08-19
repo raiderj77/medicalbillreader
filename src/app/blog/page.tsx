@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllMarkdownPosts } from "@/lib/blog-markdown";
+import { getAllEditorialGuides } from "@/lib/editorial-guides";
 
 export const metadata: Metadata = {
   title: "Medical Billing Guides & Resources",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function BlogIndexPage() {
-  const posts = getAllMarkdownPosts();
+  const guides = getAllEditorialGuides();
 
   const collectionSchema = {
     "@context": "https://schema.org",
@@ -27,11 +27,11 @@ export default function BlogIndexPage() {
     description:
       "Practical guides to understanding medical bills, insurance claims, billing codes, and your patient rights.",
     url: "https://medicalbillreader.com/blog",
-    numberOfItems: posts.length,
-    hasPart: posts.map((post) => ({
-      "@type": "BlogPosting",
-      name: post.title,
-      url: `https://medicalbillreader.com/blog/${post.slug}`,
+    numberOfItems: guides.length,
+    hasPart: guides.map((guide) => ({
+      "@type": guide.schemaType,
+      name: guide.title,
+      url: `https://medicalbillreader.com${guide.href}`,
     })),
   };
 
@@ -59,30 +59,30 @@ export default function BlogIndexPage() {
         .
       </p>
 
-      {posts.length === 0 ? (
+      {guides.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300">No guides published yet.</p>
       ) : (
         <div className="space-y-6">
-          {posts.map((post) => (
+          {guides.map((guide) => (
             <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
+              key={guide.slug}
+              href={guide.href}
               className="block p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-teal-300 dark:hover:border-teal-600 hover:shadow-md transition-all group"
             >
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-teal-800 dark:group-hover:text-teal-400 transition-colors mb-1">
-                {post.title}
+                {guide.title}
               </h2>
-              {post.excerpt && (
+              {guide.description && (
                 <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-2">
-                  {post.excerpt}
+                  {guide.description}
                 </p>
               )}
-              {post.date && (
+              {guide.publishedAt && (
                 <time
-                  dateTime={post.date}
+                  dateTime={guide.publishedAt}
                   className="text-xs text-gray-600 dark:text-gray-300"
                 >
-                  {new Date(post.date).toLocaleDateString("en-US", {
+                  {new Date(guide.publishedAt).toLocaleDateString("en-US", {
                     month: "long",
                     day: "numeric",
                     year: "numeric",
