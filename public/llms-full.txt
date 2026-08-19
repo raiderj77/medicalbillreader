@@ -1,6 +1,6 @@
 # Medical Bill Reader: detailed site facts
 
-Last reviewed: 2026-08-02
+Last reviewed: 2026-08-18
 
 ## What the service is
 
@@ -47,6 +47,7 @@ Jason Ramirez is publicly identified as the founder and author. His stated crede
 ## Canonical resources
 
 - [Home and analyzer](https://medicalbillreader.com/)
+- [Synthetic Sample Medical Bill and EOB Report](https://medicalbillreader.com/sample-medical-bill-report): Fully fabricated example with no upload or customer data.
 - [About](https://medicalbillreader.com/about)
 - [Methodology](https://medicalbillreader.com/methodology)
 - [Editorial Policy](https://medicalbillreader.com/editorial-policy)

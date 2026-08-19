@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedGuides from "@/components/RelatedGuides";
+import { DISPUTE_MEDICAL_BILL_GUIDE } from "@/lib/editorial-guides";
 
 export const metadata: Metadata = {
-  title: "How to Dispute a Medical Bill: Steps and Letter Template",
-  description:
-    "A careful, source-backed guide to checking and disputing a medical bill, including a privacy-conscious letter template and official help resources.",
+  title: DISPUTE_MEDICAL_BILL_GUIDE.title,
+  description: DISPUTE_MEDICAL_BILL_GUIDE.description,
   alternates: {
     canonical: "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
   },
   openGraph: {
-    title: "How to Dispute a Medical Bill: Steps and Letter Template",
-    description:
-      "A careful, source-backed guide to checking and disputing a medical bill, including a privacy-conscious letter template and official help resources.",
+    title: DISPUTE_MEDICAL_BILL_GUIDE.title,
+    description: DISPUTE_MEDICAL_BILL_GUIDE.description,
     url: "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
     siteName: "Medical Bill Reader",
     type: "article",
-    publishedTime: "2026-03-28",
-    modifiedTime: "2026-08-02",
+    publishedTime: DISPUTE_MEDICAL_BILL_GUIDE.publishedAt,
+    modifiedTime: DISPUTE_MEDICAL_BILL_GUIDE.lastReviewedAt,
   },
 };
 
@@ -81,11 +81,11 @@ const faqItems = [
 const articleJsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
-  headline: "How to Dispute a Medical Bill: Steps and Letter Template",
+  headline: DISPUTE_MEDICAL_BILL_GUIDE.title,
   description:
     "A source-backed guide to checking and disputing a medical bill, with a privacy-conscious letter template.",
-  datePublished: "2026-03-28",
-  dateModified: "2026-08-02",
+  datePublished: DISPUTE_MEDICAL_BILL_GUIDE.publishedAt,
+  dateModified: DISPUTE_MEDICAL_BILL_GUIDE.lastReviewedAt,
   author: {
     "@type": "Person",
     name: "Jason Ramirez",
@@ -487,6 +487,8 @@ export default function DisputeMedicalBillPage() {
                 ))}
               </ul>
             </section>
+
+            <RelatedGuides currentSlug={DISPUTE_MEDICAL_BILL_GUIDE.slug} />
           </div>
         </article>
       </main>

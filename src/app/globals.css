@@ -23,6 +23,17 @@ html.dark body {
   main { padding: 0 !important; }
   .bg-blue-600 { background-color: #2563eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
+  #synthetic-sample,
+  #synthetic-sample * {
+    background-color: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  #synthetic-sample [role="note"] {
+    border: 2px solid black !important;
+  }
+
   body:has(#printable-results) * {
     visibility: hidden;
   }

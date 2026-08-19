@@ -10,11 +10,27 @@ describe("sitemap integrity", () => {
       "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
     );
     expect(urls).toContain(
+      "https://medicalbillreader.com/sample-medical-bill-report",
+    );
+    expect(urls).toContain(
       "https://medicalbillreader.com/consumer-health-data-privacy",
     );
     expect(urls).toContain("https://medicalbillreader.com/editorial-policy");
     expect(urls).not.toContain("https://medicalbillreader.com/stats");
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it("uses the shared review dates for acquisition resources", () => {
+    const entries = sitemap();
+    const disputeGuide = entries.find((entry) =>
+      entry.url.endsWith("/blog/how-to-dispute-a-medical-bill"),
+    );
+    const sampleReport = entries.find((entry) =>
+      entry.url.endsWith("/sample-medical-bill-report"),
+    );
+
+    expect(disputeGuide?.lastModified).toEqual(new Date("2026-08-02"));
+    expect(sampleReport?.lastModified).toEqual(new Date("2026-08-18"));
   });
 
   it("does not manufacture a new legal-page modification date per request", () => {

@@ -4,6 +4,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.medicalbillreader.com",
+          },
+        ],
+        destination: "https://medicalbillreader.com/:path*",
+        permanent: true,
+      },
+      {
         source: "/blog/medical-bill-payment-plans",
         destination: "/blog",
         permanent: true,
