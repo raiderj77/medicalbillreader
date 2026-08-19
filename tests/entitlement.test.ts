@@ -210,6 +210,25 @@ describe("atomic entitlement reservations", () => {
     expect(reservation?.key).toContain("mbr:free:");
   });
 
+  it.each([
+    "trialing",
+    "past_due",
+    "canceled",
+    "unpaid",
+    "paused",
+    "incomplete",
+    "incomplete_expired",
+  ])("does not authorize a %s subscription for analysis", async (status) => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_active",
+      status,
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
   it("keeps an active subscription ahead of a simultaneous free entitlement", async () => {
     redis.command.mockResolvedValueOnce(1);
 
@@ -222,6 +241,44 @@ describe("atomic entitlement reservations", () => {
       externalId: "sub_active",
     });
     expect(reservation?.key).toContain("mbr:sub:");
+  });
+
+  it("keeps an active cancel-at-period-end subscription eligible through its paid period", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_active",
+      status: "active",
+      cancel_at_period_end: true,
+      metadata: { mbr_entitlement: "subscription" },
+    });
+    redis.command.mockResolvedValueOnce(1);
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toMatchObject({
+      kind: "subscription",
+      externalId: "sub_active",
+    });
+  });
+
+  it("does not authorize an active subscription without MBR metadata", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_active",
+      status: "active",
+      metadata: {},
+    });
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("does not authorize an active subscription with payment collection paused", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_active",
+      status: "active",
+      pause_collection: { behavior: "void", resumes_at: null },
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
   });
 
   it("falls through from an already-used paid cookie to a valid subscription", async () => {
@@ -684,6 +741,134 @@ describe("atomic entitlement reservations", () => {
     },
   );
 
+  it("accepts only a paid Checkout session backed by an active MBR subscription", async () => {
+    const nonce = "a".repeat(64);
+    const checkoutSession = {
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    };
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce(checkoutSession);
+
+    expect(
+      await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
+    ).toEqual({ type: "subscription", subscriptionId: "sub_active" });
+
+    for (const paymentStatus of ["unpaid", "no_payment_required"]) {
+      stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+        ...checkoutSession,
+        payment_status: paymentStatus,
+      });
+      expect(
+        await classifyCompletedCheckout(
+          "cs_subscription",
+          nonce,
+          "subscription",
+        ),
+      ).toBeNull();
+    }
+    expect(stripe.subscriptions.retrieve).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    "trialing",
+    "past_due",
+    "canceled",
+    "unpaid",
+    "paused",
+    "incomplete",
+    "incomplete_expired",
+  ])("does not confirm a %s subscription", async (status) => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_ineligible",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_ineligible",
+      status,
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
+    ).toBeNull();
+  });
+
+  it("does not confirm an active subscription without MBR metadata", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_unrelated",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_unrelated",
+      status: "active",
+      metadata: {},
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
+    ).toBeNull();
+  });
+
+  it("does not confirm an active subscription with payment collection paused", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_paused_collection",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_paused_collection",
+      status: "active",
+      pause_collection: { behavior: "keep_as_draft", resumes_at: null },
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
+    ).toBeNull();
+  });
+
+  it("keeps subscription checkout confirmation retryable when Stripe verification fails", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_unavailable",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockRejectedValueOnce(
+      new Error("Stripe unavailable"),
+    );
+
+    expect(
+      await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
+    ).toEqual({ type: "unavailable" });
+  });
+
   it("rejects unrelated payments and cancelled subscriptions", async () => {
     stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
       mode: "payment",
@@ -705,6 +890,7 @@ describe("atomic entitlement reservations", () => {
 
     stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
       mode: "subscription",
+      payment_status: "paid",
       subscription: "sub_cancelled",
       metadata: {
         mbr_entitlement: "subscription",

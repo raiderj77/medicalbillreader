@@ -114,6 +114,10 @@ describe("POST /api/checkout", () => {
         },
       }),
     );
+    const checkout = stripe.checkout.sessions.create.mock.calls[0][0];
+    expect(checkout).not.toHaveProperty("allow_promotion_codes");
+    expect(checkout).not.toHaveProperty("discounts");
+    expect(checkout.subscription_data).not.toHaveProperty("trial_period_days");
   });
 
   it("rejects unknown plan names without creating a Stripe session", async () => {

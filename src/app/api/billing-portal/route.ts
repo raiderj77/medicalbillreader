@@ -15,6 +15,7 @@ import {
   SUBSCRIPTION_COOKIE_MAX_AGE,
   SUBSCRIPTION_HINT_COOKIE_OPTIONS,
 } from "@/lib/entitlement-cookies";
+import { isEligibleMbrSubscription } from "@/lib/entitlement";
 
 const NO_STORE = { "Cache-Control": "no-store" };
 
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
           )
         : null;
     if (!browserBinding || !subscriptionId) {
-      return json({ error: "An active subscription is required." }, 401);
+      return json({ error: "A verified subscription is required." }, 401);
     }
 
     const stripe = getStripe();
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
       subscription.metadata?.mbr_entitlement !== "subscription" ||
       typeof subscription.customer !== "string"
     ) {
-      return json({ error: "An active subscription is required." }, 401);
+      return json({ error: "A verified subscription is required." }, 401);
     }
 
     const origin = trustedSiteOrigin();
@@ -70,10 +71,7 @@ export async function POST(request: NextRequest) {
       return_url: `${origin}/pricing`,
     });
     const response = json({ url: session.url });
-    if (
-      subscription.status === "active" ||
-      subscription.status === "trialing"
-    ) {
+    if (isEligibleMbrSubscription(subscription)) {
       response.cookies.set(
         "mbr_sub_id",
         sealStripeAccess(

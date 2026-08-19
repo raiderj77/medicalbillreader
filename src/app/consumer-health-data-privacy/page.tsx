@@ -65,7 +65,7 @@ export default function ConsumerHealthDataPrivacyPage() {
             Consumer Health Data Privacy Notice
           </h1>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-            Effective August 2, 2026 · Last reviewed August 2, 2026
+            Effective August 2, 2026 · Last reviewed August 17, 2026
           </p>
           <p className="mt-6 rounded-xl border border-teal-200 bg-teal-50 p-5 leading-7 text-slate-900 dark:border-teal-900 dark:bg-teal-950/40 dark:text-slate-100">
             A medical bill or EOB can reveal health care, diagnoses, services,
@@ -189,9 +189,11 @@ export default function ConsumerHealthDataPrivacyPage() {
                 data, filenames, or report text.
               </li>
               <li>
-                <strong>Upstash:</strong> stores HMAC-protected rate-limit,
-                entitlement, and webhook-deduplication keys. It does not receive
-                the uploaded document or AI report from our application.
+                <strong>Upstash:</strong> stores HMAC-protected rate-limit and
+                entitlement keys. It does not receive the uploaded document
+                or AI report from our application. The current code creates no
+                new webhook-deduplication keys; legacy keys from the prior design
+                may remain until their expiration.
               </li>
               <li>
                 <strong>Stripe:</strong> receives payment details directly through
@@ -239,8 +241,10 @@ export default function ConsumerHealthDataPrivacyPage() {
                 expire after about 10 minutes; most rate-limit and monthly usage
                 keys expire between one minute and 40 days. A pseudonymous
                 pay-per-use replay-prevention key may be retained for up to 370
-                days. Stripe records follow Stripe&apos;s and our applicable payment,
-                accounting, dispute, and legal retention requirements.
+                days. No new webhook-deduplication keys are created; legacy keys
+                may remain for up to 30 days after their last creation. Stripe
+                records follow Stripe&apos;s and our applicable payment, accounting,
+                dispute, and legal retention requirements.
               </li>
             </ul>
             <p className="mt-4">

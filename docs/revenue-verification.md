@@ -1,6 +1,6 @@
 # Revenue verification runbook
 
-Last reviewed: 2026-07-12
+Last reviewed: 2026-08-17
 
 ## Production configuration audit
 
@@ -11,7 +11,10 @@ The Vercel production project contains the existing Anthropic, Redis, entitlemen
 - `STRIPE_WEBHOOK_SECRET`
 - `NEXT_PUBLIC_SITE_URL`
 
-The variable names were audited without printing their secret values. The live Checkout verification below confirms that the monthly price mapping resolves to the intended active product and amount.
+The variable names were audited without printing their secret values. The July
+12, 2026 live Checkout check documented below confirmed that the monthly mapping
+then resolved to the intended active product and amount; this August review did
+not reverify external configuration.
 
 ## Stripe sandbox setup completed
 
@@ -34,13 +37,19 @@ No live-mode Stripe value or production Vercel variable was changed.
 - failed AI delivery releases rather than consumes a paid credit
 - cancelled subscriptions fail server verification
 - subscription usage is capped atomically on the server
-- refund webhooks revoke pay-per-use access
-- duplicate webhook events are processed once
-- failed webhook processing releases its lock so Stripe can retry
+- pay-per-use access is derived from current Stripe Charge and Refund state at
+  checkout confirmation and before every paid analysis
+- a successful full pay-per-use refund revokes the credit, an in-flight full
+  refund freezes it, and a partial refund does not revoke it
+- signed refund webhooks validate and acknowledge events without mutating
+  entitlement state, so duplicate and out-of-order delivery cannot change access
+- paid subscription access requires a current MBR Subscription with Stripe
+  status `active` and `pause_collection` unset; see `docs/refund-operations.md`
+  for the required coupled cancellation-and-refund procedure
 - billing portal sessions require a server-issued subscription cookie
 - no Google Analytics conversion events are sent; authoritative purchase and refund evidence comes from Stripe
 
-## Live production checks completed
+## Historical live production checks completed (July 12, 2026)
 
 Using a synthetic document containing no medical or identifying information:
 
@@ -48,8 +57,12 @@ Using a synthetic document containing no medical or identifying information:
 - free entitlement issuance returned `200`
 - first free analysis returned `200`
 - replaying the same free entitlement returned `401`
-- a live $4.99 purchase returned through server confirmation, delivered one synthetic analysis, and was refunded
-- the production refund webhook accepted the signed event and revoked the paid entitlement
+- an owner-verification $4.99 purchase returned through server confirmation,
+  delivered one synthetic analysis, and was refunded; this was not customer
+  demand or retained revenue
+- the production refund event was accepted by the then-current webhook and the
+  paid entitlement was revoked; the current implementation instead derives
+  access from live Charge and Refund state
 - the $49 subscription button opened a live Stripe Checkout for “Medical Bill Reader Monthly” at exactly $49 per month with a 44-analysis description
 - the $49 Checkout was exited through its cancellation URL without entering payment information, creating a charge, or granting an entitlement
 - the expired Cookiebot dependency was removed; Google Analytics is now disabled site-wide for the strict-YMYL release
@@ -70,7 +83,9 @@ Using Stripe sandbox cards and a generated image containing no patient or medica
 - Stripe's decline card remained unpaid and produced no entitlement
 - leaving the declined Checkout returned to the cancellation URL and still produced no entitlement
 - a full test refund generated a real `refund.created` event
-- the signed refund event was accepted, marked the PaymentIntent refunded, and a duplicate delivery was safely acknowledged without processing twice
+- the signed refund event was accepted by the then-current webhook, marked the
+  PaymentIntent refunded, and safely acknowledged a duplicate; the current
+  webhook is acknowledgement-only and current Refund objects are authoritative
 - local logs contained neither the synthetic document marker nor base64 upload data
 - automated tests prevent third-party analytics from running on analyzer, pricing, checkout, contact, and privacy-sensitive routes
 
@@ -80,8 +95,11 @@ Expired, unrelated, malformed, and concurrent entitlement cases remain covered b
 
 Medical Bill Reader's revenue-verification milestone is complete:
 
-- production price mappings and webhook configuration are present
-- the $4.99 live purchase-delivery-refund path was verified
+- production price mappings and webhook configuration were present in the
+  July 12, 2026 audit snapshot; this August 17 documentation update did not
+  reverify external configuration
+- the $4.99 owner-verification purchase-delivery-refund path was verified; it is
+  not evidence of customer demand or retained revenue
 - the $49 path was verified in Stripe sandbox through delivery, cap enforcement, portal access, cancellation, and post-cancellation denial
 - the live $49 product mapping and cancellation return were verified without an unnecessary charge
 - revenue events are not forwarded to Google Analytics; use Stripe records for purchase, subscription, cancellation, and refund verification
