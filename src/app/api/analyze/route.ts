@@ -120,10 +120,11 @@ export async function POST(request: NextRequest) {
           maxAge: SUBSCRIPTION_COOKIE_MAX_AGE,
         },
       );
-    } else if (request.cookies.get("mbr_sub_id")) {
-      // Remove expired, legacy raw-ID, or otherwise invalid subscription hints
-      // after another entitlement succeeds so future requests fall through.
-      response.cookies.set("mbr_sub_id", "", { maxAge: 0, path: "/" });
+    } else if (request.cookies.get("mbr_sub_active")) {
+      // Clear only the readable access hint after a non-subscription analysis.
+      // Preserve the sealed HttpOnly subscription token so a cancelled,
+      // paused, unpaid, or refunded customer can still reach Stripe's billing
+      // portal from the same verified browser.
       response.cookies.set("mbr_sub_active", "", { maxAge: 0, path: "/" });
     }
     return response;

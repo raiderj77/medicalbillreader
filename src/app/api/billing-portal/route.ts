@@ -4,18 +4,9 @@ import { clientIp, safeSecurityLog } from "@/lib/security";
 import { trustedSiteOrigin } from "@/lib/site-url";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import {
-  BROWSER_BINDING_COOKIE,
-  browserBindingCookieValue,
   browserBindingFromRequest,
   openStripeAccess,
-  sealStripeAccess,
 } from "@/lib/stripe-browser-access";
-import {
-  ENTITLEMENT_COOKIE_OPTIONS,
-  SUBSCRIPTION_COOKIE_MAX_AGE,
-  SUBSCRIPTION_HINT_COOKIE_OPTIONS,
-} from "@/lib/entitlement-cookies";
-import { isEligibleMbrSubscription } from "@/lib/entitlement";
 
 const NO_STORE = { "Cache-Control": "no-store" };
 
@@ -70,35 +61,11 @@ export async function POST(request: NextRequest) {
       customer: subscription.customer,
       return_url: `${origin}/pricing`,
     });
-    const response = json({ url: session.url });
-    if (isEligibleMbrSubscription(subscription)) {
-      response.cookies.set(
-        "mbr_sub_id",
-        sealStripeAccess(
-          "subscription",
-          subscriptionId,
-          browserBinding,
-          SUBSCRIPTION_COOKIE_MAX_AGE,
-        ),
-        {
-          ...ENTITLEMENT_COOKIE_OPTIONS,
-          maxAge: SUBSCRIPTION_COOKIE_MAX_AGE,
-        },
-      );
-      response.cookies.set("mbr_sub_active", "1", {
-        ...SUBSCRIPTION_HINT_COOKIE_OPTIONS,
-        maxAge: SUBSCRIPTION_COOKIE_MAX_AGE,
-      });
-      response.cookies.set(
-        BROWSER_BINDING_COOKIE,
-        browserBindingCookieValue(browserBinding),
-        {
-          ...ENTITLEMENT_COOKIE_OPTIONS,
-          maxAge: SUBSCRIPTION_COOKIE_MAX_AGE,
-        },
-      );
-    }
-    return response;
+    // Portal access is a management capability, not paid-access authority.
+    // Never renew entitlement cookies from this route; Checkout confirmation
+    // and a fully verified successful subscription analysis are the only
+    // renewal paths.
+    return json({ url: session.url });
   } catch {
     safeSecurityLog("billing_portal_creation_failed");
     return json(

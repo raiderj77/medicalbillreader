@@ -1,6 +1,6 @@
 # Revenue verification runbook
 
-Last reviewed: 2026-08-17
+Last reviewed: 2026-08-21
 
 ## Production configuration audit
 
@@ -44,8 +44,10 @@ No live-mode Stripe value or production Vercel variable was changed.
 - signed refund webhooks validate and acknowledge events without mutating
   entitlement state, so duplicate and out-of-order delivery cannot change access
 - paid subscription access requires a current MBR Subscription with Stripe
-  status `active` and `pause_collection` unset; see `docs/refund-operations.md`
-  for the required coupled cancellation-and-refund procedure
+  status `active`, `pause_collection` unset, and a coherent current-period paid
+  InvoicePayment, PaymentIntent, Charge, and Refund state; full refunds revoke
+  access, while exceptional partial or in-flight refunds freeze access for
+  owner review; see `docs/refund-operations.md`
 - billing portal sessions require a server-issued subscription cookie
 - no Google Analytics conversion events are sent; authoritative purchase and refund evidence comes from Stripe
 

@@ -72,6 +72,28 @@ describe("BillAnalyzer entitlement bootstrap", () => {
     ]);
   });
 
+  it("does not request free access when paid verification is retryable", async () => {
+    const fetcher = vi.fn().mockResolvedValueOnce(
+      jsonResponse(
+        { error: "Paid analysis access is temporarily unavailable." },
+        503,
+      ),
+    );
+
+    const result = await requestAnalysisWithAccessFallback(
+      fetcher,
+      { image: "data", fileType: "image/png", processingAcknowledged: true },
+      true,
+    );
+
+    expect(result.response.status).toBe(503);
+    expect(fetcher).toHaveBeenCalledOnce();
+    expect(fetcher).toHaveBeenCalledWith(
+      "/api/analyze",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
   it("keeps the component wired to the paid-first fallback helper", () => {
     expect(analyzer).toContain("requestAnalysisWithAccessFallback(");
     expect(analyzer).toContain("if (freeAccessError)");

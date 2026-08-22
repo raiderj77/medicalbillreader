@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 const redis = vi.hoisted(() => ({ command: vi.fn() }));
 const stripe = vi.hoisted(() => ({
   checkout: { sessions: { retrieve: vi.fn() } },
+  invoicePayments: { list: vi.fn() },
   paymentIntents: { retrieve: vi.fn(), update: vi.fn() },
   refunds: { list: vi.fn() },
   subscriptions: { retrieve: vi.fn(), update: vi.fn() },
@@ -17,7 +18,10 @@ vi.mock("@/lib/stripe", () => ({
   getStripe: () => stripe,
   PRICES: {
     perUse: { amount: 499, currency: "usd", label: "$4.99 per bill" },
+    monthly: { amount: 4900, currency: "usd", label: "$49/month" },
   },
+  stripePriceId: (type: string) =>
+    type === "subscription" ? "price_monthly" : "price_per_use",
   SUBSCRIPTION_MONTHLY_CAP: 2,
 }));
 vi.mock("@/lib/stripe-browser-access", () => ({
@@ -39,6 +43,177 @@ function refundList(
     async *[Symbol.asyncIterator]() {
       for (const refund of refunds) yield refund;
     },
+  };
+}
+
+function stripeList<T>(...items: T[]) {
+  return {
+    async *[Symbol.asyncIterator]() {
+      for (const item of items) yield item;
+    },
+  };
+}
+
+function activeSubscription(
+  overrides: Record<string, unknown> = {},
+) {
+  const now = Math.floor(Date.now() / 1000);
+  const periodStart = now - 60 * 60;
+  const periodEnd = now + 60 * 60 * 24 * 29;
+  return {
+    id: "sub_active",
+    status: "active",
+    pause_collection: null,
+    collection_method: "charge_automatically",
+    currency: "usd",
+    metadata: { mbr_entitlement: "subscription" },
+    items: {
+      has_more: false,
+      data: [
+        {
+          id: "si_monthly",
+          subscription: "sub_active",
+          quantity: 1,
+          current_period_start: periodStart,
+          current_period_end: periodEnd,
+          price: {
+            id: "price_monthly",
+            currency: "usd",
+            unit_amount: 4900,
+            recurring: { interval: "month", interval_count: 1 },
+          },
+        },
+      ],
+    },
+    latest_invoice: {
+      id: "in_current",
+      status: "paid",
+      billing_reason: "subscription_cycle",
+      collection_method: "charge_automatically",
+      currency: "usd",
+      amount_due: 4900,
+      amount_paid: 4900,
+      amount_remaining: 0,
+      amount_overpaid: 0,
+      pre_payment_credit_notes_amount: 0,
+      post_payment_credit_notes_amount: 0,
+      total: 4900,
+      parent: {
+        type: "subscription_details",
+        subscription_details: {
+          subscription: "sub_active",
+          metadata: { mbr_entitlement: "subscription" },
+        },
+      },
+      lines: {
+        has_more: false,
+        data: [
+          {
+            id: "il_current",
+            amount: 4900,
+            currency: "usd",
+            quantity: 1,
+            period: { start: periodStart, end: periodEnd },
+            parent: {
+              type: "subscription_item_details",
+              subscription_item_details: {
+                proration: false,
+                subscription: "sub_active",
+                subscription_item: "si_monthly",
+              },
+            },
+            pricing: {
+              type: "price_details",
+              price_details: { price: "price_monthly" },
+            },
+          },
+        ],
+      },
+    },
+    ...overrides,
+  };
+}
+
+function paidSubscriptionInvoicePayment(
+  overrides: Record<string, unknown> = {},
+) {
+  return {
+    id: "inpay_current",
+    status: "paid",
+    invoice: "in_current",
+    amount_paid: 4900,
+    amount_requested: 4900,
+    currency: "usd",
+    is_default: true,
+    payment: {
+      type: "payment_intent",
+      payment_intent: {
+        id: "pi_subscription",
+        status: "succeeded",
+        amount: 4900,
+        amount_received: 4900,
+        currency: "usd",
+        latest_charge: {
+          id: "ch_subscription",
+          payment_intent: "pi_subscription",
+          paid: true,
+          captured: true,
+          disputed: false,
+          amount: 4900,
+          amount_captured: 4900,
+          amount_refunded: 0,
+          refunded: false,
+          currency: "usd",
+          payment_method_details: { type: "card" },
+        },
+      },
+    },
+    ...overrides,
+  };
+}
+
+function subscriptionWithInvoice(overrides: Record<string, unknown>) {
+  const subscription = activeSubscription();
+  return {
+    ...subscription,
+    latest_invoice: {
+      ...subscription.latest_invoice,
+      ...overrides,
+    },
+  };
+}
+
+function invoicePaymentWithCharge(
+  chargeOverrides: Record<string, unknown>,
+) {
+  const invoicePayment = paidSubscriptionInvoicePayment();
+  const paymentIntent = invoicePayment.payment.payment_intent;
+  return {
+    ...invoicePayment,
+    payment: {
+      ...invoicePayment.payment,
+      payment_intent: {
+        ...paymentIntent,
+        latest_charge: {
+          ...paymentIntent.latest_charge,
+          ...chargeOverrides,
+        },
+      },
+    },
+  };
+}
+
+function subscriptionRefund(
+  status: string | null,
+  amount = 4900,
+) {
+  return {
+    id: `re_${status || "unknown"}`,
+    amount,
+    status,
+    currency: "usd",
+    charge: "ch_subscription",
+    payment_intent: "pi_subscription",
   };
 }
 
@@ -100,6 +275,9 @@ describe("atomic entitlement reservations", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     stripe.refunds.list.mockReturnValue(refundList());
+    stripe.invoicePayments.list.mockReturnValue(
+      stripeList(paidSubscriptionInvoicePayment()),
+    );
     browserAccess.fromRequest.mockImplementation(
       (request: NextRequest) =>
         request.cookies.get("mbr_browser_binding")?.value || null,
@@ -129,11 +307,7 @@ describe("atomic entitlement reservations", () => {
         metadata: { mbr_entitlement: "per_use" },
       },
     });
-    stripe.subscriptions.retrieve.mockResolvedValue({
-      id: "sub_active",
-      status: "active",
-      metadata: { mbr_entitlement: "subscription" },
-    });
+    stripe.subscriptions.retrieve.mockResolvedValue(activeSubscription());
   });
 
   it("does not allow a paid entitlement to be reserved twice", async () => {
@@ -216,7 +390,6 @@ describe("atomic entitlement reservations", () => {
     "canceled",
     "unpaid",
     "paused",
-    "incomplete",
     "incomplete_expired",
   ])("does not authorize a %s subscription for analysis", async (status) => {
     stripe.subscriptions.retrieve.mockResolvedValueOnce({
@@ -244,12 +417,9 @@ describe("atomic entitlement reservations", () => {
   });
 
   it("keeps an active cancel-at-period-end subscription eligible through its paid period", async () => {
-    stripe.subscriptions.retrieve.mockResolvedValueOnce({
-      id: "sub_active",
-      status: "active",
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(activeSubscription({
       cancel_at_period_end: true,
-      metadata: { mbr_entitlement: "subscription" },
-    });
+    }));
     redis.command.mockResolvedValueOnce(1);
 
     expect(await reserveRequestEntitlement(subscriptionRequest())).toMatchObject({
@@ -278,6 +448,351 @@ describe("atomic entitlement reservations", () => {
     });
 
     expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("keeps an incomplete subscription retryable without free fallback", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_active",
+      status: "incomplete",
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes an unsupported send-invoice subscription", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(
+      activeSubscription({ collection_method: "send_invoice" }),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes an unsupported configured subscription Price", async () => {
+    const subscription = activeSubscription();
+    subscription.items.data[0].price.id = "price_other";
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(subscription);
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes a mismatched current subscription amount", async () => {
+    const subscription = activeSubscription();
+    subscription.items.data[0].price.unit_amount = 4800;
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(subscription);
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("treats a current-period boundary mismatch as temporarily unavailable", async () => {
+    const subscription = activeSubscription();
+    subscription.items.data[0].current_period_end =
+      Math.floor(Date.now() / 1000) - 1;
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(subscription);
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("does not fall through to free access when Subscription retrieval fails", async () => {
+    stripe.subscriptions.retrieve.mockRejectedValueOnce(
+      new Error("synthetic Stripe outage"),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it.each(["open", "draft", null])(
+    "temporarily freezes an active subscription while its current invoice is %s",
+    async (status) => {
+      stripe.subscriptions.retrieve.mockResolvedValueOnce(
+        subscriptionWithInvoice({ status }),
+      );
+
+      await expect(
+        reserveRequestEntitlement(subscriptionAndFreeRequest()),
+      ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+      expect(redis.command).not.toHaveBeenCalled();
+      expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    },
+  );
+
+  it("treats a missing current invoice as temporarily unavailable", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(
+      activeSubscription({ latest_invoice: null }),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    "pre_payment_credit_notes_amount",
+    "post_payment_credit_notes_amount",
+  ])("freezes a current invoice with nonzero %s", async (field) => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(
+      subscriptionWithInvoice({ [field]: 100 }),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it.each(["uncollectible", "void"])(
+    "denies an active subscription whose current invoice is %s",
+    async (status) => {
+      stripe.subscriptions.retrieve.mockResolvedValueOnce(
+        subscriptionWithInvoice({ status }),
+      );
+
+      expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+      expect(redis.command).not.toHaveBeenCalled();
+    },
+  );
+
+  it("denies a fully refunded current subscription payment", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        invoicePaymentWithCharge({ refunded: true, amount_refunded: 4900 }),
+      ),
+    );
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("succeeded")),
+    );
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes a successful partial subscription refund for owner review", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(invoicePaymentWithCharge({ amount_refunded: 100 })),
+    );
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("succeeded", 100)),
+    );
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("denies multiple successful partial refunds that total the full payment", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        invoicePaymentWithCharge({ refunded: true, amount_refunded: 4900 }),
+      ),
+    );
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(
+        subscriptionRefund("succeeded", 2000),
+        subscriptionRefund("succeeded", 2900),
+      ),
+    );
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("temporarily freezes a full subscription refund that is still pending", async () => {
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("pending")),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it.each(["failed", "canceled"])(
+    "keeps access after a terminal %s subscription refund",
+    async (status) => {
+      stripe.refunds.list.mockReturnValueOnce(
+        stripeList(subscriptionRefund(status)),
+      );
+      redis.command.mockResolvedValueOnce(1);
+
+      expect(await reserveRequestEntitlement(subscriptionRequest())).toMatchObject({
+        kind: "subscription",
+      });
+    },
+  );
+
+  it("treats missing paid InvoicePayment state as temporarily unavailable", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(stripeList());
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes an unsupported InvoicePayment payment-record shape", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        paidSubscriptionInvoicePayment({
+          payment: {
+            type: "payment_record",
+            payment_record: "payrec_synthetic",
+          },
+        }),
+      ),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+  });
+
+  it("treats an unexpanded subscription PaymentIntent as retryable", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        paidSubscriptionInvoicePayment({
+          payment: {
+            type: "payment_intent",
+            payment_intent: "pi_subscription",
+          },
+        }),
+      ),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("treats an unexpanded subscription Charge as retryable", async () => {
+    const invoicePayment = paidSubscriptionInvoicePayment();
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList({
+        ...invoicePayment,
+        payment: {
+          ...invoicePayment.payment,
+          payment_intent: {
+            ...invoicePayment.payment.payment_intent,
+            latest_charge: "ch_subscription",
+          },
+        },
+      }),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes multiple paid InvoicePayments for the unsupported fixed-card shape", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        paidSubscriptionInvoicePayment(),
+        paidSubscriptionInvoicePayment({ id: "inpay_second" }),
+      ),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+  });
+
+  it("freezes a non-card subscription charge", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        invoicePaymentWithCharge({
+          payment_method_details: { type: "us_bank_account" },
+        }),
+      ),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+  });
+
+  it("denies an unsupported disputed subscription charge", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(invoicePaymentWithCharge({ disputed: true })),
+    );
+
+    expect(await reserveRequestEntitlement(subscriptionRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("treats a missing Charge dispute flag as temporarily unavailable", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(invoicePaymentWithCharge({ disputed: undefined })),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("fails temporarily closed when current subscription refund state is unavailable", async () => {
+    stripe.refunds.list.mockImplementationOnce(() => ({
+      async *[Symbol.asyncIterator]() {
+        throw new Error("synthetic Stripe outage");
+      },
+    }));
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("fails temporarily closed for an unknown subscription refund status", async () => {
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("unexpected")),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("fails temporarily closed when subscription Charge and Refund state disagree", async () => {
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(invoicePaymentWithCharge({ amount_refunded: 100 })),
+    );
+
+    await expect(
+      reserveRequestEntitlement(subscriptionAndFreeRequest()),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
     expect(redis.command).not.toHaveBeenCalled();
   });
 
@@ -747,6 +1262,7 @@ describe("atomic entitlement reservations", () => {
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_active",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: nonce,
@@ -757,6 +1273,15 @@ describe("atomic entitlement reservations", () => {
     expect(
       await classifyCompletedCheckout("cs_subscription", nonce, "subscription"),
     ).toEqual({ type: "subscription", subscriptionId: "sub_active" });
+    expect(stripe.subscriptions.retrieve).toHaveBeenCalledWith("sub_active", {
+      expand: ["latest_invoice"],
+    });
+    expect(stripe.invoicePayments.list).toHaveBeenCalledWith({
+      invoice: "in_current",
+      status: "paid",
+      limit: 100,
+      expand: ["data.payment.payment_intent.latest_charge"],
+    });
 
     for (const paymentStatus of ["unpaid", "no_payment_required"]) {
       stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
@@ -774,13 +1299,123 @@ describe("atomic entitlement reservations", () => {
     expect(stripe.subscriptions.retrieve).toHaveBeenCalledTimes(1);
   });
 
+  it("does not confirm a fully refunded subscription Checkout", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      invoice: "in_current",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.invoicePayments.list.mockReturnValueOnce(
+      stripeList(
+        invoicePaymentWithCharge({ refunded: true, amount_refunded: 4900 }),
+      ),
+    );
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("succeeded")),
+    );
+
+    expect(
+      await classifyCompletedCheckout("cs_refunded", nonce, "subscription"),
+    ).toBeNull();
+  });
+
+  it("keeps an in-flight subscription refund confirmation retryable", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      invoice: "in_current",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.refunds.list.mockReturnValueOnce(
+      stripeList(subscriptionRefund("requires_action")),
+    );
+
+    expect(
+      await classifyCompletedCheckout("cs_pending", nonce, "subscription"),
+    ).toEqual({ type: "unavailable" });
+  });
+
+  it("keeps a Checkout-to-current-invoice mismatch retryable", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      invoice: "in_checkout_other",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_mismatch", nonce, "subscription"),
+    ).toEqual({ type: "unavailable" });
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+  });
+
+  it("keeps a paid subscription Checkout with no invoice retryable", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      invoice: null,
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_no_invoice", nonce, "subscription"),
+    ).toEqual({ type: "unavailable" });
+    expect(stripe.subscriptions.retrieve).not.toHaveBeenCalled();
+  });
+
+  it("keeps a paid subscription Checkout retryable when Stripe returns no current invoice", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_active",
+      invoice: "in_current",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockResolvedValueOnce(
+      activeSubscription({ latest_invoice: null }),
+    );
+
+    expect(
+      await classifyCompletedCheckout(
+        "cs_missing_current_invoice",
+        nonce,
+        "subscription",
+      ),
+    ).toEqual({ type: "unavailable" });
+    expect(stripe.invoicePayments.list).not.toHaveBeenCalled();
+  });
+
   it.each([
     "trialing",
     "past_due",
     "canceled",
     "unpaid",
     "paused",
-    "incomplete",
     "incomplete_expired",
   ])("does not confirm a %s subscription", async (status) => {
     const nonce = "a".repeat(64);
@@ -788,6 +1423,7 @@ describe("atomic entitlement reservations", () => {
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_ineligible",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: nonce,
@@ -810,6 +1446,7 @@ describe("atomic entitlement reservations", () => {
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_unrelated",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: nonce,
@@ -826,12 +1463,36 @@ describe("atomic entitlement reservations", () => {
     ).toBeNull();
   });
 
+  it("keeps an incomplete subscription Checkout retryable", async () => {
+    const nonce = "a".repeat(64);
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "subscription",
+      payment_status: "paid",
+      subscription: "sub_incomplete",
+      invoice: "in_current",
+      metadata: {
+        mbr_entitlement: "subscription",
+        mbr_checkout_nonce: nonce,
+      },
+    });
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_incomplete",
+      status: "incomplete",
+      metadata: { mbr_entitlement: "subscription" },
+    });
+
+    expect(
+      await classifyCompletedCheckout("cs_incomplete", nonce, "subscription"),
+    ).toEqual({ type: "unavailable" });
+  });
+
   it("does not confirm an active subscription with payment collection paused", async () => {
     const nonce = "a".repeat(64);
     stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_paused_collection",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: nonce,
@@ -855,6 +1516,7 @@ describe("atomic entitlement reservations", () => {
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_unavailable",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: nonce,
@@ -892,6 +1554,7 @@ describe("atomic entitlement reservations", () => {
       mode: "subscription",
       payment_status: "paid",
       subscription: "sub_cancelled",
+      invoice: "in_current",
       metadata: {
         mbr_entitlement: "subscription",
         mbr_checkout_nonce: "a".repeat(64),

@@ -58,7 +58,7 @@ describe("POST /api/billing-portal", () => {
     expect(stripe.subscriptions.retrieve).not.toHaveBeenCalled();
   });
 
-  it("creates a portal only for a verified Medical Bill Reader subscription", async () => {
+  it("creates a portal without renewing paid-access cookies", async () => {
     stripe.subscriptions.retrieve.mockResolvedValue({
       id: "sub_verified",
       customer: "cus_verified",
@@ -81,11 +81,9 @@ describe("POST /api/billing-portal", () => {
       customer: "cus_verified",
       return_url: "https://medicalbillreader.com/pricing",
     });
-    const cookie = response.headers.get("set-cookie") || "";
-    expect(cookie).toContain("mbr_sub_id=renewed-subscription-token");
-    expect(cookie).toContain("mbr_sub_active=1");
-    expect(cookie).toContain("mbr_browser_binding=signed-browser-binding");
-    expect(cookie).toContain("Max-Age=34560000");
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(browserAccess.seal).not.toHaveBeenCalled();
+    expect(browserAccess.bindingCookie).not.toHaveBeenCalled();
   });
 
   it.each(["canceled", "trialing"])(
@@ -165,5 +163,38 @@ describe("POST /api/billing-portal", () => {
     expect(browserAccess.open).not.toHaveBeenCalled();
     expect(stripe.subscriptions.retrieve).not.toHaveBeenCalled();
     expect(stripe.billingPortal.sessions.create).not.toHaveBeenCalled();
+  });
+
+  it("returns a retryable error when Subscription retrieval fails", async () => {
+    stripe.subscriptions.retrieve.mockRejectedValueOnce(
+      new Error("synthetic Stripe outage"),
+    );
+
+    const response = await POST(
+      request("mbr_sub_id=opaque-subscription-token"),
+    );
+
+    expect(response.status).toBe(502);
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(stripe.billingPortal.sessions.create).not.toHaveBeenCalled();
+  });
+
+  it("returns a retryable error when portal-session creation fails", async () => {
+    stripe.subscriptions.retrieve.mockResolvedValueOnce({
+      id: "sub_verified",
+      customer: "cus_verified",
+      status: "canceled",
+      metadata: { mbr_entitlement: "subscription" },
+    });
+    stripe.billingPortal.sessions.create.mockRejectedValueOnce(
+      new Error("synthetic Stripe outage"),
+    );
+
+    const response = await POST(
+      request("mbr_sub_id=opaque-subscription-token"),
+    );
+
+    expect(response.status).toBe(502);
+    expect(response.headers.get("set-cookie")).toBeNull();
   });
 });
