@@ -11,11 +11,13 @@ describe("current project instructions", () => {
     const claude = read("CLAUDE.md");
 
     expect(claude).toContain("Single analysis: $4.99");
-    expect(claude).toContain("Subscription: $49 per month for up to 44 analyses");
+    expect(claude).toContain("Bill and EOB comparison: $9.99 planned price");
+    expect(claude).toContain("New monthly subscriptions are disabled");
+    expect(claude).toContain("server-verified access");
     expect(claude).toContain("Vercel production hosting");
     expect(claude).toContain("Jason Ramirez may remain publicly identified");
     expect(claude).not.toMatch(/free MVP|Stripe \(future|deploy pending|NOT yet deployed/i);
-    expect(claude).not.toMatch(/\$9\.99|\$14\.99|unlimited/i);
+    expect(claude).not.toMatch(/\$49|\$14\.99|unlimited/i);
   });
 
   it("prevents thin code pages and unsupported price guidance", () => {
@@ -46,5 +48,25 @@ describe("current project instructions", () => {
     expect(revenue).not.toContain("six allow-listed conversion events are wired");
     expect(workflow).not.toContain("for STEM in ads robots llms");
     expect(workflow).not.toContain("name + credential everywhere");
+  });
+
+  it("documents the disabled offers and aggregate-only validation gate", () => {
+    const env = read(".env.example");
+    const retirement = read("docs/subscription-retirement-runbook.md");
+    const scoreboard = read(
+      "docs/medicalbillreader-90-day-validation-scoreboard.md",
+    );
+
+    expect(env).toContain("STRIPE_PRICE_BILL_EOB_COMPARISON=");
+    expect(env).toContain("ENABLE_NEW_SUBSCRIPTIONS=false");
+    expect(env).toContain("ENABLE_BILL_EOB_COMPARISON=false");
+    expect(env).toContain("ENABLE_EXISTING_SUBSCRIPTION_SUPPORT=true");
+    expect(retirement).toContain("Do not restore or expose new subscription checkout");
+    expect(retirement).toContain("A webhook is a signal, not the sole source of truth");
+    expect(scoreboard).toContain(
+      "The refunded $4.99 owner-verification payment is excluded",
+    );
+    expect(scoreboard.match(/\| UNKNOWN \|/g)?.length).toBeGreaterThanOrEqual(29);
+    expect(scoreboard).not.toMatch(/customer_[A-Za-z0-9]|cus_[A-Za-z0-9]/);
   });
 });

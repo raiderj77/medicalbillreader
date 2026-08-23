@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { METHODOLOGY_REVIEW_STATUS } from "@/config/review-status";
 
 export const metadata: Metadata = {
   title: "Methodology: How Medical Bill Reader Works",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 const PAGE_URL = "https://medicalbillreader.com/methodology";
-const LAST_REVIEWED = "2026-08-02";
+const LAST_REVIEWED = "2026-08-23";
 
 export default function MethodologyPage() {
   const articleSchema = {
@@ -83,7 +84,7 @@ export default function MethodologyPage() {
       </h1>
 
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-        Last reviewed: August 2, 2026. Written by{" "}
+        Last reviewed: August 23, 2026. Written by{" "}
         <Link href="/about" className="underline underline-offset-2">
           Jason Ramirez
         </Link>
@@ -93,6 +94,10 @@ export default function MethodologyPage() {
           editorial policy
         </Link>
         .
+      </p>
+      <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm font-semibold text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">
+        Review status: {METHODOLOGY_REVIEW_STATUS.label}. No independent
+        medical-billing or coding reviewer is attributed to this methodology.
       </p>
 
       <div
@@ -113,14 +118,13 @@ export default function MethodologyPage() {
         <p>
           Medical Bill Reader accepts an uploaded medical bill or Explanation
           of Benefits document, sends it to an AI model for analysis, and
-          returns a plain-English breakdown organized into five sections: what
-          the document appears to be, visible charges and insurance fields,{" "}
-          <strong>Amounts Shown</strong>, items to verify, and questions and
-          next steps. The amounts section reports only clearly labeled figures
-          visible in the
-          document. It does not determine a final amount due or establish what
-          the user legally owes. The output is a written explanation, not a
-          diagnosis or a payment decision.
+          returns a validated report rendered in seven fixed sections: document
+          type, visible fields, amounts shown, visible codes, items to verify,
+          questions and next steps, and limitations. The server rejects output
+          that does not match the report schema. The page renders fixed React
+          fields rather than model-generated HTML, links, or Markdown. It does
+          not determine a final amount due or establish what the user legally
+          owes.
         </p>
 
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-8 mb-3">
@@ -138,8 +142,8 @@ export default function MethodologyPage() {
         </p>
         <p>
           The model receives the uploaded file (image or PDF) plus a system
-          instruction that treats document text as untrusted data and limits
-          the response to five fixed sections. It is told to act as a cautious
+          instruction that treats document text as untrusted data and a strict
+          JSON schema for the report fields. It is told to act as a cautious
           document explainer, not as a clinician, insurer, attorney, coder, or
           billing specialist. It does not look up codes against a live
           authoritative database, read your plan documents, or access records
@@ -152,9 +156,11 @@ export default function MethodologyPage() {
         <p>The model is asked to surface the items most useful to a patient:</p>
         <ul className="list-disc pl-6 space-y-1">
           <li>
-            <strong>Procedure and service codes</strong> such as CPT (Current
-            Procedural Terminology), HCPCS Level II, ICD-10-CM diagnosis codes,
-            and NDC drug codes when present.
+            <strong>Visible code labels</strong> such as CPT, HCPCS Level II,
+            ICD-10-CM, and NDC when legible. The analyzer does not provide an
+            official descriptor or an authoritative code lookup. The current
+            release reports only the legible code string and system label;
+            descriptions remain withheld while reuse rights are unresolved.
           </li>
           <li>
             <strong>Service dates and provider information</strong> as printed
@@ -218,8 +224,9 @@ export default function MethodologyPage() {
              <strong>Anthropic processing</strong>: the file is processed by
              Anthropic&apos;s API to produce the response. Per Anthropic&apos;s
              published standard commercial API policy, inputs and outputs are
-             not used to train models by default and are automatically deleted
-             from Anthropic&apos;s systems within 30 days. Anthropic says inputs
+             automatically deleted from Anthropic&apos;s backend within 30 days,
+             subject to customer-controlled service, agreed-term, Usage Policy,
+             and legal exceptions. Anthropic says inputs
              and outputs flagged by automated trust and safety systems may be
              retained for up to two years and associated classification scores
              for up to seven years; legal, policy-enforcement, customer-controlled

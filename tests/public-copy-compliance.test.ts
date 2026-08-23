@@ -22,14 +22,14 @@ describe("public YMYL and policy copy", () => {
     expect(about).not.toContain("transparent and accessible to everyone");
   });
 
-  it("uses a current, neutral FDA NDC format explanation", () => {
+  it("keeps NDC education at system level while exact-example rights are pending", () => {
     const codes = source("src/app/codes-explained/page.tsx");
 
     expect(codes).toContain("10-digit, three-segment number");
-    expect(codes).toContain("0000-0000-00");
-    expect(codes).toContain("is not a drug lookup");
-    expect(codes).toContain("HIPAA-standard 11-digit");
-    expect(codes).toContain("uniform 12-digit format takes effect March 7, 2033");
+    expect(codes).toContain("does not publish an exact code example");
+    expect(codes).toContain("reuse rights remain under review");
+    expect(codes).not.toContain("0000-0000-00");
+    expect(codes).not.toContain("HIPAA-standard 11-digit");
     expect(codes).toContain("Plan-calculated percentage cost sharing");
     expect(codes).not.toContain("NDC 0002-7510");
     expect(codes).not.toContain("codes tell the insurer what was done");

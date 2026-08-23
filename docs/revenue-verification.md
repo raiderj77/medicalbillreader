@@ -16,6 +16,12 @@ The variable names were audited without printing their secret values. The July
 then resolved to the intended active product and amount; this August review did
 not reverify external configuration.
 
+Current Truthmode branch behavior differs from that historical matrix: public
+checkout accepts only the fixed server-mapped $4.99 per-use category. New
+monthly-subscription and planned comparison purchases are rejected before any
+nonce, Price lookup, or Stripe Checkout call. The monthly configuration is
+retained only for safely verifying and managing legitimate legacy obligations.
+
 ## Stripe sandbox setup completed
 
 - created one active, one-time USD price for exactly $4.99
@@ -29,7 +35,8 @@ No live-mode Stripe value or production Vercel variable was changed.
 
 ## Verified automatically
 
-- checkout accepts only the two server-configured Stripe price identifiers
+- checkout accepts only the server-configured $4.99 per-use Price; new
+  subscription and comparison purchase categories fail closed before Stripe
 - success and cancellation URLs cannot be replaced with a caller-supplied origin
 - unpaid, expired, unrelated, and refunded sessions do not authorize analysis
 - checkout return cookies are Secure and HttpOnly and are created only after Stripe verification

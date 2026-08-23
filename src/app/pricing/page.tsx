@@ -1,564 +1,251 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState, type ReactNode } from "react";
-import { readJsonResponse } from "@/lib/read-json-response";
+import Script from "next/script";
+import { getProductConfig } from "@/config/product";
 
-const tiers = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "",
-    description:
-      "Try one free bill analysis per browser per UTC calendar month.",
-    features: [
-      "1 bill or EOB per browser per UTC calendar month",
-      "AI-generated report",
-      "Patterns flagged for verification",
-      "No credit card required",
-    ],
-    limitations: [],
-    cta: "Start Free",
-    href: "/#analyzer",
-    highlighted: false,
-    checkoutNote: null,
-    priceType: null,
-  },
-  {
-    name: "Pay Per Bill",
-    price: "$4.99",
-    period: "per bill",
-    description:
-      "Perfect for an occasional confusing bill. No subscription required.",
-    features: [
-      "One analysis per purchase",
-      "AI-generated report",
-      "Patterns flagged for verification",
-    ],
-    limitations: [],
-    cta: "Buy Single Analysis",
-    href: null,
-    highlighted: true,
-    checkoutNote:
-      "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start the one analysis.",
-    priceType: "per-use",
-  },
-  {
-    name: "Monthly Plan",
-    price: "$49",
-    period: "/month",
-    description:
-      "Best value if you or your family deal with medical bills regularly.",
-    features: [
-      "Up to 44 bills and EOBs per UTC calendar month",
-      "AI-generated report",
-      "Patterns flagged for verification",
-      "Cancel anytime",
-    ],
-    limitations: [],
-    cta: "Subscribe Now",
-    href: null,
-    highlighted: false,
-    checkoutNote:
-      "Secure checkout on Stripe. Access is enabled in this browser and renewed after each verified successful use. Keep the Stripe receipt and contact support if you clear site data or change devices.",
-    priceType: "subscription",
-  },
-];
+type PricingPageProps = Readonly<{
+  searchParams: Promise<{ payment?: string | string[] }>;
+}>;
 
-export default function PricingPage() {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [portalLoading, setPortalLoading] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<ReactNode>(null);
+const pricingActions = [
+  "(() => {",
+  "  const status = document.getElementById('pricing-status');",
+  "  const showStatus = (message) => {",
+  "    if (!status) return;",
+  "    status.textContent = message;",
+  "    status.hidden = false;",
+  "    status.focus();",
+  "  };",
+  "  const requestRedirect = async (button, endpoint, body) => {",
+  "    if (button.getAttribute('aria-busy') === 'true') return;",
+  "    button.setAttribute('aria-busy', 'true');",
+  "    button.disabled = true;",
+  "    try {",
+  "      const response = await fetch(endpoint, {",
+  "        method: 'POST',",
+  "        headers: { 'Content-Type': 'application/json' },",
+  "        body: body ? JSON.stringify(body) : undefined,",
+  "      });",
+  "      const data = await response.json().catch(() => ({}));",
+  "      if (!response.ok || typeof data.url !== 'string') {",
+  "        showStatus(data.error || 'This Stripe action could not be started.');",
+  "        return;",
+  "      }",
+  "      const target = new URL(data.url);",
+  "      const stripeHost = ['checkout.stripe.com', 'billing.stripe.com'].includes(target.hostname);",
+  "      if (target.protocol !== 'https:' || !stripeHost) {",
+  "        showStatus('This Stripe action returned an unexpected destination.');",
+  "        return;",
+  "      }",
+  "      window.location.assign(target.href);",
+  "    } catch {",
+  "      showStatus('This Stripe action could not be started. Please try again.');",
+  "    } finally {",
+  "      button.setAttribute('aria-busy', 'false');",
+  "      button.disabled = false;",
+  "    }",
+  "  };",
+  "  document.querySelectorAll('[data-checkout-price-type]').forEach((button) => {",
+  "    button.addEventListener('click', () => requestRedirect(",
+  "      button, '/api/checkout',",
+  "      { priceType: button.getAttribute('data-checkout-price-type') },",
+  "    ));",
+  "  });",
+  "  document.querySelectorAll('[data-billing-portal]').forEach((button) => {",
+  "    button.addEventListener('click', () => requestRedirect(",
+  "      button, '/api/billing-portal', undefined,",
+  "    ));",
+  "  });",
+  "})();",
+].join("\n");
 
-  useEffect(() => {
-    const paymentState = new URLSearchParams(window.location.search).get("payment");
-    queueMicrotask(() => {
-      if (paymentState === "error") {
-        setStatusMessage(
-          <>
-            We could not verify that checkout completed, so no analysis access
-            was enabled. If you see a charge,{" "}
-            <Link
-              href="/contact"
-              className="font-semibold underline underline-offset-2"
-            >
-              contact support
-            </Link>
-            .
-          </>,
-        );
-      } else if (paymentState === "cancelled") {
-        setStatusMessage("Checkout was canceled. No new access was enabled.");
-      }
-    });
-  }, []);
-
-  const handleCheckout = async (priceType: string) => {
-    if (loading) return;
-    setLoading(priceType);
-    setStatusMessage(null);
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceType }),
-      });
-
-      const data = await readJsonResponse<{ url?: string; error?: string }>(
-        response,
-      );
-      if (response.ok && data.url) {
-        window.location.assign(data.url);
-      } else {
-        setStatusMessage(data.error || "Checkout could not be started.");
-      }
-    } catch {
-      setStatusMessage("Checkout could not be started. Please try again.");
-    } finally {
-      setLoading(null);
-    }
-  };
-
-  const handleBillingPortal = async () => {
-    if (portalLoading) return;
-    setPortalLoading(true);
-    setStatusMessage(null);
-    try {
-      const response = await fetch("/api/billing-portal", { method: "POST" });
-      const data = await readJsonResponse<{ url?: string; error?: string }>(
-        response,
-      );
-      if (response.ok && data.url) window.location.assign(data.url);
-      else
-        setStatusMessage(
-          data.error || "Subscription management is unavailable.",
-        );
-    } catch {
-      setStatusMessage("Subscription management is unavailable.");
-    } finally {
-      setPortalLoading(false);
-    }
-  };
+export default async function PricingPage({ searchParams }: PricingPageProps) {
+  const config = getProductConfig();
+  const payment = (await searchParams).payment;
+  const paymentState = Array.isArray(payment) ? payment[0] : payment;
+  const cancelled = paymentState === "cancelled";
+  const verificationFailed = paymentState === "error";
 
   return (
-    <main
-      id="main-content"
-      className="min-h-screen bg-slate-50 dark:bg-slate-900"
-    >
-      {/* Nav */}
-      <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <nav className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🩺</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
+            <span className="text-2xl" role="img" aria-label="Stethoscope">
+              🩺
+            </span>
+            <span className="text-lg font-bold tracking-tight text-slate-800 dark:text-slate-100">
               MedicalBillReader
             </span>
           </Link>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-            Simple, Transparent Pricing
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">
+        <header className="mx-auto mb-12 max-w-3xl text-center">
+          <h1 className="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-100 md:text-4xl">
+            Simple, transparent options
           </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
-            Each plan uses the same AI-assisted report for supported bills and EOBs;
-            choose based on the number of analyses you expect to use.
+          <p className="text-lg text-slate-700 dark:text-slate-300">
+            Use the free allowance first, or purchase one additional AI-assisted
+            document explanation. No new monthly subscriptions are offered.
           </p>
-          <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
-            Start with a free analysis. Upgrade when you need more. No hidden
-            fees.
-          </p>
+        </header>
+
+        <div
+          id="pricing-status"
+          role="status"
+          tabIndex={-1}
+          hidden={!cancelled && !verificationFailed}
+          className="mx-auto mb-8 max-w-3xl rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 focus:outline-none dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+        >
+          {cancelled && "Checkout was canceled. No new access was enabled."}
+          {verificationFailed && (
+            <>
+              We could not verify that checkout completed, so no analysis access
+              was enabled. If you see a charge,{" "}
+              <Link href="/contact" className="font-semibold underline underline-offset-2">
+                contact support
+              </Link>
+              .
+            </>
+          )}
         </div>
 
-        {statusMessage && (
-          <div
-            className="mx-auto mb-8 max-w-3xl rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
-            role="status"
-          >
-            {statusMessage}
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {tiers.map((tier) => (
-            <div
-              key={tier.name}
-              className={`rounded-2xl p-8 flex flex-col ${
-                tier.highlighted
-                  ? "bg-slate-900 dark:bg-slate-950 text-white ring-2 ring-teal-500 shadow-xl scale-105"
-                  : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
-              }`}
+        <section aria-label="Pricing options" className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
+          <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-700 dark:bg-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Free</h2>
+            <p className="mt-2 text-4xl font-bold text-slate-900 dark:text-slate-100">$0</p>
+            <p className="mt-4 flex-1 text-sm leading-6 text-slate-700 dark:text-slate-300">
+              {config.freeAnalysis.limit} single-document analysis per{" "}
+              {config.freeAnalysis.scope} per {config.freeAnalysis.period}, subject
+              to network abuse controls. No card or account is required.
+            </p>
+            <Link
+              href="/#analyzer"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-slate-100 px-4 py-3 font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
             >
-              {tier.highlighted && (
-                <div className="text-teal-400 text-sm font-bold uppercase tracking-wider mb-2">
-                  One extra analysis
-                </div>
-              )}
-              <h2
-                className={`text-xl font-bold mb-1 ${tier.highlighted ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
-              >
-                {tier.name}
-              </h2>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span
-                  className={`text-4xl font-bold ${tier.highlighted ? "text-white" : "text-slate-900 dark:text-slate-100"}`}
-                >
-                  {tier.price}
-                </span>
-                {tier.period && (
-                  <span
-                    className={`text-sm ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
-                  >
-                    {tier.period}
-                  </span>
-                )}
-              </div>
-              <p
-                className={`text-sm mb-6 ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
-              >
-                {tier.description}
-              </p>
-              <ul className="space-y-3 mb-8 flex-1">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2 text-sm">
-                    <svg
-                      className={`w-4 h-4 flex-shrink-0 ${tier.highlighted ? "text-teal-400" : "text-teal-800"}`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span
-                      className={
-                        tier.highlighted
-                          ? "text-slate-200"
-                          : "text-slate-600 dark:text-slate-300"
-                      }
-                    >
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              Use free analysis
+            </Link>
+          </article>
 
-              {tier.href ? (
-                <Link
-                  href={tier.href}
-                  className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors ${
-                    tier.highlighted
-                      ? "bg-teal-700 text-white hover:bg-teal-800"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
-                  }`}
-                >
-                  {tier.cta}
-                </Link>
-              ) : (
-                <button
-                  onClick={() =>
-                    tier.priceType && handleCheckout(tier.priceType)
-                  }
-                  disabled={loading !== null}
-                  aria-busy={loading === tier.priceType}
-                  className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 ${
-                    tier.highlighted
-                      ? "bg-teal-700 text-white hover:bg-teal-800"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
-                  }`}
-                >
-                  {loading === tier.priceType ? "Loading..." : tier.cta}
-                </button>
-              )}
-              {tier.checkoutNote && (
-                <p
-                  className={`mt-3 text-xs leading-relaxed ${tier.highlighted ? "text-slate-300" : "text-slate-700 dark:text-slate-300"}`}
-                >
-                  {tier.checkoutNote}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center">
-          <button
-            onClick={handleBillingPortal}
-            disabled={portalLoading}
-            aria-busy={portalLoading}
-            className="min-h-11 px-3 text-sm font-semibold text-teal-800 underline underline-offset-4 disabled:cursor-not-allowed disabled:opacity-60 dark:text-teal-300"
-          >
-            {portalLoading
-              ? "Opening subscription management..."
-              : "Manage or cancel an existing subscription"}
-          </button>
-        </div>
-
-        {/* Which Plan Is Right for You? */}
-        <section className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            Which Plan Is Right for You?
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                I have one confusing bill right now
-              </h3>
-              <p className="text-sm text-slate-700 dark:text-slate-300">
-                Start with the <strong>Free</strong> plan. You get one full
-                analysis per browser per UTC calendar month at no cost, subject
-                to network abuse controls. No credit card is required. If you
-                have already used this browser&apos;s free analysis this month, the{" "}
-                <strong>Pay Per Bill</strong> option at $4.99 is the most
-                economical choice for a single bill.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                I get medical bills occasionally
-              </h3>
-              <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Pay Per Bill</strong> plan is ideal. Pay $4.99 only
-                when you need an analysis , no subscription, no commitment.
-                Perfect for the occasional ER bill, EOB, or unexpected charge.
-              </p>
-            </div>
-            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                I manage medical bills for myself or my family regularly
-              </h3>
-              <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Monthly Plan</strong> at $49 per month is the best
-                value if you review more than 10 bills a month, for example if
-                you are managing ongoing treatment or caring for family members.
-                It includes up to 44 analyses per UTC calendar month. Cancel
-                anytime with no penalty.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* What's Included in Every Plan */}
-        <section className="mt-12 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            What&apos;s Included in Every Plan
-          </h2>
-          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Each plan uses the same analysis route, supported file types, and
-              report fields. Usage limits differ by plan.
+          <article className="flex flex-col rounded-2xl border-2 border-teal-700 bg-white p-7 shadow-sm dark:bg-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Single document</h2>
+            <p className="mt-2 text-4xl font-bold text-slate-900 dark:text-slate-100">
+              {config.displayPrices.singleAnalysis}
             </p>
-            <ul className="grid sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                AI-generated bill or EOB report
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Structured visible-charge summary
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                Patterns flagged for verification
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                General verification suggestions
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                No intentional bill storage in our database
-              </li>
-              <li className="flex items-center gap-2">
-                <svg
-                  className="w-4 h-4 text-teal-800 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                HTTPS transmission to the application
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Pricing FAQ */}
-        <section className="mt-12 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-4 text-left">
-            {[
-              {
-                q: "Can I try before I buy?",
-                a: "Yes. The free tier provides one analysis per browser per UTC calendar month without a credit card, subject to network abuse controls. It uses the same report fields and supported file types as paid access.",
-              },
-              {
-                q: "How does pay-per-bill work?",
-                a: "Each $4.99 payment gives you one bill or EOB analysis. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
-              },
-              {
-                q: "Can I cancel the monthly plan?",
-                a: "Yes, you can cancel anytime. Your access continues until the end of the current billing period. There are no cancellation fees or long-term commitments.",
-              },
-              {
-                q: "How many bills can I analyze on the Monthly Plan?",
-                a: "The monthly entitlement is capped at 44 analyses per UTC calendar month and resets when the UTC month changes. No higher-volume plan is currently published.",
-              },
-              {
-                q: "Is there a refund policy?",
-                a: (
-                  <>
-                    Yes. If you are unsatisfied with a pay-per-bill analysis,{" "}
-                    <Link
-                      href="/contact"
-                      className="font-semibold text-teal-800 underline dark:text-teal-300"
-                    >
-                      contact us
-                    </Link>{" "}
-                    within 24 hours of delivery for a full refund. Monthly
-                    subscriptions can be cancelled at any time but are not
-                    refunded for partial months.
-                  </>
-                ),
-              },
-              {
-                q: "Do you store my bill or EOB after analyzing it?",
-                a: "Your document is transmitted securely to Anthropic solely to generate the analysis. It is not sold or shared for advertising, and Medical Bill Reader does not intentionally store bill documents in its own database. Anthropic, Vercel, and other infrastructure providers process data under their applicable terms and retention practices.",
-              },
-            ].map(({ q, a }) => (
-              <details
-                key={q}
-                className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 group"
+            <p className="mt-4 flex-1 text-sm leading-6 text-slate-700 dark:text-slate-300">
+              One AI-assisted analysis of one supported redacted bill or EOB. No
+              subscription. The server chooses the fixed Stripe price.
+            </p>
+            {config.features.singleAnalysis ? (
+              <button
+                type="button"
+                data-checkout-price-type="per-use"
+                aria-busy="false"
+                className="mt-6 min-h-11 rounded-lg bg-teal-700 px-4 py-3 font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <summary className="px-5 py-3 cursor-pointer font-medium text-slate-900 dark:text-slate-100 hover:text-teal-800 dark:hover:text-teal-400 transition-colors list-none flex justify-between items-center text-sm">
-                  {q}
-                  <svg
-                    className="w-4 h-4 text-slate-600 group-open:rotate-180 transition-transform flex-shrink-0 ml-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </summary>
-                <div className="px-5 pb-3 text-slate-700 dark:text-slate-300 text-sm">
-                  {a}
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
+                Buy one analysis
+              </button>
+            ) : (
+              <p className="mt-6 rounded-lg bg-slate-100 p-3 text-center text-sm font-semibold text-slate-700 dark:bg-slate-700 dark:text-slate-200">
+                Single-analysis checkout is currently unavailable.
+              </p>
+            )}
+            <p className="mt-3 text-xs leading-5 text-slate-600 dark:text-slate-300">
+              Secure checkout on Stripe. After verified payment, you return to
+              the analyzer and have 24 hours in this browser to start the one
+              analysis. Keep the Stripe receipt if you change devices or clear
+              site data.
+            </p>
+          </article>
 
-        {/* Money-Back Guarantee */}
-        <section className="mt-12 max-w-3xl mx-auto mb-4">
-          <div className="bg-teal-50 dark:bg-teal-950/30 rounded-2xl border border-teal-200 dark:border-teal-800 p-8 text-center">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-              Money-Back Guarantee
+          <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-700 dark:bg-slate-800">
+            <p className="text-sm font-bold uppercase tracking-wide text-teal-800 dark:text-teal-300">
+              Coming later
+            </p>
+            <h2 className="mt-1 text-xl font-bold text-slate-900 dark:text-slate-100">
+              Bill and EOB comparison
             </h2>
-             <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-               We stand behind the quality of every analysis. If you are not
-               satisfied with a pay-per-bill result,{" "}
-               <Link
-                 href="/contact"
-                 className="font-semibold text-teal-800 underline dark:text-teal-300"
-               >
-                 contact us
-               </Link>{" "}
-               within 24 hours of delivery for a full refund. We may request the
-               minimum Stripe transaction detail needed to locate the payment.
-               For monthly subscribers, you can cancel anytime and your access
-               continues through the end of your billing period.
+            <p className="mt-2 text-4xl font-bold text-slate-900 dark:text-slate-100">
+              {config.displayPrices.billEobComparison}
             </p>
-          </div>
+            <p className="mt-4 flex-1 text-sm leading-6 text-slate-700 dark:text-slate-300">
+              Planned price for one comparison. There is no buy button while
+              quality, payment, privacy, and owner-approval release gates remain
+              incomplete.
+            </p>
+            {config.features.localComparisonWorksheet && (
+              <Link
+                href="/bill-eob-comparison-worksheet"
+                className="mt-6 inline-flex min-h-11 items-center justify-center rounded-lg bg-slate-100 px-4 py-3 text-center font-semibold text-slate-900 hover:bg-slate-200 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
+              >
+                Use the free local worksheet
+              </Link>
+            )}
+          </article>
+        </section>
+
+        <section className="mx-auto mt-10 max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            Existing monthly subscribers
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
+            New monthly subscriptions are not offered. A real existing subscriber
+            can keep server-verified access and use Stripe to manage or cancel the
+            existing subscription.
+          </p>
+          <button
+            type="button"
+            data-billing-portal
+            aria-busy="false"
+            className="mt-4 min-h-11 rounded-lg bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+          >
+            Manage or cancel an existing subscription
+          </button>
+        </section>
+
+        <section className="mx-auto mt-10 max-w-3xl space-y-4 text-sm leading-6 text-slate-700 dark:text-slate-300">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+            Payment, access, and refunds
+          </h2>
+          <p>
+            Stripe processes payment card details; Medical Bill Reader does not
+            collect card details itself. Paid access is enabled only after the
+            server verifies an eligible paid state.
+          </p>
+          <p>
+            If a single-analysis result is unsatisfactory,{" "}
+            <Link href="/contact" className="font-semibold underline underline-offset-2">
+              contact support
+            </Link>{" "}
+            within 24 hours of delivery for the published full-refund guarantee.
+            Statutory rights are not limited. Do not email a medical bill or
+            health information.
+          </p>
+          <p>
+            If checkout or subscription management does not work,{" "}
+            <Link href="/contact" className="font-semibold underline underline-offset-2">
+              contact support
+            </Link>{" "}
+            with the minimum transaction detail needed to locate the payment.
+          </p>
+          <p>
+            Read the{" "}
+            <Link href="/terms" className="font-semibold underline underline-offset-2">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="font-semibold underline underline-offset-2">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </section>
       </div>
+
+      <Script id="pricing-actions" strategy="afterInteractive">
+        {pricingActions}
+      </Script>
     </main>
   );
 }

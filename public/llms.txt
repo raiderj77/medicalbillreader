@@ -1,12 +1,15 @@
 # Medical Bill Reader
 
-> A direct-to-consumer, AI-assisted document explainer for supported medical bills and insurance Explanations of Benefits (EOBs). It organizes legible, visible information into plain-language sections and questions to verify. It is not a certified audit or medical, legal, insurance, coding, or financial advice.
+> A direct-to-consumer service with a local-only bill-and-EOB worksheet and an optional AI-assisted explainer for supported redacted documents. It organizes user-entered or legible visible information into plain-language sections and questions to verify. It is not a certified audit or medical, legal, insurance, coding, or financial advice.
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-23
 
 ## Main tool
 
-- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month (subject to network abuse controls), a $4.99 single analysis, or a $49 monthly plan with up to 44 analyses per UTC calendar month.
+- [Private Bill and EOB Comparison Worksheet](https://medicalbillreader.com/bill-eob-comparison-worksheet): A free, local-only worksheet for amounts the visitor enters. Values stay in current browser memory and are not uploaded or saved between visits.
+- [Medical Bill Analyzer](https://medicalbillreader.com/#analyzer): One free analysis per browser per UTC calendar month (subject to network abuse controls), or one additional analysis for $4.99. No new monthly subscriptions are sold.
+- A one-time bill-and-EOB comparison is planned at $9.99 but is not available for purchase. The public comparison checkout remains disabled pending quality, payment, privacy, and owner-approval gates.
+- Existing monthly subscribers retain server-verified access and a Stripe-hosted manage-or-cancel path while retirement is reviewed.
 - The tool may organize visible codes, charges, adjustments, plan payments, and patient-responsibility fields.
 - It cannot determine fraud, upcoding, unbundling, medical necessity, coverage, legal compliance, or whether a charge is correct from a bill alone.
 
@@ -15,7 +18,7 @@ Last reviewed: 2026-08-18
 - Remove unnecessary names, addresses, member IDs, account numbers, barcodes, and other identifiers before uploading.
 - The application forwards the supported document to Anthropic only after an affirmative processing acknowledgement.
 - Medical Bill Reader does not intentionally persist the bill or report in its own database or send upload, analysis, report, or payment events to advertising or analytics systems.
-- Anthropic's published standard commercial API policy states that inputs and outputs are not used for model training by default and are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal and other published exceptions may also apply. Medical Bill Reader does not claim zero-data-retention or HIPAA/BAA coverage.
+- Anthropic's published standard commercial API policy states that inputs and outputs are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal and other published exceptions may also apply. Medical Bill Reader does not claim zero-data-retention or HIPAA/BAA coverage.
 - [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy)
 - [Privacy Policy](https://medicalbillreader.com/privacy)
 - [Cookie Policy](https://medicalbillreader.com/cookies)
@@ -29,6 +32,7 @@ Last reviewed: 2026-08-18
 
 ## Source-backed guides
 
+- [Questions to Ask About a Medical Bill](https://medicalbillreader.com/questions-to-ask-about-medical-bill): A privacy-conscious provider and health-plan checklist based on current CMS and IRS sources.
 - [Synthetic Sample Medical Bill and EOB Report](https://medicalbillreader.com/sample-medical-bill-report): A fully fabricated, no-upload walkthrough of common bill and EOB fields, amount relationships, and questions to verify.
 - [Medical Billing Guides](https://medicalbillreader.com/blog)
 - [How to Read an Explanation of Benefits](https://medicalbillreader.com/blog/how-to-read-an-explanation-of-benefits-eob)

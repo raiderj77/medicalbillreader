@@ -114,7 +114,7 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           About Medical Bill Reader
         </h1>
-        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 2, 2026</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 23, 2026</p>
 
         <p className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-6">
           Hi. I&apos;m Jason Ramirez. Here is my role and the product&apos;s scope.
@@ -132,9 +132,9 @@ export default function AboutPage() {
 
         <AnswerBlock
           what="A free-to-start AI tool that attempts to organize visible medical-bill charges, codes, and insurance fields into a plain-language report."
-          who="Patients, families, and caregivers who want to understand confusing medical bills or insurance EOBs before paying."
-          bottomLine="Upload a supported file for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
-          lastUpdated="2026-08-02"
+          who="Consumers who want to organize confusing provider-bill and EOB fields before asking the provider or plan questions."
+          bottomLine="Start with the local worksheet or request an AI-assisted first pass. Verify every important item against the source documents."
+          lastUpdated="2026-08-23"
         />
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -150,7 +150,7 @@ export default function AboutPage() {
               codes, and insurance fields, and may flag patterns for you to verify.
             </p>
             <p>
-              Medical billing in the United States is notoriously complex. A single
+              Medical billing in the United States can be complex. A single
               hospital visit can generate multiple bills from different providers, each
               filled with procedure codes, diagnostic codes, and insurance adjustments
               that can be difficult to interpret. Medical Bill Reader attempts to
@@ -191,17 +191,19 @@ export default function AboutPage() {
               How to Use Medical Bill Reader
             </h2>
             <p>
-              Take a photo of your medical bill or save it as a supported file. Next,
-              upload it through the homepage file picker and keep the page open while
-              the request runs. Review the returned report against the original bill
-              and EOB before relying on any item.
+              For a bill-and-EOB comparison, start with the local worksheet and enter
+              only the labeled dollar figures you need. If you choose the AI analyzer,
+              prepare a supported image or PDF, remove unnecessary identifiers, and
+              keep the page open while the request runs. Review the returned report
+              against the original document before relying on any item.
             </p>
             <p>
               No account is required for the free tier. Your bill is transmitted
               to Anthropic for the requested report and is not intentionally
               stored in Medical Bill Reader&apos;s own database. Anthropic&apos;s
-              published standard commercial API retention is up to 30 days,
-              subject to account, policy, safety, and legal exceptions. Remove
+              published standard commercial API policy provides deletion from its
+              backend within 30 days, subject to customer-controlled service,
+              agreed-term, Usage Policy, and legal exceptions. Remove
               unnecessary identifiers and read the{" "}
               <Link href="/consumer-health-data-privacy" className="underline underline-offset-2">
                 Consumer Health Data Privacy Notice
@@ -283,9 +285,9 @@ export default function AboutPage() {
               Understanding the visible fields can help you ask more specific
               questions. When you know what each charge label means, you can verify that the services
               listed match what you actually received. You can compare your provider
-              bill against your insurance EOB to make sure the numbers align. And you
-              can make informed decisions about whether to dispute a charge, negotiate
-              a payment plan, or apply for financial assistance.
+              bill against your insurance EOB to locate figures that do or do not
+              reconcile. That can help you prepare specific questions for the provider
+              or plan and find official financial-assistance resources when relevant.
             </p>
             <p>
               Medical Bill Reader is intended to make that review easier to organize.

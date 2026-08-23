@@ -1,248 +1,199 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  CODE_RIGHTS_ENTRIES,
+  CODE_RIGHTS_REVIEW_DATE,
+  type CodeSystemId,
+} from "@/config/code-set-rights";
+
+const PAGE_URL = "https://medicalbillreader.com/codes-explained";
 
 export const metadata: Metadata = {
-  title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
+  title: "Medical Billing Code Systems Explained",
   description:
-    "Plain-English glossary of common medical billing code systems and abbreviations, with authoritative lookup links and questions to verify.",
+    "A system-level guide to CPT, HCPCS, ICD-10, NDC, DRG, revenue, modifier, place-of-service, and remittance codes, with rights limits and official sources.",
   keywords: [
-    "medical billing codes",
-    "CPT codes explained",
-    "ICD-10 codes",
-    "HCPCS codes",
-    "NDC drug codes",
-    "DRG explained",
-    "EOB abbreviations",
-    "medical billing glossary",
+    "medical billing code systems",
+    "CPT overview",
+    "HCPCS overview",
+    "ICD-10 overview",
+    "NDC format",
+    "DRG overview",
+    "EOB codes",
   ],
-  alternates: { canonical: "https://medicalbillreader.com/codes-explained" },
+  alternates: { canonical: PAGE_URL },
   robots: { index: true, follow: true, googleBot: { "max-snippet": -1 } },
   openGraph: {
-    title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
+    title: "Medical Billing Code Systems Explained",
     description:
-      "Plain-English definitions of common code types and abbreviations that may appear on a medical bill or EOB.",
-    url: "https://medicalbillreader.com/codes-explained",
+      "Understand what common medical billing code systems are for, where to verify them, and why a code alone cannot establish correctness or payment responsibility.",
+    url: PAGE_URL,
     type: "article",
   },
 };
 
-const PAGE_URL = "https://medicalbillreader.com/codes-explained";
-const LAST_REVIEWED = "2026-08-02";
-
-type CodeSystem = {
-  slug: string;
-  name: string;
-  shortName: string;
-  oneLine: string;
-  usedFor: string;
-  example: string;
-  lookup: { label: string; href: string };
-  watchFor: string;
+type SystemCopy = {
+  purpose: string;
+  limitation: string;
+  question: string;
 };
 
-const CODE_SYSTEMS: CodeSystem[] = [
-  {
-    slug: "cpt",
-    name: "CPT (Current Procedural Terminology)",
-    shortName: "CPT",
-    oneLine:
-      "Five-character codes maintained by the AMA that identify medical procedures and services.",
-    usedFor:
-      "CPT is widely used to describe professional and outpatient procedures, visits, tests, and imaging. Payment and coverage also depend on documentation, payer rules, setting, modifiers, contracts, and the plan.",
-    example:
-      "CPT 99213: an established-patient office or other outpatient visit. Time is one permitted selection method in applicable circumstances; medical decision-making can also determine the level.",
-    lookup: {
-      label: "AMA CPT overview",
-      href: "https://www.ama-assn.org/practice-management/cpt",
-    },
-    watchFor:
-      "Ask what documentation and payer rule support an unfamiliar code or combination. A bill alone cannot establish upcoding, unbundling, or whether the code was supported.",
+const SYSTEM_COPY: Record<CodeSystemId, SystemCopy> = {
+  cpt: {
+    purpose:
+      "CPT is an AMA-maintained terminology used to report professional procedures and services.",
+    limitation:
+      "Medical Bill Reader does not provide official CPT descriptions, a CPT lookup, or a coding determination. The AMA licensing source says electronic products need an appropriate license to use, reference, or display CPT content; no product license is verified here.",
+    question:
+      "Ask the provider or insurer which licensed source and documentation support the code shown on the source document.",
   },
-  {
-    slug: "hcpcs",
-    name: "HCPCS Level II",
-    shortName: "HCPCS",
-    oneLine:
-      "Codes for medical equipment, supplies, drugs, ambulance services, and other items not covered by CPT.",
-    usedFor:
-      "HCPCS Level II covers things like wheelchairs, crutches, injectable medications administered in a clinical setting, durable medical equipment, and ambulance transport. CPT (HCPCS Level I) covers the procedures themselves; Level II covers the items.",
-    example:
-      "HCPCS J3490: unclassified drug, used to bill medications that do not have a specific code.",
-    lookup: {
-      label: "CMS HCPCS Level II",
-      href: "https://www.cms.gov/medicare/coding-billing/healthcare-common-procedure-system",
-    },
-    watchFor:
-      "If equipment is unfamiliar, ask whether it was rented or purchased and which benefit rule applied. For an unclassified drug code, ask for the drug name, quantity, and supporting detail.",
+  "hcpcs-level-i": {
+    purpose:
+      "HCPCS Level I is CPT, the AMA-maintained terminology used to report professional procedures and services.",
+    limitation:
+      "The same unresolved CPT license applies. Medical Bill Reader does not provide exact Level I examples, official descriptions, AI-generated individual-code explanations, or lookup.",
+    question:
+      "Ask the provider or insurer to explain the visible code using documentation and an appropriately licensed AMA source.",
   },
-  {
-    slug: "icd-10-cm",
-    name: "ICD-10-CM",
-    shortName: "ICD-10-CM",
-    oneLine:
-      "Diagnosis codes that describe the patient's condition or the reason for the visit.",
-    usedFor:
-      "ICD-10-CM describes diagnoses, symptoms, and reasons for encounters. Payers may use diagnosis information with procedure codes, documentation, coverage rules, and plan terms when processing a claim.",
-    example:
-      "ICD-10-CM E11.9: type 2 diabetes mellitus without complications.",
-    lookup: {
-      label: "CMS ICD-10",
-      href: "https://www.cms.gov/medicare/coding-billing/icd-10-codes",
-    },
-    watchFor:
-      "If a diagnosis label is unfamiliar or appears inconsistent with your records, ask the provider to explain it. The code and bill alone do not prove the diagnosis or coding was wrong.",
+  "hcpcs-level-ii": {
+    purpose:
+      "HCPCS Level II is used for categories such as supplies, equipment, ambulance services, and certain drugs and services.",
+    limitation:
+      "A visible HCPCS code does not establish what was supplied, whether documentation supports it, coverage, or patient responsibility.",
+    question:
+      "Ask for the item or service name, quantity, and plan-processing explanation tied to the source document.",
   },
-  {
-    slug: "icd-10-pcs",
-    name: "ICD-10-PCS",
-    shortName: "ICD-10-PCS",
-    oneLine:
-      "Inpatient procedure codes used by hospitals for services delivered during an inpatient stay.",
-    usedFor:
-      "ICD-10-PCS is hospital-only. If you were admitted as an inpatient, the procedures performed during the stay are coded in ICD-10-PCS rather than CPT. The codes are seven characters long and describe the procedure in structured detail.",
-    example:
-      "ICD-10-PCS 0FT44ZZ: laparoscopic resection of the gallbladder.",
-    lookup: {
-      label: "CMS ICD-10-PCS",
-      href: "https://www.cms.gov/medicare/coding-billing/icd-10-codes",
-    },
-    watchFor:
-      "A character can change the procedure represented and may affect claim classification. Ask the hospital or payer to explain any unfamiliar code; do not infer an error from the code alone.",
+  "icd-10-cm": {
+    purpose:
+      "ICD-10-CM is used to report diagnoses, symptoms, conditions, and reasons for encounters.",
+    limitation:
+      "A diagnosis code printed on a bill or EOB is not a diagnosis by this service and does not prove that the code or underlying clinical record is correct.",
+    question:
+      "Ask the provider to explain an unfamiliar label using the underlying record rather than relying on this page.",
   },
-  {
-    slug: "ndc",
-    name: "NDC (National Drug Code)",
-    shortName: "NDC",
-    oneLine:
-      "The current FDA-assigned NDC is a unique 10-digit, three-segment number identifying the labeler, product, and trade package size.",
-    usedFor:
-      "Current FDA formats are 4-4-2, 5-3-2, or 5-4-1. Some reimbursement transactions display a HIPAA-standard 11-digit form created by padding a segment with a leading zero. FDA's uniform 12-digit format takes effect March 7, 2033.",
-    example:
-      "Neutral 4-4-2 format example: 0000-0000-00 (labeler-product-package). This illustrates the 10-digit, three-segment format and is not a drug lookup.",
-    lookup: {
-      label: "FDA National Drug Code format",
-      href: "https://www.fda.gov/drugs/electronic-drug-registration-and-listing-system-edrls/national-drug-code-format",
-    },
-    watchFor:
-      "Confirm which NDC format the document uses, then compare the labeler, product, package, and quantity with the source record. Ask the provider, pharmacy, or payer to explain a mismatch rather than treating it as proof of an incorrect charge.",
+  "icd-10-pcs": {
+    purpose:
+      "ICD-10-PCS is used to classify procedures performed during inpatient hospital care.",
+    limitation:
+      "The characters are highly specific. A document image and general explainer cannot establish the intended procedure or whether coding rules were applied correctly.",
+    question:
+      "Ask the hospital or insurer to explain the code using the inpatient record and current official guidance.",
   },
-  {
-    slug: "drg",
-    name: "DRG (Diagnosis-Related Group)",
-    shortName: "DRG",
-    oneLine:
-      "A classification used to set a fixed payment amount for an inpatient hospital stay, based on diagnoses and procedures.",
-    usedFor:
-      "Medicare uses MS-DRGs for many inpatient prospective payments, and some other payers use DRG-based methods. The assigned group can depend on diagnoses, procedures, patient characteristics, discharge status, and payer-specific rules.",
-    example:
-      "MS-DRG 470: major hip and knee joint replacement without major complications.",
-    lookup: {
-      label: "CMS MS-DRG",
-      href: "https://www.cms.gov/medicare/payment/prospective-payment-systems/acute-inpatient-pps/ms-drg-classifications-and-software",
-    },
-    watchFor:
-      "Itemized charges and the plan's calculated payment can differ substantially. Compare the EOB with the itemized bill and ask the hospital or payer which payment method applied.",
+  ndc: {
+    purpose:
+      "The current FDA-assigned NDC is a 10-digit, three-segment number used to identify a labeler, product, and package configuration.",
+    limitation:
+      "NDC presentation can vary by source and workflow. This page does not publish an exact code example, identify a drug or package, or provide an NDC lookup while reuse rights remain under review.",
+    question:
+      "Ask which format, package, quantity, and source record were used before drawing a conclusion from the number.",
   },
-  {
-    slug: "modifiers",
-    name: "Modifiers",
-    shortName: "Modifiers",
-    oneLine:
-      "Two-character additions to a CPT or HCPCS code that change its meaning without changing the underlying procedure code.",
-    usedFor:
-      "Modifiers describe circumstances that affect payment: which side of the body, whether the service was bilateral, whether it was a separately identifiable service from another billed on the same day, and so on.",
-    example:
-      "Modifier 50: bilateral procedure. Modifier 25: significant, separately identifiable evaluation and management service on the same day as a procedure.",
-    lookup: {
-      label: "CMS modifier reference",
-      href: "https://www.cms.gov/medicare/coding-billing/national-correct-coding-initiative-ncci-edits/medicare-ncci-faq-library",
-    },
-    watchFor:
-      "A modifier can materially affect processing. Ask which circumstance and documentation supported an unfamiliar modifier; the bill alone cannot show whether its use was appropriate.",
+  drg: {
+    purpose:
+      "Diagnosis-related groups classify inpatient stays for certain payment systems; Medicare uses MS-DRGs for many inpatient prospective payments.",
+    limitation:
+      "A group label does not reveal every diagnosis, procedure, payment rule, or payer-specific adjustment behind a claim.",
+    question:
+      "Ask the hospital or insurer which classification and payment method applied to the claim.",
   },
-  {
-    slug: "place-of-service",
-    name: "Place of Service codes",
-    shortName: "Place of Service",
-    oneLine:
-      "Two-digit codes that indicate where the service was delivered.",
-    usedFor:
-      "Payers can process the same procedure differently by setting. Under the CMS code set, Place of Service 11 is office, 22 is on-campus outpatient hospital, and 21 is inpatient hospital. Other payment and facility-charge rules vary.",
-    example:
-      "POS 22: on-campus outpatient hospital under the CMS place-of-service code set.",
-    lookup: {
-      label: "CMS Place of Service code set",
-      href: "https://www.cms.gov/medicare/coding-billing/place-of-service-codes/code-sets",
-    },
-    watchFor:
-      "If the setting differs from what you expected, ask whether a facility charge or different payment rule applied and compare the EOB with advance notices and the provider bill.",
+  "revenue-codes": {
+    purpose:
+      "Revenue codes group institutional charges by service area or charge category on facility claims.",
+    limitation:
+      "A revenue category is not an itemized clinical description and does not establish that a charge is supported or owed.",
+    question:
+      "Ask for an itemized explanation when a broad facility category is unclear.",
   },
-  {
-    slug: "revenue-codes",
-    name: "Revenue codes",
-    shortName: "Revenue codes",
-    oneLine:
-      "Four-digit codes used on the UB-04 hospital claim form to group charges by department or category.",
-    usedFor:
-      "Revenue codes describe the type of service or department the charge came from: room and board, pharmacy, operating room, lab, and so on. They are paired with HCPCS or CPT codes that describe the specific service.",
-    example:
-      "Revenue code 0450: emergency room, general classification. Revenue code 0250: pharmacy.",
-    lookup: {
-      label: "NUBC overview (publishers of UB-04)",
-      href: "https://www.nubc.org/",
-    },
-    watchFor:
-      "Ask about a department category that does not match your records or a pharmacy category that lacks enough detail to identify what was administered.",
+  modifiers: {
+    purpose:
+      "Modifiers add context to a procedure or service code, such as circumstances affecting how a service was reported.",
+    limitation:
+      "Modifier meaning and rights can depend on the underlying code set. This page does not provide exact modifier descriptions or determine whether a modifier was appropriate.",
+    question:
+      "Ask which circumstance and documentation supported the modifier on the source record.",
   },
-];
+  "place-of-service": {
+    purpose:
+      "Place of Service codes identify the reported setting where a professional service occurred.",
+    limitation:
+      "A setting code alone does not establish network status, facility-fee rules, coverage, or a legal payment obligation.",
+    question:
+      "Ask the provider or insurer to confirm the setting and explain how it affected claim processing.",
+  },
+  "adjustment-remark-codes": {
+    purpose:
+      "Claim Adjustment Reason Codes and Remittance Advice Remark Codes communicate general adjustment and claim-processing information.",
+    limitation:
+      "A short adjustment or remark code does not replace the full EOB, plan document, denial notice, or appeal instructions and does not by itself establish what is owed.",
+    question:
+      "Ask the insurer to explain the code in the context of the full notice and current plan terms.",
+  },
+};
 
-const ABBREVIATIONS: { term: string; meaning: string }[] = [
-  { term: "EOB", meaning: "Explanation of Benefits, the insurer's record of how a claim was processed. Not a bill." },
-  { term: "COB", meaning: "Coordination of Benefits, the rules that determine which plan pays first when you have more than one insurance." },
-  { term: "AOB", meaning: "Assignment of Benefits, an authorization that lets the provider receive payment directly from the insurer." },
-  { term: "DOS", meaning: "Date of Service, the date the care was actually delivered." },
-  { term: "POS", meaning: "Place of Service code, indicating where care was delivered (office, outpatient hospital, inpatient hospital, etc.)." },
-  { term: "PCP", meaning: "Primary Care Provider. A plan may designate a PCP and may require referrals for some services; check the plan." },
-  { term: "PPO", meaning: "Preferred Provider Organization. Network, referral, and out-of-network benefits depend on the specific plan." },
-  { term: "HMO", meaning: "Health Maintenance Organization. Network and referral rules depend on the plan and exceptions." },
-  { term: "EPO", meaning: "Exclusive Provider Organization. Network and referral rules depend on the plan." },
-  { term: "POS plan", meaning: "Point of Service plan. In-network, referral, and out-of-network terms depend on the plan." },
-  { term: "Deductible", meaning: "The amount a member pays for covered services before the plan pays for services subject to the deductible; some benefits may apply before it is met." },
-  { term: "Copay", meaning: "A fixed amount a plan may apply as cost sharing for a covered visit, service, or item; the amount and conditions depend on the plan." },
-  { term: "Coinsurance", meaning: "Plan-calculated percentage cost sharing for a covered service under the plan's terms, often applied to the allowed amount after an applicable deductible." },
-  { term: "OOP max", meaning: "Out-of-pocket maximum, a plan-year limit on eligible cost sharing for covered services. Check what the plan excludes." },
-  { term: "Allowable / Allowed Amount", meaning: "The amount the plan treats as eligible when calculating benefits. It is not always the amount the plan pays or the amount the patient legally owes." },
-  { term: "Adjustment / Write-off", meaning: "A reduction or adjustment shown during claim processing. Ask the provider and plan whether the patient owes any part of it." },
-  { term: "N/C (Non-covered)", meaning: "A label that may indicate the plan treated all or part of an item as non-covered. Check the reason code, plan terms, and appeal notice." },
-  { term: "N/A", meaning: "Not applicable, often used in EOB columns where a value would not make sense for that line." },
-  { term: "Pending", meaning: "The claim has not finished processing yet." },
-  { term: "Paid", meaning: "The insurer has paid its portion of the claim." },
-  { term: "Denied", meaning: "The plan did not pay all or part of a claim. The notice should identify the reason and applicable review or appeal instructions." },
-  { term: "Appealed", meaning: "A formal request to reconsider an adverse benefit decision. Follow the deadline and method in the plan's notice." },
-];
+const BILL_FIELDS = [
+  {
+    term: "EOB",
+    meaning:
+      "An Explanation of Benefits is the health plan's record of how it processed a claim. It is not a provider bill.",
+  },
+  {
+    term: "Allowed amount",
+    meaning:
+      "The amount the plan uses when calculating benefits. It is not necessarily what the plan pays or what someone legally owes.",
+  },
+  {
+    term: "Coinsurance",
+    meaning:
+      "Plan-calculated percentage cost sharing under the plan's terms, often applied to an allowed amount after any applicable deductible.",
+  },
+  {
+    term: "Adjustment",
+    meaning:
+      "A change shown during claim or bill processing. Ask the provider and health plan what the label means for that specific record.",
+  },
+] as const;
+
+function rightsLabel(status: (typeof CODE_RIGHTS_ENTRIES)[number]["rightsStatus"]) {
+  if (status === "verified-restricted") {
+    return "Verified restricted — exact descriptions disabled";
+  }
+  if (status === "verified-permitted") {
+    return "Verified for the documented use";
+  }
+  return "Rights review pending — exact descriptions disabled";
+}
 
 export default function CodesExplainedPage() {
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://medicalbillreader.com" },
-      { "@type": "ListItem", position: 2, name: "Codes Explained", item: PAGE_URL },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://medicalbillreader.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Code Systems Explained",
+        item: PAGE_URL,
+      },
     ],
   };
 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
+    headline: "Medical Billing Code Systems Explained",
     description:
-      "Plain-English glossary of medical billing code systems and abbreviations.",
+      "System-level education about common medical billing code families, their limits, rights status, and official sources.",
     datePublished: "2026-04-26",
-    dateModified: LAST_REVIEWED,
+    dateModified: CODE_RIGHTS_REVIEW_DATE,
     author: {
       "@type": "Person",
       name: "Jason Ramirez",
-      jobTitle: "Founder of Your Friendly Developer",
+      jobTitle: "Web professional and product founder",
       url: "https://medicalbillreader.com/about",
     },
     publisher: {
@@ -253,32 +204,11 @@ export default function CodesExplainedPage() {
     mainEntityOfPage: PAGE_URL,
   };
 
-  const definedTermSet = {
-    "@context": "https://schema.org",
-    "@type": "DefinedTermSet",
-    name: "Medical Billing Codes and Abbreviations",
-    url: PAGE_URL,
-    hasDefinedTerm: [
-      ...CODE_SYSTEMS.map((c) => ({
-        "@type": "DefinedTerm",
-        "@id": `${PAGE_URL}#${c.slug}`,
-        name: c.name,
-        description: c.oneLine,
-        inDefinedTermSet: PAGE_URL,
-        url: `${PAGE_URL}#${c.slug}`,
-      })),
-      ...ABBREVIATIONS.map((a, i) => ({
-        "@type": "DefinedTerm",
-        "@id": `${PAGE_URL}#abbr-${i}`,
-        name: a.term,
-        description: a.meaning,
-        inDefinedTermSet: PAGE_URL,
-      })),
-    ],
-  };
-
   return (
-    <main id="main-content" className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+    <main
+      id="main-content"
+      className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12"
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -287,158 +217,152 @@ export default function CodesExplainedPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSet) }}
-      />
 
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-6"
+        className="mb-6 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
       >
-        <Link href="/" className="hover:text-teal-800 dark:hover:text-teal-400">Home</Link>
+        <Link href="/" className="hover:text-teal-800 dark:hover:text-teal-300">
+          Home
+        </Link>
         <span aria-hidden="true">/</span>
-        <span className="text-gray-600 dark:text-gray-300">Codes Explained</span>
+        <span>Code Systems Explained</span>
       </nav>
 
-      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight mb-3">
-        Medical Billing Codes Explained
+      <h1 className="mb-3 text-3xl font-bold leading-tight text-gray-900 sm:text-4xl dark:text-gray-100">
+        Medical Billing Code Systems Explained
       </h1>
-
-      <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-        Last reviewed: August 2, 2026. Written by{" "}
+      <p className="mb-6 text-sm text-gray-700 dark:text-gray-300">
+        Source and rights review: August 23, 2026. Written by{" "}
         <Link href="/about" className="underline underline-offset-2">
           Jason Ramirez
         </Link>
         , a web professional and product founder, not a certified coder or
-        billing specialist. See the{" "}
-        <Link href="/editorial-policy" className="underline underline-offset-2">
-          editorial policy
-        </Link>
-        .
+        billing specialist.
       </p>
 
       <div
         role="note"
-        className="mb-8 px-4 py-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 text-sm text-amber-800 dark:text-amber-300"
+        className="mb-8 rounded-lg border border-amber-200 bg-amber-50 px-4 py-4 text-sm leading-6 text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200"
       >
-        <strong>Disclaimer:</strong> This glossary is for informational
-        purposes only. It is not financial or medical advice. For
-        decisions about a specific bill, claim, or appeal, consult your
-        insurer, your provider&apos;s billing office, or a qualified
-        billing advocate.
+        <strong>Important:</strong> This is system-level education, not a code
+        lookup, coding audit, coverage decision, or payment determination. A code
+        printed on a bill or EOB does not by itself prove what occurred, whether
+        documentation supports it, or what someone legally owes.
       </div>
 
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-10">
-        Many lines on a medical bill are paired with one or more codes. The
-        submitted codes may represent a reported service, diagnosis or reason
-        for an encounter, setting, item, or drug. A code on a bill does not by
-        itself prove what occurred, whether documentation supports it, or what
-        the plan should cover. The sections below define each code system in
-        plain English, give an example, point to an authoritative lookup, and
-        suggest questions to verify.
+      <p className="mb-8 leading-7 text-gray-700 dark:text-gray-300">
+        Exact code-and-description examples are intentionally omitted while
+        product rights remain unresolved. Use the official source for the system
+        and ask the provider or insurer to explain a code in the context of the
+        original record.
       </p>
 
-      <div className="grid lg:grid-cols-[220px_1fr] gap-8">
-        <aside className="lg:sticky lg:top-6 self-start">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300 mb-3">
+      <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
+        <aside className="self-start lg:sticky lg:top-6">
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
             On this page
           </h2>
           <ul className="space-y-2 text-sm">
-            {CODE_SYSTEMS.map((c) => (
-              <li key={c.slug}>
+            {CODE_RIGHTS_ENTRIES.map((system) => (
+              <li key={system.id}>
                 <a
-                  href={`#${c.slug}`}
-                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
+                  href={`#${system.id}`}
+                  className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
                 >
-                  {c.shortName}
+                  {system.name}
                 </a>
               </li>
             ))}
             <li>
               <a
-                href="#abbreviations"
-                className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
+                href="#bill-fields"
+                className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
               >
-                EOB abbreviations
+                Bill and EOB fields
               </a>
             </li>
           </ul>
         </aside>
 
         <div>
-          {CODE_SYSTEMS.map((c) => (
-            <section
-              key={c.slug}
-              id={c.slug}
-              className="mb-10 scroll-mt-24"
-            >
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                {c.name}
-              </h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-                <strong>{c.oneLine}</strong>
-              </p>
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3">
-                {c.usedFor}
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
-                <span className="font-semibold">Example:</span> {c.example}
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
-                <span className="font-semibold">Lookup:</span>{" "}
-                <a
-                  href={c.lookup.href}
-                  className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                >
-                  {c.lookup.label}
-                </a>
-              </p>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                <span className="font-semibold">Watch for:</span> {c.watchFor}
-              </p>
-            </section>
-          ))}
+          {CODE_RIGHTS_ENTRIES.map((system) => {
+            const copy = SYSTEM_COPY[system.id];
+            return (
+              <section
+                key={system.id}
+                id={system.id}
+                className="mb-10 scroll-mt-24"
+              >
+                <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {system.name}
+                </h2>
+                <p className="mb-3 leading-7 text-gray-700 dark:text-gray-300">
+                  {copy.purpose}
+                </p>
+                <p className="mb-3 text-sm leading-6 text-gray-700 dark:text-gray-300">
+                  <strong>Limits:</strong> {copy.limitation}
+                </p>
+                <p className="mb-3 text-sm leading-6 text-gray-700 dark:text-gray-300">
+                  <strong>Question to ask:</strong> {copy.question}
+                </p>
+                <p className="mb-3 text-sm leading-6 text-gray-700 dark:text-gray-300">
+                  <strong>Rights status:</strong>{" "}
+                  {rightsLabel(system.rightsStatus)}. {system.rightsSummary}
+                </p>
+                <p className="text-sm leading-6 text-gray-700 dark:text-gray-300">
+                  <strong>Official source:</strong>{" "}
+                  <a
+                    href={system.officialSource}
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
+                  >
+                    {system.officialSourceLabel}
+                  </a>{" "}
+                  ({system.sourceReviewStatus === "reviewed-primary"
+                    ? "primary licensing source reviewed"
+                    : "system source listed; rights review pending"}
+                  ).
+                </p>
+              </section>
+            );
+          })}
 
-          <section id="abbreviations" className="mb-10 scroll-mt-24">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
-              EOB and billing abbreviations
+          <section id="bill-fields" className="mb-10 scroll-mt-24">
+            <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-gray-100">
+              Bill and EOB fields are not code determinations
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              These acronyms appear repeatedly across bills, EOBs, and
-              insurance correspondence. Knowing what each one means makes the
-              rest of the document readable.
-            </p>
-            <dl className="space-y-3">
-              {ABBREVIATIONS.map((a) => (
-                <div key={a.term} className="border-b border-gray-100 dark:border-gray-800 pb-3">
+            <dl className="space-y-4">
+              {BILL_FIELDS.map((field) => (
+                <div
+                  key={field.term}
+                  className="border-b border-gray-100 pb-4 dark:border-gray-800"
+                >
                   <dt className="font-semibold text-gray-900 dark:text-gray-100">
-                    {a.term}
+                    {field.term}
                   </dt>
-                  <dd className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-1">
-                    {a.meaning}
+                  <dd className="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-300">
+                    {field.meaning}
                   </dd>
                 </div>
               ))}
             </dl>
           </section>
 
-          <section className="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <section className="mt-10 border-t border-gray-200 pt-6 dark:border-gray-700">
             <p className="text-sm text-gray-600 dark:text-gray-300">
               Related:{" "}
-              <Link href="/methodology" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
+              <Link
+                href="/methodology"
+                className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
+              >
                 Methodology
-              </Link>
-              {" · "}
-              <Link href="/blog" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
-                Blog
               </Link>
               {" · "}
               <Link
                 href="/#analyzer"
-                className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline"
+                className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
               >
                 Analyze a bill
               </Link>

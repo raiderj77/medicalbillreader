@@ -1,10 +1,10 @@
 # Medical Bill Reader: detailed site facts
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-23
 
 ## What the service is
 
-Medical Bill Reader is a direct-to-consumer, AI-assisted document explainer for supported PDFs and images of medical bills and insurance Explanations of Benefits. It is designed to organize legible, visible information into a five-section report: document overview, visible charges and codes, visible patient-responsibility figures, items to verify, and next questions.
+Medical Bill Reader is a direct-to-consumer service with two paths. Its free local-only worksheet compares labeled amounts a visitor enters from a bill and EOB without uploading or persisting those values. Its optional AI-assisted document explainer organizes legible, visible information from supported redacted PDFs and images into a structured report.
 
 The report is not a certified coding or billing audit. It does not establish that a bill, code, coverage decision, or party is correct or incorrect. It is not medical, legal, insurance, coding, tax, credit, debt, or financial advice.
 
@@ -23,7 +23,7 @@ The report is not a certified coding or billing audit. It does not establish tha
 4. The route validates type and size, enforces a server-side entitlement and rate limits, and sends the document to Anthropic's commercial API with a system-level untrusted-document boundary.
 5. The report returns to the browser. The application does not intentionally write the bill or report to its own database or object storage.
 
-Anthropic's published standard commercial API policy states that inputs and outputs are not used for model training by default and are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal, policy-enforcement, customer-controlled-service, and agreed-term exceptions may also apply. Medical Bill Reader does not claim a zero-data-retention agreement, HIPAA-covered status, or a Business Associate Agreement. See [Anthropic's published retention policy](https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data), the [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy), and the [Privacy Policy](https://medicalbillreader.com/privacy).
+Anthropic's published standard commercial API policy states that inputs and outputs are automatically deleted within 30 days. Anthropic says policy-flagged inputs and outputs may be retained for up to two years and associated trust-and-safety classification scores for up to seven years; legal, policy-enforcement, customer-controlled-service, and agreed-term exceptions may also apply. Medical Bill Reader does not claim a zero-data-retention agreement, HIPAA-covered status, or a Business Associate Agreement. See [Anthropic's published retention policy](https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data), the [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy), and the [Privacy Policy](https://medicalbillreader.com/privacy).
 
 ## Analytics, advertising, and payments
 
@@ -35,9 +35,10 @@ Stripe hosts checkout and billing-portal pages. The application uses server-veri
 
 ## Pricing
 
-- Free: one analysis per browser per UTC calendar month, subject to network abuse controls.
-- Single analysis: $4.99.
-- Monthly plan: $49 per month for up to 44 analyses per UTC calendar month.
+- Free: one AI-assisted analysis per browser per UTC calendar month, subject to network abuse controls, plus the local-only worksheet.
+- Single document: $4.99 for one AI-assisted analysis.
+- Bill and EOB comparison: planned at $9.99 and coming later. No comparison checkout is available while release gates are incomplete.
+- New monthly subscriptions are not sold. Existing monthly subscribers retain server-verified access and Stripe-hosted management or cancellation while retirement is reviewed.
 - The published single-analysis refund guarantee is limited to one request made within 24 hours of delivery; details and statutory rights are in the Terms.
 
 ## Authorship and editorial controls
@@ -47,6 +48,8 @@ Jason Ramirez is publicly identified as the founder and author. His stated crede
 ## Canonical resources
 
 - [Home and analyzer](https://medicalbillreader.com/)
+- [Private Bill and EOB Comparison Worksheet](https://medicalbillreader.com/bill-eob-comparison-worksheet): Local-only arithmetic from visitor-entered labeled amounts; no upload or persistence.
+- [Questions to Ask About a Medical Bill](https://medicalbillreader.com/questions-to-ask-about-medical-bill): Neutral questions for a provider billing office or health plan, with current CMS and IRS sources.
 - [Synthetic Sample Medical Bill and EOB Report](https://medicalbillreader.com/sample-medical-bill-report): Fully fabricated example with no upload or customer data.
 - [About](https://medicalbillreader.com/about)
 - [Methodology](https://medicalbillreader.com/methodology)

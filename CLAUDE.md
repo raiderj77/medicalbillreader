@@ -2,13 +2,15 @@
 
 ## Identity
 
-Medical Bill Reader is a U.S.-focused medical-bill and Explanation of Benefits (EOB) explainer. A visitor uploads a supported image or PDF and receives an AI-generated summary of visible charges, fields, codes, and items to verify. The service does not determine what someone legally owes, prove a billing error, or provide medical, financial, insurance, coding, or legal advice.
+Medical Bill Reader is a U.S.-focused medical-bill and Explanation of Benefits (EOB) explainer. A visitor can compare labeled bill and EOB amounts in a local-only worksheet or upload a supported redacted image or PDF for an AI-generated summary of visible charges, fields, codes, and items to verify. The service does not determine what someone legally owes, prove a billing error, or provide medical, financial, insurance, coding, or legal advice.
 
 Current access model:
 
 - Free: up to one analysis per browser per UTC calendar month, subject to abuse controls.
 - Single analysis: $4.99.
-- Subscription: $49 per month for up to 44 analyses per UTC calendar month.
+- Bill and EOB comparison: $9.99 planned price, coming later with checkout disabled.
+- New monthly subscriptions are disabled. Preserve server-verified access and Stripe-hosted management or cancellation for any real existing subscriber until retirement is approved.
+- The browser never supplies an authoritative price or amount; the server selects a fixed configured Stripe price.
 
 ## Before changing the product
 

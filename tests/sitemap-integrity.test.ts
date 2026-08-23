@@ -16,8 +16,20 @@ describe("sitemap integrity", () => {
       "https://medicalbillreader.com/consumer-health-data-privacy",
     );
     expect(urls).toContain("https://medicalbillreader.com/editorial-policy");
+    expect(urls).toContain(
+      "https://medicalbillreader.com/bill-eob-comparison-worksheet",
+    );
     expect(urls).not.toContain("https://medicalbillreader.com/stats");
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it("publishes the local worksheet with the reviewed product date", () => {
+    const worksheet = sitemap().find((entry) =>
+      entry.url.endsWith("/bill-eob-comparison-worksheet"),
+    );
+
+    expect(worksheet?.lastModified).toEqual(new Date("2026-08-23"));
+    expect(worksheet?.priority).toBe(0.9);
   });
 
   it("uses the shared review dates for acquisition resources", () => {
@@ -44,10 +56,10 @@ describe("sitemap integrity", () => {
     expect(consumerHealth?.lastModified).toEqual(new Date("2026-08-17"));
   });
 
-  it("does not manufacture a new legal-page modification date per request", () => {
+  it("keeps the reviewed disclaimer date stable across requests", () => {
     const disclaimer = sitemap().find((entry) =>
       entry.url.endsWith("/disclaimer"),
     );
-    expect(disclaimer?.lastModified).toEqual(new Date("2026-08-02"));
+    expect(disclaimer?.lastModified).toEqual(new Date("2026-08-23"));
   });
 });
