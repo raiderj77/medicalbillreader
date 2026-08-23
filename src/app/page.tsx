@@ -5,13 +5,14 @@ import AnswerBlock from "@/components/AnswerBlock";
 import Disclaimer from "@/components/Disclaimer";
 import HomepageGuideCluster from "@/components/HomepageGuideCluster";
 import ThemeToggle from "@/components/ThemeToggle";
+import { getProductConfig } from "@/config/product";
 
 export const metadata: Metadata = {
   title: "Medical Bill Reader — Understand Your Bill",
   description:
-    "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+    "Compare labeled bill and EOB amounts in a local-only worksheet, or upload a supported redacted document for an AI-assisted explanation.",
   keywords:
-    "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
+    "medical bill reader, understand medical bill, EOB explanation, medical billing code systems, insurance EOB, bill verification checklist",
   alternates: {
     canonical: "https://medicalbillreader.com",
   },
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Medical Bill Reader — Understand Your Bill",
     description:
-      "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+      "Compare labeled bill and EOB amounts in a local-only worksheet, or upload a supported redacted document for an AI-assisted explanation.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -61,15 +62,15 @@ const faqJsonLd = {
     },
     {
       "@type": "Question",
-      name: "What medical billing codes does the tool explain?",
+      name: "How does the tool handle visible billing codes?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The tool attempts to identify CPT, ICD-10-CM, and HCPCS codes when they are legible in the uploaded document. AI output can be incomplete or incorrect, so verify each finding against the original bill, EOB, and insurer or provider records.",
+        text: "The tool may transcribe visible code labels when they are legible, but it does not provide official CPT descriptors or an authoritative code lookup. Verify each finding with the source document, provider, insurer, or an appropriately licensed official resource.",
       },
     },
     {
       "@type": "Question",
-      name: "Can Medical Bill Reader detect billing errors?",
+      name: "Can Medical Bill Reader determine that a bill has an error?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "The tool may identify apparent duplicate lines, mismatches, or unfamiliar fields for review. It cannot determine from a bill alone that coding, coverage, or a charge is wrong. Confirm every concern with the provider or insurer before taking action.",
@@ -87,6 +88,8 @@ const faqJsonLd = {
 };
 
 export default function Home() {
+  const config = getProductConfig();
+
   return (
     <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <script
@@ -123,36 +126,22 @@ export default function Home() {
       </nav>
 
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
-        {/* Hero */}
+        {/* Product definition */}
         <div className="mb-8 text-center sm:mb-12">
           <div className="inline-block bg-teal-50 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-teal-200 dark:border-teal-700">
-            Free Medical Bill Explainer — No Sign-Up Required
+            Private worksheet + optional AI document explanation
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4 leading-tight">
-            Make Sense of<br />Your Medical Bill
+            Compare and understand<br />medical billing documents
           </h1>
           <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">
-            Last reviewed: August 2, 2026
+            Last reviewed: August 23, 2026
           </p>
           <p className="mx-auto max-w-2xl text-lg text-slate-700 dark:text-slate-300 sm:text-xl">
-            Medical Bill Reader helps consumers review confusing medical bills and insurance
-            EOBs in plain language. Upload a photo or PDF and
-            receive an AI-generated report of visible charges, codes, insurance fields, and items to verify.
+            Medical Bill Reader gives U.S. consumers two informational tools:
+            a browser-only worksheet for labeled bill and EOB amounts, and an
+            AI-assisted explainer for a supported redacted document.
           </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a
-              href="#analyzer"
-              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700"
-            >
-              Start free analysis
-            </a>
-            <Link
-              href="/sample-medical-bill-report"
-              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-700 bg-white px-6 py-3 text-base font-semibold text-teal-900 transition-colors hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 dark:bg-slate-900 dark:text-teal-200 dark:hover:bg-slate-800"
-            >
-              See a synthetic sample report
-            </Link>
-          </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
             Built by{" "}
             <Link href="/about" className="font-medium underline">
@@ -165,6 +154,66 @@ export default function Home() {
             .
           </p>
         </div>
+
+        {config.features.localComparisonWorksheet && (
+          <section className="mb-6 rounded-2xl border-2 border-teal-700 bg-white p-6 shadow-sm dark:bg-slate-800">
+            <p className="text-sm font-bold uppercase tracking-wide text-teal-800 dark:text-teal-300">
+              Path 1 · Local-only
+            </p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
+              Compare a Bill and EOB Privately
+            </h2>
+            <p className="mt-3 max-w-3xl text-slate-700 dark:text-slate-300">
+              Enter the labeled amounts yourself. The worksheet stays in the
+              browser and is not uploaded.
+            </p>
+            <Link
+              href="/bill-eob-comparison-worksheet"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-teal-700 px-6 py-3 font-semibold text-white hover:bg-teal-800"
+            >
+              Open Private Comparison Worksheet
+            </Link>
+          </section>
+        )}
+
+        <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+          <p className="text-sm font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+            No upload · fully synthetic
+          </p>
+          <h2 className="mt-2 text-xl font-bold text-slate-900 dark:text-slate-100">
+            See the report format before using the AI tool
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
+            Review a fabricated bill-and-EOB example with no customer or health data.
+          </p>
+          <Link
+            href="/sample-medical-bill-report"
+            className="mt-4 inline-flex min-h-11 items-center font-semibold text-teal-900 underline underline-offset-4 dark:text-teal-200"
+          >
+            See a synthetic sample report
+          </Link>
+        </section>
+
+        {config.features.singleAnalysis && (
+          <section className="mb-6 rounded-2xl border border-slate-300 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+            <p className="text-sm font-bold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+              Path 2 · Third-party AI processing
+            </p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900 dark:text-slate-100">
+              Explain a Redacted Document with AI
+            </h2>
+            <p className="mt-3 max-w-3xl text-slate-700 dark:text-slate-300">
+              Upload a supported redacted bill or EOB. The file is sent through
+              the application to Anthropic for the requested report.
+            </p>
+            <a
+              href="#analyzer"
+              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-slate-900 px-6 py-3 font-semibold text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900"
+            >
+              Use AI Document Explainer
+            </a>
+          </section>
+        )}
 
         <section
           aria-labelledby="health-data-notice-heading"
@@ -202,15 +251,105 @@ export default function Home() {
         </div>
 
         {/* Interactive Tool (client component) */}
-        <BillAnalyzer />
+        {config.features.singleAnalysis ? (
+          <BillAnalyzer
+            localImageRedactionEnabled={config.features.localImageRedaction}
+          />
+        ) : (
+          <section
+            id="analyzer"
+            className="mb-8 scroll-mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8"
+            aria-labelledby="analyzer-unavailable-heading"
+          >
+            <h2
+              id="analyzer-unavailable-heading"
+              className="text-xl font-bold text-slate-900 dark:text-slate-100"
+            >
+              Document analysis is not currently available
+            </h2>
+            <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+              You can still use the free local comparison worksheet and the
+              educational guides without uploading a document.
+            </p>
+          </section>
+        )}
 
         {/* Answer Block (server-rendered) */}
         <AnswerBlock
           what="An AI-assisted tool that organizes legible medical-bill fields, explains unfamiliar terms, and identifies specific items to verify."
-          who="Patients who received a confusing medical bill and want to understand what they were charged for before paying or disputing."
+          who="People who received a confusing medical bill or EOB and want a structured first pass before verifying details with the provider or insurer."
           bottomLine="Upload a supported medical bill for an AI-assisted first pass. Verify important findings against the source; results are not financial or medical advice."
-          lastUpdated="2026-08-02"
+          lastUpdated="2026-08-23"
         />
+
+        <section className="mb-12 grid gap-6 md:grid-cols-2" aria-label="Report boundaries">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              What the AI report does
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-300">
+              It organizes legible visible fields, codes, amounts, and specific
+              questions to verify against the source document.
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              What the AI report does not do
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-300">
+              It does not determine fraud, legal obligations, medical necessity,
+              coverage, coding correctness, savings, or dispute outcomes.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-12" aria-labelledby="homepage-pricing-heading">
+          <h2 id="homepage-pricing-heading" className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+            Clear options
+          </h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">Free</h3>
+              <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+                $0 · 1 analysis per browser per UTC calendar month.
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">Single document</h3>
+              <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+                {config.displayPrices.singleAnalysis} · one analysis.
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">Bill and EOB comparison</h3>
+              <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
+                {config.displayPrices.billEobComparison} · coming later; no checkout yet.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/pricing"
+            className="mt-5 inline-flex min-h-11 items-center font-semibold text-teal-900 underline underline-offset-4 dark:text-teal-200"
+          >
+            Read pricing, access, and refund details
+          </Link>
+        </section>
+
+        <section className="mb-12 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+            Methodology and limits
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-slate-700 dark:text-slate-300">
+            See the documented data flow, evidence boundaries, source hierarchy,
+            and limitations before relying on any output.
+          </p>
+          <Link
+            href="/methodology"
+            className="mt-4 inline-flex min-h-11 items-center font-semibold text-teal-900 underline underline-offset-4 dark:text-teal-200"
+          >
+            Read the methodology
+          </Link>
+        </section>
 
         {/* GEO Content Sections (server-rendered) */}
         <section className="mb-12 space-y-10">
@@ -228,13 +367,13 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Section 2 ,  Common billing errors */}
+          {/* Section 2 ,  Fields to verify */}
           <div>
             <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">
-              What are the most common medical billing errors?
+              Which bill and EOB fields can I check?
             </h2>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-3">
-               Common issues worth checking include apparent duplicate line items, incorrect patient or insurance information, missing payments, and services or quantities you do not recognize. Coding questions require the underlying records and payer rules.
+               Fields worth comparing include service dates, apparent duplicate line items, insurance and patient payments, billed and allowed amounts, and services or quantities you do not recognize. Coding questions require the underlying records, current payer rules, and authorized code sources.
             </p>
             <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
               CMS advises comparing the provider bill with the Explanation of Benefits, checking that the services match what you received, and contacting the provider or insurer when amounts do not match. An AI flag is only a prompt to verify the source records; it does not establish that a charge is wrong.
@@ -311,6 +450,31 @@ export default function Home() {
             </ul>
           </div>
 
+          <div>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3">
+              Privacy and legal
+            </h3>
+            <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+              Review the{" "}
+              <Link href="/consumer-health-data-privacy" className="font-semibold underline">
+                Consumer Health Data Privacy Notice
+              </Link>
+              ,{" "}
+              <Link href="/privacy" className="font-semibold underline">
+                Privacy Policy
+              </Link>
+              ,{" "}
+              <Link href="/terms" className="font-semibold underline">
+                Terms
+              </Link>
+              , and{" "}
+              <Link href="/disclaimer" className="font-semibold underline">
+                Disclaimer
+              </Link>
+              .
+            </p>
+          </div>
+
         </section>
 
         <HomepageGuideCluster />
@@ -378,13 +542,13 @@ export default function Home() {
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">What medical billing codes does the tool explain?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">How does the tool handle visible billing codes?</h3>
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                The tool attempts to identify CPT, ICD-10-CM, and HCPCS codes when they are legible. Verify each code and description against the original document and provider or insurer records.
+                The tool may transcribe visible code labels when they are legible, but it does not provide official CPT descriptors or an authoritative code lookup. Verify each finding with the source document, provider, insurer, or an appropriately licensed official resource.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader detect billing errors?</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Can Medical Bill Reader determine that a bill has an error?</h3>
               <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                  The tool may identify apparent duplicate lines, mismatches, or unfamiliar fields for review. It cannot determine from a bill alone that coding, coverage, or a charge is wrong. Confirm every concern with the provider or insurer before taking action.
               </p>

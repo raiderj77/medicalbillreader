@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { requestAnalysisWithAccessFallback } from "@/lib/analyze-access";
+import { syntheticBillAnalysisReport } from "./bill-analysis-fixture";
 
 const analyzer = readFileSync("src/components/BillAnalyzer.tsx", "utf8");
 
@@ -13,9 +14,10 @@ function jsonResponse(body: object, status = 200): Response {
 
 describe("BillAnalyzer entitlement bootstrap", () => {
   it("uses the server-authorized subscription before requesting free access", async () => {
+    const report = syntheticBillAnalysisReport();
     const fetcher = vi
       .fn()
-      .mockResolvedValueOnce(jsonResponse({ result: "subscription result" }));
+      .mockResolvedValueOnce(jsonResponse({ report }));
 
     const result = await requestAnalysisWithAccessFallback(
       fetcher,
@@ -23,7 +25,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
       true,
     );
 
-    expect(result.data.result).toBe("subscription result");
+    expect(result.data.report).toEqual(report);
     expect(fetcher).toHaveBeenCalledOnce();
     expect(fetcher).toHaveBeenCalledWith(
       "/api/analyze",
@@ -32,10 +34,11 @@ describe("BillAnalyzer entitlement bootstrap", () => {
   });
 
   it("does not let failed free issuance block a returning pay-per-use credit", async () => {
+    const report = syntheticBillAnalysisReport();
     const fetcher = vi
       .fn()
       .mockResolvedValueOnce(jsonResponse({ error: "Free issue limited" }, 429))
-      .mockResolvedValueOnce(jsonResponse({ result: "paid result" }));
+      .mockResolvedValueOnce(jsonResponse({ report }));
 
     const result = await requestAnalysisWithAccessFallback(
       fetcher,
@@ -43,7 +46,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
       false,
     );
 
-    expect(result.data.result).toBe("paid result");
+    expect(result.data.report).toEqual(report);
     expect(result.freeAccessError).toBe("Free issue limited");
     expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
       "/api/entitlement/free",
@@ -52,11 +55,12 @@ describe("BillAnalyzer entitlement bootstrap", () => {
   });
 
   it("falls back to free access when a subscription hint is stale", async () => {
+    const report = syntheticBillAnalysisReport();
     const fetcher = vi
       .fn()
       .mockResolvedValueOnce(jsonResponse({ error: "Entitlement required" }, 401))
       .mockResolvedValueOnce(jsonResponse({ ready: true }))
-      .mockResolvedValueOnce(jsonResponse({ result: "free result" }));
+      .mockResolvedValueOnce(jsonResponse({ report }));
 
     const result = await requestAnalysisWithAccessFallback(
       fetcher,
@@ -64,7 +68,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
       true,
     );
 
-    expect(result.data.result).toBe("free result");
+    expect(result.data.report).toEqual(report);
     expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
       "/api/analyze",
       "/api/entitlement/free",
@@ -98,5 +102,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
     expect(analyzer).toContain("requestAnalysisWithAccessFallback(");
     expect(analyzer).toContain("if (freeAccessError)");
     expect(analyzer).not.toContain("if (!justPaidRef.current) {");
+    expect(analyzer).toContain("ANALYZER_REVIEW_STATUS.label");
+    expect(analyzer).toContain("No independent");
   });
 });

@@ -53,23 +53,47 @@ async function hasAvailablePerUsePayment(
     throw new EntitlementTemporarilyUnavailableError();
   }
 
-  const validPayment =
-    paymentIntent.status === "succeeded" &&
-    paymentIntent.amount_received === PRICES.perUse.amount &&
-    paymentIntent.currency === PRICES.perUse.currency &&
-    paymentIntent.metadata?.mbr_entitlement === "per_use" &&
-    paymentIntent.metadata?.used !== "true";
-  if (!validPayment) return false;
+  if (paymentIntent.metadata?.mbr_entitlement !== "per_use") return false;
+  if (paymentIntent.metadata?.used === "true") return false;
+  if (
+    !isStripeId(paymentIntent.id, "pi_") ||
+    paymentIntent.status !== "succeeded" ||
+    paymentIntent.amount !== PRICES.perUse.amount ||
+    paymentIntent.amount_received !== PRICES.perUse.amount ||
+    paymentIntent.currency !== PRICES.perUse.currency
+  ) {
+    // A paid Checkout Session cannot safely authorize access when its current
+    // expanded PaymentIntent is missing fields or disagrees with the purchase.
+    throw new EntitlementTemporarilyUnavailableError();
+  }
 
   const latestCharge = paymentIntent.latest_charge;
   if (!latestCharge || typeof latestCharge === "string") {
     throw new EntitlementTemporarilyUnavailableError();
   }
+  const chargePaymentIntentId = expandedId(
+    latestCharge.payment_intent,
+    "pi_",
+  );
   if (
-    typeof latestCharge.id !== "string" ||
-    !latestCharge.id.startsWith("ch_") ||
-    typeof latestCharge.refunded !== "boolean"
+    !isStripeId(latestCharge.id, "ch_") ||
+    chargePaymentIntentId !== paymentIntent.id ||
+    latestCharge.status !== "succeeded" ||
+    latestCharge.paid !== true ||
+    latestCharge.captured !== true ||
+    latestCharge.amount !== PRICES.perUse.amount ||
+    latestCharge.amount_captured !== PRICES.perUse.amount ||
+    latestCharge.currency !== PRICES.perUse.currency ||
+    latestCharge.payment_method_details?.type !== "card" ||
+    typeof latestCharge.refunded !== "boolean" ||
+    !Number.isSafeInteger(latestCharge.amount_refunded) ||
+    latestCharge.amount_refunded < 0 ||
+    latestCharge.amount_refunded > PRICES.perUse.amount
   ) {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  if (latestCharge.disputed === true) return false;
+  if (latestCharge.disputed !== false) {
     throw new EntitlementTemporarilyUnavailableError();
   }
 
@@ -83,12 +107,22 @@ async function hasAvailablePerUsePayment(
     charge: latestCharge.id,
     limit: 100,
   })) {
-    if (!Number.isSafeInteger(refund.amount) || refund.amount <= 0) {
+    const refundChargeId = expandedId(refund.charge, "ch_");
+    const refundPaymentIntentId = expandedId(refund.payment_intent, "pi_");
+    if (
+      !Number.isSafeInteger(refund.amount) ||
+      refund.amount <= 0 ||
+      refund.currency !== PRICES.perUse.currency ||
+      refundChargeId !== latestCharge.id ||
+      refundPaymentIntentId !== paymentIntent.id
+    ) {
       throw new EntitlementTemporarilyUnavailableError();
     }
     if (refund.status === "succeeded") {
       successfullyRefunded += refund.amount;
-      if (successfullyRefunded >= PRICES.perUse.amount) return false;
+      if (!Number.isSafeInteger(successfullyRefunded)) {
+        throw new EntitlementTemporarilyUnavailableError();
+      }
       continue;
     }
     if (
@@ -96,6 +130,9 @@ async function hasAvailablePerUsePayment(
       refund.status === "requires_action"
     ) {
       inFlightRefund += refund.amount;
+      if (!Number.isSafeInteger(inFlightRefund)) {
+        throw new EntitlementTemporarilyUnavailableError();
+      }
       continue;
     }
     if (
@@ -105,15 +142,23 @@ async function hasAvailablePerUsePayment(
       throw new EntitlementTemporarilyUnavailableError();
     }
   }
-  if (successfullyRefunded + inFlightRefund >= PRICES.perUse.amount) {
+  if (
+    successfullyRefunded > PRICES.perUse.amount ||
+    inFlightRefund > PRICES.perUse.amount ||
+    successfullyRefunded + inFlightRefund > PRICES.perUse.amount ||
+    !Number.isSafeInteger(successfullyRefunded + inFlightRefund)
+  ) {
     throw new EntitlementTemporarilyUnavailableError();
   }
   if (
-    latestCharge.refunded &&
-    successfullyRefunded < PRICES.perUse.amount
+    latestCharge.amount_refunded !== successfullyRefunded ||
+    latestCharge.refunded !==
+      (successfullyRefunded === PRICES.perUse.amount)
   ) {
-    // The aggregate Charge and its current Refund objects disagree. Do not
-    // grant or permanently revoke access until Stripe returns a coherent view.
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  if (successfullyRefunded === PRICES.perUse.amount) return false;
+  if (successfullyRefunded + inFlightRefund >= PRICES.perUse.amount) {
     throw new EntitlementTemporarilyUnavailableError();
   }
   return true;
@@ -157,6 +202,7 @@ async function reserve(
 
 export async function reserveRequestEntitlement(
   request: NextRequest,
+  allowExistingSubscription = true,
 ): Promise<EntitlementReservation | null> {
   const browserBinding = browserBindingFromRequest(request);
   const paidToken = request.cookies.get("mbr_pending_use")?.value;
@@ -179,27 +225,30 @@ export async function reserveRequestEntitlement(
     );
     if (paidReservation) return paidReservation;
   }
-  const subscriptionToken = request.cookies.get("mbr_sub_id")?.value;
-  const subscription =
-    browserBinding && subscriptionToken
-      ? openStripeAccess(subscriptionToken, "subscription", browserBinding)
-      : null;
-  if (
-    subscription &&
-    (await verifyActiveSubscription(subscription))
-  ) {
-    // An active subscription keeps priority over the free allowance, including
-    // when its monthly cap is exhausted. Inactive or stale subscription cookies
-    // fall through so they cannot mask an otherwise valid free entitlement.
-    return reserve(
-      `mbr:sub:${opaqueHash(subscription)}:${currentMonth()}`,
-      SUBSCRIPTION_MONTHLY_CAP,
-      "subscription",
-      subscription,
-      60 * 60 * 24 * 40,
-      subscriptionToken,
-      browserBinding || undefined,
-    );
+  if (allowExistingSubscription) {
+    const subscriptionToken = request.cookies.get("mbr_sub_id")?.value;
+    const subscription =
+      browserBinding && subscriptionToken
+        ? openStripeAccess(subscriptionToken, "subscription", browserBinding)
+        : null;
+    if (
+      subscription &&
+      (await verifyActiveSubscription(subscription))
+    ) {
+      // An active subscription keeps priority over the free allowance,
+      // including when its monthly cap is exhausted. Inactive or stale
+      // subscription cookies fall through so they cannot mask an otherwise
+      // valid free entitlement.
+      return reserve(
+        `mbr:sub:${opaqueHash(subscription)}:${currentMonth()}`,
+        SUBSCRIPTION_MONTHLY_CAP,
+        "subscription",
+        subscription,
+        60 * 60 * 24 * 40,
+        subscriptionToken,
+        browserBinding || undefined,
+      );
+    }
   }
   const signedFree = request.cookies.get("mbr_free_entitlement")?.value;
   if (!signedFree) return null;

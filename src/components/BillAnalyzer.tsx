@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { requestAnalysisWithAccessFallback } from "@/lib/analyze-access";
+import BillAnalysisReport from "@/components/BillAnalysisReport";
+import LocalImageRedactor, {
+  LOCAL_IMAGE_REDACTOR_DEFAULT_ENABLED,
+} from "@/components/LocalImageRedactor";
+import type { BillAnalysisReport as BillAnalysisReportData } from "@/lib/bill-analysis-schema";
+import { billAnalysisToPlainText } from "@/lib/bill-analysis-plain-text";
+import { ANALYZER_REVIEW_STATUS } from "@/config/review-status";
 
 function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
   const text =
@@ -46,76 +53,24 @@ function hasSubscriptionAccessHint(): boolean {
     .some((c) => c.trim() === "mbr_sub_active=1");
 }
 
-function renderAnalysisResult(value: string): ReactNode[] {
-  const lines = value.split("\n");
-  const nodes: ReactNode[] = [];
-
-  for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index].trim();
-    if (!line) continue;
-
-    if (line.startsWith("## ")) {
-      nodes.push(
-        <h3
-          key={`heading-${index}`}
-          className="mt-6 text-lg font-bold text-slate-800 first:mt-0 dark:text-slate-100"
-        >
-          {line.slice(3)}
-        </h3>,
-      );
-      continue;
-    }
-
-    if (line.startsWith("- ")) {
-      const bullets: string[] = [];
-      while (index < lines.length && lines[index].trim().startsWith("- ")) {
-        bullets.push(lines[index].trim().slice(2));
-        index += 1;
-      }
-      index -= 1;
-      nodes.push(
-        <ul
-          key={`list-${index}`}
-          className="ml-5 list-disc space-y-2 text-slate-700 dark:text-slate-300"
-        >
-          {bullets.map((bullet, bulletIndex) => (
-            <li key={`${index}-${bulletIndex}`}>{bullet}</li>
-          ))}
-        </ul>,
-      );
-      continue;
-    }
-
-    const isLabel = line.startsWith("**") && line.endsWith("**");
-    nodes.push(
-      <p
-        key={`paragraph-${index}`}
-        className={
-          isLabel
-            ? "mt-4 font-semibold text-slate-800 dark:text-slate-200"
-            : "leading-relaxed text-slate-700 dark:text-slate-300"
-        }
-      >
-        {isLabel ? line.replace(/\*\*/g, "") : line}
-      </p>,
-    );
-  }
-
-  return nodes;
-}
-
-export default function BillAnalyzer() {
+export default function BillAnalyzer({
+  localImageRedactionEnabled = LOCAL_IMAGE_REDACTOR_DEFAULT_ENABLED,
+}: {
+  localImageRedactionEnabled?: boolean;
+}) {
   const router = useRouter();
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<BillAnalysisReportData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
   const [showCheckoutReturn, setShowCheckoutReturn] = useState(false);
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
+  const [showLocalRedactor, setShowLocalRedactor] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const fileReadGenerationRef = useRef(0);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   // One-time hint that we just came back from a successful per-use checkout.
   // Consumed by the first analysis attempt and stripped from the URL
@@ -153,14 +108,22 @@ export default function BillAnalyzer() {
       );
       return;
     }
+    const readGeneration = ++fileReadGenerationRef.current;
     setFile(f);
+    setPreview(null);
+    setShowLocalRedactor(false);
     setPrivacyAcknowledged(false);
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
     const reader = new FileReader();
     reader.onload = (e) => {
-      setPreview(e.target?.result as string);
+      if (
+        readGeneration === fileReadGenerationRef.current &&
+        typeof e.target?.result === "string"
+      ) {
+        setPreview(e.target.result);
+      }
     };
     reader.readAsDataURL(f);
   };
@@ -173,7 +136,7 @@ export default function BillAnalyzer() {
   };
 
   const handleSubmit = async () => {
-    if (!file || !preview || !privacyAcknowledged) return;
+    if (!file || !preview || !privacyAcknowledged || showLocalRedactor) return;
 
     const hasPaidAccessHint =
       justPaidRef.current || hasSubscriptionAccessHint();
@@ -209,12 +172,12 @@ export default function BillAnalyzer() {
           : "The analysis could not be completed. Please wait two minutes and try again.";
         throw new Error(data.error || fallbackError);
       }
-      if (!data.result) {
+      if (!data.report) {
         throw new Error(
           "The analysis service returned an incomplete response. Please try again.",
         );
       }
-      setResult(data.result);
+      setResult(data.report);
 
       if (justPaidRef.current) {
         justPaidRef.current = false;
@@ -228,6 +191,7 @@ export default function BillAnalyzer() {
   };
 
   const reset = () => {
+    fileReadGenerationRef.current += 1;
     setFile(null);
     setPreview(null);
     setResult(null);
@@ -235,6 +199,7 @@ export default function BillAnalyzer() {
     setNeedsUpgrade(false);
     setShowCheckoutReturn(false);
     setPrivacyAcknowledged(false);
+    setShowLocalRedactor(false);
   };
 
   if (result) {
@@ -260,6 +225,11 @@ export default function BillAnalyzer() {
           </span>
         </div>
 
+        <p className="border-b border-amber-300 bg-amber-50 px-6 py-3 text-sm font-semibold text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">
+          Review status: {ANALYZER_REVIEW_STATUS.label}. No independent
+          medical-billing reviewer is attributed to this analyzer.
+        </p>
+
         <div className="p-8">
           <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center gap-3">
@@ -282,9 +252,7 @@ export default function BillAnalyzer() {
               Analyze Another Bill
             </button>
           </div>
-          <div className="space-y-3">
-            {renderAnalysisResult(result)}
-          </div>
+          <BillAnalysisReport report={result} />
 
           {/* Disclaimer */}
           <div className="mt-8 p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
@@ -308,18 +276,7 @@ export default function BillAnalyzer() {
             <button
               type="button"
               onClick={() => {
-                const text = result
-                  .split("\n")
-                  .map((line) => {
-                    if (line.startsWith("## "))
-                      return line.replace("## ", "") + ":";
-                    if (line.startsWith("**") && line.endsWith("**"))
-                      return line.replace(/\*\*/g, "");
-                    if (line.startsWith("- "))
-                      return "  • " + line.replace("- ", "");
-                    return line;
-                  })
-                  .join("\n");
+                const text = billAnalysisToPlainText(result);
                 navigator.clipboard.writeText(text).then(() => {
                   const btn = document.getElementById("copy-btn");
                   if (btn) {
@@ -399,6 +356,10 @@ export default function BillAnalyzer() {
       <div className="mb-5">
         <VerificationBadge variant="pre" />
       </div>
+      <p className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm font-semibold text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">
+        Review status: {ANALYZER_REVIEW_STATUS.label}. No independent
+        medical-billing reviewer is attributed to this analyzer.
+      </p>
       {!file ? (
         <>
         <button
@@ -489,6 +450,38 @@ export default function BillAnalyzer() {
             </div>
           )}
 
+          {localImageRedactionEnabled && file.type.startsWith("image/") && (
+            <div className="mb-6">
+              {!showLocalRedactor ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPrivacyAcknowledged(false);
+                    setShowLocalRedactor(true);
+                  }}
+                  className="min-h-11 rounded-lg border border-teal-300 px-4 py-2 text-sm font-semibold text-teal-900 dark:border-teal-700 dark:text-teal-200"
+                >
+                  Redact this image locally
+                </button>
+              ) : (
+                <LocalImageRedactor
+                  file={file}
+                  enabled={localImageRedactionEnabled}
+                  onUseRedactedFile={(redactedFile) => {
+                    // Remove the original from analyzer state before validating
+                    // and selecting the flattened local PNG.
+                    fileReadGenerationRef.current += 1;
+                    setFile(null);
+                    setPreview(null);
+                    setShowLocalRedactor(false);
+                    handleFile(redactedFile);
+                  }}
+                  onCancel={() => setShowLocalRedactor(false)}
+                />
+              )}
+            </div>
+          )}
+
           {/* Upload privacy notice */}
           <div className="mb-4 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg">
             <p className="text-xs text-slate-700 dark:text-slate-300">
@@ -558,7 +551,7 @@ export default function BillAnalyzer() {
 
           <button
             onClick={handleSubmit}
-            disabled={loading || !privacyAcknowledged}
+            disabled={loading || !privacyAcknowledged || showLocalRedactor}
             aria-busy={loading}
             aria-describedby="upload-privacy"
             className="w-full bg-teal-700 hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"

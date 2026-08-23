@@ -54,7 +54,7 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Effective Date: August 2, 2026 | Last Reviewed: August 2, 2026
+          Effective Date: August 2, 2026 | Last Reviewed: August 23, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
@@ -121,11 +121,12 @@ export default function TermsPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li>The free tier provides up to 1 medical bill or EOB analysis per browser per UTC calendar month, subject to network abuse controls. Clearing browser data does not authorize abuse or automated use.</li>
               <li>Pay-per-bill customers receive one analysis per purchase ($4.99).</li>
-              <li>Monthly subscribers ($49/month) may analyze up to 44 bills or EOBs per UTC calendar month, which resets when the UTC month changes regardless of billing date.</li>
+              <li>A one-time bill-and-EOB comparison is planned at $9.99 but is not currently available for purchase.</li>
+              <li>New monthly subscriptions are not offered. A real existing monthly subscriber retains server-verified access under the existing subscription terms unless the subscription becomes ineligible or ends.</li>
               <li>Payments are processed securely through Stripe. We do not store your payment card details.</li>
-              <li>Monthly subscriptions can be cancelled at any time and remain active through the end of the current billing period.</li>
+              <li>Existing monthly subscriptions can be managed or cancelled through the Stripe-hosted billing portal and remain subject to the existing billing terms through the applicable period.</li>
               <li>If a pay-per-bill result is unsatisfactory, contact support within 24 hours of delivery for the published full-refund guarantee. We may request the minimum transaction detail needed to locate the payment.</li>
-              <li>Single-analysis and subscription access is browser-bound through essential cookies containing authenticated, encrypted entitlement tokens. The tokens do not expose raw Stripe identifiers. The single-analysis token lasts up to 24 hours; subscription access may last up to 400 days and is reverified before use. Clearing site data or changing devices can require support-assisted recovery. Keep the Stripe receipt and do not email a medical bill.</li>
+              <li>Single-analysis and existing-subscription access is browser-bound through essential cookies containing authenticated, encrypted entitlement tokens. The tokens do not expose raw Stripe identifiers. The single-analysis token lasts up to 24 hours; existing-subscription access may last up to 400 days and is reverified before use. Clearing site data or changing devices can require support-assisted recovery. Keep the Stripe receipt and do not email a medical bill.</li>
               <li>Monthly charges are not prorated or refunded for a partial month except where applicable law requires otherwise.</li>
               <li>If the analysis service fails before delivering a report, the application is designed not to consume the paid credit.</li>
             </ul>
@@ -188,17 +189,12 @@ export default function TermsPage() {
                  legal, and other published exceptions can be longer. Anthropic
                  says policy-flagged inputs and outputs may be retained for up to
                  two years and associated classification scores for up to seven
-                 years.
+                 years. We do not claim that this public service has a
+                 zero-data-retention agreement or Business Associate Agreement.
               </li>
               <li>
                 Analysis results exist only in your browser session and are not
                 stored server-side.
-              </li>
-              <li>
-                 By default, Anthropic says commercial API inputs and outputs are
-                 not used for model training unless the customer opts in or
-                 submits feedback. We do not claim that this public service has a
-                 zero-data-retention agreement or Business Associate Agreement.
               </li>
             </ul>
           </section>

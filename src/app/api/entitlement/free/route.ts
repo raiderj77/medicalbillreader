@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getProductConfig } from "@/config/product";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import { StoreUnavailableError } from "@/lib/redis";
 import { clientIp, currentMonth, randomToken, signValue, verifySignedValue } from "@/lib/security";
@@ -11,6 +12,9 @@ function json(body: Record<string, unknown>, status = 200) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!getProductConfig().features.singleAnalysis)
+      return json({ error: "Single-document analysis is not available." }, 503);
+
     const existing = request.cookies.get("mbr_free_entitlement")?.value;
     if (existing && verifySignedValue(existing)?.endsWith(`:${currentMonth()}`)) return json({ ready: true });
     const allowed = await enforceRateLimit("free-issue-v2", `${clientIp(request.headers)}:${currentMonth()}`, 20, 60 * 60 * 24 * 32);

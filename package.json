@@ -12,18 +12,23 @@
     "lint": "eslint",
     "lint:content": "node scripts/content-lint.js",
     "lint:predeploy": "node scripts/predeploy-check.js",
+    "evaluate:model": "vite-node scripts/evaluate-model.ts",
+    "review:targets": "vite-node scripts/professional-review-targets.ts",
     "test": "vitest run",
     "test:indexnow": "node --test tests/indexnow-urls.node.mjs",
     "prebuild": "npm run lint:predeploy && npm run lint:content"
   },
   "dependencies": {
+    "ajv": "^8.20.0",
     "gray-matter": "^4.0.3",
     "next": "16.2.12",
+    "pdf-lib": "^1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
+    "sharp": "^0.35.3",
     "stripe": "^20.4.0"
   },
   "devDependencies": {
@@ -35,6 +40,7 @@
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
     "typescript": "5.9.3",
+    "vite-node": "^3.2.4",
     "vitest": "^3.2.4"
   },
   "overrides": {

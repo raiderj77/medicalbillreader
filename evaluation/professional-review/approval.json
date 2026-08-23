@@ -1,0 +1,48 @@
+{
+  "recordVersion": "2026-08-23.1",
+  "syntheticOnly": true,
+  "decision": "pending",
+  "ownerAuthorization": {
+    "recorded": true,
+    "date": "2026-08-23",
+    "scope": [
+      "30-case-synthetic-manifest",
+      "bill-analysis-output-schema",
+      "evaluation-scoring-semantics"
+    ]
+  },
+  "reviewedCommit": null,
+  "reviewedTargets": {
+    "fixtureDefinitionsVersion": null,
+    "groundTruthVersion": null,
+    "schemaVersion": null,
+    "scorerVersion": null,
+    "fixtureDefinitionsSha256": null,
+    "groundTruthSha256": null,
+    "outputSchemaSha256": null,
+    "outputContractSha256": null,
+    "outputScrubberSha256": null,
+    "codeRightsConfigSha256": null,
+    "scoringImplementationSha256": null,
+    "approvalGuardSha256": null
+  },
+  "reviewerChecks": {
+    "identityVerifiedPrivately": false,
+    "relevantQualificationVerified": false,
+    "recentDirectBillingExperienceVerified": false,
+    "exactScopeAccepted": false,
+    "conflictDisclosureReviewed": false,
+    "independentOfImplementation": false
+  },
+  "writtenDecision": {
+    "onFile": false,
+    "reviewDate": null,
+    "openBlockingFindings": null,
+    "allThirtyCasesAccepted": false,
+    "allSchemaDecisionsAccepted": false,
+    "allScoringDecisionsAccepted": false,
+    "allInternalFindingsDispositioned": false
+  },
+  "ownerAcceptedDecision": false,
+  "publicAttributionPermission": false
+}

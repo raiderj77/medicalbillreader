@@ -10,6 +10,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 test("maps static pages and blog content to public URLs", () => {
   assert.equal(pagePathToUrl("src/app/page.tsx"), "https://medicalbillreader.com/");
   assert.equal(pagePathToUrl("src/app/pricing/page.tsx"), "https://medicalbillreader.com/pricing");
+  assert.equal(
+    pagePathToUrl("src/app/bill-eob-comparison-worksheet/page.tsx"),
+    "https://medicalbillreader.com/bill-eob-comparison-worksheet",
+  );
   assert.equal(contentPathToUrl("content/blog/check-your-bill.md"), "https://medicalbillreader.com/blog/check-your-bill");
 });
 
@@ -23,12 +27,14 @@ test("submits only affected public URLs plus the homepage", () => {
   assert.deepEqual(
     pathsToIndexNowUrls([
       "src/app/pricing/page.tsx",
+      "src/app/bill-eob-comparison-worksheet/page.tsx",
       "content/blog/check-your-bill.md",
       "content/blog/check-your-bill.md",
     ]),
     [
       "https://medicalbillreader.com/",
       "https://medicalbillreader.com/pricing",
+      "https://medicalbillreader.com/bill-eob-comparison-worksheet",
       "https://medicalbillreader.com/blog/check-your-bill",
       "https://medicalbillreader.com/blog",
     ],

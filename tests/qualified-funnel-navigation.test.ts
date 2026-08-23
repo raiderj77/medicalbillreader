@@ -4,6 +4,31 @@ import { describe, expect, it } from "vitest";
 const readSource = (path: string) => readFileSync(path, "utf8");
 
 describe("qualified funnel navigation", () => {
+  it("presents the local worksheet before the sample and AI upload path", () => {
+    const homepage = readSource("src/app/page.tsx");
+    const orderedCopy = [
+      "Medical Bill Reader gives U.S. consumers two informational tools",
+      "Compare a Bill and EOB Privately",
+      "See the report format before using the AI tool",
+      "Explain a Redacted Document with AI",
+      "Before you upload a bill or EOB",
+      "What the AI report does",
+      "Clear options",
+      "Methodology and limits",
+      "Further Reading",
+      "Privacy and legal",
+    ];
+
+    let previousIndex = -1;
+    for (const copy of orderedCopy) {
+      const currentIndex = homepage.indexOf(copy);
+      expect(currentIndex, copy).toBeGreaterThan(previousIndex);
+      previousIndex = currentIndex;
+    }
+    expect(homepage).toContain("Jason Ramirez");
+    expect(homepage).toContain("experienced web professional");
+  });
+
   it("sends product-intent links directly to the existing analyzer", () => {
     const homepage = readSource("src/app/page.tsx");
     const analyzer = readSource("src/components/BillAnalyzer.tsx");
@@ -16,7 +41,7 @@ describe("qualified funnel navigation", () => {
 
     expect(homepage).toContain('href="#analyzer"');
     expect(analyzer).toContain('id="analyzer"');
-    expect(pricing).toContain('href: "/#analyzer"');
+    expect(pricing).toContain('href="/#analyzer"');
     expect(markdownArticle).toContain('href="/#analyzer"');
     expect(markdownArticle).toContain("Try Medical Bill Reader Free");
     expect(disputeGuide).toContain('href="/#analyzer"');

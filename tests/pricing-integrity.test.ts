@@ -10,17 +10,27 @@ describe("pricing evidence and checkout handoff", () => {
     expect(pricing).not.toContain("Most Popular");
   });
 
-  it("explains the Stripe return path for each paid option", () => {
-    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(2);
-    expect(pricing).toContain(
-      "return to the bill analyzer and have 24 hours in this browser to start the one analysis",
-    );
-    expect(pricing).toContain(
-      "Access is enabled in this browser and renewed after each verified successful use",
-    );
-    expect(pricing).toContain(
-      "Keep the Stripe receipt and contact support if you clear site data or change devices",
-    );
+  it("offers only the fixed single-document checkout", () => {
+    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(1);
+    expect(pricing).toContain('data-checkout-price-type="per-use"');
+    expect(pricing).not.toContain('data-checkout-price-type="subscription"');
+    expect(pricing).not.toContain('data-checkout-price-type="comparison"');
+    expect(pricing).toContain("have 24 hours in this browser to start the one");
+    expect(pricing).toContain("Keep the Stripe receipt if you change devices or clear");
+  });
+
+  it("shows the approved public options without selling or recommending monthly", () => {
+    expect(pricing).toContain("Free");
+    expect(pricing).toContain("Single document");
+    expect(pricing).toContain("Bill and EOB comparison");
+    expect(pricing).toContain("Coming later");
+    expect(pricing).toContain("Manage or cancel an existing subscription");
+    for (const source of [pricing, terms, llmsFull]) {
+      expect(source).not.toContain("$49");
+    }
+    expect(pricing).not.toContain("Subscribe Now");
+    expect(pricing).not.toContain("Best value");
+    expect(pricing).not.toContain("44 analyses");
   });
 
   it("distinguishes a cancelled checkout from a verification failure", () => {
@@ -40,5 +50,12 @@ describe("pricing evidence and checkout handoff", () => {
     }
     expect(pricing).not.toContain("within 24 hours of purchase");
     expect(llmsFull).not.toContain("within 24 hours of purchase");
+  });
+
+  it("does not publish the unsupported provider-training-default sentence", () => {
+    for (const source of [terms, llmsFull]) {
+      expect(source).not.toContain("not used for model training by default");
+      expect(source).not.toContain("customer opts in or submits feedback");
+    }
   });
 });

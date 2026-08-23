@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
+import { getProductConfig } from "@/config/product";
 import { getAllEditorialGuides } from "@/lib/editorial-guides";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://medicalbillreader.com";
+  const config = getProductConfig();
+  const baseUrl = config.productionOrigin;
 
   const editorialGuideEntries: MetadataRoute.Sitemap =
     getAllEditorialGuides().map((guide) => ({
@@ -17,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: baseUrl,
-      lastModified: new Date("2026-08-18"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "weekly",
       priority: 1,
     },
@@ -29,26 +31,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/pricing`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    ...(config.features.localComparisonWorksheet
+      ? [
+          {
+            url: `${baseUrl}/bill-eob-comparison-worksheet`,
+            lastModified: new Date("2026-08-23"),
+            changeFrequency: "monthly" as const,
+            priority: 0.9,
+          },
+        ]
+      : []),
+    {
+      url: `${baseUrl}/questions-to-ask-about-medical-bill`,
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     ...editorialGuideEntries,
     {
       url: `${baseUrl}/methodology`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date(config.reviewDates.methodology),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/codes-explained`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.7,
     },
@@ -72,13 +90,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.5,
     },
@@ -100,7 +118,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/disclaimer`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.3,
     },

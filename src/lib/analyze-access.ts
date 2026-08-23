@@ -1,4 +1,5 @@
 import { readJsonResponse } from "./read-json-response";
+import type { BillAnalysisReport } from "./bill-analysis-schema";
 
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
@@ -10,7 +11,7 @@ export type AnalysisRequestPayload = {
 
 type AnalysisResponseData = {
   error?: string;
-  result?: string;
+  report?: BillAnalysisReport;
 };
 
 type AnalysisAccessResult = {

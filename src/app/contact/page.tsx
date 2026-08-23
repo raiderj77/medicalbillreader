@@ -86,7 +86,7 @@ export default function ContactPage() {
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">Contact Us</h1>
-        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 2, 2026</p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 mb-4 text-center">Last reviewed: August 23, 2026</p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed">
           <section>
@@ -185,6 +185,14 @@ export default function ContactPage() {
               request deletion of any personal information we may hold such as
               server logs or analytics data, or need to exercise your rights
               under applicable privacy or consumer-health-data law, email us at:
+            </p>
+            <p>
+              First read the{" "}
+              <Link href="/privacy-request" className="font-semibold text-teal-800 underline">
+                privacy request instructions
+              </Link>
+              . They explain how to begin without sending a bill, health data,
+              payment details, or another sensitive locator.
             </p>
             <p>
               <a

@@ -195,10 +195,8 @@ export default function PrivacyPage() {
                  retention is needed for policy enforcement or law. Anthropic&apos;s
                  published policy says inputs and outputs flagged by its automated
                  trust and safety systems may be retained for up to two years and
-                 associated classification scores for up to seven years. By
-                 default, Anthropic says commercial API inputs and outputs are not
-                 used to train its models unless the customer opts in or submits
-                 feedback. Medical Bill Reader does not claim a zero-data-retention
+                 associated classification scores for up to seven years. Medical
+                 Bill Reader does not claim a zero-data-retention
                  agreement or Business Associate Agreement. See{" "}
                  <a
                    href="https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data"
