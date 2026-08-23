@@ -84,7 +84,7 @@ The evaluation inventory contains 30 fabricated cases and ground truth only. It 
 
 ## 15. Model evaluation process
 
-Offline evaluation is the default and cannot call a model. It validates the inventory and scoring implementation but does not score model quality or mark a release gate passed. A live-model run requires both explicit opt-in environment values, a canonical allowed fixture directory, real-path containment, a manifest allowlist, symlink/traversal refusal, an API key, and owner approval for spend. Provider responses remain in memory; only synthetic fixture IDs and scalar sanitized metrics may be written. The diagnostic scorer covers schema, document type, amounts, supported fields/items, evidence, identifiers, injection resistance, prohibited conclusions, arithmetic, duplicate status, comparison outcome, limitations, page evidence, and unsupported input with explicit eligible denominators. It requires the exact canonical 30-fixture set, and `SCORING_IMPLEMENTATION_REVIEWED` remains false, so it cannot authorize a release even if every diagnostic threshold passes. Current/candidate comparisons must use the same manifest and require separate owner and professional approval of scoring semantics before external model use can support a release decision.
+Offline evaluation is the default and cannot call a model. It validates the inventory and provisional scoring implementation but does not score model quality or mark a release gate passed. A live-model run requires both explicit opt-in environment values, a canonical allowed fixture directory, real-path containment, a manifest allowlist, symlink/traversal refusal, an API key, and owner approval for spend. Provider responses remain in memory; only synthetic fixture IDs and scalar sanitized metrics may be written. The diagnostic scorer covers schema, document type, amounts, supported fields/items, evidence, identifiers, injection resistance, prohibited conclusions, arithmetic, duplicate status, comparison outcome, limitations, page evidence, and unsupported input with explicit eligible denominators. The annotations and thresholds remain provisional and reviewer-pending. It requires the exact canonical 30-fixture set, and `SCORING_IMPLEMENTATION_REVIEWED` remains false, so it cannot authorize a release even if every diagnostic threshold passes. Current/candidate comparisons must use the same manifest and require separate owner and professional approval of scoring semantics before external model use can support a release decision.
 
 ## 16. Privacy data map
 
@@ -145,6 +145,7 @@ npm run build
 npm audit --omit=dev
 npm audit
 npm run evaluate:model
+npm run review:targets -- --assert-ready
 git diff --check
 ```
 
@@ -152,7 +153,7 @@ The evaluation command was run with the live-evaluation, cost-confirmation, and 
 
 ## 27. Test results
 
-Local integrated validation passed on 2026-08-23: 56 Vitest files and 406 tests; ESLint; TypeScript without incremental state; content lint; predeployment checks; four IndexNow tests; production build; production-only and full dependency audits with zero reported vulnerabilities; offline inventory validation of 30 synthetic definitions against 30 ground-truth entries with `networkCalls: 0`, `qualityGatesEvaluated: false`, `scoringImplementationReviewed: false`, and `releaseAuthorityEnabled: false`; and working-tree diff whitespace checks. This is local evidence only and does not validate production configuration, a live model result, a live Stripe payment, professional accuracy, or legal compliance.
+Local integrated validation passed on 2026-08-23: 57 Vitest files and 411 tests; ESLint; TypeScript without incremental state; content lint; predeployment checks; four IndexNow tests; production build; production-only and full dependency audits with zero reported vulnerabilities; offline inventory validation of 30 synthetic definitions against 30 ground-truth entries with `networkCalls: 0`, `qualityGatesEvaluated: false`, `scoringImplementationReviewed: false`, and `releaseAuthorityEnabled: false`; post-commit review-target output confirming the exact commit, clean worktree, owner authorization, decision `pending`, matching repository-only versions/fingerprints, and approval incomplete; and working-tree diff whitespace checks. This is local evidence only and does not validate production configuration, a live model result, a live Stripe payment, professional accuracy, or legal compliance.
 
 ## 28. Environment variables
 
@@ -183,7 +184,18 @@ See `docs/medicalbillreader-owner-action-checklist.md`. Required actions include
 
 ## 31. Professional review items
 
-- Structured report fields, evidence semantics, scrubber false-positive/false-negative boundaries, code behavior, and no-discrepancy language.
+On 2026-08-23 the owner authorized a qualified medical-billing professional to
+review the exact 30-case synthetic manifest, output schema, and
+scoring semantics. This records authority to prepare the review; it does not
+record a reviewer selection, engagement terms, completed review, attribution,
+live-model spend, or release approval. The reviewer packet and blank scorecard
+are under `evaluation/professional-review/`, and the fail-closed scoring flag is
+now derived from a strict version-and-fingerprint approval record.
+
+The following broader professional-review work remains pending and outside this
+narrow authorization:
+
+- Runtime parser, identifier-scrubber false-positive/false-negative boundaries, renderer behavior, code-set rights enforcement, and public no-discrepancy language.
 - Worksheet labels and formulas across real-world document conventions using only professionally created synthetic review cases.
 - Editorial pages, methodology, and sample report.
 - Comparison matching and questions before release.

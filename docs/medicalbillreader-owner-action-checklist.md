@@ -33,6 +33,9 @@ Rule: Do not put customer, bill, health, payment, credential, or analytics-ident
 ## Specialist decisions
 
 - [ ] Obtain a U.S. consumer-health-data privacy attorney's written review of the product-specific FTC Health Breach Notification Rule and Washington My Health My Data applicability, notice, consent/legal-basis, request, deletion-propagation, appeal, incident, and processor requirements.
+- [x] Record owner authorization dated 2026-08-23 for a qualified medical-billing professional to review only the 30-case synthetic manifest, output schema, and scoring semantics. Authorization is not completion, attribution, release approval, contact approval for an unnamed person, or spending approval.
+- [ ] Identify the authorized reviewer to this workflow, privately verify identity, active relevant qualification, recent direct U.S. billing/EOB experience, exact written scope, independence, and conflict disclosure, and approve the engagement channel and terms.
+- [ ] Obtain the version-bound written decision and case-by-case scorecard described in `evaluation/professional-review/review-packet.md`; close every P0/P1 condition before accepting an approval record.
 - [ ] Obtain a qualified medical billing professional's written review of the analyzer schema, renderer, worksheet formulas/labels, methodology, synthetic benchmark, and prohibited-conclusion boundaries.
 - [ ] Verify any reviewer identity, relevant credential, exact scope, written approval, publication permission, review date, and conflict disclosure before publishing attribution.
 - [ ] Resolve AMA CPT licensing for this exact public product and AI use. Until written authorization is on file, keep exact descriptors, descriptor lookup, and individual-code explanations disabled.
@@ -52,6 +55,6 @@ Rule: Do not put customer, bill, health, payment, credential, or analytics-ident
 - [ ] Pass same-manifest synthetic evaluation for both documents and matching logic.
 - [ ] Approve file, page, request, provider-response, latency, and cost ceilings.
 - [ ] Approve comparison privacy language and five-part consent.
-- [ ] Complete professional review.
+- [ ] Complete a separate professional review of the two-document comparison runtime, matching policy, renderer, and user-facing questions. The narrow manifest/schema/scorer authorization above does not complete this gate.
 - [ ] Verify the dedicated Stripe Price and current refund behavior.
 - [ ] Change the feature flag only in an owner-approved release after all prior boxes are complete.

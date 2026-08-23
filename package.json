@@ -13,6 +13,7 @@
     "lint:content": "node scripts/content-lint.js",
     "lint:predeploy": "node scripts/predeploy-check.js",
     "evaluate:model": "vite-node scripts/evaluate-model.ts",
+    "review:targets": "vite-node scripts/professional-review-targets.ts",
     "test": "vitest run",
     "test:indexnow": "node --test tests/indexnow-urls.node.mjs",
     "prebuild": "npm run lint:predeploy && npm run lint:content"

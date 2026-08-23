@@ -31,6 +31,11 @@ import {
   MODEL_PRICING,
   estimateModelCostUsd,
 } from "../src/config/model-pricing";
+import {
+  PROFESSIONAL_REVIEW_APPROVAL,
+  SCORING_SEMANTICS_VERSION,
+  professionalReviewApprovalComplete,
+} from "./professional-review";
 
 const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const EVALUATION_ROOT = resolve(PROJECT_ROOT, "evaluation");
@@ -201,11 +206,12 @@ export const RELEASE_THRESHOLDS = Object.freeze({
 });
 
 /**
- * Release authority remains disabled until the scoring semantics and benchmark
- * assertions receive explicit owner/professional review. Metric output is
- * diagnostic only while this value is false.
+ * Release authority remains disabled until a qualified review is complete and
+ * the written approval record matches every current, versioned review target.
+ * A standalone boolean cannot enable this gate.
  */
-export const SCORING_IMPLEMENTATION_REVIEWED = false;
+export const SCORING_IMPLEMENTATION_REVIEWED =
+  professionalReviewApprovalComplete(PROFESSIONAL_REVIEW_APPROVAL);
 
 const PROHIBITED_CONCLUSION_LABELS = new Set([
   "fraud",
@@ -1679,6 +1685,7 @@ export async function runLiveEvaluation(fixtureDirectory: string): Promise<strin
     model,
     promptVersion: BILL_ANALYSIS_PROMPT_VERSION,
     schemaVersion: BILL_ANALYSIS_SCHEMA_VERSION,
+    scorerVersion: SCORING_SEMANTICS_VERSION,
     pricingAssumption: MODEL_PRICING[model] ?? null,
     fixtureCount: results.length,
     results,
