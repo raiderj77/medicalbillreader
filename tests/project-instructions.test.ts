@@ -11,7 +11,8 @@ describe("current project instructions", () => {
     const claude = read("CLAUDE.md");
 
     expect(claude).toContain("Single analysis: $4.99");
-    expect(claude).toContain("Subscription: $49 per month for up to 44 analyses");
+    expect(claude).toContain("New monthly subscriptions are disabled");
+    expect(claude).toContain("Stripe-hosted management or cancellation");
     expect(claude).toContain("Vercel production hosting");
     expect(claude).toContain("Jason Ramirez may remain publicly identified");
     expect(claude).not.toMatch(/free MVP|Stripe \(future|deploy pending|NOT yet deployed/i);

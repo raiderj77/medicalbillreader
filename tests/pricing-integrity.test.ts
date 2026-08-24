@@ -2,25 +2,38 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const pricing = readFileSync("src/app/pricing/page.tsx", "utf8");
+const pricingMetadata = readFileSync("src/app/pricing/layout.tsx", "utf8");
 const terms = readFileSync("src/app/terms/page.tsx", "utf8");
 const llmsFull = readFileSync("public/llms-full.txt", "utf8");
+const llms = readFileSync("public/llms.txt", "utf8");
+const brandVoice = readFileSync("context/brand-voice.md", "utf8");
+const internalLinks = readFileSync("context/internal-links-map.md", "utf8");
+const revenue = readFileSync("docs/revenue-verification.md", "utf8");
 
 describe("pricing evidence and checkout handoff", () => {
   it("does not make an unsupported popularity claim", () => {
     expect(pricing).not.toContain("Most Popular");
   });
 
-  it("explains the Stripe return path for each paid option", () => {
-    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(2);
+  it("explains the Stripe return path for the single paid option", () => {
+    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(1);
     expect(pricing).toContain(
       "return to the bill analyzer and have 24 hours in this browser to start the one analysis",
     );
-    expect(pricing).toContain(
-      "Access is enabled in this browser and renewed after each verified successful use",
-    );
-    expect(pricing).toContain(
-      "Keep the Stripe receipt and contact support if you clear site data or change devices",
-    );
+  });
+
+  it("does not sell new monthly subscriptions while preserving management", () => {
+    for (const source of [pricing, pricingMetadata, terms, llms, llmsFull, brandVoice, internalLinks]) {
+      expect(source).toMatch(/New monthly subscriptions (?:are )?(?:disabled|not (?:available|offered|sold)|unavailable)/i);
+    }
+    expect(pricing).toContain("Manage or cancel an existing subscription");
+    expect(pricing).toMatch(/Existing\s+monthly subscriptions can be cancelled/);
+    expect(pricing).not.toContain("Subscribe Now");
+    expect(pricing).not.toContain('priceType: "subscription"');
+    expect(pricing).not.toContain("Best value");
+    expect(pricingMetadata).not.toContain("monthly Medical Bill Reader plan");
+    expect(revenue).toContain("new checkout accepts only the server-configured one-time Stripe price");
+    expect(revenue).toContain("monthly mapping remains available only for verifying real existing");
   });
 
   it("distinguishes a cancelled checkout from a verification failure", () => {

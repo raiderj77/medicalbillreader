@@ -3,7 +3,7 @@
 ## Product and trust pages
 
 - `/` - Medical Bill Reader analyzer and product overview.
-- `/pricing` - current free, single-analysis, and subscription access.
+- `/pricing` - current free and single-analysis access, plus management or cancellation for real existing subscribers; new monthly subscriptions are disabled.
 - `/methodology` - how the report is generated and what it cannot determine.
 - `/codes-explained` - manually reviewed overview of major billing code systems.
 - `/about` - named founder, qualifications, and limits.

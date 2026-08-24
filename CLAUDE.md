@@ -8,7 +8,7 @@ Current access model:
 
 - Free: up to one analysis per browser per UTC calendar month, subject to abuse controls.
 - Single analysis: $4.99.
-- Subscription: $49 per month for up to 44 analyses per UTC calendar month.
+- New monthly subscriptions are disabled. Preserve server-verified access and Stripe-hosted management or cancellation for any real existing subscriber until retirement is approved.
 
 ## Before changing the product
 

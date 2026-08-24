@@ -1,6 +1,6 @@
 # Revenue verification runbook
 
-Last reviewed: 2026-08-21
+Last reviewed: 2026-08-23
 
 ## Production configuration audit
 
@@ -29,7 +29,9 @@ No live-mode Stripe value or production Vercel variable was changed.
 
 ## Verified automatically
 
-- checkout accepts only the two server-configured Stripe price identifiers
+- new checkout accepts only the server-configured one-time Stripe price; the
+  monthly mapping remains available only for verifying real existing
+  subscription entitlements and historical checkout returns
 - success and cancellation URLs cannot be replaced with a caller-supplied origin
 - unpaid, expired, unrelated, and refunded sessions do not authorize analysis
 - checkout return cookies are Secure and HttpOnly and are created only after Stripe verification

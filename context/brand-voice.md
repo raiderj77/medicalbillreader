@@ -2,7 +2,7 @@
 
 ## Site overview
 
-Medical Bill Reader is a U.S.-focused medical-bill and EOB explainer with a limited free tier plus paid single-analysis and subscription options. Visitors upload a supported image or PDF. The report summarizes visible charges, billing fields, codes, and items to verify; it does not decide what a person owes or prove what should be disputed.
+Medical Bill Reader is a U.S.-focused medical-bill and EOB explainer with a limited free tier plus paid single-analysis access. New monthly subscriptions are disabled; real existing subscribers retain server-verified access and Stripe-hosted management or cancellation. Visitors upload a supported image or PDF. The report summarizes visible charges, billing fields, codes, and items to verify; it does not decide what a person owes or prove what should be disputed.
 
 Advertising and third-party analytics are disabled for the strict-YMYL release. Do not make AdSense, programmatic SEO, or traffic growth the next priority unless content quality, privacy, policy, and account readiness have been separately verified.
 

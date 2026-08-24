@@ -1,6 +1,6 @@
 # Medical Bill Reader: detailed site facts
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-23
 
 ## What the service is
 
@@ -37,7 +37,7 @@ Stripe hosts checkout and billing-portal pages. The application uses server-veri
 
 - Free: one analysis per browser per UTC calendar month, subject to network abuse controls.
 - Single analysis: $4.99.
-- Monthly plan: $49 per month for up to 44 analyses per UTC calendar month.
+- New monthly subscriptions are not sold. Existing monthly subscribers retain server-verified access and Stripe-hosted management or cancellation while retirement is reviewed.
 - The published single-analysis refund guarantee is limited to one request made within 24 hours of delivery; details and statutory rights are in the Terms.
 
 ## Authorship and editorial controls

@@ -9,6 +9,9 @@ const prices = vi.hoisted(() => ({
     type === "per-use" ? "price_single" : "price_monthly",
   ),
 }));
+const rateLimit = vi.hoisted(() => ({
+  enforce: vi.fn().mockResolvedValue(true),
+}));
 const browserAccess = vi.hoisted(() => ({
   fromRequest: vi.fn(),
   createBinding: vi.fn(),
@@ -20,10 +23,9 @@ const browserAccess = vi.hoisted(() => ({
 vi.mock("@/lib/stripe", () => ({
   getStripe: () => stripe,
   verifiedStripePriceId: prices.priceId,
-  SUBSCRIPTION_MONTHLY_CAP: 44,
 }));
 vi.mock("@/lib/rate-limit", () => ({
-  enforceRateLimit: vi.fn().mockResolvedValue(true),
+  enforceRateLimit: rateLimit.enforce,
 }));
 vi.mock("@/lib/stripe-browser-access", () => ({
   BROWSER_BINDING_COOKIE: "mbr_browser_binding",
@@ -97,27 +99,18 @@ describe("POST /api/checkout", () => {
     );
   });
 
-  it("creates only the mapped $49 subscription with the server cap", async () => {
+  it("rejects new subscriptions before creating checkout state", async () => {
+    delete process.env.STRIPE_SECRET_KEY;
     const response = await POST(request("subscription"));
-    expect(response.status).toBe(200);
-    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        mode: "subscription",
-        payment_method_types: ["card"],
-        line_items: [{ price: "price_monthly", quantity: 1 }],
-        metadata: {
-          mbr_entitlement: "subscription",
-          mbr_checkout_nonce: "a".repeat(64),
-        },
-        subscription_data: {
-          metadata: { mbr_entitlement: "subscription", monthly_cap: "44" },
-        },
-      }),
-    );
-    const checkout = stripe.checkout.sessions.create.mock.calls[0][0];
-    expect(checkout).not.toHaveProperty("allow_promotion_codes");
-    expect(checkout).not.toHaveProperty("discounts");
-    expect(checkout.subscription_data).not.toHaveProperty("trial_period_days");
+    expect(response.status).toBe(410);
+    expect(await response.json()).toEqual({
+      error: "New monthly subscriptions are not available.",
+    });
+    expect(browserAccess.createBinding).not.toHaveBeenCalled();
+    expect(browserAccess.createNonce).not.toHaveBeenCalled();
+    expect(rateLimit.enforce).not.toHaveBeenCalled();
+    expect(prices.priceId).not.toHaveBeenCalled();
+    expect(stripe.checkout.sessions.create).not.toHaveBeenCalled();
   });
 
   it("rejects unknown plan names without creating a Stripe session", async () => {

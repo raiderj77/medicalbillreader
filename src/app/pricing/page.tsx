@@ -43,26 +43,6 @@ const tiers = [
       "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start the one analysis.",
     priceType: "per-use",
   },
-  {
-    name: "Monthly Plan",
-    price: "$49",
-    period: "/month",
-    description:
-      "Best value if you or your family deal with medical bills regularly.",
-    features: [
-      "Up to 44 bills and EOBs per UTC calendar month",
-      "AI-generated report",
-      "Patterns flagged for verification",
-      "Cancel anytime",
-    ],
-    limitations: [],
-    cta: "Subscribe Now",
-    href: null,
-    highlighted: false,
-    checkoutNote:
-      "Secure checkout on Stripe. Access is enabled in this browser and renewed after each verified successful use. Keep the Stripe receipt and contact support if you clear site data or change devices.",
-    priceType: "subscription",
-  },
 ];
 
 export default function PricingPage() {
@@ -163,12 +143,12 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
-            Each plan uses the same AI-assisted report for supported bills and EOBs;
-            choose based on the number of analyses you expect to use.
+            Free and single-analysis access use the same AI-assisted report for
+            supported bills and EOBs.
           </p>
           <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
-            Start with a free analysis. Upgrade when you need more. No hidden
-            fees.
+            Start with a free analysis. One additional analysis costs $4.99.
+            New monthly subscriptions are not available.
           </p>
         </div>
 
@@ -181,7 +161,7 @@ export default function PricingPage() {
           </div>
         )}
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -299,6 +279,10 @@ export default function PricingPage() {
               ? "Opening subscription management..."
               : "Manage or cancel an existing subscription"}
           </button>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-slate-700 dark:text-slate-300">
+            New monthly subscriptions are not available. Existing subscribers
+            can use the Stripe-hosted portal above to manage or cancel.
+          </p>
         </div>
 
         {/* Which Plan Is Right for You? */}
@@ -332,14 +316,12 @@ export default function PricingPage() {
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                I manage medical bills for myself or my family regularly
+                I already have a monthly subscription
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Monthly Plan</strong> at $49 per month is the best
-                value if you review more than 10 bills a month, for example if
-                you are managing ongoing treatment or caring for family members.
-                It includes up to 44 analyses per UTC calendar month. Cancel
-                anytime with no penalty.
+                New monthly subscriptions are not available. Existing
+                subscribers can use the Stripe-hosted billing portal above to
+                manage or cancel under their existing terms.
               </p>
             </div>
           </div>
@@ -478,12 +460,8 @@ export default function PricingPage() {
                 a: "Each $4.99 payment gives you one bill or EOB analysis. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
               },
               {
-                q: "Can I cancel the monthly plan?",
-                a: "Yes, you can cancel anytime. Your access continues until the end of the current billing period. There are no cancellation fees or long-term commitments.",
-              },
-              {
-                q: "How many bills can I analyze on the Monthly Plan?",
-                a: "The monthly entitlement is capped at 44 analyses per UTC calendar month and resets when the UTC month changes. No higher-volume plan is currently published.",
+                q: "Are monthly subscriptions available?",
+                a: "No new monthly subscriptions are available. Existing subscribers can use the Stripe-hosted billing portal on this page to manage or cancel under their existing terms.",
               },
               {
                 q: "Is there a refund policy?",
@@ -496,9 +474,9 @@ export default function PricingPage() {
                     >
                       contact us
                     </Link>{" "}
-                    within 24 hours of delivery for a full refund. Monthly
-                    subscriptions can be cancelled at any time but are not
-                    refunded for partial months.
+                    within 24 hours of delivery for a full refund. Existing
+                    monthly subscriptions can be cancelled at any time but are
+                    not refunded for partial months.
                   </>
                 ),
               },
@@ -553,8 +531,8 @@ export default function PricingPage() {
                </Link>{" "}
                within 24 hours of delivery for a full refund. We may request the
                minimum Stripe transaction detail needed to locate the payment.
-               For monthly subscribers, you can cancel anytime and your access
-               continues through the end of your billing period.
+               Existing monthly subscribers can use the Stripe-hosted billing
+               portal above to manage or cancel under their existing terms.
             </p>
           </div>
         </section>
