@@ -6,7 +6,7 @@ Last reviewed: 2026-08-23
 
 ## Main tool
 
-- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month (subject to network abuse controls) or a $4.99 single analysis. New monthly subscriptions are unavailable; existing subscribers can still manage or cancel through Stripe.
+- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month, subject to network abuse controls. The published single-analysis price remains $4.99, but new paid checkout is temporarily unavailable while payment setup is verified. Previously verified paid access and existing subscription management remain available under their existing rules.
 - The tool may organize visible codes, charges, adjustments, plan payments, and patient-responsibility fields.
 - It cannot determine fraud, upcoding, unbundling, medical necessity, coverage, legal compliance, or whether a charge is correct from a bill alone.
 

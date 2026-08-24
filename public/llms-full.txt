@@ -31,13 +31,13 @@ Third-party analytics is disabled site-wide. Medical Bill Reader does not load G
 
 No advertising code currently loads. A direct Google seller line remains in ads.txt for account readiness, but future ads require account approval, an appropriate consent platform, and placement only on nonsensitive editorial or marketing pages.
 
-Stripe hosts checkout and billing-portal pages. The application uses server-verified checkout and subscription identifiers for entitlement and does not collect card details itself. See [Pricing](https://medicalbillreader.com/pricing) and [Terms](https://medicalbillreader.com/terms).
+New paid checkout is temporarily unavailable while payment setup is verified. Stripe continues to host billing-portal pages for existing subscribers. The application uses server-verified prior checkout and subscription identifiers for entitlement and does not collect card details itself. See [Pricing](https://medicalbillreader.com/pricing) and [Terms](https://medicalbillreader.com/terms).
 
 ## Pricing
 
 - Free: one analysis per browser per UTC calendar month, subject to network abuse controls.
-- Single analysis: $4.99.
-- New monthly subscriptions are not sold. Existing monthly subscribers retain server-verified access and Stripe-hosted management or cancellation while retirement is reviewed.
+- Single analysis: the published price remains $4.99, but new paid checkout is temporarily unavailable while payment setup is verified.
+- Existing monthly subscribers retain server-verified access and Stripe-hosted management or cancellation while retirement is reviewed.
 - The published single-analysis refund guarantee is limited to one request made within 24 hours of delivery; details and statutory rights are in the Terms.
 
 ## Authorship and editorial controls

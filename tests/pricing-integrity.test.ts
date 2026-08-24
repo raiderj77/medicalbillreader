@@ -15,25 +15,41 @@ describe("pricing evidence and checkout handoff", () => {
     expect(pricing).not.toContain("Most Popular");
   });
 
-  it("explains the Stripe return path for the single paid option", () => {
-    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(1);
-    expect(pricing).toContain(
-      "return to the bill analyzer and have 24 hours in this browser to start the one analysis",
-    );
+  it("removes new purchase actions and clearly explains the temporary pause", () => {
+    for (const source of [
+      pricing,
+      pricingMetadata,
+      terms,
+      llms,
+      llmsFull,
+      brandVoice,
+    ]) {
+      expect(source).toMatch(/New paid checkout is temporarily unavailable/i);
+    }
+    expect(pricing).toMatch(/No payment\s+will be started from this page/);
+    expect(pricing).toContain("Start Free");
+    expect(pricing).toContain('badge: "Available now"');
+    expect(pricing).toContain("$4.99");
+    expect(pricing).not.toContain("/api/checkout");
+    expect(pricing).not.toContain("handleCheckout");
+    expect(pricing).not.toContain("Buy Single Analysis");
+    expect(pricing).not.toContain("Subscribe Now");
+    expect(pricing).not.toContain("Secure checkout on Stripe");
+    expect(pricing).not.toContain("priceType");
   });
 
-  it("does not sell new monthly subscriptions while preserving management", () => {
-    for (const source of [pricing, pricingMetadata, terms, llms, llmsFull, brandVoice, internalLinks]) {
-      expect(source).toMatch(/New monthly subscriptions (?:are )?(?:disabled|not (?:available|offered|sold)|unavailable)/i);
-    }
+  it("preserves existing paid access, refunds, and subscription management", () => {
     expect(pricing).toContain("Manage or cancel an existing subscription");
-    expect(pricing).toMatch(/Existing\s+monthly subscriptions can be cancelled/);
-    expect(pricing).not.toContain("Subscribe Now");
-    expect(pricing).not.toContain('priceType: "subscription"');
+    expect(pricing).toContain('/api/billing-portal');
+    expect(pricing).toMatch(/previously verified paid access/i);
+    expect(terms).toMatch(/Existing monthly subscriptions can be managed or cancelled/);
+    expect(llmsFull).toMatch(/server-verified access/i);
+    expect(internalLinks).toMatch(/prior-purchase refund terms/i);
     expect(pricing).not.toContain("Best value");
     expect(pricingMetadata).not.toContain("monthly Medical Bill Reader plan");
-    expect(revenue).toContain("new checkout accepts only the server-configured one-time Stripe price");
-    expect(revenue).toContain("monthly mapping remains available only for verifying real existing");
+    expect(revenue).toContain("new checkout returns a cache-resistant `503`");
+    expect(revenue).toContain("before rate limiting, browser binding, nonce creation");
+    expect(revenue).toContain("previously created\nStripe Checkout Sessions or Payment Links");
   });
 
   it("distinguishes a cancelled checkout from a verification failure", () => {

@@ -120,9 +120,9 @@ export default function TermsPage() {
             </h2>
             <ul className="list-disc ml-6 space-y-1">
               <li>The free tier provides up to 1 medical bill or EOB analysis per browser per UTC calendar month, subject to network abuse controls. Clearing browser data does not authorize abuse or automated use.</li>
-              <li>Pay-per-bill customers receive one analysis per purchase ($4.99).</li>
-              <li>New monthly subscriptions are not offered. Existing monthly subscribers retain their current $49/month, 44-analysis terms while the subscription remains eligible.</li>
-              <li>Payments are processed securely through Stripe. We do not store your payment card details.</li>
+              <li>The published pay-per-bill price is $4.99 for one analysis. New paid checkout is temporarily unavailable while payment setup is verified.</li>
+              <li>Existing monthly subscribers retain their current $49/month, 44-analysis terms while the subscription remains eligible.</li>
+              <li>Stripe processes payments for prior purchases and existing subscriptions. We do not store payment card details.</li>
               <li>Existing monthly subscriptions can be managed or cancelled through the Stripe-hosted billing portal and remain subject to the existing billing terms through the applicable period.</li>
               <li>If a pay-per-bill result is unsatisfactory, contact support within 24 hours of delivery for the published full-refund guarantee. We may request the minimum transaction detail needed to locate the payment.</li>
               <li>Single-analysis and subscription access is browser-bound through essential cookies containing authenticated, encrypted entitlement tokens. The tokens do not expose raw Stripe identifiers. The single-analysis token lasts up to 24 hours; subscription access may last up to 400 days and is reverified before use. Clearing site data or changing devices can require support-assisted recovery. Keep the Stripe receipt and do not email a medical bill.</li>
