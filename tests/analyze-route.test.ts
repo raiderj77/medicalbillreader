@@ -183,4 +183,31 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     expect(cookie).toContain("mbr_pending_use=");
     expect(cookie).toContain("Max-Age=0");
   });
+
+  it("preserves the portal token after a non-subscription analysis", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          content: [
+            { text: "## What This Document Appears To Be\nSynthetic fixture" },
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const response = await POST(
+      request(
+        validBody,
+        "mbr_sub_id=opaque-subscription-token; mbr_sub_active=1",
+      ),
+    );
+    const cookie = response.headers.get("set-cookie") || "";
+
+    expect(response.status).toBe(200);
+    expect(cookie).not.toContain("mbr_sub_id=");
+    expect(cookie).toContain("mbr_sub_active=");
+    expect(cookie).toContain("Max-Age=0");
+  });
 });

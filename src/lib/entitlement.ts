@@ -1,4 +1,9 @@
-import { getStripe, PRICES, SUBSCRIPTION_MONTHLY_CAP } from "./stripe";
+import {
+  getStripe,
+  PRICES,
+  stripePriceId,
+  SUBSCRIPTION_MONTHLY_CAP,
+} from "./stripe";
 import type Stripe from "stripe";
 import type { NextRequest } from "next/server";
 import { redisCommand } from "./redis";
@@ -9,7 +14,10 @@ import {
   safeSecurityLog,
   verifySignedValue,
 } from "./security";
-import { isStripeId } from "./stripe-identifiers";
+import {
+  isStripeId,
+  type StripeIdPrefix,
+} from "./stripe-identifiers";
 import {
   browserBindingFromRequest,
   openStripeAccess,
@@ -291,23 +299,294 @@ export function isEligibleMbrSubscription(
   );
 }
 
-// Confirms a paid subscription is active and collecting payment. Called on
-// every analysis so an immediately cancelled, past-due, or collection-paused
-// subscription stops working without a local copy of billing status. Full
-// monthly refunds must be paired with immediate Stripe cancellation; the
-// cancellation, not the refund event, removes access. Ordinary end-of-period
-// cancellation keeps Stripe status active until the paid period ends.
+function expandedId(
+  value: string | { id?: unknown } | null | undefined,
+  prefix: StripeIdPrefix,
+): string | null {
+  const id =
+    typeof value === "string"
+      ? value
+      : value && typeof value.id === "string"
+        ? value.id
+        : null;
+  return id && isStripeId(id, prefix) ? id : null;
+}
+
+function unavailableSubscriptionState(): never {
+  throw new EntitlementTemporarilyUnavailableError();
+}
+
+async function hasCurrentSubscriptionPayment(
+  subscription: Stripe.Subscription,
+  stripe: ReturnType<typeof getStripe>,
+  expectedInvoiceId?: string,
+): Promise<boolean> {
+  if (subscription.status === "incomplete") {
+    return unavailableSubscriptionState();
+  }
+  if (!isEligibleMbrSubscription(subscription)) return false;
+
+  let expectedPriceId: string;
+  try {
+    expectedPriceId = stripePriceId("subscription");
+  } catch {
+    return unavailableSubscriptionState();
+  }
+
+  if (
+    subscription.collection_method !== "charge_automatically" ||
+    subscription.currency !== PRICES.monthly.currency
+  ) {
+    return unavailableSubscriptionState();
+  }
+
+  const items = subscription.items;
+  if (!items || !Array.isArray(items.data)) {
+    return unavailableSubscriptionState();
+  }
+  if (items.has_more !== false || items.data.length !== 1) {
+    return unavailableSubscriptionState();
+  }
+
+  const item = items.data[0];
+  const periodStart = item?.current_period_start;
+  const periodEnd = item?.current_period_end;
+  if (
+    !item ||
+    !Number.isSafeInteger(periodStart) ||
+    !Number.isSafeInteger(periodEnd) ||
+    periodEnd <= periodStart
+  ) {
+    return unavailableSubscriptionState();
+  }
+  if (
+    item.subscription !== subscription.id ||
+    item.quantity !== 1 ||
+    item.price?.id !== expectedPriceId ||
+    item.price.currency !== PRICES.monthly.currency ||
+    item.price.unit_amount !== PRICES.monthly.amount ||
+    item.price.recurring?.interval !== "month" ||
+    item.price.recurring.interval_count !== 1
+  ) {
+    return unavailableSubscriptionState();
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+  if (now < periodStart || now >= periodEnd) {
+    return unavailableSubscriptionState();
+  }
+
+  const invoice = subscription.latest_invoice;
+  if (invoice === null) return unavailableSubscriptionState();
+  if (!invoice || typeof invoice === "string") {
+    return unavailableSubscriptionState();
+  }
+  if (!isStripeId(invoice.id, "in_")) {
+    return unavailableSubscriptionState();
+  }
+  if (expectedInvoiceId && invoice.id !== expectedInvoiceId) {
+    return unavailableSubscriptionState();
+  }
+  if (invoice.status !== "paid") {
+    if (invoice.status === "void" || invoice.status === "uncollectible") {
+      return false;
+    }
+    return unavailableSubscriptionState();
+  }
+
+  const invoiceSubscriptionId = expandedId(
+    invoice.parent?.subscription_details?.subscription,
+    "sub_",
+  );
+  if (
+    invoice.parent?.type !== "subscription_details" ||
+    invoiceSubscriptionId !== subscription.id ||
+    invoice.parent.subscription_details?.metadata?.mbr_entitlement !==
+      "subscription" ||
+    (invoice.billing_reason !== "subscription_create" &&
+      invoice.billing_reason !== "subscription_cycle") ||
+    invoice.collection_method !== "charge_automatically" ||
+    invoice.currency !== PRICES.monthly.currency ||
+    invoice.amount_due !== PRICES.monthly.amount ||
+    invoice.amount_paid !== PRICES.monthly.amount ||
+    invoice.amount_remaining !== 0 ||
+    invoice.amount_overpaid !== 0 ||
+    !Number.isSafeInteger(invoice.pre_payment_credit_notes_amount) ||
+    invoice.pre_payment_credit_notes_amount !== 0 ||
+    !Number.isSafeInteger(invoice.post_payment_credit_notes_amount) ||
+    invoice.post_payment_credit_notes_amount !== 0 ||
+    invoice.total !== PRICES.monthly.amount
+  ) {
+    return unavailableSubscriptionState();
+  }
+
+  const lines = invoice.lines;
+  if (!lines || !Array.isArray(lines.data)) {
+    return unavailableSubscriptionState();
+  }
+  if (lines.has_more !== false || lines.data.length !== 1) {
+    return unavailableSubscriptionState();
+  }
+
+  const line = lines.data[0];
+  const lineParent = line?.parent?.subscription_item_details;
+  const lineSubscriptionId = expandedId(lineParent?.subscription, "sub_");
+  const linePriceId = expandedId(line?.pricing?.price_details?.price, "price_");
+  if (
+    !line ||
+    line.parent?.type !== "subscription_item_details" ||
+    lineParent?.proration !== false ||
+    lineSubscriptionId !== subscription.id ||
+    lineParent.subscription_item !== item.id ||
+    line.period?.start !== periodStart ||
+    line.period?.end !== periodEnd ||
+    line.pricing?.type !== "price_details" ||
+    linePriceId !== expectedPriceId ||
+    line.quantity !== 1 ||
+    line.currency !== PRICES.monthly.currency ||
+    line.amount !== PRICES.monthly.amount
+  ) {
+    return unavailableSubscriptionState();
+  }
+
+  let paidInvoicePayment: Stripe.InvoicePayment | null = null;
+  for await (const invoicePayment of stripe.invoicePayments.list({
+    invoice: invoice.id,
+    status: "paid",
+    limit: 100,
+    expand: ["data.payment.payment_intent.latest_charge"],
+  })) {
+    if (paidInvoicePayment) return unavailableSubscriptionState();
+    paidInvoicePayment = invoicePayment;
+  }
+  if (!paidInvoicePayment) return unavailableSubscriptionState();
+
+  const invoicePaymentInvoiceId = expandedId(
+    paidInvoicePayment.invoice,
+    "in_",
+  );
+  if (paidInvoicePayment.payment?.type !== "payment_intent") {
+    return unavailableSubscriptionState();
+  }
+  const paymentIntent = paidInvoicePayment.payment?.payment_intent;
+  if (!paymentIntent || typeof paymentIntent === "string") {
+    return unavailableSubscriptionState();
+  }
+  if (
+    paidInvoicePayment.status !== "paid" ||
+    invoicePaymentInvoiceId !== invoice.id ||
+    paidInvoicePayment.amount_paid !== PRICES.monthly.amount ||
+    paidInvoicePayment.amount_requested !== PRICES.monthly.amount ||
+    paidInvoicePayment.currency !== PRICES.monthly.currency ||
+    paidInvoicePayment.is_default !== true ||
+    !isStripeId(paymentIntent.id, "pi_") ||
+    paymentIntent.status !== "succeeded" ||
+    paymentIntent.amount !== PRICES.monthly.amount ||
+    paymentIntent.amount_received !== PRICES.monthly.amount ||
+    paymentIntent.currency !== PRICES.monthly.currency
+  ) {
+    return unavailableSubscriptionState();
+  }
+
+  const charge = paymentIntent.latest_charge;
+  if (!charge || typeof charge === "string") {
+    return unavailableSubscriptionState();
+  }
+  const chargePaymentIntentId = expandedId(charge.payment_intent, "pi_");
+  if (
+    !isStripeId(charge.id, "ch_") ||
+    chargePaymentIntentId !== paymentIntent.id ||
+    charge.paid !== true ||
+    charge.captured !== true ||
+    charge.amount !== PRICES.monthly.amount ||
+    charge.amount_captured !== PRICES.monthly.amount ||
+    charge.currency !== PRICES.monthly.currency ||
+    charge.payment_method_details?.type !== "card" ||
+    typeof charge.refunded !== "boolean" ||
+    !Number.isSafeInteger(charge.amount_refunded) ||
+    charge.amount_refunded < 0
+  ) {
+    return unavailableSubscriptionState();
+  }
+  if (charge.disputed === true) return false;
+  if (charge.disputed !== false) return unavailableSubscriptionState();
+
+  let succeededRefundAmount = 0;
+  let inFlightRefundAmount = 0;
+  for await (const refund of stripe.refunds.list({
+    charge: charge.id,
+    limit: 100,
+  })) {
+    const refundChargeId = expandedId(refund.charge, "ch_");
+    const refundPaymentIntentId = expandedId(refund.payment_intent, "pi_");
+    if (
+      !Number.isSafeInteger(refund.amount) ||
+      refund.amount <= 0 ||
+      refund.currency !== PRICES.monthly.currency ||
+      refundChargeId !== charge.id ||
+      refundPaymentIntentId !== paymentIntent.id
+    ) {
+      return unavailableSubscriptionState();
+    }
+    if (refund.status === "succeeded") {
+      succeededRefundAmount += refund.amount;
+      if (!Number.isSafeInteger(succeededRefundAmount)) {
+        return unavailableSubscriptionState();
+      }
+      continue;
+    }
+    if (refund.status === "pending" || refund.status === "requires_action") {
+      inFlightRefundAmount += refund.amount;
+      if (!Number.isSafeInteger(inFlightRefundAmount)) {
+        return unavailableSubscriptionState();
+      }
+      continue;
+    }
+    if (refund.status !== "failed" && refund.status !== "canceled") {
+      return unavailableSubscriptionState();
+    }
+  }
+
+  // A completed full refund revokes the current-period entitlement. Partial
+  // and in-flight refunds require owner review under the current runbook, so
+  // freeze access rather than guessing at an exceptional adjustment.
+  if (succeededRefundAmount >= PRICES.monthly.amount) return false;
+  if (succeededRefundAmount > 0 || inFlightRefundAmount > 0) {
+    return unavailableSubscriptionState();
+  }
+  if (
+    charge.refunded ||
+    charge.amount_refunded !== succeededRefundAmount
+  ) {
+    return unavailableSubscriptionState();
+  }
+  return true;
+}
+
+// Confirms current-period subscription payment authority from live Stripe
+// objects before each analysis and Checkout confirmation. Known inactive,
+// unpaid, disputed, or refunded state is ineligible. Missing, in-flight, or
+// incoherent provider state is retryable and must not fall through to another
+// entitlement while Stripe verification is unavailable.
 export async function verifyActiveSubscription(
   subscriptionId: string,
+  expectedInvoiceId?: string,
 ): Promise<boolean> {
   if (!isStripeId(subscriptionId, "sub_")) return false;
   const stripe = getStripe();
   try {
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    return isEligibleMbrSubscription(subscription);
-  } catch {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+      expand: ["latest_invoice"],
+    });
+    return await hasCurrentSubscriptionPayment(
+      subscription,
+      stripe,
+      expectedInvoiceId,
+    );
+  } catch (error) {
     safeSecurityLog("stripe_subscription_check_failed");
-    return false;
+    if (error instanceof EntitlementTemporarilyUnavailableError) throw error;
+    throw new EntitlementTemporarilyUnavailableError();
   }
 }
 
@@ -411,11 +690,10 @@ export async function classifyCompletedCheckout(
       session.metadata?.mbr_checkout_nonce === checkoutNonce &&
       typeof session.subscription === "string"
     ) {
-      const subscription = await stripe.subscriptions.retrieve(
-        session.subscription,
-      );
-      if (isEligibleMbrSubscription(subscription)) {
-        return { type: "subscription", subscriptionId: subscription.id };
+      const invoiceId = expandedId(session.invoice, "in_");
+      if (!invoiceId) throw new EntitlementTemporarilyUnavailableError();
+      if (await verifyActiveSubscription(session.subscription, invoiceId)) {
+        return { type: "subscription", subscriptionId: session.subscription };
       }
     }
 
