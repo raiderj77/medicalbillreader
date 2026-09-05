@@ -9,15 +9,16 @@ export default function ThemeToggle() {
     // Hydration guard: theme preferences are available only in the browser.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
-    const stored = localStorage.getItem('theme') as 'light' | 'dark' | null
+    let stored: string | null = null
+    try { stored = localStorage.getItem('theme') } catch { /* Use the system preference when storage is denied. */ }
     const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    setTheme(stored || system)
+    setTheme(stored === 'light' || stored === 'dark' ? stored : system)
   }, [])
 
   const toggle = () => {
     const next = theme === 'light' ? 'dark' : 'light'
     setTheme(next)
-    localStorage.setItem('theme', next)
+    try { localStorage.setItem('theme', next) } catch { /* Theme switching still works for this page. */ }
     document.documentElement.classList.remove('light', 'dark')
     document.documentElement.classList.add(next)
   }
