@@ -12,7 +12,10 @@ export default function ThemeToggle() {
     let stored: string | null = null
     try { stored = localStorage.getItem('theme') } catch { /* Use the system preference when storage is denied. */ }
     const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    setTheme(stored === 'light' || stored === 'dark' ? stored : system)
+    const selected = stored === 'light' || stored === 'dark' ? stored : system
+    setTheme(selected)
+    document.documentElement.classList.remove('light', 'dark')
+    document.documentElement.classList.add(selected)
   }, [])
 
   const toggle = () => {

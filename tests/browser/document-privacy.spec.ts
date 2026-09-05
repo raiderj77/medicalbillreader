@@ -13,6 +13,7 @@ test('mobile entry is accessible and choosing a file does not transmit it',async
   page.on('request',request=>{if(request.method()!=='GET')uploads.push('unexpected transmission');});
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
+  await page.waitForLoadState('networkidle');
   await page.getByLabel('Upload a medical bill').setInputFiles(fixture);
   await expect(page.getByText(fixture.name,{exact:true})).toBeVisible();
   await expect(page.getByRole('checkbox')).not.toBeChecked();
@@ -31,11 +32,13 @@ test('unsupported files are rejected without transmission',async({page})=>{
   await expect(page.getByRole('alert').filter({hasText:'Choose a JPEG'})).toBeVisible();
 });
 test('denied preference storage does not break upload or theme controls',async({page})=>{
+  await page.emulateMedia({colorScheme:'dark'});
   await page.addInitScript(()=>{Storage.prototype.getItem=()=>{throw new DOMException('Denied','SecurityError');};Storage.prototype.setItem=()=>{throw new DOMException('Denied','SecurityError');};});
   const errors:string[]=[];page.on('pageerror',()=>errors.push('runtime error'));
   await page.goto('/');
-  await page.getByRole('button',{name:'Switch to dark mode'}).click();
   await expect(page.locator('html')).toHaveClass(/dark/);
+  await page.getByRole('button',{name:'Switch to light mode'}).click();
+  await expect(page.locator('html')).toHaveClass(/light/);
   await page.getByLabel('Upload a medical bill').setInputFiles(fixture);
   await expect(page.getByText(fixture.name,{exact:true})).toBeVisible();
   expect(errors).toEqual([]);
