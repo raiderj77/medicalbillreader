@@ -20,53 +20,32 @@ const tiers = [
     limitations: [],
     cta: "Start Free",
     href: "/#analyzer",
-    highlighted: false,
+    highlighted: true,
+    badge: "Available now",
     checkoutNote: null,
-    priceType: null,
   },
   {
     name: "Pay Per Bill",
     price: "$4.99",
     period: "per bill",
     description:
-      "Perfect for an occasional confusing bill. No subscription required.",
+      "The $4.99 single-analysis option is temporarily unavailable while payment setup is verified.",
     features: [
       "One analysis per purchase",
       "AI-generated report",
       "Patterns flagged for verification",
     ],
     limitations: [],
-    cta: "Buy Single Analysis",
-    href: null,
-    highlighted: true,
-    checkoutNote:
-      "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start the one analysis.",
-    priceType: "per-use",
-  },
-  {
-    name: "Monthly Plan",
-    price: "$49",
-    period: "/month",
-    description:
-      "Best value if you or your family deal with medical bills regularly.",
-    features: [
-      "Up to 44 bills and EOBs per UTC calendar month",
-      "AI-generated report",
-      "Patterns flagged for verification",
-      "Cancel anytime",
-    ],
-    limitations: [],
-    cta: "Subscribe Now",
+    cta: "Checkout temporarily unavailable",
     href: null,
     highlighted: false,
+    badge: null,
     checkoutNote:
-      "Secure checkout on Stripe. Access is enabled in this browser and renewed after each verified successful use. Keep the Stripe receipt and contact support if you clear site data or change devices.",
-    priceType: "subscription",
+      "This page will not start a payment. Previously verified paid access remains subject to the existing eligibility and refund rules.",
   },
 ];
 
 export default function PricingPage() {
-  const [loading, setLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<ReactNode>(null);
 
@@ -92,32 +71,6 @@ export default function PricingPage() {
       }
     });
   }, []);
-
-  const handleCheckout = async (priceType: string) => {
-    if (loading) return;
-    setLoading(priceType);
-    setStatusMessage(null);
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceType }),
-      });
-
-      const data = await readJsonResponse<{ url?: string; error?: string }>(
-        response,
-      );
-      if (response.ok && data.url) {
-        window.location.assign(data.url);
-      } else {
-        setStatusMessage(data.error || "Checkout could not be started.");
-      }
-    } catch {
-      setStatusMessage("Checkout could not be started. Please try again.");
-    } finally {
-      setLoading(null);
-    }
-  };
 
   const handleBillingPortal = async () => {
     if (portalLoading) return;
@@ -163,14 +116,32 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
-            Each plan uses the same AI-assisted report for supported bills and EOBs;
-            choose based on the number of analyses you expect to use.
+            The free analysis remains available for supported bills and EOBs.
           </p>
           <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
-            Start with a free analysis. Upgrade when you need more. No hidden
-            fees.
+            New paid checkout is temporarily unavailable while payment setup is
+            verified.
           </p>
         </div>
+
+        <section
+          aria-labelledby="checkout-availability-heading"
+          className="mx-auto mb-8 max-w-3xl rounded-xl border border-amber-300 bg-amber-50 p-5 text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+        >
+          <h2
+            id="checkout-availability-heading"
+            className="font-semibold"
+          >
+            New paid checkout is temporarily unavailable
+          </h2>
+          <p className="mt-1 text-sm leading-relaxed">
+            Medical Bill Reader is not starting new single-analysis or monthly
+            checkout from this site while payment setup is verified. No payment
+            will be started from this page. Free analysis remains available,
+            and existing eligible paid access and subscription management keep
+            their current verification rules.
+          </p>
+        </section>
 
         {statusMessage && (
           <div
@@ -181,7 +152,7 @@ export default function PricingPage() {
           </div>
         )}
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -191,9 +162,9 @@ export default function PricingPage() {
                   : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
               }`}
             >
-              {tier.highlighted && (
+              {tier.badge && (
                 <div className="text-teal-400 text-sm font-bold uppercase tracking-wider mb-2">
-                  One extra analysis
+                  {tier.badge}
                 </div>
               )}
               <h2
@@ -262,20 +233,12 @@ export default function PricingPage() {
                   {tier.cta}
                 </Link>
               ) : (
-                <button
-                  onClick={() =>
-                    tier.priceType && handleCheckout(tier.priceType)
-                  }
-                  disabled={loading !== null}
-                  aria-busy={loading === tier.priceType}
-                  className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 ${
-                    tier.highlighted
-                      ? "bg-teal-700 text-white hover:bg-teal-800"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-600"
-                  }`}
+                <span
+                  aria-disabled="true"
+                  className="block w-full cursor-not-allowed rounded-lg bg-slate-700 py-3 text-center font-semibold text-slate-200"
                 >
-                  {loading === tier.priceType ? "Loading..." : tier.cta}
-                </button>
+                  {tier.cta}
+                </span>
               )}
               {tier.checkoutNote && (
                 <p
@@ -299,6 +262,10 @@ export default function PricingPage() {
               ? "Opening subscription management..."
               : "Manage or cancel an existing subscription"}
           </button>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-slate-700 dark:text-slate-300">
+            New paid checkout is temporarily unavailable. Existing subscribers
+            can still use the Stripe-hosted portal above to manage or cancel.
+          </p>
         </div>
 
         {/* Which Plan Is Right for You? */}
@@ -314,10 +281,9 @@ export default function PricingPage() {
               <p className="text-sm text-slate-700 dark:text-slate-300">
                 Start with the <strong>Free</strong> plan. You get one full
                 analysis per browser per UTC calendar month at no cost, subject
-                to network abuse controls. No credit card is required. If you
-                have already used this browser&apos;s free analysis this month, the{" "}
-                <strong>Pay Per Bill</strong> option at $4.99 is the most
-                economical choice for a single bill.
+                to network abuse controls. No credit card is required. New paid
+                checkout is temporarily unavailable if this browser&apos;s free
+                analysis has already been used this month.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -325,35 +291,34 @@ export default function PricingPage() {
                 I get medical bills occasionally
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Pay Per Bill</strong> plan is ideal. Pay $4.99 only
-                when you need an analysis , no subscription, no commitment.
-                Perfect for the occasional ER bill, EOB, or unexpected charge.
+                The published <strong>Pay Per Bill</strong> price remains $4.99,
+                but Medical Bill Reader is not starting new paid checkout while
+                payment setup is verified.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                I manage medical bills for myself or my family regularly
+                I already have a monthly subscription
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Monthly Plan</strong> at $49 per month is the best
-                value if you review more than 10 bills a month, for example if
-                you are managing ongoing treatment or caring for family members.
-                It includes up to 44 analyses per UTC calendar month. Cancel
-                anytime with no penalty.
+                New paid checkout is temporarily unavailable. Existing
+                subscribers can use the Stripe-hosted billing portal above to
+                manage or cancel under their existing terms.
               </p>
             </div>
           </div>
         </section>
 
-        {/* What's Included in Every Plan */}
+        {/* What's Included in Each Access Type */}
         <section className="mt-12 max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            What&apos;s Included in Every Plan
+            What&apos;s Included in Each Access Type
           </h2>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Each plan uses the same analysis route, supported file types, and
-              report fields. Usage limits differ by plan.
+              Free and previously verified paid access use the same analysis
+              route, supported file types, and report fields. Usage limits
+              differ by access type.
             </p>
             <ul className="grid sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex items-center gap-2">
@@ -470,35 +435,32 @@ export default function PricingPage() {
           <div className="space-y-4 text-left">
             {[
               {
-                q: "Can I try before I buy?",
-                a: "Yes. The free tier provides one analysis per browser per UTC calendar month without a credit card, subject to network abuse controls. It uses the same report fields and supported file types as paid access.",
+                q: "Can I use it without paying?",
+                a: "Yes. The free tier provides one analysis per browser per UTC calendar month without a credit card, subject to network abuse controls. New paid checkout is temporarily unavailable.",
               },
               {
                 q: "How does pay-per-bill work?",
-                a: "Each $4.99 payment gives you one bill or EOB analysis. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
+                a: "New pay-per-bill checkout is temporarily unavailable while payment setup is verified. A previously completed purchase can authorize one bill or EOB analysis only after the application verifies current Stripe payment and refund state.",
               },
               {
-                q: "Can I cancel the monthly plan?",
-                a: "Yes, you can cancel anytime. Your access continues until the end of the current billing period. There are no cancellation fees or long-term commitments.",
-              },
-              {
-                q: "How many bills can I analyze on the Monthly Plan?",
-                a: "The monthly entitlement is capped at 44 analyses per UTC calendar month and resets when the UTC month changes. No higher-volume plan is currently published.",
+                q: "Are monthly subscriptions available?",
+                a: "No new paid checkout is currently available. Existing subscribers can use the Stripe-hosted billing portal on this page to manage or cancel under their existing terms.",
               },
               {
                 q: "Is there a refund policy?",
                 a: (
                   <>
-                    Yes. If you are unsatisfied with a pay-per-bill analysis,{" "}
+                    Yes. For a pay-per-bill analysis purchased before new
+                    checkout was paused, contact us{" "}
                     <Link
                       href="/contact"
                       className="font-semibold text-teal-800 underline dark:text-teal-300"
                     >
-                      contact us
+                      through the support page
                     </Link>{" "}
-                    within 24 hours of delivery for a full refund. Monthly
-                    subscriptions can be cancelled at any time but are not
-                    refunded for partial months.
+                    within 24 hours of delivery for the published full refund.
+                    Existing monthly subscriptions can be cancelled at any time
+                    but are not refunded for partial months.
                   </>
                 ),
               },
@@ -536,25 +498,26 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Money-Back Guarantee */}
+        {/* Refund Policy for Prior Purchases */}
         <section className="mt-12 max-w-3xl mx-auto mb-4">
           <div className="bg-teal-50 dark:bg-teal-950/30 rounded-2xl border border-teal-200 dark:border-teal-800 p-8 text-center">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-              Money-Back Guarantee
+              Refund Policy for Prior Purchases
             </h2>
-             <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
-               We stand behind the quality of every analysis. If you are not
-               satisfied with a pay-per-bill result,{" "}
-               <Link
-                 href="/contact"
-                 className="font-semibold text-teal-800 underline dark:text-teal-300"
-               >
-                 contact us
-               </Link>{" "}
-               within 24 hours of delivery for a full refund. We may request the
-               minimum Stripe transaction detail needed to locate the payment.
-               For monthly subscribers, you can cancel anytime and your access
-               continues through the end of your billing period.
+            <p className="text-slate-600 dark:text-slate-300 max-w-xl mx-auto">
+              For a pay-per-bill result purchased before new checkout was
+              paused, contact us{" "}
+              <Link
+                href="/contact"
+                className="font-semibold text-teal-800 underline dark:text-teal-300"
+              >
+                through the support page
+              </Link>{" "}
+              within 24 hours of delivery for the published full refund. We may
+              request the minimum Stripe transaction detail needed to locate
+              the payment. Existing monthly subscribers can use the
+              Stripe-hosted billing portal above to manage or cancel under their
+              existing terms.
             </p>
           </div>
         </section>

@@ -1,6 +1,6 @@
 # Revenue verification runbook
 
-Last reviewed: 2026-08-21
+Last reviewed: 2026-08-23
 
 ## Production configuration audit
 
@@ -13,8 +13,10 @@ The Vercel production project contains the existing Anthropic, Redis, entitlemen
 
 The variable names were audited without printing their secret values. The July
 12, 2026 live Checkout check documented below confirmed that the monthly mapping
-then resolved to the intended active product and amount; this August review did
-not reverify external configuration.
+then resolved to the intended active product and amount. The August 23 review
+did not establish a canonical current Medical Bill Reader Stripe account or
+reverify production price, webhook, or deployment configuration. Those items
+are unknown, not evidence of healthy payment operation or zero revenue.
 
 ## Stripe sandbox setup completed
 
@@ -29,7 +31,13 @@ No live-mode Stripe value or production Vercel variable was changed.
 
 ## Verified automatically
 
-- checkout accepts only the two server-configured Stripe price identifiers
+- new checkout returns a cache-resistant `503` response before reading request
+  headers or body and before rate limiting, browser binding, nonce creation,
+  price lookup, or any Stripe call
+- the pricing page offers no new paid purchase action and clearly states that
+  new paid checkout is temporarily unavailable
+- the monthly mapping remains available only for verifying real existing
+  subscription entitlements and historical checkout returns
 - success and cancellation URLs cannot be replaced with a caller-supplied origin
 - unpaid, expired, unrelated, and refunded sessions do not authorize analysis
 - checkout return cookies are Secure and HttpOnly and are created only after Stripe verification
@@ -95,7 +103,7 @@ Expired, unrelated, malformed, and concurrent entitlement cases remain covered b
 
 ## Priority 1 closeout
 
-Medical Bill Reader's revenue-verification milestone is complete:
+Historical revenue-verification work established the following limited facts:
 
 - production price mappings and webhook configuration were present in the
   July 12, 2026 audit snapshot; this August 17 documentation update did not
@@ -107,3 +115,9 @@ Medical Bill Reader's revenue-verification milestone is complete:
 - revenue events are not forwarded to Google Analytics; use Stripe records for purchase, subscription, cancellation, and refund verification
 
 Third-party analytics is disabled for the strict-YMYL release. Do not infer traffic or conversion counts from an unavailable analytics dashboard, and do not re-enable analytics or forward sensitive funnel events without a new privacy review and regression tests. Revenue claims require current Stripe or other authoritative transaction evidence.
+
+Disabling the current application route does not expire previously created
+Stripe Checkout Sessions or Payment Links and cannot disable an older deployed
+application version. Their existence and current usability remain unknown until
+the canonical Stripe account and production deployment are independently
+verified. Do not test them with a live payment.

@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/pricing`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -72,7 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date("2026-08-02"),
+      lastModified: new Date("2026-08-23"),
       changeFrequency: "monthly",
       priority: 0.3,
     },

@@ -10,8 +10,11 @@ describe("current project instructions", () => {
   it("keeps product status, pricing, and attribution aligned with production", () => {
     const claude = read("CLAUDE.md");
 
-    expect(claude).toContain("Single analysis: $4.99");
-    expect(claude).toContain("Subscription: $49 per month for up to 44 analyses");
+    expect(claude).toContain("published price remains $4.99");
+    expect(claude).toContain("new paid checkout is temporarily unavailable");
+    expect(claude).toContain("refund handling");
+    expect(claude).toContain("Stripe-hosted management or cancellation");
+    expect(claude).toContain("Current production Stripe account and price mapping are not verified");
     expect(claude).toContain("Vercel production hosting");
     expect(claude).toContain("Jason Ramirez may remain publicly identified");
     expect(claude).not.toMatch(/free MVP|Stripe \(future|deploy pending|NOT yet deployed/i);
