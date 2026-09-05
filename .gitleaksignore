@@ -12,3 +12,7 @@ bf1cf39eec19ce7d9c09951c33fab7f110bd83b9:tests/billing-portal-route.test.ts:stri
 bf1cf39eec19ce7d9c09951c33fab7f110bd83b9:tests/stripe-config.test.ts:stripe-access-token:6
 # Public IndexNow verification key, intentionally published; not a private credential.
 69db3e7a7af858f77f73e9b191eafc57cca0b115:.github/workflows/indexnow.yml:generic-api-key:16
+# Identical reviewed synthetic fixture on retained historical branch; exact fingerprint only.
+c0f2f6c3bf6d51fe4b148b75349b3cb0a2ebc369:tests/setup.ts:generic-api-key:1
+# Identical reviewed synthetic fixture on retained historical branch; exact fingerprint only.
+c0f2f6c3bf6d51fe4b148b75349b3cb0a2ebc369:tests/security.test.ts:generic-api-key:4
