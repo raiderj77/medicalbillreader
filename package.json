@@ -14,7 +14,8 @@
     "lint:predeploy": "node scripts/predeploy-check.js",
     "test": "vitest run",
     "test:indexnow": "node --test tests/indexnow-urls.node.mjs",
-    "prebuild": "npm run lint:predeploy && npm run lint:content"
+    "prebuild": "npm run lint:predeploy && npm run lint:content",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -27,6 +28,8 @@
     "stripe": "^20.4.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

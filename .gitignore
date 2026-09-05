@@ -47,3 +47,6 @@ data_sources/cache/
 content/drafts/
 content/review-required/
 /.env*.local
+
+test-results/
+playwright-report/
