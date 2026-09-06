@@ -20,7 +20,7 @@ export default function HomepageGuideCluster() {
             and deadlines can vary, so verify them for your situation.
           </p>
         </div>
-        <Link
+        <Link prefetch={false}
           href="/blog"
           className="inline-flex min-h-11 shrink-0 items-center font-semibold text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
         >
@@ -35,7 +35,7 @@ export default function HomepageGuideCluster() {
             className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800"
           >
             <h3 className="font-bold text-slate-900 dark:text-slate-100">
-              <Link
+              <Link prefetch={false}
                 href={guide.href}
                 className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
               >

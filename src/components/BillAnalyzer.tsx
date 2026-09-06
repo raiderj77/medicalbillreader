@@ -29,6 +29,7 @@ function VerificationBadge({ variant }: { variant: "pre" | "post" }) {
       <span>
         {text}{" "}
         <Link
+          prefetch={false}
           href="/methodology"
           className="underline font-medium hover:text-teal-800 dark:hover:text-teal-100"
         >
@@ -514,6 +515,7 @@ export default function BillAnalyzer() {
                </a>{" "}
                and our{" "}
                <Link
+                prefetch={false}
                 href="/consumer-health-data-privacy"
                 className="font-semibold text-teal-800 underline dark:text-teal-300"
               >
@@ -547,6 +549,7 @@ export default function BillAnalyzer() {
               <p>{error}</p>
               {needsUpgrade && (
                 <Link
+                  prefetch={false}
                   href="/pricing"
                   className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-teal-700 px-4 py-2 font-semibold text-white hover:bg-teal-800"
                 >

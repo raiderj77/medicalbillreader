@@ -108,7 +108,7 @@ export default function Home() {
             </span>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <Link
+            <Link prefetch={false}
               href="/blog"
               className="inline-flex min-h-11 items-center px-1 text-sm font-semibold text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
             >
@@ -146,7 +146,7 @@ export default function Home() {
             >
               Start free analysis
             </a>
-            <Link
+            <Link prefetch={false}
               href="/sample-medical-bill-report"
               className="inline-flex min-h-11 items-center justify-center rounded-xl border border-teal-700 bg-white px-6 py-3 text-base font-semibold text-teal-900 transition-colors hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-700 dark:bg-slate-900 dark:text-teal-200 dark:hover:bg-slate-800"
             >
@@ -155,11 +155,11 @@ export default function Home() {
           </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
             Built by{" "}
-            <Link href="/about" className="font-medium underline">
+            <Link prefetch={false} href="/about" className="font-medium underline">
               Jason Ramirez
             </Link>
             , an experienced web professional. See our{" "}
-            <Link href="/editorial-policy" className="font-medium underline">
+            <Link prefetch={false} href="/editorial-policy" className="font-medium underline">
               editorial standards
             </Link>
             .
@@ -188,7 +188,7 @@ export default function Home() {
             or a Business Associate Agreement and is a direct-to-consumer tool,
             not a HIPAA-covered service.
           </p>
-          <Link
+          <Link prefetch={false}
             href="/consumer-health-data-privacy"
             className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-white px-4 py-2 text-sm font-bold text-teal-900 underline shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:bg-slate-900 dark:text-teal-200"
           >
