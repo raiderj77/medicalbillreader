@@ -36,6 +36,44 @@ function request(body: unknown, cookie?: string, headers?: Record<string, string
 describe("POST /api/analyze abuse and entitlement controls", () => {
   beforeEach(() => { vi.clearAllMocks(); entitlement.commit.mockResolvedValue(true); entitlement.release.mockResolvedValue(undefined); });
 
+  it.each([
+    { stop_reason: "max_tokens", content: [{ type: "text", text: "Partial explanation" }] },
+    { stop_reason: "refusal", content: [{ type: "text", text: "Cannot process" }] },
+    { stop_reason: "pause_turn", content: [{ type: "text", text: "Partial explanation" }] },
+    { content: [{ type: "text", text: "Missing completion status" }] },
+    { stop_reason: "end_turn", content: [{ type: "text", text: "   " }] },
+    { stop_reason: "end_turn", content: [{ type: "text", text: 123 }] },
+    { stop_reason: "end_turn", content: [{ type: "tool_use", text: "Not an explanation" }] },
+    { stop_reason: "end_turn", content: [] },
+    null,
+  ])("preserves credit when the provider has not delivered complete text: %j", async (payload) => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    const ai = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify(payload), { status: 200 }),
+    );
+    const response = await POST(request(validBody, "mbr_pending_use=sealed-credit"));
+    expect(response.status).toBe(502);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(await response.json()).toEqual({ error: "The analysis service returned an incomplete response. Your paid credit was not used." });
+    expect(entitlement.release).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(entitlement.commit).not.toHaveBeenCalled();
+    expect(ai).toHaveBeenCalledOnce();
+  });
+
+  it("delivers every text block of a completed response before consuming one credit", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({
+      stop_reason: "end_turn",
+      content: [{ type: "text", text: "First section" }, { type: "text", text: "Final section" }],
+    }), { status: 200 }));
+    const response = await POST(request(validBody));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ result: "First section\n\nFinal section" });
+    expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(entitlement.release).not.toHaveBeenCalled();
+  });
+
   it("rejects direct and client-side bypass calls without a server entitlement before AI", async () => {
     entitlement.reserve.mockResolvedValue(null);
     const ai = vi.spyOn(globalThis, "fetch");
@@ -128,7 +166,7 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
   it("uses a system-level document boundary and keeps the attachment in user data", async () => {
     entitlement.reserve.mockResolvedValue(reservation);
     const ai = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response(JSON.stringify({ content: [{ text: "## What This Document Appears To Be\nUnclear" }] }), {
+      new Response(JSON.stringify({ stop_reason: "end_turn", content: [{ type: "text", text: "## What This Document Appears To Be\nUnclear" }] }), {
         status: 200,
       }),
     );
@@ -162,8 +200,9 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
+          stop_reason: "end_turn",
           content: [
-            { text: "## What This Document Appears To Be\nUnclear" },
+            { type: "text", text: "## What This Document Appears To Be\nUnclear" },
           ],
         }),
         { status: 200 },
@@ -189,8 +228,9 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
+          stop_reason: "end_turn",
           content: [
-            { text: "## What This Document Appears To Be\nSynthetic fixture" },
+            { type: "text", text: "## What This Document Appears To Be\nSynthetic fixture" },
           ],
         }),
         { status: 200 },

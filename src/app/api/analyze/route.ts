@@ -74,9 +74,22 @@ export async function POST(request: NextRequest) {
       await releaseEntitlement(reservation); reservation = null;
       return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
     }
-    const data = (await aiResponse.json()) as { content?: Array<{ text?: string }> };
-    const result = data.content?.[0]?.text;
-    if (!result) {
+    const data: unknown = await aiResponse.json();
+    // A successful HTTP response can still contain truncated output or a
+    // refusal. This request uses neither tools nor custom stop sequences, so
+    // only a naturally completed, nonempty text response earns a credit.
+    const message = data && typeof data === "object"
+      ? data as { stop_reason?: unknown; content?: unknown }
+      : null;
+    const blocks = message?.content;
+    const result = message?.stop_reason === "end_turn" &&
+      Array.isArray(blocks) && blocks.length > 0 &&
+      blocks.every((block: unknown) => block !== null && typeof block === "object" &&
+        "type" in block && block.type === "text" &&
+        "text" in block && typeof block.text === "string" && block.text.trim().length > 0)
+      ? blocks.map((block: { text: string }) => block.text).join("\n\n")
+      : null;
+    if (result === null) {
       await releaseEntitlement(reservation); reservation = null;
       return errorResponse("The analysis service returned an incomplete response. Your paid credit was not used.", 502);
     }
