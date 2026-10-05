@@ -117,6 +117,7 @@ export default function BillAnalyzer() {
   const [showCheckoutReturn, setShowCheckoutReturn] = useState(false);
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const activeReaderRef = useRef<FileReader | null>(null);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   // One-time hint that we just came back from a successful per-use checkout.
   // Consumed by the first analysis attempt and stripped from the URL
@@ -124,6 +125,18 @@ export default function BillAnalyzer() {
   // paying again. The server independently verifies and consumes the real
   // entitlement via an httpOnly cookie, this is only a UX gate.
   const justPaidRef = useRef(false);
+
+  const cancelFileRead = () => {
+    const reader = activeReaderRef.current;
+    activeReaderRef.current = null;
+    if (reader?.readyState === FileReader.LOADING) reader.abort();
+  };
+
+  useEffect(() => () => {
+    const reader = activeReaderRef.current;
+    activeReaderRef.current = null;
+    if (reader?.readyState === FileReader.LOADING) reader.abort();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -154,14 +167,25 @@ export default function BillAnalyzer() {
       );
       return;
     }
+    cancelFileRead();
+    setPreview(null);
     setFile(f);
     setPrivacyAcknowledged(false);
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
     const reader = new FileReader();
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string);
+    activeReaderRef.current = reader;
+    reader.onload = () => {
+      if (activeReaderRef.current !== reader) return;
+      activeReaderRef.current = null;
+      if (typeof reader.result === "string") setPreview(reader.result);
+      else setError("This file could not be read. Remove it and choose it again.");
+    };
+    reader.onerror = () => {
+      if (activeReaderRef.current !== reader) return;
+      activeReaderRef.current = null;
+      setError("This file could not be read. Remove it and choose it again.");
     };
     reader.readAsDataURL(f);
   };
@@ -229,6 +253,7 @@ export default function BillAnalyzer() {
   };
 
   const reset = () => {
+    cancelFileRead();
     setFile(null);
     setPreview(null);
     setResult(null);
@@ -561,7 +586,7 @@ export default function BillAnalyzer() {
 
           <button
             onClick={handleSubmit}
-            disabled={loading || !privacyAcknowledged}
+            disabled={loading || !preview || !privacyAcknowledged}
             aria-busy={loading}
             aria-describedby="upload-privacy"
             className="w-full bg-teal-700 hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"

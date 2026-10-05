@@ -70,6 +70,49 @@ test('unsupported files are rejected without transmission',async({page,context})
   await expect(page.getByRole('alert').filter({hasText:'Choose a JPEG'})).toBeVisible();
   expect(uploads).toEqual([]);
 });
+
+test('removed file reads cannot replace a later selection or enable submission', async ({page,context}) => {
+  // Deterministic local completion order; even a queued callback after abort
+  // must not restore bytes belonging to the removed selection.
+  await page.addInitScript(() => {
+    const readers: FileReader[] = [];
+    class ControlledReader {
+      static LOADING = 1;
+      readyState = 1;
+      result: string | null = null;
+      onload: ((event: {target: ControlledReader}) => void) | null = null;
+      onerror: (() => void) | null = null;
+      readAsDataURL() { readers.push(this as unknown as FileReader); }
+      abort() { this.readyState = 2; }
+    }
+    Object.assign(window, {FileReader: ControlledReader, completeTestRead: (index: number, fail = false) => {
+      const reader = readers[index] as unknown as ControlledReader;
+      reader.result = 'data:image/png;base64,' + btoa('SYNTHETIC-' + index);
+      if (fail) reader.onerror?.(); else reader.onload?.({target: reader});
+    }});
+  });
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  const uploads = observeSensitiveTransport(context);
+  await page.getByLabel('Upload a medical bill').setInputFiles(fixture);
+  await page.getByRole('button',{name:'Remove',exact:true}).click();
+  await page.getByLabel('Upload a medical bill').setInputFiles({...fixture,name:'SECOND-SYNTHETIC.png'});
+  await page.getByRole('checkbox').check();
+  const submit = page.getByRole('button',{name:/Explain My Bill/}).last();
+  await expect.soft(submit).toBeDisabled();
+  await page.evaluate(() => (window as unknown as {completeTestRead: (index: number) => void}).completeTestRead(0));
+  await expect(page.getByAltText('Preview of uploaded medical bill')).toHaveCount(0);
+  await expect(submit).toBeDisabled();
+  await page.evaluate(() => (window as unknown as {completeTestRead: (index: number) => void}).completeTestRead(1));
+  await expect(page.getByAltText('Preview of uploaded medical bill')).toHaveAttribute('src','data:image/png;base64,' + Buffer.from('SYNTHETIC-1').toString('base64'));
+  await expect(submit).toBeEnabled();
+  await page.getByRole('button',{name:'Remove',exact:true}).click();
+  await page.getByLabel('Upload a medical bill').setInputFiles(fixture);
+  await page.evaluate(() => (window as unknown as {completeTestRead: (index: number, fail: boolean) => void}).completeTestRead(2,true));
+  await expect(page.getByRole('alert').filter({hasText:'This file could not be read'})).toBeVisible();
+  await expect(page.getByRole('button',{name:/Explain My Bill/}).last()).toBeDisabled();
+  expect(uploads).toEqual([]);
+});
 test('denied preference storage does not break upload or theme controls',async({page})=>{
   await page.emulateMedia({colorScheme:'dark'});
   await page.addInitScript(()=>{Storage.prototype.getItem=()=>{throw new DOMException('Denied','SecurityError');};Storage.prototype.setItem=()=>{throw new DOMException('Denied','SecurityError');};});
