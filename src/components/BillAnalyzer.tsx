@@ -118,6 +118,7 @@ export default function BillAnalyzer() {
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const activeReaderRef = useRef<FileReader | null>(null);
+  const analysisPendingRef = useRef(false);
   const resultHeadingRef = useRef<HTMLHeadingElement>(null);
   // One-time hint that we just came back from a successful per-use checkout.
   // Consumed by the first analysis attempt and stripped from the URL
@@ -153,6 +154,7 @@ export default function BillAnalyzer() {
   }, [result]);
 
   const handleFile = (f: File) => {
+    if (analysisPendingRef.current) return;
     const allowed = [
       "image/jpeg",
       "image/png",
@@ -198,11 +200,14 @@ export default function BillAnalyzer() {
   };
 
   const handleSubmit = async () => {
-    if (!file || !preview || !privacyAcknowledged) return;
+    if (analysisPendingRef.current || !file || !preview || !privacyAcknowledged) return;
 
     const hasPaidAccessHint =
       justPaidRef.current || hasSubscriptionAccessHint();
 
+    // Keep this selection until its result arrives: a completed request can
+    // already have consumed paid access even if the browser discards it.
+    analysisPendingRef.current = true;
     setLoading(true);
     setError(null);
     setNeedsUpgrade(false);
@@ -248,11 +253,13 @@ export default function BillAnalyzer() {
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
+      analysisPendingRef.current = false;
       setLoading(false);
     }
   };
 
   const reset = () => {
+    if (analysisPendingRef.current) return;
     cancelFileRead();
     setFile(null);
     setPreview(null);
@@ -497,8 +504,10 @@ export default function BillAnalyzer() {
               </div>
             </div>
             <button
+              type="button"
               onClick={reset}
-              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200"
+              disabled={loading}
+              className="min-h-11 shrink-0 rounded-lg px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-slate-200"
             >
               Remove
             </button>
@@ -555,6 +564,7 @@ export default function BillAnalyzer() {
               <input
                 type="checkbox"
                 checked={privacyAcknowledged}
+                disabled={loading}
                 onChange={(event) =>
                   setPrivacyAcknowledged(event.currentTarget.checked)
                 }
