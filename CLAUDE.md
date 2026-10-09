@@ -7,8 +7,8 @@ Medical Bill Reader is a U.S.-focused medical-bill and Explanation of Benefits (
 Current access model:
 
 - Free: up to one analysis per browser per UTC calendar month, subject to abuse controls.
-- Single analysis: $4.99.
-- Subscription: $49 per month for up to 44 analyses per UTC calendar month.
+- Single analysis: the published price remains $4.99, but new paid checkout is temporarily unavailable while payment setup is verified.
+- Preserve server-verified paid access, refund handling, and Stripe-hosted management or cancellation for any real existing subscriber until retirement is approved.
 
 ## Before changing the product
 
@@ -40,7 +40,7 @@ Jason Ramirez may remain publicly identified as founder and author. Describe him
 
 ## Current status
 
-- Production deployment, Stripe access paths, legal pages, technical SEO, schema, and source-backed editorial pages are implemented.
+- Production deployment, legal pages, technical SEO, schema, and source-backed editorial pages are implemented. Current production Stripe account and price mapping are not verified.
 - The current remediation branch tightens entitlement security, privacy boundaries, YMYL wording, accessibility, and release tests.
 - Revenue claims require Stripe or other authoritative evidence. Search or analytics access gaps are unknowns, not proof of zero traffic.
 

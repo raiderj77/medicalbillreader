@@ -35,13 +35,17 @@ describe("sitemap integrity", () => {
 
   it("keeps policy sitemap dates aligned with visible review dates", () => {
     const entries = sitemap();
+    const pricing = entries.find((entry) => entry.url.endsWith("/pricing"));
     const privacy = entries.find((entry) => entry.url.endsWith("/privacy"));
     const consumerHealth = entries.find((entry) =>
       entry.url.endsWith("/consumer-health-data-privacy"),
     );
+    const terms = entries.find((entry) => entry.url.endsWith("/terms"));
 
+    expect(pricing?.lastModified).toEqual(new Date("2026-08-23"));
     expect(privacy?.lastModified).toEqual(new Date("2026-08-17"));
     expect(consumerHealth?.lastModified).toEqual(new Date("2026-08-17"));
+    expect(terms?.lastModified).toEqual(new Date("2026-08-23"));
   });
 
   it("does not manufacture a new legal-page modification date per request", () => {
