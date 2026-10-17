@@ -3,7 +3,7 @@
 ## Product and trust pages
 
 - `/` - Medical Bill Reader analyzer and product overview.
-- `/pricing` - current free, single-analysis, and subscription access.
+- `/pricing` - current free access, the temporarily unavailable new-checkout notice, the published $4.99 single-analysis price, prior-purchase refund terms, and management or cancellation for real existing subscribers.
 - `/methodology` - how the report is generated and what it cannot determine.
 - `/codes-explained` - manually reviewed overview of major billing code systems.
 - `/about` - named founder, qualifications, and limits.

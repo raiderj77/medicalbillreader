@@ -2,11 +2,11 @@
 
 > A direct-to-consumer, AI-assisted document explainer for supported medical bills and insurance Explanations of Benefits (EOBs). It organizes legible, visible information into plain-language sections and questions to verify. It is not a certified audit or medical, legal, insurance, coding, or financial advice.
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-23
 
 ## Main tool
 
-- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month (subject to network abuse controls), a $4.99 single analysis, or a $49 monthly plan with up to 44 analyses per UTC calendar month.
+- [Medical Bill Analyzer](https://medicalbillreader.com/): One free analysis per browser per UTC calendar month, subject to network abuse controls. The published single-analysis price remains $4.99, but new paid checkout is temporarily unavailable while payment setup is verified. Previously verified paid access and existing subscription management remain available under their existing rules.
 - The tool may organize visible codes, charges, adjustments, plan payments, and patient-responsibility fields.
 - It cannot determine fraud, upcoding, unbundling, medical necessity, coverage, legal compliance, or whether a charge is correct from a bill alone.
 
