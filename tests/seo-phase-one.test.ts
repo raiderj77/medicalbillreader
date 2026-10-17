@@ -1,12 +1,13 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import matter from "gray-matter";
 import { describe, expect, it } from "vitest";
-import GuidePage from "@/app/guides/[slug]/page";
+import GuidePage, { generateStaticParams } from "@/app/guides/[slug]/page";
 import GuidesPage from "@/app/guides/page";
 import GlossaryTermPage from "@/app/glossary/[slug]/page";
 import GlossaryPage from "@/app/glossary/page";
+import sitemap from "@/app/sitemap";
 import ArticleCTA from "@/components/ArticleCTA";
 import FAQSection from "@/components/FAQSection";
 import { GLOSSARY_TERMS } from "@/lib/glossary";
@@ -16,34 +17,133 @@ function wordCount(value: string): number {
   return value.match(/[A-Za-z0-9$][A-Za-z0-9'’$-]*/g)?.length ?? 0;
 }
 
-describe("SEO Phase 1 editorial foundations", () => {
-  it("publishes five substantial, question-led Tier 1 guides", () => {
-    const guides = getAllGuides();
-    expect(guides).toHaveLength(5);
+const GUIDES_DIRECTORY = "content/guides";
+const REQUIRED_GUIDE_FRONTMATTER = [
+  "slug",
+  "title",
+  "description",
+  "publishedAt",
+  "reviewedAt",
+  "keywords",
+  "faqs",
+] as const;
 
-    for (const guide of guides) {
-      const raw = readFileSync(`content/guides/${guide.slug}.md`, "utf8");
-      const parsed = matter(raw);
-      const siblingLinks = parsed.content.match(/\]\(\/guides\//g) ?? [];
+function guideFiles() {
+  return readdirSync(GUIDES_DIRECTORY)
+    .filter((filename) => filename.endsWith(".md"))
+    .sort()
+    .map((filename) => ({
+      filename,
+      ...matter(readFileSync(`${GUIDES_DIRECTORY}/${filename}`, "utf8")),
+    }));
+}
+
+function requiredString(
+  data: Record<string, unknown>,
+  key: string,
+  filename: string,
+): string {
+  const value = data[key];
+  expect(typeof value, `${filename}: ${key} must be a string`).toBe("string");
+  if (typeof value !== "string") throw new Error(`${filename}: invalid ${key}`);
+  expect(value.trim().length, `${filename}: ${key} must not be empty`).toBeGreaterThan(0);
+  return value.trim();
+}
+
+describe("SEO Phase 1 editorial foundations", () => {
+  it("discovers and publishes every guide file through the route and sitemap", async () => {
+    const files = guideFiles();
+    const guides = getAllGuides();
+    expect(files.length).toBeGreaterThan(0);
+    const discoveredSlugs = files.map(({ filename, data }) => {
+      for (const key of REQUIRED_GUIDE_FRONTMATTER) {
+        expect(
+          Object.prototype.hasOwnProperty.call(data, key),
+          `${filename}: missing ${key}`,
+        ).toBe(true);
+      }
+
+      const slug = requiredString(data, "slug", filename);
+      const title = requiredString(data, "title", filename);
+      const description = requiredString(data, "description", filename);
+      const publishedAt = requiredString(data, "publishedAt", filename);
+      const reviewedAt = requiredString(data, "reviewedAt", filename);
+      const filenameSlug = filename
+        .replace(/\.md$/, "")
+        .replace(/^\d{4}-\d{2}-\d{2}-/, "");
+
+      expect(slug, filename).toBe(filenameSlug);
+      expect(slug, filename).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+      expect(title, filename).toContain("?");
+      expect(title, filename).toContain("2026");
+      expect(title.length, filename).toBeLessThan(60);
+      expect(description.length, filename).toBeGreaterThanOrEqual(80);
+      expect(publishedAt, filename).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(reviewedAt, filename).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(Number.isNaN(Date.parse(publishedAt)), filename).toBe(false);
+      expect(Number.isNaN(Date.parse(reviewedAt)), filename).toBe(false);
+      expect(Array.isArray(data.keywords), `${filename}: keywords must be an array`).toBe(true);
+      expect((data.keywords as unknown[]).length, filename).toBeGreaterThan(0);
+      for (const keyword of data.keywords as unknown[]) {
+        expect(typeof keyword, `${filename}: keyword must be a string`).toBe("string");
+        expect(String(keyword).trim().length, filename).toBeGreaterThan(0);
+      }
+      expect(Array.isArray(data.faqs), `${filename}: faqs must be an array`).toBe(true);
+      expect((data.faqs as unknown[]).length, filename).toBeGreaterThanOrEqual(3);
+      for (const faq of data.faqs as Array<Record<string, unknown>>) {
+        expect(typeof faq?.question, `${filename}: FAQ question must be a string`).toBe("string");
+        expect(String(faq?.question ?? "").trim().length, filename).toBeGreaterThan(0);
+        expect(typeof faq?.answer, `${filename}: FAQ answer must be a string`).toBe("string");
+        expect(String(faq?.answer ?? "").trim().length, filename).toBeGreaterThan(0);
+      }
+
+      return slug;
+    });
+
+    expect(new Set(discoveredSlugs).size).toBe(discoveredSlugs.length);
+    expect(guides.map((guide) => guide.slug)).toEqual([...discoveredSlugs].sort());
+    expect(generateStaticParams().map(({ slug }) => slug)).toEqual(
+      [...discoveredSlugs].sort(),
+    );
+
+    const guideHub = renderToStaticMarkup(createElement(GuidesPage));
+    const sitemapPaths = new Set(
+      sitemap().map((entry) => new URL(entry.url).pathname),
+    );
+
+    for (const { filename, content, data } of files) {
+      const slug = String(data.slug);
+      const guide = guides.find((candidate) => candidate.slug === slug);
+      if (!guide) throw new Error(`${filename}: guide loader omitted ${slug}`);
+      const siblingLinks = content.match(/\]\(\/guides\//g) ?? [];
 
       expect(guide.title, guide.slug).toContain("?");
       expect(guide.title, guide.slug).toContain("2026");
       expect(guide.title.length, guide.slug).toBeLessThan(60);
       expect(guide.description.length, guide.slug).toBeGreaterThanOrEqual(80);
-      expect(guide.publishedAt, guide.slug).toBe("2026-10-16");
-      expect(guide.reviewedAt, guide.slug).toBe("2026-10-16");
       expect(guide.faqs.length, guide.slug).toBeGreaterThanOrEqual(3);
-      expect(wordCount(parsed.content), guide.slug).toBeGreaterThanOrEqual(1_200);
-      expect(wordCount(parsed.content), guide.slug).toBeLessThanOrEqual(2_500);
-      expect(parsed.content, guide.slug).not.toMatch(/^#\s/m);
-      expect(parsed.content, guide.slug).toContain("## Sources");
-      expect(parsed.content, guide.slug).toMatch(/synthetic|illustrative/i);
-      expect(parsed.content, guide.slug).toContain("](/glossary)");
+      expect(wordCount(content), guide.slug).toBeGreaterThanOrEqual(1_200);
+      expect(wordCount(content), guide.slug).toBeLessThanOrEqual(2_500);
+      expect(content, guide.slug).not.toMatch(/^#\s/m);
+      expect(content, guide.slug).toContain("## Sources");
+      expect(content, guide.slug).toMatch(/synthetic|illustrative/i);
+      expect(content, guide.slug).toContain("](/glossary)");
       expect(siblingLinks.length, guide.slug).toBeGreaterThanOrEqual(2);
-      expect(parsed.content, guide.slug).not.toMatch(/20[–-]30%|30[–-]50%/);
-      expect(parsed.content, guide.slug).not.toMatch(/scripts? that (?:actually )?work/i);
-      expect(parsed.content, guide.slug).not.toMatch(
+      expect(content, guide.slug).not.toMatch(/20[–-]30%|30[–-]50%/);
+      expect(content, guide.slug).not.toMatch(/scripts? that (?:actually )?work/i);
+      expect(content, guide.slug).not.toMatch(
         /(?:is|have|has) (?:a )?federal right to (?:an|a) itemized bill/i,
+      );
+
+      expect(guideHub, guide.slug).toContain(`href="/guides/${guide.slug}"`);
+      expect(sitemapPaths, guide.slug).toContain(`/guides/${guide.slug}`);
+      const page = await GuidePage({
+        params: Promise.resolve({ slug: guide.slug }),
+      });
+      const html = renderToStaticMarkup(page);
+      expect(html, guide.slug).toContain("<h1");
+      expect(html, guide.slug).toContain(
+        `https://medicalbillreader.com/guides/${guide.slug}`,
       );
     }
   });

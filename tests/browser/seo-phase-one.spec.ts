@@ -1,11 +1,52 @@
+import { readdirSync, readFileSync } from "node:fs";
+import matter from "gray-matter";
 import { expect, test } from "@playwright/test";
 
-test("guide hub and generated resources are discoverable", async ({ page }) => {
+function guidesFromFiles() {
+  return readdirSync("content/guides")
+    .filter((filename) => filename.endsWith(".md"))
+    .sort()
+    .map((filename) => {
+      const { data } = matter(
+        readFileSync(`content/guides/${filename}`, "utf8"),
+      );
+      if (typeof data.slug !== "string" || typeof data.title !== "string") {
+        throw new Error(`${filename}: missing slug or title`);
+      }
+      return { slug: data.slug, title: data.title };
+    });
+}
+
+test("guide hub, routes, and sitemap discover every guide file", async ({ page }) => {
+  const guides = guidesFromFiles();
+  expect(guides.length).toBeGreaterThan(0);
   await page.goto("/guides");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Medical billing guides for 2026",
   );
-  await expect(page.locator('a[href^="/guides/"]')).toHaveCount(5);
+  const hubHrefs = await page
+    .locator('section[aria-labelledby="guide-list-heading"] a[href^="/guides/"]')
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+  expect(hubHrefs.sort()).toEqual(
+    guides.map(({ slug }) => `/guides/${slug}`).sort(),
+  );
+
+  for (const guide of guides) {
+    const response = await page.goto(`/guides/${guide.slug}`);
+    expect(response?.status(), guide.slug).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 }), guide.slug).toHaveText(
+      guide.title,
+    );
+  }
+
+  const sitemapResponse = await page.request.get("/sitemap.xml");
+  expect(sitemapResponse.status()).toBe(200);
+  const sitemapXml = await sitemapResponse.text();
+  for (const guide of guides) {
+    expect(sitemapXml, guide.slug).toContain(
+      `<loc>https://medicalbillreader.com/guides/${guide.slug}</loc>`,
+    );
+  }
 
   await page.goto("/glossary");
   await expect(page.locator('a[href^="/glossary/"]')).toHaveCount(12);
