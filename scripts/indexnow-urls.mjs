@@ -3,6 +3,30 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const SITE_ORIGIN = "https://medicalbillreader.com";
+const GUIDE_SLUGS = [
+  "common-medical-bill-errors",
+  "good-faith-estimate-400-rule",
+  "how-to-dispute-a-medical-bill",
+  "how-to-negotiate-a-hospital-bill",
+  "how-to-read-an-eob",
+];
+const GLOSSARY_SLUGS = [
+  "allowed-amount",
+  "balance-billing",
+  "chargemaster",
+  "coinsurance",
+  "copay",
+  "deductible",
+  "explanation-of-benefits",
+  "good-faith-estimate",
+  "itemized-bill",
+  "out-of-pocket-maximum",
+  "prior-authorization",
+  "surprise-billing",
+];
+
+const publicUrls = (prefix, slugs) =>
+  slugs.map((slug) => `${SITE_ORIGIN}/${prefix}/${slug}`);
 
 export function pagePathToUrl(filePath) {
   const normalized = filePath.replaceAll("\\", "/");
@@ -25,9 +49,13 @@ export function pagePathToUrl(filePath) {
 
 export function contentPathToUrl(filePath) {
   const normalized = filePath.replaceAll("\\", "/");
-  if (!normalized.startsWith("content/blog/") || !/\.mdx?$/.test(normalized)) return null;
-  const slug = path.posix.basename(normalized).replace(/\.mdx?$/, "");
-  return slug ? `${SITE_ORIGIN}/blog/${slug}` : null;
+  const match = normalized.match(/^content\/(blog|guides)\/([^/]+)\.mdx?$/);
+  if (!match) return null;
+  const section = match[1];
+  const slug = path.posix
+    .basename(match[2])
+    .replace(/^\d{4}-\d{2}-\d{2}-/, "");
+  return slug ? `${SITE_ORIGIN}/${section}/${slug}` : null;
 }
 
 export function pathsToIndexNowUrls(filePaths) {
@@ -38,6 +66,14 @@ export function pathsToIndexNowUrls(filePaths) {
     if (url) urls.add(url);
     if (trimmed.startsWith("content/blog/") || trimmed === "src/app/blog/page.tsx") {
       urls.add(`${SITE_ORIGIN}/blog`);
+    }
+    if (trimmed.startsWith("content/guides/") || trimmed.startsWith("src/app/guides/") || trimmed === "src/lib/guides.ts") {
+      urls.add(`${SITE_ORIGIN}/guides`);
+      publicUrls("guides", GUIDE_SLUGS).forEach((guideUrl) => urls.add(guideUrl));
+    }
+    if (trimmed.startsWith("src/app/glossary/") || trimmed === "src/lib/glossary.ts") {
+      urls.add(`${SITE_ORIGIN}/glossary`);
+      publicUrls("glossary", GLOSSARY_SLUGS).forEach((termUrl) => urls.add(termUrl));
     }
   }
   return [...urls];

@@ -44,11 +44,11 @@ describe("sample medical bill report acquisition page", () => {
 
   it("keeps rendered Article and Breadcrumb schema aligned with the page", () => {
     expect(renderedPage).toContain(
-      `>Sample Medical Bill Report: Bill and EOB Explained</h1>`,
+      `>${SAMPLE_MEDICAL_BILL_REPORT_GUIDE.title}</h1>`,
     );
     expect(renderedPage).toContain('"@type":"Article"');
     expect(renderedPage).toContain(
-      '"headline":"Sample Medical Bill Report: Bill and EOB Explained"',
+      `"headline":"${SAMPLE_MEDICAL_BILL_REPORT_GUIDE.title}"`,
     );
     expect(renderedPage).toContain('"@type":"BreadcrumbList"');
     expect(renderedPage).toContain(

@@ -30,33 +30,53 @@ describe("legacy Search Console URL redirects", () => {
     expect(redirects).toEqual(
       expect.arrayContaining([
         {
+          source: "/blog",
+          destination: "/guides",
+          permanent: true,
+        },
+        {
+          source: "/blog/how-to-read-an-explanation-of-benefits-eob",
+          destination: "/guides/how-to-read-an-eob",
+          permanent: true,
+        },
+        {
+          source: "/blog/common-medical-billing-errors-and-how-to-spot-them",
+          destination: "/guides/common-medical-bill-errors",
+          permanent: true,
+        },
+        {
+          source: "/blog/how-to-dispute-a-medical-bill",
+          destination: "/guides/how-to-dispute-a-medical-bill",
+          permanent: true,
+        },
+        {
           source: "/blog/medical-bill-payment-plans",
-          destination: "/blog",
+          destination: "/guides/how-to-negotiate-a-hospital-bill",
           permanent: true,
         },
         {
           source: "/blog/medical-debt-collections-rights",
-          destination: "/blog",
+          destination: "/guides/how-to-dispute-a-medical-bill",
           permanent: true,
         },
         {
           source: "/blog/medical-bill-statute-of-limitations",
-          destination: "/blog",
+          destination: "/guides/how-to-dispute-a-medical-bill",
           permanent: true,
         },
         {
           source: "/blog/medical-bill-after-insurance",
-          destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+          destination: "/guides/how-to-read-an-eob",
           permanent: true,
         },
         {
           source: "/blog/health-insurance-deductible-explained",
-          destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+          destination: "/guides/how-to-read-an-eob",
           permanent: true,
         },
         {
           source: "/blog/how-to-read-medical-bill",
-          destination: "/blog/how-to-read-an-explanation-of-benefits-eob",
+          destination: "/guides/how-to-read-an-eob",
           permanent: true,
         },
       ]),

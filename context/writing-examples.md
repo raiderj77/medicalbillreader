@@ -2,9 +2,9 @@
 
 Use the current reviewed guides as structural references, not as proof of performance:
 
-- `/blog/how-to-dispute-a-medical-bill`
-- `/blog/how-to-read-an-explanation-of-benefits-eob`
-- `/blog/common-medical-billing-errors-and-how-to-spot-them`
+- `/guides/how-to-dispute-a-medical-bill`
+- `/guides/how-to-read-an-eob`
+- `/guides/common-medical-bill-errors`
 
 Good patterns: qualified direct answers, current primary sources, visible review dates, explicit author limits, document-versus-general-rule separation, and next steps that direct readers to their provider, plan, notice, regulator, or qualified professional.
 

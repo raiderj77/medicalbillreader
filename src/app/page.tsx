@@ -7,9 +7,9 @@ import HomepageGuideCluster from "@/components/HomepageGuideCluster";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
-  title: "Medical Bill Reader — Understand Your Bill",
+  title: "How Can AI Help Explain a Medical Bill? (2026)",
   description:
-    "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+    "Upload a supported medical bill or EOB for an AI-generated plain-language report of legible fields and questions to verify.",
   keywords:
     "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
   alternates: {
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
   },
   robots: "index, follow, max-snippet:-1",
   openGraph: {
-    title: "Medical Bill Reader — Understand Your Bill",
+    title: "How Can AI Help Explain a Medical Bill? (2026)",
     description:
-      "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+      "Upload a supported medical bill or EOB for an AI-generated plain-language report of legible fields and questions to verify.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -109,7 +109,7 @@ export default function Home() {
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <Link prefetch={false}
-              href="/blog"
+              href="/guides"
               className="inline-flex min-h-11 items-center px-1 text-sm font-semibold text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
             >
               Guides

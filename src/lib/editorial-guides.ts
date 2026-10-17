@@ -1,6 +1,6 @@
-import { getAllMarkdownPosts } from "@/lib/blog-markdown";
+import { getAllGuides } from "@/lib/guides";
 
-export type EditorialGuideSource = "markdown" | "standalone";
+export type EditorialGuideSource = "guide" | "markdown" | "standalone";
 
 export type EditorialGuide = {
   slug: string;
@@ -28,7 +28,7 @@ export const DISPUTE_MEDICAL_BILL_GUIDE = {
 export const SAMPLE_MEDICAL_BILL_REPORT_GUIDE = {
   slug: "sample-medical-bill-report",
   href: "/sample-medical-bill-report",
-  title: "Sample Medical Bill Report: Bill and EOB Explained",
+  title: "What Does a Sample Bill Report Show? (2026)",
   description:
     "Walk through a fully fabricated bill and EOB, see how the amounts relate, and review questions to verify without uploading a document.",
   publishedAt: "2026-08-18",
@@ -39,24 +39,23 @@ export const SAMPLE_MEDICAL_BILL_REPORT_GUIDE = {
 
 const standaloneGuides: readonly EditorialGuide[] = [
   SAMPLE_MEDICAL_BILL_REPORT_GUIDE,
-  DISPUTE_MEDICAL_BILL_GUIDE,
 ];
 
 export function getAllEditorialGuides(): EditorialGuide[] {
-  const markdownGuides = getAllMarkdownPosts().map(
-    (post): EditorialGuide => ({
-      slug: post.slug,
-      href: `/blog/${post.slug}`,
-      title: post.title,
-      description: post.description,
-      publishedAt: post.date,
-      lastReviewedAt: post.modified,
-      source: "markdown",
-      schemaType: "BlogPosting",
+  const tierOneGuides = getAllGuides().map(
+    (guide): EditorialGuide => ({
+      slug: guide.slug,
+      href: `/guides/${guide.slug}`,
+      title: guide.title,
+      description: guide.description,
+      publishedAt: guide.publishedAt,
+      lastReviewedAt: guide.reviewedAt,
+      source: "guide",
+      schemaType: "Article",
     }),
   );
 
-  const guides = [...markdownGuides, ...standaloneGuides];
+  const guides = [...tierOneGuides, ...standaloneGuides];
   const uniqueSlugs = new Set(guides.map((guide) => guide.slug));
 
   if (uniqueSlugs.size !== guides.length) {

@@ -7,7 +7,12 @@ describe("sitemap integrity", () => {
     const urls = entries.map((entry) => entry.url);
 
     expect(urls).toContain(
-      "https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill",
+      "https://medicalbillreader.com/guides/how-to-dispute-a-medical-bill",
+    );
+    expect(urls).toContain("https://medicalbillreader.com/guides");
+    expect(urls).toContain("https://medicalbillreader.com/glossary");
+    expect(urls).toContain(
+      "https://medicalbillreader.com/glossary/explanation-of-benefits",
     );
     expect(urls).toContain(
       "https://medicalbillreader.com/sample-medical-bill-report",
@@ -16,6 +21,8 @@ describe("sitemap integrity", () => {
       "https://medicalbillreader.com/consumer-health-data-privacy",
     );
     expect(urls).toContain("https://medicalbillreader.com/editorial-policy");
+    expect(urls).not.toContain("https://medicalbillreader.com/blog");
+    expect(urls.some((url) => url.includes("/blog/"))).toBe(false);
     expect(urls).not.toContain("https://medicalbillreader.com/stats");
     expect(new Set(urls).size).toBe(urls.length);
   });
@@ -23,13 +30,13 @@ describe("sitemap integrity", () => {
   it("uses the shared review dates for acquisition resources", () => {
     const entries = sitemap();
     const disputeGuide = entries.find((entry) =>
-      entry.url.endsWith("/blog/how-to-dispute-a-medical-bill"),
+      entry.url.endsWith("/guides/how-to-dispute-a-medical-bill"),
     );
     const sampleReport = entries.find((entry) =>
       entry.url.endsWith("/sample-medical-bill-report"),
     );
 
-    expect(disputeGuide?.lastModified).toEqual(new Date("2026-08-02"));
+    expect(disputeGuide?.lastModified).toEqual(new Date("2026-10-16"));
     expect(sampleReport?.lastModified).toEqual(new Date("2026-08-18"));
   });
 

@@ -9,17 +9,19 @@ import RelatedGuides from "@/components/RelatedGuides";
 import { getAllEditorialGuides } from "@/lib/editorial-guides";
 
 describe("editorial guide discovery", () => {
-  it("keeps markdown and standalone guides in one typed registry", () => {
+  it("keeps Tier 1 and standalone guides in one typed registry", () => {
     const guides = getAllEditorialGuides();
 
     expect(guides.map((guide) => guide.slug)).toEqual([
-      "sample-medical-bill-report",
-      "common-medical-billing-errors-and-how-to-spot-them",
-      "how-to-read-an-explanation-of-benefits-eob",
+      "common-medical-bill-errors",
+      "good-faith-estimate-400-rule",
       "how-to-dispute-a-medical-bill",
+      "how-to-negotiate-a-hospital-bill",
+      "how-to-read-an-eob",
+      "sample-medical-bill-report",
     ]);
-    expect(guides.filter((guide) => guide.source === "markdown")).toHaveLength(2);
-    expect(guides.filter((guide) => guide.source === "standalone")).toHaveLength(2);
+    expect(guides.filter((guide) => guide.source === "guide")).toHaveLength(5);
+    expect(guides.filter((guide) => guide.source === "standalone")).toHaveLength(1);
   });
 
   it("renders an inbound blog-index link for every editorial resource in the sitemap", () => {
@@ -36,8 +38,7 @@ describe("editorial guide discovery", () => {
       expect(html).toContain(`href="${path}"`);
     }
     expect(html).toContain(`"numberOfItems":${editorialPaths.length}`);
-    expect(html).toContain("August 18, 2026");
-    expect(html).not.toContain("August 17, 2026");
+    expect(html).toContain("October 16, 2026");
   });
 
   it("renders every guide in the contextual homepage cluster", () => {
@@ -47,27 +48,24 @@ describe("editorial guide discovery", () => {
       expect(html).toContain(`href="${guide.href}"`);
       expect(html).toContain(guide.title);
     }
-    expect(html).toContain('href="/blog"');
+    expect(html).toContain('href="/guides"');
   });
 
   it("renders other registry guides without linking the current guide", () => {
-    const currentSlug = "how-to-read-an-explanation-of-benefits-eob";
+    const currentSlug = "how-to-read-an-eob";
     const html = renderToStaticMarkup(
       createElement(RelatedGuides, { currentSlug }),
     );
 
-    expect(html).not.toContain(`href="/blog/${currentSlug}"`);
-    expect(html).toContain('href="/blog/how-to-dispute-a-medical-bill"');
-    expect(html).toContain(
-      'href="/blog/common-medical-billing-errors-and-how-to-spot-them"',
-    );
-    expect(html).toContain('href="/sample-medical-bill-report"');
+    expect(html).not.toContain(`href="/guides/${currentSlug}"`);
+    expect(html).toContain('href="/guides/how-to-dispute-a-medical-bill"');
+    expect(html).toContain('href="/guides/common-medical-bill-errors"');
   });
 
   it("keeps Guides in primary navigation and the guide cluster on the homepage", () => {
     const homepage = readFileSync("src/app/page.tsx", "utf8");
 
-    expect(homepage).toContain('href="/blog"');
+    expect(homepage).toContain('href="/guides"');
     expect(homepage).toContain('href="/sample-medical-bill-report"');
     expect(homepage).toContain("See a synthetic sample report");
     expect(homepage).toContain("<HomepageGuideCluster />");

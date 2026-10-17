@@ -11,8 +11,12 @@
 
 ## Guides
 
-- `/blog/how-to-dispute-a-medical-bill` - cautious, source-backed dispute and appeal preparation.
-- `/blog/how-to-read-an-explanation-of-benefits-eob` - EOB fields and verification steps.
-- `/blog/common-medical-billing-errors-and-how-to-spot-them` - questions to investigate without declaring an error.
+- `/guides` - source-backed medical-billing guide hub.
+- `/guides/how-to-dispute-a-medical-bill` - cautious dispute and appeal preparation.
+- `/guides/how-to-read-an-eob` - EOB fields and verification steps.
+- `/guides/common-medical-bill-errors` - questions to investigate without declaring an error.
+- `/guides/good-faith-estimate-400-rule` - federal estimate-dispute eligibility and deadlines.
+- `/guides/how-to-negotiate-a-hospital-bill` - financial-assistance and payment-option questions.
+- `/glossary` - reviewed billing-term definitions.
 
 Add links only when they help the reader continue the same task. Do not create or link scaled thin code pages.
