@@ -97,6 +97,14 @@ describe("BillAnalyzer entitlement bootstrap", () => {
   it("keeps the component wired to the paid-first fallback helper", () => {
     expect(analyzer).toContain("requestAnalysisWithAccessFallback(");
     expect(analyzer).toContain("if (freeAccessError)");
+    expect(analyzer).toContain('data.supportPath === "/contact"');
+    expect(analyzer).toContain("justPaidRef.current = false");
+    expect(analyzer).toContain("setShowCheckoutReturn(false)");
+    expect(analyzer).toContain("disabled={loading || !preview || !privacyAcknowledged || needsSupport}");
+    expect(analyzer).toContain("Contact support");
+    expect(analyzer).not.toContain(
+      "Your paid credit was not used. Please wait two minutes and try again.",
+    );
     expect(analyzer).not.toContain("if (!justPaidRef.current) {");
   });
 });

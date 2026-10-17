@@ -11,6 +11,7 @@ export type AnalysisRequestPayload = {
 type AnalysisResponseData = {
   error?: string;
   result?: string;
+  supportPath?: "/contact";
 };
 
 type AnalysisAccessResult = {

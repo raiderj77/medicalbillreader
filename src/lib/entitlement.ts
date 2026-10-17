@@ -27,7 +27,9 @@ import {
 const RESERVE_SCRIPT = `redis.call('ZREMRANGEBYSCORE',KEYS[2],'-inf',ARGV[3]) local used=tonumber(redis.call('HGET',KEYS[1],'used') or '0') local reserved=redis.call('ZCARD',KEYS[2]) if used+reserved>=tonumber(ARGV[1]) then return 0 end redis.call('ZADD',KEYS[2],ARGV[4],ARGV[2]) redis.call('HSETNX',KEYS[1],'used',0) if tonumber(ARGV[5])>0 then redis.call('EXPIRE',KEYS[1],ARGV[5]) end redis.call('EXPIRE',KEYS[2],600) return 1`;
 const COMMIT_SCRIPT = `if redis.call('ZREM',KEYS[2],ARGV[1])==0 then return 0 end redis.call('HINCRBY',KEYS[1],'used',1) return 1`;
 const RELEASE_SCRIPT = `return redis.call('ZREM',KEYS[2],ARGV[1])`;
+const RECORD_PAID_PROVIDER_ATTEMPT_SCRIPT = `local expires=redis.call('ZSCORE',KEYS[2],ARGV[1]) if not expires or tonumber(expires)<=tonumber(ARGV[2]) then redis.call('ZREM',KEYS[2],ARGV[1]) return -1 end local attempts=tonumber(redis.call('HGET',KEYS[1],'provider_attempts') or '0') if attempts>=tonumber(ARGV[3]) then return 0 end return redis.call('HINCRBY',KEYS[1],'provider_attempts',1)`;
 const PAID_REPLAY_TTL_SECONDS = 60 * 60 * 24 * 370;
+export const PAID_PROVIDER_ATTEMPT_LIMIT = 3;
 
 export class EntitlementTemporarilyUnavailableError extends Error {
   constructor() {
@@ -68,17 +70,20 @@ async function hasAvailablePerUsePayment(
   if (
     typeof latestCharge.id !== "string" ||
     !latestCharge.id.startsWith("ch_") ||
-    typeof latestCharge.refunded !== "boolean"
+    typeof latestCharge.refunded !== "boolean" ||
+    typeof latestCharge.disputed !== "boolean" ||
+    !Number.isSafeInteger(latestCharge.amount_refunded) ||
+    latestCharge.amount_refunded < 0
   ) {
     throw new EntitlementTemporarilyUnavailableError();
   }
+  if (latestCharge.disputed) return false;
+  if (latestCharge.amount_refunded > 0) return false;
 
   // Derive access from current Refund objects rather than webhook delivery or
-  // mutable metadata. A completed full refund revokes access; a full refund
-  // still in flight freezes access; terminal failures restore access only
+  // mutable metadata. Any completed refund revokes access; any refund still
+  // in flight freezes access; terminal failures restore access only
   // after the Charge also reports that it is not fully refunded.
-  let successfullyRefunded = 0;
-  let inFlightRefund = 0;
   for await (const refund of stripe.refunds.list({
     charge: latestCharge.id,
     limit: 100,
@@ -86,17 +91,12 @@ async function hasAvailablePerUsePayment(
     if (!Number.isSafeInteger(refund.amount) || refund.amount <= 0) {
       throw new EntitlementTemporarilyUnavailableError();
     }
-    if (refund.status === "succeeded") {
-      successfullyRefunded += refund.amount;
-      if (successfullyRefunded >= PRICES.perUse.amount) return false;
-      continue;
-    }
+    if (refund.status === "succeeded") return false;
     if (
       refund.status === "pending" ||
       refund.status === "requires_action"
     ) {
-      inFlightRefund += refund.amount;
-      continue;
+      throw new EntitlementTemporarilyUnavailableError();
     }
     if (
       refund.status !== "failed" &&
@@ -105,13 +105,7 @@ async function hasAvailablePerUsePayment(
       throw new EntitlementTemporarilyUnavailableError();
     }
   }
-  if (successfullyRefunded + inFlightRefund >= PRICES.perUse.amount) {
-    throw new EntitlementTemporarilyUnavailableError();
-  }
-  if (
-    latestCharge.refunded &&
-    successfullyRefunded < PRICES.perUse.amount
-  ) {
+  if (latestCharge.refunded) {
     // The aggregate Charge and its current Refund objects disagree. Do not
     // grant or permanently revoke access until Stripe returns a coherent view.
     throw new EntitlementTemporarilyUnavailableError();
@@ -244,6 +238,41 @@ export async function releaseEntitlement(
   ]);
 }
 
+export type PaidProviderAttemptClaim =
+  | { status: "recorded"; attempt: number }
+  | { status: "exhausted" };
+
+// Atomically records an outbound analysis attempt against the paid credit's
+// existing pseudonymous replay key. The log deliberately contains only the
+// per-credit ordinal and limit, never the key, Stripe identifier, or content.
+export async function claimPaidProviderAttempt(
+  reservation: EntitlementReservation,
+): Promise<PaidProviderAttemptClaim> {
+  if (reservation.kind !== "paid") {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  const attempt = await redisCommand<number>([
+    "EVAL",
+    RECORD_PAID_PROVIDER_ATTEMPT_SCRIPT,
+    2,
+    reservation.key,
+    `${reservation.key}:reservations`,
+    reservation.reservationId,
+    Date.now(),
+    PAID_PROVIDER_ATTEMPT_LIMIT,
+  ]);
+  if (attempt === 0) return { status: "exhausted" };
+  if (attempt < 1 || attempt > PAID_PROVIDER_ATTEMPT_LIMIT) {
+    throw new EntitlementTemporarilyUnavailableError();
+  }
+  safeSecurityLog(JSON.stringify({
+    event: "paid_credit_provider_attempt",
+    attempt,
+    limit: PAID_PROVIDER_ATTEMPT_LIMIT,
+  }));
+  return { status: "recorded", attempt };
+}
+
 // Checks that a pay-per-use Checkout Session was actually paid and has not
 // already been consumed, WITHOUT consuming it. Called before we spend any
 // Anthropic tokens. Stripe's own metadata is the only state we store, there
@@ -266,9 +295,9 @@ export async function checkPerUseSessionAvailable(
   }
 }
 
-// Marks a pay-per-use session as consumed. Only call this after an analysis
-// has actually succeeded, so a transient failure (e.g. the AI call erroring
-// out) does not burn the customer's paid credit.
+// Marks a pay-per-use session as consumed after a complete analysis or after
+// its third lifetime outbound analysis attempt. Earlier failed attempts retain
+// the credit, while the bounded final attempt fails closed into support review.
 export async function consumePerUseSession(sessionId: string): Promise<void> {
   if (!isStripeId(sessionId, "cs_")) return;
   const stripe = getStripe();

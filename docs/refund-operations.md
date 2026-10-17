@@ -1,6 +1,6 @@
 # Refund operations
 
-Last reviewed: 2026-08-21
+Last reviewed: 2026-10-16
 
 Stripe is the billing source of truth. Refunds require explicit owner approval
 and must be performed in Stripe. Never copy payment details, customer records,
@@ -10,11 +10,11 @@ or support messages.
 ## Pay-per-use refunds
 
 The application re-reads the current Stripe Charge and Refund objects at
-checkout confirmation and before every paid analysis. A successful full refund
-revokes an unused credit. A full refund that is pending or requires action
-temporarily freezes the credit. A partial refund does not revoke the indivisible
-credit, and a terminal failed or cancelled refund restores it after Stripe's
-Charge state agrees.
+checkout confirmation and before every paid analysis. Any successful refund,
+full or partial, revokes an unused credit. Any refund that is pending or
+requires action, full or partial, immediately freezes the credit. A disputed
+charge is ineligible. A terminal failed or cancelled refund restores the credit
+only after Stripe's Charge state agrees.
 
 The signed Stripe webhook validates and acknowledges events but does not mutate
 entitlement state. This keeps duplicate and out-of-order refund events from
