@@ -21,10 +21,11 @@ test("expands registry changes to every dynamic SEO URL", () => {
     "src/lib/cpt-codes.ts",
     "content/guides/how-to-read-an-eob.md",
   ]);
+  const urlSet = new Set(urls);
 
-  assert.ok(urls.includes("https://medicalbillreader.com/guides/how-to-read-an-eob"));
-  assert.ok(urls.includes("https://medicalbillreader.com/glossary/explanation-of-benefits"));
-  assert.ok(urls.includes("https://medicalbillreader.com/codes/cpt/99213"));
+  assert.ok(urlSet.has("https://medicalbillreader.com/guides/how-to-read-an-eob"));
+  assert.ok(urlSet.has("https://medicalbillreader.com/glossary/explanation-of-benefits"));
+  assert.ok(urlSet.has("https://medicalbillreader.com/codes/cpt/99213"));
 });
 
 test("excludes API routes and dynamic route templates", () => {

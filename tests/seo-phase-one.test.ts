@@ -143,8 +143,16 @@ An EOB can show an allowed amount and a deductible. A second EOB stays plain.
     expect(entry.title.length).toBeLessThan(60);
     expect(entry.plainEnglishMeaning).toMatch(/does not prove/i);
     expect(entry.comparisonSteps.join(" ")).toMatch(/not a universal/i);
-    expect(entry.sources.some((source) => source.href.includes("ama-assn.org"))).toBe(true);
-    expect(entry.sources.some((source) => source.href.includes("cms.gov"))).toBe(true);
+    expect(
+      entry.sources.some(
+        (source) => new URL(source.href).hostname === "www.ama-assn.org",
+      ),
+    ).toBe(true);
+    expect(
+      entry.sources.some(
+        (source) => new URL(source.href).hostname === "www.cms.gov",
+      ),
+    ).toBe(true);
     expect(JSON.stringify(entry)).not.toMatch(/office or other outpatient visit/i);
     expect(readFileSync("src/app/codes-explained/page.tsx", "utf8")).not.toMatch(
       /office or other outpatient visit/i,
