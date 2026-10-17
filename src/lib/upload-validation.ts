@@ -1,3 +1,4 @@
+import { MAX_IMAGES } from "./analysis-cost";
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const MAX_REQUEST_BODY_BYTES = 14 * 1024 * 1024;
 export const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"] as const;
@@ -19,6 +20,9 @@ function hasMagic(bytes: Buffer, type: AllowedFileType): boolean {
 }
 export function validateUpload(payload: unknown): { mediaType: AllowedFileType; data: string } {
   if (!payload || typeof payload !== "object") throw new UploadValidationError("Upload request is malformed.");
+  const images = (payload as Record<string, unknown>).images;
+  if (Array.isArray(images) && images.length > MAX_IMAGES) throw new UploadValidationError("Too many images. Try splitting the document into smaller uploads (at most 10 images).");
+  // The existing upload flow accepts one photo per request; no multi-photo API is added.
   const { image, fileType, processingAcknowledged } = payload as Record<string, unknown>;
   if (processingAcknowledged !== true) throw new UploadValidationError("You must acknowledge the document processing notice before analysis.");
   if (typeof image !== "string" || typeof fileType !== "string") throw new UploadValidationError("A file and file type are required.");

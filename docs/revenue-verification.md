@@ -1,17 +1,21 @@
 # Revenue verification runbook
 
-Last reviewed: 2026-08-21
+Last source review: 2026-10-16 (no current production configuration check)
 
 ## Production configuration audit
 
-The Vercel production project contains the existing Anthropic, Redis, entitlement, and Stripe variable names. As of July 12, 2026, all required revenue variable names are present and encrypted:
+Current required revenue configuration names follow. Their current production presence and values have not been verified:
 
+- `STRIPE_SECRET_KEY`
+- `ENABLE_SINGLE_ANALYSIS` (default false)
+- `ENABLE_NEW_SUBSCRIPTIONS` (permanently disabled)
+- `COST_ALERT_THRESHOLD_USD` (default 1.00)
 - `STRIPE_PRICE_PER_USE`
 - `STRIPE_PRICE_MONTHLY`
 - `STRIPE_WEBHOOK_SECRET`
 - `NEXT_PUBLIC_SITE_URL`
 
-The variable names were audited without printing their secret values. The July
+Historical variable names were audited without printing their secret values. The new flags and cost threshold have not been checked in production. The July
 12, 2026 live Checkout check documented below confirmed that the monthly mapping
 then resolved to the intended active product and amount; this August review did
 not reverify external configuration.
@@ -29,7 +33,7 @@ No live-mode Stripe value or production Vercel variable was changed.
 
 ## Verified automatically
 
-- checkout accepts only the two server-configured Stripe price identifiers
+- new checkout accepts only the configured single-analysis price when enabled; new subscriptions are permanently rejected
 - success and cancellation URLs cannot be replaced with a caller-supplied origin
 - unpaid, expired, unrelated, and refunded sessions do not authorize analysis
 - checkout return cookies are Secure and HttpOnly and are created only after Stripe verification
@@ -107,3 +111,5 @@ Medical Bill Reader's revenue-verification milestone is complete:
 - revenue events are not forwarded to Google Analytics; use Stripe records for purchase, subscription, cancellation, and refund verification
 
 Third-party analytics is disabled for the strict-YMYL release. Do not infer traffic or conversion counts from an unavailable analytics dashboard, and do not re-enable analytics or forward sensitive funnel events without a new privacy review and regression tests. Revenue claims require current Stripe or other authoritative transaction evidence.
+
+New purchase controls and local input preflight supersede the historical launch status above. Professional-review sign-off is backlog; no such review is claimed. Usage and anomaly events use server error logs; external alert delivery is unverified. ENABLE_SINGLE_ANALYSIS stops new purchases only, preserving free allowance, existing credits and legacy subscribers.

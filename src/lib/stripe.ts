@@ -50,6 +50,7 @@ export async function verifiedStripePriceId(
       : price.recurring?.interval === "month" &&
         price.recurring.interval_count === 1;
   if (
+    (process.env.NODE_ENV === "production" && price.livemode !== true) ||
     !price.active ||
     price.unit_amount !== expected.amount ||
     price.currency !== expected.currency ||

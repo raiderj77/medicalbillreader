@@ -1,7 +1,7 @@
+import { singleAnalysisEnabled, newSubscriptionsEnabled } from "@/lib/purchase-policy";
 import { NextRequest, NextResponse } from "next/server";
 import {
   getStripe,
-  SUBSCRIPTION_MONTHLY_CAP,
   verifiedStripePriceId,
 } from "@/lib/stripe";
 import { clientIp, safeSecurityLog } from "@/lib/security";
@@ -43,9 +43,6 @@ export async function POST(request: NextRequest) {
         429,
       );
     }
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return json({ error: "Stripe is not configured." }, 500);
-    }
 
     const declaredLength = Number(request.headers.get("content-length") || 0);
     if (declaredLength > MAX_CHECKOUT_BODY_BYTES) {
@@ -68,6 +65,15 @@ export async function POST(request: NextRequest) {
       return json({ error: "Invalid price type." }, 400);
     }
 
+    if (priceType === "subscription" && !newSubscriptionsEnabled()) {
+      return json({ error: "New monthly subscriptions are no longer available. Existing subscribers can still manage billing." }, 403);
+    }
+    if (priceType === "per-use" && !singleAnalysisEnabled()) {
+      return json({ error: "Single analysis purchases are not available yet. Your free allowance is unchanged." }, 403);
+    }
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return json({ error: "Stripe is not configured." }, 500);
+    }
     const origin = trustedSiteOrigin();
     const currentBinding = browserBindingFromRequest(request);
     const issuedBinding = currentBinding ? null : createBrowserBinding();
@@ -110,38 +116,7 @@ export async function POST(request: NextRequest) {
       return response;
     }
 
-    const session = await stripe.checkout.sessions.create({
-        mode: "subscription",
-        payment_method_types: ["card"],
-        line_items: [
-          {
-            price: await verifiedStripePriceId("subscription"),
-            quantity: 1,
-          },
-        ],
-        success_url: successUrl,
-        cancel_url: `${origin}/pricing?payment=cancelled`,
-        metadata: {
-          mbr_entitlement: "subscription",
-          mbr_checkout_nonce: nonceHash,
-        },
-        subscription_data: {
-          metadata: {
-            mbr_entitlement: "subscription",
-            monthly_cap: String(SUBSCRIPTION_MONTHLY_CAP),
-          },
-        },
-    });
-
-    const response = json({ url: session.url });
-    if (issuedBinding) {
-      response.cookies.set(BROWSER_BINDING_COOKIE, issuedBinding.cookieValue, {
-        ...ENTITLEMENT_COOKIE_OPTIONS,
-        maxAge: SUBSCRIPTION_COOKIE_MAX_AGE,
-      });
-    }
-    checkoutNonce = null;
-    return response;
+    return json({ error: "New monthly subscriptions are no longer available." }, 403);
   } catch {
     if (checkoutNonce) {
       try {

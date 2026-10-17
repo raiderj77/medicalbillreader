@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const pricing = readFileSync("src/app/pricing/page.tsx", "utf8");
+const pricing = readFileSync("src/components/PricingClient.tsx", "utf8");
 const terms = readFileSync("src/app/terms/page.tsx", "utf8");
 const llmsFull = readFileSync("public/llms-full.txt", "utf8");
 
@@ -11,16 +11,14 @@ describe("pricing evidence and checkout handoff", () => {
   });
 
   it("explains the Stripe return path for each paid option", () => {
-    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(2);
+    expect(pricing.match(/Secure checkout on Stripe\./g)).toHaveLength(1);
     expect(pricing).toContain(
       "return to the bill analyzer and have 24 hours in this browser to start the one analysis",
     );
-    expect(pricing).toContain(
-      "Access is enabled in this browser and renewed after each verified successful use",
-    );
-    expect(pricing).toContain(
-      "Keep the Stripe receipt and contact support if you clear site data or change devices",
-    );
+    expect(pricing).toContain("Existing subscriber? Manage billing");
+    expect(pricing).not.toContain("Subscribe Now");
+    expect(pricing).not.toContain("Best value");
+
   });
 
   it("distinguishes a cancelled checkout from a verification failure", () => {

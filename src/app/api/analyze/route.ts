@@ -1,3 +1,5 @@
+import { preflightUpload } from "@/lib/input-preflight";
+import { ANALYSIS_MODEL, MAX_OUTPUT_TOKENS, recordAnalysisUsage } from "@/lib/analysis-cost";
 import { NextRequest, NextResponse } from "next/server";
 import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
 import { commitEntitlement, EntitlementTemporarilyUnavailableError, releaseEntitlement, reserveRequestEntitlement, type EntitlementReservation } from "@/lib/entitlement";
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
       return errorResponse("This analysis entitlement is being used too quickly. Please wait and try again.", 429);
     }
 
-    const upload = validateUpload(await readLimitedJson(request));
+    const upload = await preflightUpload(validateUpload(await readLimitedJson(request)));
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) throw new Error("anthropic_not_configured");
     const fileContent = upload.mediaType === "application/pdf"
@@ -51,8 +53,8 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 2000,
+        model: ANALYSIS_MODEL,
+        max_tokens: MAX_OUTPUT_TOKENS,
         temperature: 0,
         system: BILL_ANALYSIS_INSTRUCTIONS,
         messages: [
@@ -67,14 +69,15 @@ export async function POST(request: NextRequest) {
       }),
     }, ANTHROPIC_TIMEOUT_MS);
 
+    const data: unknown = await aiResponse.json().catch(() => null);
+    recordAnalysisUsage(data);
     if (!aiResponse.ok) {
-      const failure = (await aiResponse.json().catch(() => null)) as { error?: { type?: string } } | null;
+      const failure = data as { error?: { type?: string } } | null;
       const category = failure?.error?.type?.replace(/[^a-z0-9_-]/gi, "").slice(0, 40) || "unknown";
       safeSecurityLog(`anthropic_request_failed_${aiResponse.status}_${category}`);
       await releaseEntitlement(reservation); reservation = null;
       return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
     }
-    const data: unknown = await aiResponse.json();
     // A successful HTTP response can still contain truncated output or a
     // refusal. This request uses neither tools nor custom stop sequences, so
     // only a naturally completed, nonempty text response earns a credit.

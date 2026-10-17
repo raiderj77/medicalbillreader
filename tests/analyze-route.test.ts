@@ -1,3 +1,4 @@
+vi.mock("@/lib/input-preflight", () => ({ preflightUpload: vi.fn(async (upload) => upload) }));
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
@@ -59,6 +60,19 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     expect(entitlement.release).toHaveBeenCalledExactlyOnceWith(reservation);
     expect(entitlement.commit).not.toHaveBeenCalled();
     expect(ai).toHaveBeenCalledOnce();
+  });
+
+  it("records provider usage without logging response content", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({
+      model: "claude-sonnet-4-6", usage: { input_tokens: 10000, output_tokens: 1000 },
+      stop_reason: "end_turn", content: [{ type: "text", text: "PRIVATE_SYNTHETIC_RESULT" }],
+    }), { status: 200 }));
+    expect((await POST(request(validBody))).status).toBe(200);
+    expect(log).toHaveBeenCalledWith(expect.stringContaining('"computed_usd":0.045'));
+    expect(JSON.stringify(log.mock.calls)).not.toContain("PRIVATE_SYNTHETIC_RESULT");
+    log.mockRestore();
   });
 
   it("delivers every text block of a completed response before consuming one credit", async () => {

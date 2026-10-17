@@ -7,7 +7,7 @@ describe("qualified funnel navigation", () => {
   it("sends product-intent links directly to the existing analyzer", () => {
     const homepage = readSource("src/app/page.tsx");
     const analyzer = readSource("src/components/BillAnalyzer.tsx");
-    const pricing = readSource("src/app/pricing/page.tsx");
+    const pricing = readSource("src/components/PricingClient.tsx");
     const markdownArticle = readSource("src/app/blog/[slug]/page.tsx");
     const disputeGuide = readSource(
       "src/app/blog/how-to-dispute-a-medical-bill/page.tsx",
@@ -48,7 +48,7 @@ describe("qualified funnel navigation", () => {
   });
 
   it("links checkout failures and refund requests to the support path", () => {
-    const pricing = readSource("src/app/pricing/page.tsx");
+    const pricing = readSource("src/components/PricingClient.tsx");
     const confirmation = readSource("src/app/api/checkout/confirm/route.ts");
 
     expect(pricing.split('href="/contact"').length - 1).toBeGreaterThanOrEqual(3);
