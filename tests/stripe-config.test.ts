@@ -61,3 +61,12 @@ describe("Stripe price mapping validation", () => {
     );
   });
 });
+
+it.each([false, undefined, true])("enforces production livemode=%s", async (livemode) => {
+  vi.stubEnv("NODE_ENV", "production");
+  vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({ active: true, unit_amount: 499, currency: "usd", recurring: null, livemode } as never);
+  try {
+    if (livemode === true) await expect(verifiedStripePriceId("per-use")).resolves.toBeDefined();
+    else await expect(verifiedStripePriceId("per-use")).rejects.toThrow("invalid");
+  } finally { vi.unstubAllEnvs(); }
+});

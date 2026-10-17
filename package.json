@@ -25,7 +25,9 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
-    "stripe": "^20.4.0"
+    "sharp": "0.35.5",
+    "stripe": "^20.4.0",
+    "unpdf": "1.4.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

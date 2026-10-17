@@ -6,7 +6,7 @@ export default function Disclaimer() {
       </p>
       <p className="text-amber-800 dark:text-amber-400 text-sm leading-relaxed">
         This tool provides general explanations of medical billing codes and charges for
-        informational purposes only. It does not constitute financial or medical advice.
+        educational purposes only; not professional billing, medical, or legal advice. Verify with your provider/insurer.
         Always verify charges directly with your healthcare provider and insurance company
         before taking action.
       </p>

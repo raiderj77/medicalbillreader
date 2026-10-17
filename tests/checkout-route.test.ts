@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 const stripe = vi.hoisted(() => ({
   checkout: { sessions: { create: vi.fn() } },
 }));
+const sdk = vi.hoisted(() => ({ get: vi.fn() }));
 const prices = vi.hoisted(() => ({
   priceId: vi.fn(async (type: string) =>
     type === "per-use" ? "price_single" : "price_monthly",
@@ -18,7 +19,7 @@ const browserAccess = vi.hoisted(() => ({
 }));
 
 vi.mock("@/lib/stripe", () => ({
-  getStripe: () => stripe,
+  getStripe: sdk.get,
   verifiedStripePriceId: prices.priceId,
   SUBSCRIPTION_MONTHLY_CAP: 44,
 }));
@@ -58,6 +59,9 @@ function rawRequest(body: string, contentLength?: number) {
 describe("POST /api/checkout", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sdk.get.mockReturnValue(stripe);
+    process.env.ENABLE_SINGLE_ANALYSIS = "true";
+    process.env.ENABLE_NEW_SUBSCRIPTIONS = "false";
     process.env.STRIPE_SECRET_KEY = "sk_test_configured";
     process.env.NEXT_PUBLIC_SITE_URL = "https://medicalbillreader.com";
     stripe.checkout.sessions.create.mockResolvedValue({
@@ -97,27 +101,26 @@ describe("POST /api/checkout", () => {
     );
   });
 
-  it("creates only the mapped $49 subscription with the server cap", async () => {
-    const response = await POST(request("subscription"));
-    expect(response.status).toBe(200);
-    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        mode: "subscription",
-        payment_method_types: ["card"],
-        line_items: [{ price: "price_monthly", quantity: 1 }],
-        metadata: {
-          mbr_entitlement: "subscription",
-          mbr_checkout_nonce: "a".repeat(64),
-        },
-        subscription_data: {
-          metadata: { mbr_entitlement: "subscription", monthly_cap: "44" },
-        },
-      }),
-    );
-    const checkout = stripe.checkout.sessions.create.mock.calls[0][0];
-    expect(checkout).not.toHaveProperty("allow_promotion_codes");
-    expect(checkout).not.toHaveProperty("discounts");
-    expect(checkout.subscription_data).not.toHaveProperty("trial_period_days");
+  it.each([undefined, "false", "true"])("permanently rejects monthly purchases (%s) before Stripe or nonce", async (setting) => {
+    if (setting === undefined) delete process.env.ENABLE_NEW_SUBSCRIPTIONS;
+    else process.env.ENABLE_NEW_SUBSCRIPTIONS = setting;
+    expect((await POST(request("subscription"))).status).toBe(403);
+    expect(prices.priceId).not.toHaveBeenCalled();
+    expect(sdk.get).not.toHaveBeenCalled();
+    expect(stripe.checkout.sessions.create).not.toHaveBeenCalled();
+    expect(browserAccess.createNonce).not.toHaveBeenCalled();
+  });
+  it.each([undefined, "false", "TRUE"])("rejects disabled single purchase (%s) before Stripe or nonce", async (setting) => {
+    if (setting === undefined) delete process.env.ENABLE_SINGLE_ANALYSIS;
+    else process.env.ENABLE_SINGLE_ANALYSIS = setting;
+    delete process.env.STRIPE_SECRET_KEY;
+    const response = await POST(request("per-use"));
+    expect(response.status).toBe(403);
+    expect((await response.json()).error).toContain("not available yet");
+    expect(prices.priceId).not.toHaveBeenCalled();
+    expect(sdk.get).not.toHaveBeenCalled();
+    expect(stripe.checkout.sessions.create).not.toHaveBeenCalled();
+    expect(browserAccess.createNonce).not.toHaveBeenCalled();
   });
 
   it("rejects unknown plan names without creating a Stripe session", async () => {
