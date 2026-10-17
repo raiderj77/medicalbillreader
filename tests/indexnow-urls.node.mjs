@@ -18,14 +18,12 @@ test("maps static pages and editorial content to public URLs", () => {
 test("expands registry changes to every dynamic SEO URL", () => {
   const urls = pathsToIndexNowUrls([
     "src/lib/glossary.ts",
-    "src/lib/cpt-codes.ts",
     "content/guides/how-to-read-an-eob.md",
   ]);
   const urlSet = new Set(urls);
 
   assert.ok(urlSet.has("https://medicalbillreader.com/guides/how-to-read-an-eob"));
   assert.ok(urlSet.has("https://medicalbillreader.com/glossary/explanation-of-benefits"));
-  assert.ok(urlSet.has("https://medicalbillreader.com/codes/cpt/99213"));
 });
 
 test("excludes API routes and dynamic route templates", () => {

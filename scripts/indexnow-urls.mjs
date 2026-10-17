@@ -75,10 +75,6 @@ export function pathsToIndexNowUrls(filePaths) {
       urls.add(`${SITE_ORIGIN}/glossary`);
       publicUrls("glossary", GLOSSARY_SLUGS).forEach((termUrl) => urls.add(termUrl));
     }
-    if (trimmed.startsWith("src/app/codes/cpt/") || trimmed === "src/lib/cpt-codes.ts") {
-      urls.add(`${SITE_ORIGIN}/codes-explained`);
-      urls.add(`${SITE_ORIGIN}/codes/cpt/99213`);
-    }
   }
   return [...urls];
 }

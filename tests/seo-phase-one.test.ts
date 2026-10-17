@@ -3,14 +3,12 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import matter from "gray-matter";
 import { describe, expect, it } from "vitest";
-import CptCodePage from "@/app/codes/cpt/[code]/page";
 import GuidePage from "@/app/guides/[slug]/page";
 import GuidesPage from "@/app/guides/page";
 import GlossaryTermPage from "@/app/glossary/[slug]/page";
 import GlossaryPage from "@/app/glossary/page";
 import ArticleCTA from "@/components/ArticleCTA";
 import FAQSection from "@/components/FAQSection";
-import { CPT_CODES } from "@/lib/cpt-codes";
 import { GLOSSARY_TERMS } from "@/lib/glossary";
 import { getAllGuides, renderGuideMarkdown } from "@/lib/guides";
 
@@ -134,34 +132,6 @@ An EOB can show an allowed amount and a deductible. A second EOB stays plain.
     }
   });
 
-  it("publishes one cautious CPT exemplar rather than a scaled code library", () => {
-    expect(CPT_CODES).toHaveLength(1);
-    const [entry] = CPT_CODES;
-    expect(entry.code).toBe("99213");
-    expect(entry.title).toContain("2026");
-    expect(entry.title).toContain("?");
-    expect(entry.title.length).toBeLessThan(60);
-    expect(entry.plainEnglishMeaning).toMatch(/does not prove/i);
-    expect(entry.comparisonSteps.join(" ")).toMatch(/not a universal/i);
-    expect(
-      entry.sources.some(
-        (source) => new URL(source.href).hostname === "www.ama-assn.org",
-      ),
-    ).toBe(true);
-    expect(
-      entry.sources.some(
-        (source) => new URL(source.href).hostname === "www.cms.gov",
-      ),
-    ).toBe(true);
-    expect(JSON.stringify(entry)).not.toMatch(/office or other outpatient visit/i);
-    expect(readFileSync("src/app/codes-explained/page.tsx", "utf8")).not.toMatch(
-      /office or other outpatient visit/i,
-    );
-    expect(readFileSync("docs/cpt-publication-gate.md", "utf8")).toMatch(
-      /blocks marking the SEO Phase 1 pull request ready or merging it/i,
-    );
-  });
-
   it("renders hubs with inbound links to every generated resource", () => {
     const guideHub = renderToStaticMarkup(createElement(GuidesPage));
     const glossaryHub = renderToStaticMarkup(createElement(GlossaryPage));
@@ -199,13 +169,5 @@ An EOB can show an allowed amount and a deductible. A second EOB stays plain.
       expect(html, term.slug).toContain('href="/glossary"');
       expect(html.match(/href="\/guides\//g)?.length ?? 0, term.slug).toBeGreaterThanOrEqual(2);
     }
-
-    const cptPage = await CptCodePage({
-      params: Promise.resolve({ code: "99213" }),
-    });
-    const cptHtml = renderToStaticMarkup(cptPage);
-    expect(cptHtml).toContain('href="/#analyzer"');
-    expect(cptHtml).toContain('href="/glossary"');
-    expect(cptHtml.match(/href="\/guides\//g)?.length ?? 0).toBeGreaterThanOrEqual(2);
   });
 });

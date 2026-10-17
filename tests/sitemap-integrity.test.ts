@@ -14,7 +14,6 @@ describe("sitemap integrity", () => {
     expect(urls).toContain(
       "https://medicalbillreader.com/glossary/explanation-of-benefits",
     );
-    expect(urls).toContain("https://medicalbillreader.com/codes/cpt/99213");
     expect(urls).toContain(
       "https://medicalbillreader.com/sample-medical-bill-report",
     );

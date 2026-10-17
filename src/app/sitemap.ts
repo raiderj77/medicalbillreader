@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { getAllEditorialGuides } from "@/lib/editorial-guides";
-import { CPT_CODES, CPT_REVIEWED_AT } from "@/lib/cpt-codes";
 import { GLOSSARY_REVIEWED_AT, GLOSSARY_TERMS } from "@/lib/glossary";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -19,13 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const glossaryEntries: MetadataRoute.Sitemap = GLOSSARY_TERMS.map((term) => ({
     url: `${baseUrl}/glossary/${term.slug}`,
     lastModified: new Date(GLOSSARY_REVIEWED_AT),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
-
-  const cptEntries: MetadataRoute.Sitemap = CPT_CODES.map((entry) => ({
-    url: `${baseUrl}/codes/cpt/${entry.code}`,
-    lastModified: new Date(CPT_REVIEWED_AT),
     changeFrequency: "monthly",
     priority: 0.6,
   }));
@@ -57,7 +49,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     ...glossaryEntries,
-    ...cptEntries,
     {
       url: `${baseUrl}/methodology`,
       lastModified: new Date("2026-08-02"),

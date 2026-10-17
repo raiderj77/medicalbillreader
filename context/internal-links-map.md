@@ -18,6 +18,5 @@
 - `/guides/good-faith-estimate-400-rule` - federal estimate-dispute eligibility and deadlines.
 - `/guides/how-to-negotiate-a-hospital-bill` - financial-assistance and payment-option questions.
 - `/glossary` - reviewed billing-term definitions.
-- `/codes/cpt/99213` - one cautious code exemplar; do not scale without licensing review.
 
 Add links only when they help the reader continue the same task. Do not create or link scaled thin code pages.

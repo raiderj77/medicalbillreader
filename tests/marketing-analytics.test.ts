@@ -8,7 +8,6 @@ describe("marketing-only analytics boundary", () => {
     "/blog/how-to-dispute-a-medical-bill",
     "/guides/how-to-dispute-a-medical-bill",
     "/glossary/explanation-of-benefits",
-    "/codes/cpt/99213",
     "/codes-explained",
     "/editorial-policy",
     "/methodology",

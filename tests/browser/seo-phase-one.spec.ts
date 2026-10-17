@@ -9,10 +9,6 @@ test("guide hub and generated resources are discoverable", async ({ page }) => {
 
   await page.goto("/glossary");
   await expect(page.locator('a[href^="/glossary/"]')).toHaveCount(12);
-
-  await page.goto("/codes/cpt/99213");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("CPT 99213");
-  await expect(page.getByRole("link", { name: "Explain my bill" })).toBeVisible();
 });
 
 test("legacy editorial URLs redirect directly to the new canonical guides", async ({ page }) => {

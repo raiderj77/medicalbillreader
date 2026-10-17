@@ -50,7 +50,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
     usedFor:
       "CPT is widely used to describe professional and outpatient procedures, visits, tests, and imaging. Payment and coverage also depend on documentation, payer rules, setting, modifiers, contracts, and the plan.",
     example:
-      "CPT 99213: a return evaluation-and-management encounter for a patient already known to the reporting practice. Current coding rules and documentation control the level.",
+      "A five-character CPT code may identify an office service, test, procedure, or other professional service. Current coding rules and documentation control which code applies.",
     lookup: {
       label: "AMA CPT overview",
       href: "https://www.ama-assn.org/practice-management/cpt",
@@ -385,18 +385,6 @@ export default function CodesExplainedPage() {
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 <span className="font-semibold">Example:</span> {c.example}
               </p>
-              {c.slug === "cpt" && (
-                <p className="mb-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-                  Read the cautious, source-linked{" "}
-                  <Link
-                    href="/codes/cpt/99213"
-                    className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
-                  >
-                    CPT 99213 explainer
-                  </Link>
-                  .
-                </p>
-              )}
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 <span className="font-semibold">Lookup:</span>{" "}
                 <a

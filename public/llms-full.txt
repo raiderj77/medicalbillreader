@@ -59,7 +59,6 @@ Jason Ramirez is publicly identified as the founder and author. His stated crede
 - [Good Faith Estimate $400 Rule](https://medicalbillreader.com/guides/good-faith-estimate-400-rule)
 - [Hospital Financial Assistance and Payment Options](https://medicalbillreader.com/guides/how-to-negotiate-a-hospital-bill)
 - [Medical Billing Glossary](https://medicalbillreader.com/glossary)
-- [CPT 99213 Explainer](https://medicalbillreader.com/codes/cpt/99213)
 - [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy)
 - [Privacy Policy](https://medicalbillreader.com/privacy)
 - [Terms](https://medicalbillreader.com/terms)

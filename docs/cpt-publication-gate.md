@@ -1,40 +1,26 @@
-# CPT exemplar publication gate
+# CPT per-code publication decision
 
-Status: **OPEN — blocks marking the SEO Phase 1 pull request ready or merging it**
+Status: **CLOSED BY REMOVAL**
 
-Last checked: October 16, 2026
+Decision recorded: October 16, 2026
 
-## Scope
+## Pre-revenue decision
 
-This gate applies to the single independently written CPT 99213 explainer at
-`/codes/cpt/99213`. It also applies before creating additional CPT pages,
-copying an official descriptor, or building an automated CPT library.
+The proposed single-code CPT exemplar, its dynamic route and registry, and
+every public discovery reference were removed from SEO Phase 1. The owner will
+not obtain an AMA license before verified retained revenue, and no qualified
+legal clearance is available for publication now. Independently worded copy is
+not a substitute for licensing or legal clearance.
 
-The page does not reproduce the full AMA descriptor and does not claim a
-universal price. That editorial restraint does not establish that publication
-is licensed or legally cleared.
+The general, source-linked explanation of code systems may remain. It does not
+publish a per-code library or reproduce official CPT descriptors.
 
-## Why the gate is open
+## Phase 2 gate
 
-The American Medical Association's current licensing FAQ says organizations
-that use, reference, display, or create derivative works from CPT content are
-expected to obtain an appropriate license. Repository evidence does not verify
-an applicable license or a qualified legal determination for this use. Missing
-evidence is unknown, not approval.
+Per-code CPT pages are deferred to a post-revenue Phase 2. Before any such page
+is implemented or published, the owner must document appropriate AMA licensing
+clearance and any needed qualified legal review without committing license
+credentials, contracts, or private legal communications to the repository.
 
 Primary source:
 [AMA CPT licensing frequently asked questions](https://www.ama-assn.org/practice-management/cpt/cpt-licensing-frequently-asked-questions-faqs)
-
-## Close the gate before publication
-
-The owner must choose and document one of these outcomes without placing
-license credentials, contracts, or private legal communications in the
-repository:
-
-1. Confirm that an appropriate AMA license covers this use.
-2. Obtain qualified legal review that clears the proposed single-page use.
-3. Remove the CPT 99213 page and its sitemap, internal-link, and LLM-index
-   references from the pull request.
-
-Until one outcome is documented as a simple pass/fail decision, keep the pull
-request in draft and do not merge or deploy it.
