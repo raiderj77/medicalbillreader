@@ -21,7 +21,7 @@ export default function HomepageGuideCluster() {
           </p>
         </div>
         <Link prefetch={false}
-          href="/blog"
+          href="/guides"
           className="inline-flex min-h-11 shrink-0 items-center font-semibold text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
         >
           View all guides

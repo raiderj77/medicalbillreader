@@ -12,8 +12,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://medicalbillreader.com"),
-  title: "Medical Bill Reader — Understand Your Bill",
-  description: "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+  title: "How Can AI Help Explain a Medical Bill? (2026)",
+  description: "See how Medical Bill Reader organizes legible bill and EOB fields into a plain-language report, with one limited free analysis when eligible.",
   keywords: "medical bill reader, understand medical bill, EOB explanation, medical billing codes, CPT codes, insurance EOB, billing errors",
   authors: [{ name: "Jason Ramirez" }],
   alternates: {
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
   },
   openGraph: {
-    title: "Medical Bill Reader — Understand Your Bill",
-    description: "Upload a supported medical bill or EOB for an AI-generated report of billing codes, charges, insurance fields, and patterns to verify.",
+    title: "How Can AI Help Explain a Medical Bill? (2026)",
+    description: "See how Medical Bill Reader organizes legible bill and EOB fields into a plain-language report and questions to verify.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",

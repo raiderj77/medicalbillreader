@@ -1,6 +1,6 @@
 # Medical Bill Reader: detailed site facts
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-10-16
 
 ## What the service is
 
@@ -52,8 +52,14 @@ Jason Ramirez is publicly identified as the founder and author. His stated crede
 - [Methodology](https://medicalbillreader.com/methodology)
 - [Editorial Policy](https://medicalbillreader.com/editorial-policy)
 - [Medical Billing Codes Explained](https://medicalbillreader.com/codes-explained)
-- [Medical Billing Guides](https://medicalbillreader.com/blog)
-- [How to Dispute a Medical Bill](https://medicalbillreader.com/blog/how-to-dispute-a-medical-bill)
+- [Medical Billing Guides](https://medicalbillreader.com/guides)
+- [How to Read an EOB Line by Line](https://medicalbillreader.com/guides/how-to-read-an-eob)
+- [Common Medical Bill Issues to Check](https://medicalbillreader.com/guides/common-medical-bill-errors)
+- [How to Dispute a Medical Bill](https://medicalbillreader.com/guides/how-to-dispute-a-medical-bill)
+- [Good Faith Estimate $400 Rule](https://medicalbillreader.com/guides/good-faith-estimate-400-rule)
+- [Hospital Financial Assistance and Payment Options](https://medicalbillreader.com/guides/how-to-negotiate-a-hospital-bill)
+- [Medical Billing Glossary](https://medicalbillreader.com/glossary)
+- [CPT 99213 Explainer](https://medicalbillreader.com/codes/cpt/99213)
 - [Consumer Health Data Privacy Notice](https://medicalbillreader.com/consumer-health-data-privacy)
 - [Privacy Policy](https://medicalbillreader.com/privacy)
 - [Terms](https://medicalbillreader.com/terms)

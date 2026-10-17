@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
+  title: "What Do Medical Billing Codes Mean? (2026)",
   description:
     "Plain-English glossary of common medical billing code systems and abbreviations, with authoritative lookup links and questions to verify.",
   keywords: [
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://medicalbillreader.com/codes-explained" },
   robots: { index: true, follow: true, googleBot: { "max-snippet": -1 } },
   openGraph: {
-    title: "Medical Billing Codes Explained: CPT, ICD-10, HCPCS, NDC, DRG",
+    title: "What Do Medical Billing Codes Mean? (2026)",
     description:
       "Plain-English definitions of common code types and abbreviations that may appear on a medical bill or EOB.",
     url: "https://medicalbillreader.com/codes-explained",
@@ -50,7 +50,7 @@ const CODE_SYSTEMS: CodeSystem[] = [
     usedFor:
       "CPT is widely used to describe professional and outpatient procedures, visits, tests, and imaging. Payment and coverage also depend on documentation, payer rules, setting, modifiers, contracts, and the plan.",
     example:
-      "CPT 99213: an established-patient office or other outpatient visit. Time is one permitted selection method in applicable circumstances; medical decision-making can also determine the level.",
+      "CPT 99213: a return evaluation-and-management encounter for a patient already known to the reporting practice. Current coding rules and documentation control the level.",
     lookup: {
       label: "AMA CPT overview",
       href: "https://www.ama-assn.org/practice-management/cpt",
@@ -385,6 +385,18 @@ export default function CodesExplainedPage() {
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 <span className="font-semibold">Example:</span> {c.example}
               </p>
+              {c.slug === "cpt" && (
+                <p className="mb-3 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                  Read the cautious, source-linked{" "}
+                  <Link
+                    href="/codes/cpt/99213"
+                    className="text-teal-800 underline underline-offset-2 hover:no-underline dark:text-teal-300"
+                  >
+                    CPT 99213 explainer
+                  </Link>
+                  .
+                </p>
+              )}
               <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
                 <span className="font-semibold">Lookup:</span>{" "}
                 <a
@@ -432,8 +444,8 @@ export default function CodesExplainedPage() {
                 Methodology
               </Link>
               {" · "}
-              <Link href="/blog" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
-                Blog
+              <Link href="/guides" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
+                Guides
               </Link>
               {" · "}
               <Link

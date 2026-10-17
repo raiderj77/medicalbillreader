@@ -13,6 +13,7 @@ describe("qualified funnel navigation", () => {
       "src/app/blog/how-to-dispute-a-medical-bill/page.tsx",
     );
     const codes = readSource("src/app/codes-explained/page.tsx");
+    const articleCta = readSource("src/components/ArticleCTA.tsx");
 
     expect(homepage).toContain('href="#analyzer"');
     expect(analyzer).toContain('id="analyzer"');
@@ -23,6 +24,9 @@ describe("qualified funnel navigation", () => {
     expect(disputeGuide).toContain("Medical Bill Reader");
     expect(codes).toContain('href="/#analyzer"');
     expect(codes).toContain("Analyze a bill");
+    expect(articleCta).toContain('href="/#analyzer"');
+    expect(articleCta).toContain("limited free analysis is");
+    expect(articleCta).not.toMatch(/explains every line|error scan/i);
   });
 
   it("returns verified checkout to entry-path-neutral analyzer guidance", () => {

@@ -24,8 +24,11 @@ export default function Footer() {
         <Link prefetch={false} href="/contact" className="hover:text-slate-700 dark:hover:text-slate-300">
           Contact
         </Link>
-        <Link prefetch={false} href="/blog" className="hover:text-slate-700 dark:hover:text-slate-300">
-          Blog
+        <Link prefetch={false} href="/guides" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Guides
+        </Link>
+        <Link prefetch={false} href="/glossary" className="hover:text-slate-700 dark:hover:text-slate-300">
+          Glossary
         </Link>
         <Link prefetch={false} href="/privacy" className="hover:text-slate-700 dark:hover:text-slate-300">
           Privacy

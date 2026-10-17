@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Methodology: How Medical Bill Reader Works",
+  title: "How Does Medical Bill Reader Work? (2026)",
   description:
     "How Medical Bill Reader processes uploaded bills, what the AI is asked to organize, how providers handle data, and what the tool cannot determine.",
   keywords: [
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://medicalbillreader.com/methodology" },
   robots: { index: true, follow: true, googleBot: { "max-snippet": -1 } },
   openGraph: {
-    title: "Methodology: How Medical Bill Reader Works",
+    title: "How Does Medical Bill Reader Work? (2026)",
     description:
       "How the analyzer works, what it identifies, how bill data is handled, and what it cannot do.",
     url: "https://medicalbillreader.com/methodology",
@@ -30,7 +30,7 @@ export default function MethodologyPage() {
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: "Methodology: How Medical Bill Reader Works",
+    headline: "How Does Medical Bill Reader Work? (2026)",
     description:
       "How Medical Bill Reader analyzes uploaded medical bills, which AI model powers it, what it identifies, how bill data is handled, and its honest limits.",
     datePublished: "2026-04-26",
@@ -79,7 +79,7 @@ export default function MethodologyPage() {
       </nav>
 
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight mb-3">
-        Methodology: How Medical Bill Reader Works
+        How Does Medical Bill Reader Work? (2026)
       </h1>
 
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
@@ -358,8 +358,8 @@ export default function MethodologyPage() {
           </li>
           <li>
             Related guides on this site:{" "}
-            <Link href="/blog" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
-              blog
+            <Link href="/guides" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
+              guides
             </Link>
             ,{" "}
             <Link href="/codes-explained" className="text-teal-800 dark:text-teal-300 underline underline-offset-2 hover:no-underline">
