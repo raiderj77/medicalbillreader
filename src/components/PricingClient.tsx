@@ -40,7 +40,7 @@ const tiers = [
     href: null,
     highlighted: true,
     checkoutNote:
-      "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start the one analysis.",
+      "Secure checkout on Stripe. After payment, you return to the bill analyzer and have 24 hours in this browser to start. A credit allows one delivered analysis and at most three outbound analysis attempts; after a third failed attempt, contact support for manual review or to request a refund.",
     priceType: "per-use",
   },
 
@@ -429,7 +429,8 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                     </Link>{" "}
                     within 24 hours of delivery for a full refund. Monthly
                     subscriptions can be cancelled at any time but are not
-                    refunded for partial months.
+                    refunded for partial months. Any refund on an unused
+                    pay-per-bill purchase revokes its analysis credit.
                   </>
                 ),
               },

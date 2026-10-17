@@ -30,8 +30,10 @@ vi.mock("@/lib/stripe-browser-access", () => ({
   validCheckoutNonceHash: (value: string) => /^[a-f0-9]{64}$/.test(value),
 }));
 import {
+  claimPaidProviderAttempt,
   classifyCompletedCheckout,
   EntitlementTemporarilyUnavailableError,
+  PAID_PROVIDER_ATTEMPT_LIMIT,
   reserveRequestEntitlement,
 } from "@/lib/entitlement";
 import { currentMonth, signValue } from "@/lib/security";
@@ -303,7 +305,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_paid", refunded: false },
+        latest_charge: { id: "ch_paid", refunded: false, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     });
@@ -328,6 +330,67 @@ describe("atomic entitlement reservations", () => {
       reserveRequestEntitlement(paidRequest()),
     ]);
     expect(results.filter(Boolean)).toHaveLength(1);
+  });
+
+  it("atomically records at most three lifetime outbound attempts per paid credit", async () => {
+    const paidReservation = {
+      kind: "paid" as const,
+      key: "mbr:paid:synthetic-hash",
+      reservationId: "synthetic-reservation",
+      externalId: "cs_paid",
+    };
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    redis.command
+      .mockResolvedValueOnce(1)
+      .mockResolvedValueOnce(2)
+      .mockResolvedValueOnce(3)
+      .mockResolvedValueOnce(0);
+
+    await expect(claimPaidProviderAttempt(paidReservation)).resolves.toEqual({
+      status: "recorded",
+      attempt: 1,
+    });
+    await expect(claimPaidProviderAttempt(paidReservation)).resolves.toEqual({
+      status: "recorded",
+      attempt: 2,
+    });
+    await expect(claimPaidProviderAttempt(paidReservation)).resolves.toEqual({
+      status: "recorded",
+      attempt: 3,
+    });
+    await expect(claimPaidProviderAttempt(paidReservation)).resolves.toEqual({
+      status: "exhausted",
+    });
+
+    const evalArgs = redis.command.mock.calls[0][0] as unknown[];
+    const script = String(evalArgs[1]);
+    expect(script).toContain("redis.call('ZSCORE',KEYS[2],ARGV[1])");
+    expect(script).toContain("'provider_attempts'");
+    expect(script.indexOf("ZSCORE")).toBeLessThan(
+      script.indexOf("HINCRBY"),
+    );
+    expect(evalArgs.at(-1)).toBe(PAID_PROVIDER_ATTEMPT_LIMIT);
+    const logText = log.mock.calls.flat().join("\n");
+    expect(logText).toContain(
+      '"event":"paid_credit_provider_attempt"',
+    );
+    expect(logText).toContain('"attempt":3');
+    expect(logText).not.toContain(paidReservation.key);
+    expect(logText).not.toContain(paidReservation.reservationId);
+    expect(logText).not.toContain("cs_paid");
+    log.mockRestore();
+  });
+
+  it("fails closed instead of recording against a missing or expired reservation", async () => {
+    redis.command.mockResolvedValueOnce(-1);
+
+    await expect(
+      claimPaidProviderAttempt({
+        kind: "paid",
+        key: "mbr:paid:synthetic-hash",
+        reservationId: "expired-reservation",
+      }),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
   });
 
   it("enforces subscription usage caps atomically", async () => {
@@ -808,7 +871,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_used", refunded: false },
+        latest_charge: { id: "ch_used", refunded: false, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use", used: "true" },
       },
     });
@@ -860,7 +923,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_paid", refunded: false },
+        latest_charge: { id: "ch_paid", refunded: false, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     };
@@ -923,13 +986,10 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_refunded", refunded: true },
+        latest_charge: { id: "ch_refunded", refunded: true, disputed: false, amount_refunded: 499 },
         metadata: { mbr_entitlement: "per_use" },
       },
     });
-    stripe.refunds.list.mockReturnValueOnce(
-      refundList({ id: "re_refunded", amount: 499, status: "succeeded" }),
-    );
     expect(await reserveRequestEntitlement(paidRequest())).toBeNull();
     expect(redis.command).not.toHaveBeenCalled();
   });
@@ -946,7 +1006,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_stale_marker", refunded: false },
+        latest_charge: { id: "ch_stale_marker", refunded: false, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use", refunded: "true" },
       },
     });
@@ -961,23 +1021,45 @@ describe("atomic entitlement reservations", () => {
     });
   });
 
-  it("keeps an unused analysis available after a successful partial refund", async () => {
+  it("revokes an unused analysis after a 498-cent successful partial refund", async () => {
     stripe.refunds.list.mockReturnValueOnce(
-      refundList({ id: "re_partial", amount: 100, status: "succeeded" }),
+      refundList({ id: "re_partial", amount: 498, status: "succeeded" }),
     );
-    redis.command.mockResolvedValueOnce(1);
 
-    expect(await reserveRequestEntitlement(paidRequest())).toMatchObject({
-      kind: "paid",
-    });
+    expect(await reserveRequestEntitlement(paidRequest())).toBeNull();
+    expect(redis.command).not.toHaveBeenCalled();
   });
 
-  it("freezes access when successful and pending refunds together cover the full payment", async () => {
+  it("revokes from the Charge aggregate when a 498-cent refund list is stale", async () => {
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "payment",
+      payment_status: "paid",
+      amount_total: 499,
+      currency: "usd",
+      metadata: { mbr_entitlement: "per_use" },
+      payment_intent: {
+        id: "pi_partial_charge",
+        status: "succeeded",
+        amount_received: 499,
+        currency: "usd",
+        latest_charge: {
+          id: "ch_partial_charge",
+          refunded: false,
+          disputed: false,
+          amount_refunded: 498,
+        },
+        metadata: { mbr_entitlement: "per_use" },
+      },
+    });
+
+    expect(await reserveRequestEntitlement(paidRequest())).toBeNull();
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("freezes access for any partial refund still in flight", async () => {
     stripe.refunds.list.mockReturnValueOnce(
-      refundList(
-        { id: "re_partial", amount: 100, status: "succeeded" },
-        { id: "re_pending", amount: 399, status: "pending" },
-      ),
+      refundList({ id: "re_pending", amount: 1, status: "pending" }),
     );
 
     await expect(
@@ -986,7 +1068,62 @@ describe("atomic entitlement reservations", () => {
     expect(redis.command).not.toHaveBeenCalled();
   });
 
-  it("denies multiple successful refunds that total the full payment", async () => {
+  it("denies a disputed unused pay-per-use charge", async () => {
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "payment",
+      payment_status: "paid",
+      amount_total: 499,
+      currency: "usd",
+      metadata: { mbr_entitlement: "per_use" },
+      payment_intent: {
+        id: "pi_disputed",
+        status: "succeeded",
+        amount_received: 499,
+        currency: "usd",
+        latest_charge: {
+          id: "ch_disputed",
+          refunded: false,
+          disputed: true,
+          amount_refunded: 0,
+        },
+        metadata: { mbr_entitlement: "per_use" },
+      },
+    });
+
+    expect(await reserveRequestEntitlement(paidRequest())).toBeNull();
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("fails temporarily closed when a pay-per-use dispute flag is missing", async () => {
+    stripe.checkout.sessions.retrieve.mockResolvedValueOnce({
+      mode: "payment",
+      payment_status: "paid",
+      amount_total: 499,
+      currency: "usd",
+      metadata: { mbr_entitlement: "per_use" },
+      payment_intent: {
+        id: "pi_dispute_unknown",
+        status: "succeeded",
+        amount_received: 499,
+        currency: "usd",
+        latest_charge: {
+          id: "ch_dispute_unknown",
+          refunded: false,
+          amount_refunded: 0,
+        },
+        metadata: { mbr_entitlement: "per_use" },
+      },
+    });
+
+    await expect(
+      reserveRequestEntitlement(paidAndFreeRequest("paid-token")),
+    ).rejects.toBeInstanceOf(EntitlementTemporarilyUnavailableError);
+    expect(stripe.refunds.list).not.toHaveBeenCalled();
+    expect(redis.command).not.toHaveBeenCalled();
+  });
+
+  it("denies any successful refund when the Charge aggregate is stale", async () => {
     const expectedNonce = "a".repeat(64);
     const fullyRefundedSession = {
       mode: "payment",
@@ -1002,7 +1139,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_fully_refunded", refunded: true },
+        latest_charge: { id: "ch_fully_refunded", refunded: false, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     };
@@ -1046,7 +1183,7 @@ describe("atomic entitlement reservations", () => {
           status: "succeeded",
           amount_received: 499,
           currency: "usd",
-          latest_charge: { id: `ch_${status}`, refunded: false },
+          latest_charge: { id: `ch_${status}`, refunded: false, disputed: false, amount_refunded: 0 },
           metadata: { mbr_entitlement: "per_use" },
         },
       });
@@ -1087,7 +1224,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_incoherent", refunded: true },
+        latest_charge: { id: "ch_incoherent", refunded: true, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     });
@@ -1098,16 +1235,11 @@ describe("atomic entitlement reservations", () => {
     expect(redis.command).not.toHaveBeenCalled();
   });
 
-  it("consumes auto-paginated refund results before deciding access", async () => {
-    const firstPageEquivalent = Array.from({ length: 100 }, (_, index) => ({
-      id: `re_cent_${index}`,
-      amount: 1,
-      status: "succeeded",
-    }));
+  it("revokes without waiting for successful partial refunds to total the payment", async () => {
     stripe.refunds.list.mockReturnValueOnce(
       refundList(
-        ...firstPageEquivalent,
-        { id: "re_later_page", amount: 399, status: "succeeded" },
+        { id: "re_first_cent", amount: 1, status: "succeeded" },
+        { id: "re_later_partial", amount: 100, status: "succeeded" },
       ),
     );
 
@@ -1129,7 +1261,7 @@ describe("atomic entitlement reservations", () => {
           status: "succeeded",
           amount_received: 499,
           currency: "usd",
-          latest_charge: { id: `ch_${status}`, refunded: false },
+          latest_charge: { id: `ch_${status}`, refunded: false, disputed: false, amount_refunded: 0 },
           metadata: { mbr_entitlement: "per_use" },
         },
       });
@@ -1156,7 +1288,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_failed_incoherent", refunded: true },
+        latest_charge: { id: "ch_failed_incoherent", refunded: true, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     });
@@ -1186,7 +1318,7 @@ describe("atomic entitlement reservations", () => {
         status: "succeeded",
         amount_received: 499,
         currency: "usd",
-        latest_charge: { id: "ch_unavailable_refunds", refunded: true },
+        latest_charge: { id: "ch_unavailable_refunds", refunded: true, disputed: false, amount_refunded: 0 },
         metadata: { mbr_entitlement: "per_use" },
       },
     };

@@ -114,6 +114,7 @@ export default function BillAnalyzer() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
+  const [needsSupport, setNeedsSupport] = useState(false);
   const [showCheckoutReturn, setShowCheckoutReturn] = useState(false);
   const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -176,6 +177,7 @@ export default function BillAnalyzer() {
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
+    setNeedsSupport(false);
     const reader = new FileReader();
     activeReaderRef.current = reader;
     reader.onload = () => {
@@ -200,7 +202,13 @@ export default function BillAnalyzer() {
   };
 
   const handleSubmit = async () => {
-    if (analysisPendingRef.current || !file || !preview || !privacyAcknowledged) return;
+    if (
+      analysisPendingRef.current ||
+      !file ||
+      !preview ||
+      !privacyAcknowledged ||
+      needsSupport
+    ) return;
 
     const hasPaidAccessHint =
       justPaidRef.current || hasSubscriptionAccessHint();
@@ -211,6 +219,7 @@ export default function BillAnalyzer() {
     setLoading(true);
     setError(null);
     setNeedsUpgrade(false);
+    setNeedsSupport(false);
     try {
       const { response: res, data, freeAccessError } =
         await requestAnalysisWithAccessFallback(
@@ -235,8 +244,13 @@ export default function BillAnalyzer() {
           );
         }
         const fallbackError = hasPaidAccessHint
-          ? "The analysis could not be completed. Your paid credit was not used. Please wait two minutes and try again."
+          ? "The analysis could not be completed. Its paid-attempt status could not be confirmed. Please wait two minutes and try again."
           : "The analysis could not be completed. Please wait two minutes and try again.";
+        if (data.supportPath === "/contact") {
+          justPaidRef.current = false;
+          setShowCheckoutReturn(false);
+          setNeedsSupport(true);
+        }
         throw new Error(data.error || fallbackError);
       }
       if (!data.result) {
@@ -266,6 +280,7 @@ export default function BillAnalyzer() {
     setResult(null);
     setError(null);
     setNeedsUpgrade(false);
+    setNeedsSupport(false);
     setShowCheckoutReturn(false);
     setPrivacyAcknowledged(false);
   };
@@ -591,12 +606,21 @@ export default function BillAnalyzer() {
                   See analysis options
                 </Link>
               )}
+              {needsSupport && (
+                <Link
+                  prefetch={false}
+                  href="/contact"
+                  className="mt-3 inline-flex min-h-11 items-center rounded-lg bg-teal-700 px-4 py-2 font-semibold text-white hover:bg-teal-800"
+                >
+                  Contact support
+                </Link>
+              )}
             </div>
           )}
 
           <button
             onClick={handleSubmit}
-            disabled={loading || !preview || !privacyAcknowledged}
+            disabled={loading || !preview || !privacyAcknowledged || needsSupport}
             aria-busy={loading}
             aria-describedby="upload-privacy"
             className="w-full bg-teal-700 hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-400 text-white font-semibold py-4 rounded-xl transition-colors text-lg"

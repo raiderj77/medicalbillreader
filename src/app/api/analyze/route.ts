@@ -2,7 +2,15 @@ import { preflightUpload } from "@/lib/input-preflight";
 import { ANALYSIS_MODEL, MAX_OUTPUT_TOKENS, recordAnalysisUsage } from "@/lib/analysis-cost";
 import { NextRequest, NextResponse } from "next/server";
 import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
-import { commitEntitlement, EntitlementTemporarilyUnavailableError, releaseEntitlement, reserveRequestEntitlement, type EntitlementReservation } from "@/lib/entitlement";
+import {
+  claimPaidProviderAttempt,
+  commitEntitlement,
+  EntitlementTemporarilyUnavailableError,
+  PAID_PROVIDER_ATTEMPT_LIMIT,
+  releaseEntitlement,
+  reserveRequestEntitlement,
+  type EntitlementReservation,
+} from "@/lib/entitlement";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import { StoreUnavailableError } from "@/lib/redis";
 import { clientIp, safeSecurityLog } from "@/lib/security";
@@ -24,12 +32,48 @@ export const runtime = "nodejs";
 
 const ANTHROPIC_TIMEOUT_MS = 100_000;
 
-function errorResponse(error: string, status: number) {
-  return NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
+function errorResponse(error: string, status: number, supportPath?: "/contact") {
+  return NextResponse.json(
+    supportPath ? { error, supportPath } : { error },
+    { status, headers: { "Cache-Control": "no-store" } },
+  );
+}
+
+function paidAttemptFailureMessage(message: string, attempt: number): string {
+  const remaining = PAID_PROVIDER_ATTEMPT_LIMIT - attempt;
+  return `${message} Outbound analysis attempt ${attempt} of ${PAID_PROVIDER_ATTEMPT_LIMIT} counted, and this credit remains available for ${remaining} more ${remaining === 1 ? "attempt" : "attempts"}.`;
+}
+
+function exhaustedPaidCreditResponse(message: string, status: number) {
+  const response = errorResponse(
+    `${message} No complete report was delivered by the third outbound analysis attempt, so this paid credit is exhausted. Contact support for manual review or to request a refund.`,
+    status,
+    "/contact",
+  );
+  response.cookies.set("mbr_pending_use", "", { maxAge: 0, path: "/" });
+  return response;
+}
+
+async function finalizeFailedProviderAttempt(
+  reservation: EntitlementReservation,
+  paidProviderAttempt: number | null,
+): Promise<boolean> {
+  if (
+    reservation.kind === "paid" &&
+    paidProviderAttempt === PAID_PROVIDER_ATTEMPT_LIMIT
+  ) {
+    if (!(await commitEntitlement(reservation))) {
+      safeSecurityLog("paid_credit_exhaustion_finalize_failed");
+    }
+    return true;
+  }
+  await releaseEntitlement(reservation);
+  return false;
 }
 
 export async function POST(request: NextRequest) {
   let reservation: EntitlementReservation | null = null;
+  let paidProviderAttempt: number | null = null;
   try {
     if (!(await enforceRateLimit("analyze-ip", clientIp(request.headers), 10, 60))) return errorResponse("Too many analysis requests. Please wait and try again.", 429);
 
@@ -48,6 +92,21 @@ export async function POST(request: NextRequest) {
     const fileContent = upload.mediaType === "application/pdf"
       ? { type: "document", source: { type: "base64", media_type: upload.mediaType, data: upload.data } }
       : { type: "image", source: { type: "base64", media_type: upload.mediaType, data: upload.data } };
+
+    if (reservation.kind === "paid") {
+      const claim = await claimPaidProviderAttempt(reservation);
+      if (claim.status === "exhausted") {
+        if (!(await commitEntitlement(reservation))) {
+          safeSecurityLog("paid_credit_exhaustion_finalize_failed");
+        }
+        reservation = null;
+        return exhaustedPaidCreditResponse(
+          "This paid credit already reached its outbound-attempt limit.",
+          409,
+        );
+      }
+      paidProviderAttempt = claim.attempt;
+    }
 
     const aiResponse = await fetchWithTimeout("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -75,8 +134,26 @@ export async function POST(request: NextRequest) {
       const failure = data as { error?: { type?: string } } | null;
       const category = failure?.error?.type?.replace(/[^a-z0-9_-]/gi, "").slice(0, 40) || "unknown";
       safeSecurityLog(`anthropic_request_failed_${aiResponse.status}_${category}`);
-      await releaseEntitlement(reservation); reservation = null;
-      return errorResponse("The analysis service could not process this file. Your paid credit was not used.", 502);
+      const exhausted = await finalizeFailedProviderAttempt(
+        reservation,
+        paidProviderAttempt,
+      );
+      reservation = null;
+      if (exhausted) {
+        return exhaustedPaidCreditResponse(
+          "The analysis service could not process this file.",
+          502,
+        );
+      }
+      return errorResponse(
+        paidProviderAttempt === null
+          ? "The analysis service could not process this file. Please wait and try again."
+          : paidAttemptFailureMessage(
+              "The analysis service could not process this file.",
+              paidProviderAttempt,
+            ),
+        502,
+      );
     }
     // A successful HTTP response can still contain truncated output or a
     // refusal. This request uses neither tools nor custom stop sequences, so
@@ -93,10 +170,47 @@ export async function POST(request: NextRequest) {
       ? blocks.map((block: { text: string }) => block.text).join("\n\n")
       : null;
     if (result === null) {
-      await releaseEntitlement(reservation); reservation = null;
-      return errorResponse("The analysis service returned an incomplete response. Your paid credit was not used.", 502);
+      const exhausted = await finalizeFailedProviderAttempt(
+        reservation,
+        paidProviderAttempt,
+      );
+      reservation = null;
+      if (exhausted) {
+        return exhaustedPaidCreditResponse(
+          "The analysis service returned an incomplete response.",
+          502,
+        );
+      }
+      return errorResponse(
+        paidProviderAttempt === null
+          ? "The analysis service returned an incomplete response. Please try again."
+          : paidAttemptFailureMessage(
+              "The analysis service returned an incomplete response.",
+              paidProviderAttempt,
+            ),
+        502,
+      );
     }
-    if (!(await commitEntitlement(reservation))) return errorResponse("The analysis could not be finalized safely. Please contact support.", 503);
+    if (!(await commitEntitlement(reservation))) {
+      const attempt = paidProviderAttempt;
+      reservation = null;
+      if (attempt === PAID_PROVIDER_ATTEMPT_LIMIT) {
+        return exhaustedPaidCreditResponse(
+          "The completed analysis could not be finalized safely.",
+          503,
+        );
+      }
+      return errorResponse(
+        attempt === null
+          ? "The analysis could not be finalized safely. Please contact support."
+          : paidAttemptFailureMessage(
+              "The analysis could not be finalized safely.",
+              attempt,
+            ),
+        503,
+        "/contact",
+      );
+    }
     const kind = reservation.kind;
     const subscriptionId =
       kind === "subscription" ? reservation.externalId : undefined;
@@ -145,15 +259,67 @@ export async function POST(request: NextRequest) {
     }
     return response;
   } catch (error) {
-    if (reservation) { try { await releaseEntitlement(reservation); } catch { safeSecurityLog("entitlement_release_failed"); } }
+    let paidCreditExhausted = false;
+    if (reservation) {
+      try {
+        paidCreditExhausted = await finalizeFailedProviderAttempt(
+          reservation,
+          paidProviderAttempt,
+        );
+      } catch {
+        safeSecurityLog("entitlement_release_failed");
+        paidCreditExhausted =
+          reservation.kind === "paid" &&
+          paidProviderAttempt === PAID_PROVIDER_ATTEMPT_LIMIT;
+      }
+      reservation = null;
+    }
     if (error instanceof UploadValidationError) return errorResponse(error.message, 400);
     if (error instanceof EntitlementTemporarilyUnavailableError) return errorResponse("Paid analysis access is temporarily unavailable. Your credit was not used. Please wait and try again.", 503);
-    if (error instanceof StoreUnavailableError) return errorResponse("Analysis access is temporarily unavailable.", 503);
     if (error instanceof RequestTimeoutError) {
       safeSecurityLog("anthropic_request_timeout");
-      return errorResponse("The analysis service took too long. Your paid credit was not used. Please wait two minutes and try again.", 504);
+      if (paidCreditExhausted) {
+        return exhaustedPaidCreditResponse(
+          "The analysis service took too long.",
+          504,
+        );
+      }
+      return errorResponse(
+        paidProviderAttempt === null
+          ? "The analysis service took too long. Please wait two minutes and try again."
+          : paidAttemptFailureMessage(
+              "The analysis service took too long.",
+              paidProviderAttempt,
+            ),
+        504,
+      );
+    }
+    if (paidCreditExhausted) {
+      return exhaustedPaidCreditResponse(
+        "The analysis attempt could not be finalized safely.",
+        503,
+      );
+    }
+    if (error instanceof StoreUnavailableError) {
+      return errorResponse(
+        paidProviderAttempt === null
+          ? "Analysis access is temporarily unavailable."
+          : paidAttemptFailureMessage(
+              "The analysis attempt could not be finalized safely.",
+              paidProviderAttempt,
+            ),
+        503,
+      );
     }
     safeSecurityLog("analysis_route_failed");
-    return errorResponse("The analysis could not be completed. Your paid credit was not used.", 500);
+    return errorResponse(
+      paidProviderAttempt === null
+        ? "The analysis could not be completed. Your paid credit was not used."
+        : paidAttemptFailureMessage(
+            "The analysis could not be completed.",
+            paidProviderAttempt,
+          ),
+      500,
+    );
   }
 }

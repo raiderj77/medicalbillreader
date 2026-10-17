@@ -75,7 +75,7 @@ it("keeps disclaimers at pricing, upload and results",()=>{
   expect(client).not.toMatch(/ENABLE_SINGLE_ANALYSIS|ENABLE_NEW_SUBSCRIPTIONS/);
 });
 
-vi.mock("@/lib/entitlement", () => ({ reserveRequestEntitlement: vi.fn(async()=>({key:"synthetic",kind:"paid"})), releaseEntitlement: vi.fn(), commitEntitlement: vi.fn(), EntitlementTemporarilyUnavailableError: class extends Error {} }));
+vi.mock("@/lib/entitlement", () => ({ reserveRequestEntitlement: vi.fn(async()=>({key:"synthetic",kind:"paid"})), claimPaidProviderAttempt: vi.fn(async()=>({status:"recorded",attempt:1})), releaseEntitlement: vi.fn(), commitEntitlement: vi.fn(), PAID_PROVIDER_ATTEMPT_LIMIT: 3, EntitlementTemporarilyUnavailableError: class extends Error {} }));
 vi.mock("@/lib/rate-limit", () => ({enforceRateLimit: vi.fn(async()=>true)}));
 it.each(["pages","characters","images"])("route rejects excessive %s before any Anthropic request", async(kind)=>{
   const { POST } = await import("@/app/api/analyze/route");

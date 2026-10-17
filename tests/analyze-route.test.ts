@@ -4,18 +4,22 @@ import { NextRequest } from "next/server";
 
 const entitlement = vi.hoisted(() => ({
   reserve: vi.fn(),
+  claimPaidProviderAttempt: vi.fn(),
   commit: vi.fn(),
   release: vi.fn(),
   TemporarilyUnavailableError: class extends Error {},
 }));
+const rateLimit = vi.hoisted(() => ({ enforce: vi.fn() }));
 vi.mock("@/lib/entitlement", () => ({
   reserveRequestEntitlement: entitlement.reserve,
+  claimPaidProviderAttempt: entitlement.claimPaidProviderAttempt,
   commitEntitlement: entitlement.commit,
   releaseEntitlement: entitlement.release,
+  PAID_PROVIDER_ATTEMPT_LIMIT: 3,
   EntitlementTemporarilyUnavailableError:
     entitlement.TemporarilyUnavailableError,
 }));
-vi.mock("@/lib/rate-limit", () => ({ enforceRateLimit: vi.fn().mockResolvedValue(true) }));
+vi.mock("@/lib/rate-limit", () => ({ enforceRateLimit: rateLimit.enforce }));
 vi.mock("@/lib/stripe-browser-access", () => ({
   BROWSER_BINDING_COOKIE: "mbr_browser_binding",
   browserBindingCookieValue: vi.fn(() => "signed-browser-binding"),
@@ -35,7 +39,16 @@ function request(body: unknown, cookie?: string, headers?: Record<string, string
 }
 
 describe("POST /api/analyze abuse and entitlement controls", () => {
-  beforeEach(() => { vi.clearAllMocks(); entitlement.commit.mockResolvedValue(true); entitlement.release.mockResolvedValue(undefined); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    entitlement.claimPaidProviderAttempt.mockResolvedValue({
+      status: "recorded",
+      attempt: 1,
+    });
+    entitlement.commit.mockResolvedValue(true);
+    entitlement.release.mockResolvedValue(undefined);
+    rateLimit.enforce.mockResolvedValue(true);
+  });
 
   it.each([
     { stop_reason: "max_tokens", content: [{ type: "text", text: "Partial explanation" }] },
@@ -47,7 +60,7 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     { stop_reason: "end_turn", content: [{ type: "tool_use", text: "Not an explanation" }] },
     { stop_reason: "end_turn", content: [] },
     null,
-  ])("preserves credit when the provider has not delivered complete text: %j", async (payload) => {
+  ])("counts but preserves the credit after a first incomplete provider response: %j", async (payload) => {
     entitlement.reserve.mockResolvedValue(reservation);
     const ai = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(JSON.stringify(payload), { status: 200 }),
@@ -56,10 +69,71 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     expect(response.status).toBe(502);
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(response.headers.get("set-cookie")).toBeNull();
-    expect(await response.json()).toEqual({ error: "The analysis service returned an incomplete response. Your paid credit was not used." });
+    expect(await response.json()).toEqual({
+      error:
+        "The analysis service returned an incomplete response. Outbound analysis attempt 1 of 3 counted, and this credit remains available for 2 more attempts.",
+    });
+    expect(entitlement.claimPaidProviderAttempt).toHaveBeenCalledExactlyOnceWith(
+      reservation,
+    );
     expect(entitlement.release).toHaveBeenCalledExactlyOnceWith(reservation);
     expect(entitlement.commit).not.toHaveBeenCalled();
     expect(ai).toHaveBeenCalledOnce();
+  });
+
+  it("consumes the paid credit and points to support after a third incomplete provider response", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    entitlement.claimPaidProviderAttempt.mockResolvedValue({
+      status: "recorded",
+      attempt: 3,
+    });
+    const ai = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          stop_reason: "max_tokens",
+          content: [{ type: "text", text: "Synthetic partial explanation" }],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const response = await POST(
+      request(validBody, "mbr_pending_use=sealed-credit"),
+    );
+
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({
+      error:
+        "The analysis service returned an incomplete response. No complete report was delivered by the third outbound analysis attempt, so this paid credit is exhausted. Contact support for manual review or to request a refund.",
+      supportPath: "/contact",
+    });
+    expect(response.headers.get("set-cookie")).toContain("mbr_pending_use=");
+    expect(response.headers.get("set-cookie")).toContain("Max-Age=0");
+    expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(entitlement.release).not.toHaveBeenCalled();
+    expect(ai).toHaveBeenCalledOnce();
+  });
+
+  it("consumes an already exhausted credit without another provider request", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    entitlement.claimPaidProviderAttempt.mockResolvedValue({
+      status: "exhausted",
+    });
+    const ai = vi.spyOn(globalThis, "fetch");
+
+    const response = await POST(
+      request(validBody, "mbr_pending_use=sealed-credit"),
+    );
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({
+      error:
+        "This paid credit already reached its outbound-attempt limit. No complete report was delivered by the third outbound analysis attempt, so this paid credit is exhausted. Contact support for manual review or to request a refund.",
+      supportPath: "/contact",
+    });
+    expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(entitlement.release).not.toHaveBeenCalled();
+    expect(ai).not.toHaveBeenCalled();
   });
 
   it("records provider usage without logging response content", async () => {
@@ -96,6 +170,28 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     expect(ai).not.toHaveBeenCalled();
   });
 
+  it("keeps the existing three-per-minute entitlement rate limit before outbound attempts", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    rateLimit.enforce
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(false);
+    const ai = vi.spyOn(globalThis, "fetch");
+
+    const response = await POST(request(validBody));
+
+    expect(response.status).toBe(429);
+    expect(rateLimit.enforce).toHaveBeenNthCalledWith(
+      2,
+      "analyze-entitlement",
+      reservation.key,
+      3,
+      60,
+    );
+    expect(entitlement.claimPaidProviderAttempt).not.toHaveBeenCalled();
+    expect(entitlement.release).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(ai).not.toHaveBeenCalled();
+  });
+
   it("returns a retryable response when paid entitlement verification is temporarily unavailable", async () => {
     entitlement.reserve.mockRejectedValue(
       new entitlement.TemporarilyUnavailableError(),
@@ -124,6 +220,7 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     const response = await POST(request(body));
     expect(response.status).toBe(400);
     expect(ai).not.toHaveBeenCalled();
+    expect(entitlement.claimPaidProviderAttempt).not.toHaveBeenCalled();
     expect(entitlement.release).toHaveBeenCalledOnce();
   });
 
@@ -135,6 +232,7 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     );
     expect(response.status).toBe(400);
     expect(ai).not.toHaveBeenCalled();
+    expect(entitlement.claimPaidProviderAttempt).not.toHaveBeenCalled();
     expect(entitlement.release).toHaveBeenCalledOnce();
   });
 
@@ -144,13 +242,21 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     const response = await POST(request(validBody, undefined, { "content-length": String(15 * 1024 * 1024) }));
     expect(response.status).toBe(400);
     expect(ai).not.toHaveBeenCalled();
+    expect(entitlement.claimPaidProviderAttempt).not.toHaveBeenCalled();
   });
 
-  it("releases rather than consumes paid credit when AI fails", async () => {
+  it("counts and releases the first paid attempt when the provider fails", async () => {
     entitlement.reserve.mockResolvedValue(reservation);
     vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 500 }));
     const response = await POST(request(validBody));
     expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({
+      error:
+        "The analysis service could not process this file. Outbound analysis attempt 1 of 3 counted, and this credit remains available for 2 more attempts.",
+    });
+    expect(entitlement.claimPaidProviderAttempt).toHaveBeenCalledExactlyOnceWith(
+      reservation,
+    );
     expect(entitlement.release).toHaveBeenCalledWith(reservation);
     expect(entitlement.commit).not.toHaveBeenCalled();
   });
@@ -161,10 +267,64 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     const response = await POST(request(validBody));
     expect(response.status).toBe(504);
     expect(await response.json()).toEqual({
-      error: "The analysis service took too long. Your paid credit was not used. Please wait two minutes and try again.",
+      error:
+        "The analysis service took too long. Outbound analysis attempt 1 of 3 counted, and this credit remains available for 2 more attempts.",
     });
     expect(entitlement.release).toHaveBeenCalledWith(reservation);
     expect(entitlement.commit).not.toHaveBeenCalled();
+  });
+
+  it("consumes the paid credit when the third outbound attempt times out", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    entitlement.claimPaidProviderAttempt.mockResolvedValue({
+      status: "recorded",
+      attempt: 3,
+    });
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new RequestTimeoutError());
+
+    const response = await POST(request(validBody));
+
+    expect(response.status).toBe(504);
+    expect(await response.json()).toEqual({
+      error:
+        "The analysis service took too long. No complete report was delivered by the third outbound analysis attempt, so this paid credit is exhausted. Contact support for manual review or to request a refund.",
+      supportPath: "/contact",
+    });
+    expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(reservation);
+    expect(entitlement.release).not.toHaveBeenCalled();
+  });
+
+  it("reports exhaustion honestly when finalizing the third outbound attempt fails", async () => {
+    entitlement.reserve.mockResolvedValue(reservation);
+    entitlement.claimPaidProviderAttempt.mockResolvedValue({
+      status: "recorded",
+      attempt: 3,
+    });
+    entitlement.commit.mockRejectedValue(new Error("synthetic store failure"));
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          stop_reason: "max_tokens",
+          content: [{ type: "text", text: "Synthetic partial explanation" }],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const response = await POST(
+      request(validBody, "mbr_pending_use=sealed-credit"),
+    );
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      error:
+        "The analysis attempt could not be finalized safely. No complete report was delivered by the third outbound analysis attempt, so this paid credit is exhausted. Contact support for manual review or to request a refund.",
+      supportPath: "/contact",
+    });
+    expect(response.headers.get("set-cookie")).toContain("mbr_pending_use=");
+    expect(response.headers.get("set-cookie")).toContain("Max-Age=0");
+    expect(entitlement.commit).toHaveBeenCalledTimes(2);
+    expect(entitlement.release).not.toHaveBeenCalled();
   });
 
   it("never writes bill content or model output to logs", async () => {

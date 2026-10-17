@@ -38,13 +38,15 @@ No live-mode Stripe value or production Vercel variable was changed.
 - unpaid, expired, unrelated, and refunded sessions do not authorize analysis
 - checkout return cookies are Secure and HttpOnly and are created only after Stripe verification
 - one paid session cannot be used twice or concurrently
-- failed AI delivery releases rather than consumes a paid credit
+- each paid credit permits at most three lifetime outbound analysis attempts;
+  the first two incomplete attempts leave the credit available, while an
+  incomplete third attempt consumes it and directs the visitor to support
 - cancelled subscriptions fail server verification
 - subscription usage is capped atomically on the server
 - pay-per-use access is derived from current Stripe Charge and Refund state at
   checkout confirmation and before every paid analysis
-- a successful full pay-per-use refund revokes the credit, an in-flight full
-  refund freezes it, and a partial refund does not revoke it
+- any successful full or partial pay-per-use refund revokes the unused credit,
+  and any in-flight full or partial refund freezes it
 - signed refund webhooks validate and acknowledge events without mutating
   entitlement state, so duplicate and out-of-order delivery cannot change access
 - paid subscription access requires a current MBR Subscription with Stripe
