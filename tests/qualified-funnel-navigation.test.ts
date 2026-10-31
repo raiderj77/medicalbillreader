@@ -25,7 +25,7 @@ describe("qualified funnel navigation", () => {
     expect(codes).toContain('href="/#analyzer"');
     expect(codes).toContain("Analyze a bill");
     expect(articleCta).toContain('href="/#analyzer"');
-    expect(articleCta).toContain("limited free analysis is");
+    expect(articleCta).toContain("free scan is");
     expect(articleCta).not.toMatch(/explains every line|error scan/i);
   });
 

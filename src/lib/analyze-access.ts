@@ -11,6 +11,7 @@ export type AnalysisRequestPayload = {
 type AnalysisResponseData = {
   error?: string;
   result?: string;
+  tier?: "scan" | "full";
   supportPath?: "/contact";
 };
 

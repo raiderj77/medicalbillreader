@@ -6,19 +6,19 @@ import { readJsonResponse } from "@/lib/read-json-response";
 
 const tiers = [
   {
-    name: "Free",
+    name: "Free Scan",
     price: "$0",
     period: "",
     description:
-      "Try one free bill analysis per browser per UTC calendar month.",
+      "Try one free summary scan per browser per UTC calendar month.",
     features: [
-      "1 bill or EOB per browser per UTC calendar month",
-      "AI-generated report",
-      "Patterns flagged for verification",
+      "1 scan per browser per UTC calendar month",
+      "Summary of potential issues and broad categories",
+      "No full itemized analysis",
       "No credit card required",
     ],
     limitations: [],
-    cta: "Start Free",
+    cta: "Run the Free Scan",
     href: "/#analyzer",
     highlighted: false,
     checkoutNote: null,
@@ -26,17 +26,17 @@ const tiers = [
   },
   {
     name: "Pay Per Bill",
-    price: "$4.99",
+    price: "$19",
     period: "per bill",
     description:
-      "Perfect for an occasional confusing bill. No subscription required.",
+      "Unlock the full analysis: itemized detail and verification guidance omitted from the scan. No subscription required.",
     features: [
-      "One analysis per purchase",
-      "AI-generated report",
+      "One full analysis per purchase",
+      "Itemized breakdown of legible charges and codes",
       "Patterns flagged for verification",
     ],
     limitations: [],
-    cta: "Buy Single Analysis",
+    cta: "Unlock Full Analysis",
     href: null,
     highlighted: true,
     checkoutNote:
@@ -117,11 +117,11 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
             Simple, Transparent Pricing
           </h1>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
-            Each plan uses the same AI-assisted report for supported bills and EOBs;
-            choose based on the number of analyses you expect to use.
+            Start with a summary of potential issues and categories; unlock the full
+            itemized analysis for $19 one time.
           </p>
           <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
-            Start with a free analysis. Upgrade when you need more. No hidden
+            Start with a free scan. Unlock the full analysis when you need detail. No hidden
             fees.
           </p>
         </div>
@@ -147,7 +147,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
             >
               {tier.highlighted && (
                 <div className="text-teal-400 text-sm font-bold uppercase tracking-wider mb-2">
-                  One extra analysis
+                  Full analysis
                 </div>
               )}
               <h2
@@ -254,12 +254,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                 I have one confusing bill right now
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                Start with the <strong>Free</strong> plan. You get one full
-                analysis per browser per UTC calendar month at no cost, subject
-                to network abuse controls. No credit card is required. If you
-                have already used this browser&apos;s free analysis this month, the{" "}
-                <strong>Pay Per Bill</strong> option at $4.99 is the most
-                economical choice for a single bill.
+                Start with the <strong>Free Scan</strong>: one summary scan per browser per UTC calendar month, subject to network abuse controls. No credit card is required. For an itemized breakdown of legible charges and codes and guidance on what to verify, unlock the <strong>Pay Per Bill</strong> full analysis for $19.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -267,8 +262,8 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                 I get medical bills occasionally
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Pay Per Bill</strong> plan is ideal. Pay $4.99 only
-                when you need an analysis, no subscription, no commitment.
+                The <strong>Pay Per Bill</strong> plan is ideal. Pay $19 only
+                when you need a full analysis, no subscription, no commitment.
                 Perfect for the occasional ER bill, EOB, or unexpected charge.
               </p>
             </div>
@@ -283,8 +278,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
           </h2>
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <p className="text-slate-600 dark:text-slate-300 mb-4">
-              Each plan uses the same analysis route, supported file types, and
-              report fields. Usage limits differ by plan.
+              Both options support the same file types. The free scan summarizes potential issues and categories; the full analysis adds itemized details and verification guidance. Neither determines what you owe or proves an error.
             </p>
             <ul className="grid sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex items-center gap-2">
@@ -319,7 +313,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Structured visible-charge summary
+                Document-supported patterns only
               </li>
               <li className="flex items-center gap-2">
                 <svg
@@ -353,7 +347,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                General verification suggestions
+                Uncertainty and source limitations
               </li>
               <li className="flex items-center gap-2">
                 <svg
@@ -402,11 +396,11 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
             {[
               {
                 q: "Can I try before I buy?",
-                a: "Yes. The free tier provides one analysis per browser per UTC calendar month without a credit card, subject to network abuse controls. It uses the same report fields and supported file types as paid access.",
+                a: "Yes. Free Scan provides one summary scan per browser per UTC calendar month without a credit card, subject to network abuse controls. It reports potential issues, approximate counts, and broad categories, not the full itemized analysis.",
               },
               {
                 q: "How does pay-per-bill work?",
-                a: "Each $4.99 payment gives you one bill or EOB analysis. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
+                a: "Each $19 payment gives you one full bill or EOB analysis with itemized detail and guidance on what to verify. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
               },
               {
                 q: "Can existing subscribers cancel?",

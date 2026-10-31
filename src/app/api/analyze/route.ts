@@ -1,7 +1,7 @@
 import { preflightUpload } from "@/lib/input-preflight";
-import { ANALYSIS_MODEL, MAX_OUTPUT_TOKENS, recordAnalysisUsage } from "@/lib/analysis-cost";
+import { ANALYSIS_MODEL, MAX_OUTPUT_TOKENS, SCAN_MAX_OUTPUT_TOKENS, recordAnalysisUsage } from "@/lib/analysis-cost";
 import { NextRequest, NextResponse } from "next/server";
-import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
+import { BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt, BILL_SCAN_INSTRUCTIONS, buildBillScanPrompt } from "@/lib/bill-analysis-prompt";
 import {
   claimPaidProviderAttempt,
   commitEntitlement,
@@ -108,19 +108,20 @@ export async function POST(request: NextRequest) {
       paidProviderAttempt = claim.attempt;
     }
 
+    const isScan = reservation.kind === "free";
     const aiResponse = await fetchWithTimeout("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: ANALYSIS_MODEL,
-        max_tokens: MAX_OUTPUT_TOKENS,
+        max_tokens: isScan ? SCAN_MAX_OUTPUT_TOKENS : MAX_OUTPUT_TOKENS,
         temperature: 0,
-        system: BILL_ANALYSIS_INSTRUCTIONS,
+        system: isScan ? BILL_SCAN_INSTRUCTIONS : BILL_ANALYSIS_INSTRUCTIONS,
         messages: [
           {
             role: "user",
             content: [
-              { type: "text", text: buildBillAnalysisPrompt() },
+              { type: "text", text: isScan ? buildBillScanPrompt() : buildBillAnalysisPrompt() },
               fileContent,
             ],
           },
@@ -217,7 +218,7 @@ export async function POST(request: NextRequest) {
     const subscriptionBinding =
       kind === "subscription" ? reservation.browserBinding : undefined;
     reservation = null;
-    const response = NextResponse.json({ result }, { headers: { "Cache-Control": "no-store" } });
+    const response = NextResponse.json({ result, tier: kind === "free" ? "scan" : "full" }, { headers: { "Cache-Control": "no-store" } });
     // Clear both consumed and stale pending-use cookies after any successful
     // analysis so an old checkout return cannot keep masking later access.
     if (kind === "paid" || request.cookies.get("mbr_pending_use"))

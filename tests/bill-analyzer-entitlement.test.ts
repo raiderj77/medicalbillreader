@@ -35,7 +35,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
     const fetcher = vi
       .fn()
       .mockResolvedValueOnce(jsonResponse({ error: "Free issue limited" }, 429))
-      .mockResolvedValueOnce(jsonResponse({ result: "paid result" }));
+      .mockResolvedValueOnce(jsonResponse({ result: "paid result", tier: "full" }));
 
     const result = await requestAnalysisWithAccessFallback(
       fetcher,
@@ -44,6 +44,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
     );
 
     expect(result.data.result).toBe("paid result");
+    expect(result.data.tier).toBe("full");
     expect(result.freeAccessError).toBe("Free issue limited");
     expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
       "/api/entitlement/free",
@@ -56,7 +57,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
       .fn()
       .mockResolvedValueOnce(jsonResponse({ error: "Entitlement required" }, 401))
       .mockResolvedValueOnce(jsonResponse({ ready: true }))
-      .mockResolvedValueOnce(jsonResponse({ result: "free result" }));
+      .mockResolvedValueOnce(jsonResponse({ result: "free result", tier: "scan" }));
 
     const result = await requestAnalysisWithAccessFallback(
       fetcher,
@@ -65,6 +66,7 @@ describe("BillAnalyzer entitlement bootstrap", () => {
     );
 
     expect(result.data.result).toBe("free result");
+    expect(result.data.tier).toBe("scan");
     expect(fetcher.mock.calls.map(([url]) => url)).toEqual([
       "/api/analyze",
       "/api/entitlement/free",
@@ -96,6 +98,8 @@ describe("BillAnalyzer entitlement bootstrap", () => {
 
   it("keeps the component wired to the paid-first fallback helper", () => {
     expect(analyzer).toContain("requestAnalysisWithAccessFallback(");
+    expect(analyzer).toContain("setTier(data.tier)");
+    expect(analyzer).toContain('tier === "scan" && (');
     expect(analyzer).toContain("if (freeAccessError)");
     expect(analyzer).toContain('data.supportPath === "/contact"');
     expect(analyzer).toContain("justPaidRef.current = false");

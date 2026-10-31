@@ -52,15 +52,15 @@ describe("POST /api/stripe/webhook", () => {
   it.each([
     [
       "refund.created",
-      { payment_intent: "pi_paid", status: "pending", amount: 499 },
+      { payment_intent: "pi_paid", status: "pending", amount: 1900 },
     ],
     [
       "refund.updated",
-      { payment_intent: "pi_paid", status: "succeeded", amount: 499 },
+      { payment_intent: "pi_paid", status: "succeeded", amount: 1900 },
     ],
     [
       "refund.failed",
-      { payment_intent: "pi_paid", status: "failed", amount: 499 },
+      { payment_intent: "pi_paid", status: "failed", amount: 1900 },
     ],
     [
       "charge.refunded",

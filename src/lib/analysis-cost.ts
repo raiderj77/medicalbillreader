@@ -42,3 +42,5 @@ export function recordAnalysisUsage(response: unknown): void {
   if (usd === null) safeSecurityLog('analysis_usage_pricing_unknown');
   else if (usd > costAlertThreshold()) safeSecurityLog(JSON.stringify({ event: "analysis_cost_anomaly", severity: "high", ...base }));
 }
+
+export const SCAN_MAX_OUTPUT_TOKENS = 600;

@@ -1,5 +1,6 @@
 "use client";
 
+import SingleAnalysisPurchase from "./SingleAnalysisPurchase";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -111,6 +112,7 @@ export default function BillAnalyzer() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [tier, setTier] = useState<"scan" | "full" | undefined>(undefined);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [needsUpgrade, setNeedsUpgrade] = useState(false);
@@ -175,6 +177,7 @@ export default function BillAnalyzer() {
     setFile(f);
     setPrivacyAcknowledged(false);
     setResult(null);
+    setTier(undefined);
     setError(null);
     setNeedsUpgrade(false);
     setNeedsSupport(false);
@@ -259,6 +262,7 @@ export default function BillAnalyzer() {
         );
       }
       setResult(data.result);
+      setTier(data.tier);
 
       if (justPaidRef.current) {
         justPaidRef.current = false;
@@ -278,6 +282,7 @@ export default function BillAnalyzer() {
     setFile(null);
     setPreview(null);
     setResult(null);
+    setTier(undefined);
     setError(null);
     setNeedsUpgrade(false);
     setNeedsSupport(false);
@@ -319,7 +324,7 @@ export default function BillAnalyzer() {
                 tabIndex={-1}
                 className="text-xl font-bold text-slate-800 outline-none focus-visible:ring-2 focus-visible:ring-teal-700 dark:text-slate-100"
               >
-                Your Medical Bill Explained Simply
+                {tier === "scan" ? "Your Free Scan Summary" : "Your Medical Bill Explained Simply"}
               </h2>
             </div>
             <button
@@ -333,6 +338,14 @@ export default function BillAnalyzer() {
           <div className="space-y-3">
             {renderAnalysisResult(result)}
           </div>
+
+          {tier === "scan" && (
+            <section aria-label="Unlock full analysis" className="no-print mt-8 rounded-xl border border-teal-300 p-5 dark:border-teal-700">
+              <h3 className="text-lg font-bold">Unlock the full analysis — $19 one time</h3>
+              <p className="my-3">The free scan is a summary only. The full analysis includes an itemized breakdown of legible charges and codes, plus guidance on what to verify with your provider or insurer. Findings are patterns to verify, not proven errors; this service does not determine what you owe.</p>
+              <SingleAnalysisPurchase />
+            </section>
+          )}
 
           {/* Disclaimer */}
           <div className="mt-8 p-5 bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl">
