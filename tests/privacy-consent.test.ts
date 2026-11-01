@@ -57,6 +57,18 @@ describe("privacy consent", () => {
     }
   });
 
+  it("sends analytics a query-free page location", () => {
+    const control = readFileSync(
+      join(process.cwd(), "src/components/PrivacyConsent.tsx"),
+      "utf8",
+    );
+    // Post-checkout landings carry ?payment=success and inbound campaign
+    // links carry utm_* params; GA4 must only ever receive origin + path.
+    expect(control).toContain(
+      "page_location: `${window.location.origin}${window.location.pathname}`",
+    );
+  });
+
   it("permits Google analytics origins only in the content security policy", () => {
     const nextConfig = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
     const vercelText = readFileSync(join(process.cwd(), "vercel.json"), "utf8");

@@ -139,5 +139,9 @@ function loadGoogleAnalytics() {
   currentWindow.gtag("config", measurementId, {
     allow_google_signals: false,
     allow_ad_personalization_signals: false,
+    // Send only origin + path, never the query string. Post-checkout
+    // landings carry ?payment=success and marketing links carry utm_*
+    // params; none of them belong in analytics page URLs.
+    page_location: `${window.location.origin}${window.location.pathname}`,
   });
 }
