@@ -28,14 +28,12 @@ describe("privacy consent", () => {
     expect(cookie).toContain("SameSite=Lax");
   });
 
-  it("keeps all optional tracking disabled and renders no consent banner", () => {
+  it("gates Google Analytics behind consent and env configuration", () => {
     const layout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8");
     const control = readFileSync(
       join(process.cwd(), "src/components/PrivacyConsent.tsx"),
       "utf8",
     );
-    const trackingCode = `${layout}\n${control}`;
-
     for (const tracker of [
       "consent.cookiebot.com",
       "googlesyndication.com",
@@ -44,21 +42,43 @@ describe("privacy consent", () => {
       "dataLayer",
       "window.gtag",
     ]) {
-      expect(trackingCode).not.toContain(tracker);
+      expect(layout).not.toContain(tracker);
     }
-    expect(control).not.toContain("Allow analytics");
-    expect(control).not.toContain("Privacy choices");
-    expect(control).toContain("return null");
+    expect(control).toContain("NEXT_PUBLIC_GA_ID");
+    const consentRead = control.indexOf("parsePrivacyConsent(document.cookie)");
+    expect(consentRead).toBeGreaterThanOrEqual(0);
+    expect(consentRead).toBeLessThan(
+      control.indexOf("googletagmanager.com/gtag/js"),
+    );
+    expect(control).toContain('createPrivacyConsentCookie("analytics")');
     expect(control).toContain('createPrivacyConsentCookie("essential")');
+    for (const tracker of ["consent.cookiebot.com", "googlesyndication.com", "clarity.ms"]) {
+      expect(control).not.toContain(tracker);
+    }
   });
 
-  it("does not permit Google tracking origins in deployment policies", () => {
-    const policies = ["next.config.ts", "vercel.json"]
-      .map((path) => readFileSync(join(process.cwd(), path), "utf8"))
-      .join("\n");
-
-    expect(policies).not.toContain("googletagmanager.com");
-    expect(policies).not.toContain("google-analytics.com");
+  it("permits Google analytics origins only in the content security policy", () => {
+    const nextConfig = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
+    const vercelText = readFileSync(join(process.cwd(), "vercel.json"), "utf8");
+    const policies = `${nextConfig}\n${vercelText}`;
+    expect(policies).toMatch(/script-src[^;]*googletagmanager\.com/);
+    expect(policies).toMatch(/connect-src[^;]*google-analytics\.com/);
+    const nextCsp = nextConfig.match(/key: "Content-Security-Policy",\s*value:\s*"([^"]+)"/)?.[1];
+    const vercelConfig = JSON.parse(vercelText) as {
+      headers: Array<{ headers: Array<{ key: string; value: string }> }>;
+    };
+    const vercelCsps = vercelConfig.headers.flatMap((rule) => rule.headers)
+      .filter((header) => header.key === "Content-Security-Policy")
+      .map((header) => header.value);
+    expect(nextCsp).toBeDefined();
+    expect(vercelCsps.length).toBeGreaterThan(0);
+    let remainder = policies;
+    for (const csp of [nextCsp!, ...vercelCsps]) {
+      remainder = remainder.replaceAll(csp, "");
+    }
+    expect(vercelCsps.every((csp) => csp === nextCsp)).toBe(true);
+    expect(remainder).not.toContain("googletagmanager.com");
+    expect(remainder).not.toContain("google-analytics.com");
   });
 
   it("keeps the health referrer policy consistent in every deployment config", () => {

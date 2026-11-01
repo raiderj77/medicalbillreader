@@ -54,7 +54,7 @@ export default function CookiesPage() {
           Cookie Policy
         </h1>
         <p className="text-sm text-slate-700 dark:text-slate-300 mb-8">
-          Effective: August 2, 2026 | Last Updated: August 2, 2026
+          Effective: August 2, 2026 | Last Updated: October 31, 2026
         </p>
 
         <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300">
@@ -77,38 +77,39 @@ export default function CookiesPage() {
             These cookies are strictly necessary for the website to function. They include:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Legacy privacy preference:</strong> If your browser still has an older analytics-choice cookie, the site changes an old opt-in value to essential-only. No optional tracking is enabled by that cookie.</li>
+            <li><strong>Privacy preference:</strong> mbr_privacy_consent stores &quot;analytics&quot; or &quot;essential&quot;. A legacy opt-in is honored only when analytics is configured, otherwise it is normalized to essential-only.</li>
             <li><strong>Theme preference:</strong> Stores your light/dark mode preference in localStorage (not a cookie, but similar local storage).</li>
             <li><strong>Analysis entitlements:</strong> HttpOnly cookies hold signed or opaque access values that the server verifies before use. They do not contain bill content or payment-card data. A single-analysis cookie lasts up to 24 hours. A subscription cookie can last up to 400 days and is renewed after verified successful use; Stripe status is checked on each analysis. Clearing cookies or changing browsers can remove access, and shared devices share the same browser allowance. Privacy-minimized network counters are also used for abuse prevention.</li>
           </ul>
 
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Analytics Cookies</h3>
           <p>
-            We do not currently load Google Analytics, advertising pixels, or
-            other third-party analytics code on any page, and the site does not
-            set third-party analytics or advertising cookies.
+            Google Analytics loads only after acceptance via the consent control.
+            When accepted, it sets cookies such as _ga to distinguish visits.
+            Declining sets none. Withdrawal via the Privacy choices control clears
+            the analytics cookies we are able to clear.
           </p>
-          <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Current status:</strong> Third-party analytics and advertising tracking are disabled for every visitor.</li>
-          </ul>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Optional Tracking</h2>
           <p>
-            Because no optional analytics or advertising tracking is active, the
-            site does not display a tracking-consent banner. An older saved
-            analytics choice cannot re-enable Google Analytics.
+            Optional analytics (Google Analytics) stays off unless you accept via the
+            tracking-consent banner. Your choice is stored in the mbr_privacy_consent
+            cookie. A saved analytics choice loads Google Analytics only when
+            analytics is configured on the site, and you can change or withdraw
+            your choice at any time with the Privacy choices control. No
+            advertising tracking is used.
           </p>
           <p>
-            Global Privacy Control signals are consistent with the current
-            default: no personal information is sold or shared for cross-context
-            behavioral advertising, and no optional tracking loads.
+            Global Privacy Control and Do Not Track signals are treated as a decline:
+            when either is present, optional analytics does not load. No personal
+            information is sold or shared for cross-context behavioral advertising.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">How to Control Cookies</h2>
           <p>You can manage cookies in several ways:</p>
           <ul className="list-disc ml-6 space-y-1">
             <li><strong>Browser settings:</strong> Most browsers let you block or delete cookies. Check your browser&apos;s help documentation for instructions.</li>
-            <li><strong>Global Privacy Control:</strong> You may enable GPC in your browser. The service already keeps sale, sharing for behavioral advertising, and optional tracking off.</li>
+            <li><strong>Global Privacy Control:</strong> You may enable GPC in your browser. The service honors GPC as a decline of optional analytics and does not sell or share personal information for behavioral advertising.</li>
           </ul>
           <p>
             Disabling essential cookies may prevent free or paid access, theme
