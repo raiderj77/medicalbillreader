@@ -268,7 +268,7 @@ export default function PrivacyPage() {
                 fraud-prevention, and legal obligations.
               </li>
               <li>
-                <strong>Analytics:</strong> if you accepted analytics, Google Analytics retains usage data under Google's standard retention settings. Declining or withdrawing consent stops new site-usage data from being sent.
+                <strong>Analytics:</strong> if you accepted analytics, Google Analytics retains usage data under Google&apos;s standard retention settings. Declining or withdrawing consent stops new site-usage data from being sent.
               </li>
               <li>
                 <strong>Provider metadata and logs:</strong> follows the active

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import {
   createPrivacyConsentCookie,
@@ -26,10 +26,33 @@ function clearAnalyticsCookies() {
   });
 }
 
+function readSavedChoice(): ConsentChoice | null {
+  if (typeof window === "undefined") return null;
+  return parsePrivacyConsent(document.cookie);
+}
+
+function hasPrivacySignal(): boolean {
+  if (typeof window === "undefined") return false;
+  return (
+    (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true ||
+    navigator.doNotTrack === "1"
+  );
+}
+
+const subscribeToMount = () => () => {};
+
 export default function PrivacyConsent() {
-  const [choice, setChoice] = useState<ConsentChoice | null>(null);
-  const [ready, setReady] = useState(false);
-  const [showChoices, setShowChoices] = useState(false);
+  // The server snapshot is false, so SSR and the hydration render stay
+  // empty; the client snapshot flips to true right after hydration.
+  const mounted = useSyncExternalStore(
+    subscribeToMount,
+    () => true,
+    () => false,
+  );
+  const [choice, setChoice] = useState<ConsentChoice | null>(readSavedChoice);
+  const [showChoices, setShowChoices] = useState<boolean>(
+    () => readSavedChoice() === null,
+  );
 
   useEffect(() => {
     const savedChoice = parsePrivacyConsent(document.cookie);
@@ -39,16 +62,10 @@ export default function PrivacyConsent() {
       }
       return;
     }
-    const privacySignal =
-      (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true ||
-      navigator.doNotTrack === "1";
-    if (privacySignal) {
+    if (hasPrivacySignal()) {
       document.cookie = createPrivacyConsentCookie("essential");
       return;
     }
-    setChoice(savedChoice);
-    setShowChoices(savedChoice === null);
-    setReady(true);
     if (savedChoice === "analytics") loadGoogleAnalytics();
   }, []);
 
@@ -67,7 +84,9 @@ export default function PrivacyConsent() {
     }
   };
 
-  if (!ready) return null;
+  if (!mounted) return null;
+  if (!GA_MEASUREMENT_ID?.trim()) return null;
+  if (hasPrivacySignal()) return null;
   if (!showChoices) {
     return (
       <button type="button" onClick={() => setShowChoices(true)}
@@ -122,4 +141,3 @@ function loadGoogleAnalytics() {
     allow_ad_personalization_signals: false,
   });
 }
-

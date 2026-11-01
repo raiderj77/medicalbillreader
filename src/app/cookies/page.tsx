@@ -77,7 +77,7 @@ export default function CookiesPage() {
             These cookies are strictly necessary for the website to function. They include:
           </p>
           <ul className="list-disc ml-6 space-y-1">
-            <li><strong>Privacy preference:</strong> mbr_privacy_consent stores "analytics" or "essential". A legacy opt-in is honored only when analytics is configured, otherwise it is normalized to essential-only.</li>
+            <li><strong>Privacy preference:</strong> mbr_privacy_consent stores &quot;analytics&quot; or &quot;essential&quot;. A legacy opt-in is honored only when analytics is configured, otherwise it is normalized to essential-only.</li>
             <li><strong>Theme preference:</strong> Stores your light/dark mode preference in localStorage (not a cookie, but similar local storage).</li>
             <li><strong>Analysis entitlements:</strong> HttpOnly cookies hold signed or opaque access values that the server verifies before use. They do not contain bill content or payment-card data. A single-analysis cookie lasts up to 24 hours. A subscription cookie can last up to 400 days and is renewed after verified successful use; Stripe status is checked on each analysis. Clearing cookies or changing browsers can remove access, and shared devices share the same browser allowance. Privacy-minimized network counters are also used for abuse prevention.</li>
           </ul>
