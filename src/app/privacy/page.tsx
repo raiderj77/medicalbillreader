@@ -6,7 +6,7 @@ const PAGE_URL = "https://medicalbillreader.com/privacy";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Medical Bill Reader handles uploads, reports, request metadata, payments, essential cookies, and privacy requests. Third-party analytics is disabled.",
+    "How Medical Bill Reader handles uploads, reports, request metadata, payments, essential cookies, and privacy requests. Google Analytics runs only with your consent.",
   alternates: { canonical: PAGE_URL },
   robots: { index: true, follow: true },
   openGraph: {
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
             Privacy Policy
           </h1>
           <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-            Effective August 2, 2026 · Last reviewed August 17, 2026
+            Effective August 2, 2026 · Last reviewed October 31, 2026
           </p>
           <p className="mt-6 rounded-xl border border-teal-200 bg-teal-50 p-5 leading-7 text-slate-900 dark:border-teal-900 dark:bg-teal-950/40 dark:text-slate-100">
             Medical Bill Reader does not sell uploaded bill data or use it for
@@ -135,11 +135,7 @@ export default function PrivacyPage() {
                 and message content you choose to send.
               </li>
               <li>
-                <strong>Third-party analytics:</strong> disabled site-wide. The
-                current site does not load Google Analytics or send page views,
-                device or referral information, upload activity, analysis
-                activity, report content, payment state, or conversion events to
-                Google.
+                <strong>Third-party analytics:</strong> Google Analytics (GA4) loads only if you accept via the consent control, and then receives only standard page-view and usage data (pages visited, device and browser information). Upload activity, analysis activity, report content, payment state, and conversion events are never sent to Google. If you decline or have not chosen, Google Analytics does not load and sets no cookies.
               </li>
             </ul>
           </section>
@@ -229,9 +225,7 @@ export default function PrivacyPage() {
                 subscription, refund, and billing-portal data.
               </li>
               <li>
-                <strong>Third-party analytics:</strong> disabled. Google Analytics
-                is not a current service provider for site-usage measurement, and
-                the application does not send analytics data to it.
+                <strong>Third-party analytics:</strong> Google Analytics (GA4), only when you have accepted analytics via the consent control. It receives page-view and usage data as described in this policy, and never receives uploaded documents, report content, or payment data.
               </li>
             </ul>
             <p className="mt-4">
@@ -274,8 +268,7 @@ export default function PrivacyPage() {
                 fraud-prevention, and legal obligations.
               </li>
               <li>
-                <strong>Analytics:</strong> third-party analytics is disabled, so
-                the current site sends no new site-usage data to Google Analytics.
+                <strong>Analytics:</strong> if you accepted analytics, Google Analytics retains usage data under Google's standard retention settings. Declining or withdrawing consent stops new site-usage data from being sent.
               </li>
               <li>
                 <strong>Provider metadata and logs:</strong> follows the active
@@ -293,9 +286,8 @@ export default function PrivacyPage() {
               authenticated browser binding, and encrypted paid or subscription
               entitlement tokens. The paid tokens are bound to the browser-binding
               cookie and do not expose raw Stripe identifiers. A theme choice may
-              be stored in localStorage. Third-party analytics is disabled, so the
-              current site does not load Google Analytics, set Google Analytics
-              cookies, or display an analytics-consent banner. See the{" "}
+              be stored in localStorage. Google Analytics loads only after you accept via the
+              analytics-consent banner, and only then sets Google Analytics cookies. See the{" "}
               <Link
                 href="/cookies"
                 className="font-medium text-teal-800 underline dark:text-teal-300"

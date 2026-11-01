@@ -203,9 +203,10 @@ export default function ConsumerHealthDataPrivacyPage() {
               </li>
             </ul>
             <p className="mt-4">
-              Third-party analytics is disabled site-wide. Medical Bill Reader
-              does not load Google Analytics or send public-page usage, document
-              content, report text, filenames, upload activity, analysis activity,
+              Google Analytics loads only when configured on the site and after
+              you accept via the analytics-consent banner, and receives only
+              standard page-view and usage data. Medical Bill Reader does not
+              send document content, report text, filenames, upload activity, analysis activity,
               payment state, or conversion events to Google. Consumer health data
               is not disclosed to advertising systems.
             </p>

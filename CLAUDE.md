@@ -31,7 +31,7 @@ Current access model:
 - Uploaded documents must not be intentionally written to the application database or included in analytics or logs.
 - Clearly disclose Anthropic processing and published retention exceptions. Do not claim HIPAA coverage, a BAA, or zero-data retention unless current account terms have been independently verified.
 - Do not reproduce unlicensed CPT descriptors, publish unsupported typical-price claims, or generate scaled thin code pages.
-- Advertising and third-party analytics remain disabled unless a later, separately verified privacy and policy review authorizes them.
+- Advertising remains disabled. Third-party analytics: consent-gated Google Analytics (GA4) was authorized by the owner on 2026-10-31 and implemented with the privacy-policy update and consent controls in the same change (branch feat/consent-gated-analytics); GA loads only after visitor consent and never receives uploaded documents or bill content. Any other third-party analytics remains disabled unless a later, separately verified privacy and policy review authorizes it.
 - Keep legal, privacy, editorial, accessibility, contact, and methodology pages accurate and linked.
 
 ## Public attribution

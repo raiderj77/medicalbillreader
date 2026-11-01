@@ -81,8 +81,9 @@ export default function DoNotSellPage() {
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Analytics and Third Parties</h2>
           <p>
-             Google Analytics, advertising pixels, and other third-party analytics
-             code are disabled on every page. We do not send filenames, medical
+             Google Analytics loads only when configured on the site and after
+             you accept via the analytics-consent banner. Advertising pixels and
+             other third-party analytics code remain disabled. We do not send filenames, medical
              bill content, report text, upload or analysis activity, or payment
              state to analytics or advertising systems.
           </p>
@@ -92,9 +93,8 @@ export default function DoNotSellPage() {
           <ul className="list-disc ml-6 space-y-2">
             <li>
               <strong>Global Privacy Control (GPC):</strong> Enable GPC in your browser. We automatically
-              treat that signal consistently with our current default: sale,
-              sharing for behavioral advertising, and optional tracking remain
-              off. Learn more at{" "}
+              treat that signal as a decline of optional analytics. We do not sell
+              or share personal information for behavioral advertising. Learn more at{" "}
               <a href="https://globalprivacycontrol.org/" className="text-teal-800 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 underline" target="_blank" rel="noopener noreferrer">
                 globalprivacycontrol.org
               </a>.
