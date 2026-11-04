@@ -128,6 +128,8 @@ A neutral script is:
 
 Do not send money based only on a verbal statement. Ask for written confirmation that identifies the account, agreed amount, due date, application of the payment, and whether the remaining balance will be zero or forgiven. If a debt collector rather than the hospital controls the account, CFPB specifically recommends obtaining the settlement plan and the collector's promises in writing before paying.
 
+If you would rather make the request in writing from the start, the [medical bill negotiation letter guide](/guides/medical-bill-negotiation-letter) provides a one-page template, a worked payment comparison, and a sending checklist.
+
 ## Step 8: Compare payment plans with credit products
 
 If a valid balance remains, ask whether the hospital offers a provider-administered interest-free plan:

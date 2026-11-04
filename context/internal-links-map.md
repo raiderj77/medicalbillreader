@@ -17,6 +17,8 @@
 - `/guides/common-medical-bill-errors` - questions to investigate without declaring an error.
 - `/guides/good-faith-estimate-400-rule` - federal estimate-dispute eligibility and deadlines.
 - `/guides/how-to-negotiate-a-hospital-bill` - financial-assistance and payment-option questions.
+- `/guides/medical-bill-negotiation-letter` - written negotiation requests, template, and worked payment comparison.
+- `/guides/how-long-to-dispute-a-medical-bill` - the main dispute, appeal, assistance, and validation clocks side by side.
 - `/glossary` - reviewed billing-term definitions.
 
 Add links only when they help the reader continue the same task. Do not create or link scaled thin code pages.
