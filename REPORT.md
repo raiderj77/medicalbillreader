@@ -1,3 +1,11 @@
+## 2026-11-03 addendum: price and dispute kit
+
+The offer was reworked from $19 to $16.99, with a dispute kit added: a ready-to-send dispute letter, a billing-office phone script, and a dispute checklist at no extra charge. Fill in the letter blanks and verify every detail before sending.
+
+The $16.99 one-time Stripe price (price_1UXxNYD6Nip7FMaN4gfXu5tW) and STRIPE_PRICE_FULL_ANALYSIS production environment setting are already configured. The historical "Create the $19.00 one-time live Stripe price" deployment step below is superseded. Fail-closed price validation now requires 1699 cents. No production configuration was changed in this worktree.
+
+Historical report follows unchanged.
+
 # MBR free scan → $19 full analysis
 
 Completed within this worktree. No git commands, pushes, PRs, merges, deployments, Stripe account actions, or real environment changes were performed. Subscription configuration and src/lib/entitlement.ts were not changed.

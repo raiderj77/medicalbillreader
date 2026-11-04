@@ -14,9 +14,9 @@ export function getStripe(): Stripe {
 
 export const PRICES = {
   perUse: {
-    amount: 1900,
+    amount: 1699,
     currency: "usd",
-    label: "$19 per bill",
+    label: "$16.99 per bill",
   },
   monthly: {
     amount: 4900,

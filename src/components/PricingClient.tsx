@@ -26,7 +26,7 @@ const tiers = [
   },
   {
     name: "Pay Per Bill",
-    price: "$19",
+    price: "$16.99",
     period: "per bill",
     description:
       "Unlock the full analysis: itemized detail and verification guidance omitted from the scan. No subscription required.",
@@ -34,6 +34,7 @@ const tiers = [
       "One full analysis per purchase",
       "Itemized breakdown of legible charges and codes",
       "Patterns flagged for verification",
+      "Dispute kit at no extra charge: a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist",
     ],
     limitations: [],
     cta: "Unlock Full Analysis",
@@ -118,7 +119,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
           </h1>
           <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto mb-2">
             Start with a summary of potential issues and categories; unlock the full
-            itemized analysis for $19 one time.
+            itemized analysis for $16.99 one time.
           </p>
           <p className="text-slate-700 dark:text-slate-300 text-lg max-w-2xl mx-auto">
             Start with a free scan. Unlock the full analysis when you need detail. No hidden
@@ -254,7 +255,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                 I have one confusing bill right now
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                Start with the <strong>Free Scan</strong>: one summary scan per browser per UTC calendar month, subject to network abuse controls. No credit card is required. For an itemized breakdown of legible charges and codes and guidance on what to verify, unlock the <strong>Pay Per Bill</strong> full analysis for $19.
+                Start with the <strong>Free Scan</strong>: one summary scan per browser per UTC calendar month, subject to network abuse controls. No credit card is required. For an itemized breakdown of legible charges and codes and guidance on what to verify, unlock the <strong>Pay Per Bill</strong> full analysis for $16.99. It includes a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist at no extra charge.
               </p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
@@ -262,9 +263,9 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
                 I get medical bills occasionally
               </h3>
               <p className="text-sm text-slate-700 dark:text-slate-300">
-                The <strong>Pay Per Bill</strong> plan is ideal. Pay $19 only
+                The <strong>Pay Per Bill</strong> plan is ideal. Pay $16.99 only
                 when you need a full analysis, no subscription, no commitment.
-                Perfect for the occasional ER bill, EOB, or unexpected charge.
+                Includes a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist at no extra charge.
               </p>
             </div>
 
@@ -400,7 +401,7 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
               },
               {
                 q: "How does pay-per-bill work?",
-                a: "Each $19 payment gives you one full bill or EOB analysis with itemized detail and guidance on what to verify. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
+                a: "Each $16.99 payment gives you one full bill or EOB analysis with itemized detail and guidance on what to verify. The included dispute kit has a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist at no extra charge. Fill in the bracketed blanks and verify every detail before sending. You pay only when you need it, no subscription required. Payment is processed securely through Stripe.",
               },
               {
                 q: "Can existing subscribers cancel?",

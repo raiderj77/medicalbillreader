@@ -1,5 +1,6 @@
 "use client";
 
+import { buildDisputeLetter, buildPhoneScript, buildDisputeChecklist } from "@/lib/dispute-kit";
 import SingleAnalysisPurchase from "./SingleAnalysisPurchase";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -341,9 +342,38 @@ export default function BillAnalyzer() {
 
           {tier === "scan" && (
             <section aria-label="Unlock full analysis" className="no-print mt-8 rounded-xl border border-teal-300 p-5 dark:border-teal-700">
-              <h3 className="text-lg font-bold">Unlock the full analysis — $19 one time</h3>
-              <p className="my-3">The free scan is a summary only. The full analysis includes an itemized breakdown of legible charges and codes, plus guidance on what to verify with your provider or insurer. Findings are patterns to verify, not proven errors; this service does not determine what you owe.</p>
+              <h3 className="text-lg font-bold">Unlock the full analysis: $16.99 one time</h3>
+              <p className="my-3">The free scan is a summary only. The full analysis includes an itemized breakdown of legible charges and codes, plus guidance on what to verify with your provider or insurer. Included at no extra charge: a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist. Fill in the bracketed blanks and verify every detail before sending. Findings are patterns to verify, not proven errors; this service does not determine what you owe.</p>
               <SingleAnalysisPurchase />
+            </section>
+          )}
+
+          {tier === "full" && (
+            <section aria-labelledby="dispute-kit-heading" className="mt-8 rounded-xl border border-teal-300 p-5 dark:border-teal-700 space-y-4">
+              <h3 id="dispute-kit-heading" className="text-lg font-bold">Dispute kit (included with your full analysis)</h3>
+              <p>The letter is drafted from the items your analysis flagged for verification. Fill in the bracketed blanks from your bill and verify every detail before sending.</p>
+              <h4 className="font-semibold">Dispute letter</h4>
+              <div className="whitespace-pre-wrap break-words">{buildDisputeLetter(result)}</div>
+              <button
+                type="button"
+                className="no-print min-h-11 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-700 rounded-lg transition-colors"
+                onClick={() => {
+                  const url = URL.createObjectURL(new Blob([buildDisputeLetter(result)], { type: "text/plain;charset=utf-8" }));
+                  const anchor = document.createElement("a");
+                  anchor.href = url;
+                  anchor.download = "medical-bill-dispute-letter.txt";
+                  document.body.appendChild(anchor);
+                  anchor.click();
+                  anchor.remove();
+                  setTimeout(() => URL.revokeObjectURL(url), 1000);
+                }}
+              >Download letter (.txt)</button>
+              <h4 className="font-semibold">Phone script</h4>
+              <div className="whitespace-pre-wrap break-words">{buildPhoneScript(result)}</div>
+              <h4 className="font-semibold">Dispute checklist</h4>
+              <ul className="list-disc pl-5 space-y-2">
+                {buildDisputeChecklist().map((step) => <li key={step}>{step}</li>)}
+              </ul>
             </section>
           )}
 

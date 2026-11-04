@@ -194,7 +194,7 @@ An EOB can show an allowed amount and a deductible. A second EOB stays plain.
 
     expect(html).toContain('href="/#analyzer"');
     expect(html).toContain("Explain my bill");
-    expect(html).toContain("$19 one time for the full itemized analysis");
+    expect(html).toContain("$16.99 one time for the full itemized analysis");
     expect(html).toContain("free scan is available");
     expect(html).toContain("cannot determine that a charge is wrong");
     expect(html).toContain("fixed inset-x-3");

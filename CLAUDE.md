@@ -7,7 +7,7 @@ Medical Bill Reader is a U.S.-focused medical-bill and Explanation of Benefits (
 Current access model:
 
 - Free: up to one limited scan summarizing potential issue patterns and categories per browser per UTC calendar month, subject to abuse controls.
-- Single analysis: $19.
+- Single analysis: $16.99, including a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist at no extra charge.
 - Subscription: $49 per month for up to 44 analyses per UTC calendar month.
 
 ## Before changing the product

@@ -22,13 +22,18 @@ describe("BillAnalyzer delivered tier", () => {
     const html = renderToStaticMarkup(createElement(BillAnalyzer));
     expect(html).toContain("Synthetic summary");
     if (tier === "scan") {
-      expect(html).toContain("$19 one time");
+      expect(html).not.toContain("dispute-kit-heading");
+      expect(html).toContain("$16.99 one time");
       expect(html).toContain("The free scan is a summary only");
       expect(html).toContain("Unlock Full Analysis</button>");
     } else {
       expect(html).not.toContain("Unlock Full Analysis");
-      expect(html).not.toContain("$19 one time");
+      expect(html).not.toContain("$16.99 one time");
       expect(html).toContain("Your Medical Bill Explained Simply");
+      expect(html).toContain("Dispute kit (included with your full analysis)");
+      expect(html).toContain("Download letter (.txt)");
+      expect(html).toContain("Phone script");
+      expect(html).toContain("Dispute checklist");
     }
   });
 });

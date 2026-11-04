@@ -120,7 +120,7 @@ export default function TermsPage() {
             </h2>
             <ul className="list-disc ml-6 space-y-1">
               <li>The free tier provides up to 1 medical bill or EOB analysis per browser per UTC calendar month, subject to network abuse controls. Clearing browser data does not authorize abuse or automated use.</li>
-              <li>Pay-per-bill customers receive one delivered analysis per purchase ($19), with at most three outbound analysis attempts for that credit.</li>
+              <li>Pay-per-bill customers receive one delivered analysis per purchase ($16.99), with at most three outbound analysis attempts for that credit.</li>
               <li>Monthly subscribers ($49/month) may analyze up to 44 bills or EOBs per UTC calendar month, which resets when the UTC month changes regardless of billing date.</li>
               <li>Payments are processed securely through Stripe. We do not store your payment card details.</li>
               <li>Monthly subscriptions can be cancelled at any time and remain active through the end of the current billing period.</li>
