@@ -209,9 +209,11 @@ export default function MethodologyPage() {
             identifiers before submitting it.
           </li>
           <li>
-            <strong>No advertising or analytics data flow</strong>: the
-            analyzer does not load advertising or analytics code and does not
-            emit upload, analysis, report, or payment events to those systems.
+            <strong>Analytics and sensitive data</strong>: Google Analytics loads
+            only when configured on the site and after you accept via the
+            analytics-consent banner. The analyzer does not load advertising code
+            or emit upload, analysis, report, or payment events to analytics or
+            advertising systems.
             The site also uses a no-referrer policy.
           </li>
           <li>

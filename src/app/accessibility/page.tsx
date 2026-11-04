@@ -102,9 +102,9 @@ export default function AccessibilityPage() {
             <li><strong>Assistive-technology coverage:</strong> The site has not been comprehensively tested across every browser, screen reader, magnifier, voice-control product, and input method.</li>
           </ul>
           <p>
-            <strong>Analytics:</strong> Third-party analytics is disabled
-            site-wide. Medical Bill Reader does not load Google Analytics or send
-            site-usage data to it.
+            <strong>Analytics:</strong> Google Analytics loads only when configured on
+            the site and after you accept via the analytics-consent banner. It
+            receives only standard page-view and usage data.
           </p>
 
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-200">Geographic Scope</h2>

@@ -67,7 +67,7 @@ describe("public YMYL and policy copy", () => {
     expect(accessibility).not.toContain("Lighthouse, axe-core");
   });
 
-  it("states that third-party analytics is disabled", () => {
+  it("states that third-party analytics is consent-gated", () => {
     const files = [
       "src/app/privacy/page.tsx",
       "src/app/consumer-health-data-privacy/page.tsx",
@@ -77,12 +77,12 @@ describe("public YMYL and policy copy", () => {
 
     for (const file of files) {
       const contents = source(file);
-      expect(contents, file).toMatch(/third-party analytics is disabled/i);
+      expect(contents, file).toMatch(/Google Analytics[\s\S]{0,140}consent/i);
+      expect(contents, file).not.toMatch(/third-party analytics is disabled/i);
     }
 
     const privacy = source("src/app/privacy/page.tsx");
     expect(privacy).not.toContain("Optional marketing-page analytics");
-    expect(privacy).not.toContain("Privacy choices control");
   });
 
   it("states the intended U.S. audience without a global compliance claim", () => {

@@ -27,7 +27,7 @@ Anthropic's published standard commercial API policy states that inputs and outp
 
 ## Analytics, advertising, and payments
 
-Third-party analytics is disabled site-wide. Medical Bill Reader does not load Google Analytics or send page views, device or referral data, upload activity, analysis activity, report content, payment state, or conversion events to Google.
+Google Analytics (GA4) loads only after a visitor accepts via the consent control, and only when a measurement ID is configured for the site. It receives standard page-view and usage data only. Medical Bill Reader does not send upload activity, analysis activity, report content, payment state, or conversion events to Google, and advertising and personalization signals stay off.
 
 No advertising code currently loads. A direct Google seller line remains in ads.txt for account readiness, but future ads require account approval, an appropriate consent platform, and placement only on nonsensitive editorial or marketing pages.
 
