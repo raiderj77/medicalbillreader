@@ -96,6 +96,8 @@ You may contact the provider, ask it to correct the bill, negotiate, or apply fo
 
 CMS currently charges a **$25 non-refundable administrative fee** to file. The process does not begin until the fee is paid. If the decision favors the consumer, CMS says the provider must credit that $25 against the amount the consumer owes. That credit does not turn the filing fee into a cash refund.
 
+For the full set of clocks that can run on the same bill at once, see the [dispute deadlines guide](/guides/how-long-to-dispute-a-medical-bill).
+
 An independent reviewer evaluates the estimate, bill, and supporting information. The reviewer may reduce the amount, select another amount, or leave the bill unchanged when added charges were appropriate under the governing rules. Filing a dispute is not a guarantee of a reduction.
 
 ## When collection protection begins

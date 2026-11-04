@@ -124,6 +124,8 @@ Record the date, department, representative or reference number, promised action
 
 Do not let an informal provider review cause you to miss an insurer appeal deadline or a debt-collector validation deadline. Ask each organization which process and deadline applies. If you pay an undisputed portion, identify in writing what the payment covers and retain proof; rules about partial payment and settlements can vary.
 
+The [dispute deadlines guide](/guides/how-long-to-dispute-a-medical-bill) puts the main clocks side by side, including the appeal, estimate dispute, assistance, and debt collector validation windows.
+
 ## If a debt collector contacts you
 
 A third-party debt-collector dispute is not the same as the provider letter above. The Consumer Financial Protection Bureau says a validation notice generally tells you the creditor, amount, and how to dispute the debt.
