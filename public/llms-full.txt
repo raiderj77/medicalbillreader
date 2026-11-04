@@ -36,8 +36,8 @@ Stripe hosts checkout and billing-portal pages. The application uses server-veri
 ## Pricing
 
 - Free: one analysis per browser per UTC calendar month, subject to network abuse controls.
-- Single analysis: $4.99.
-- Monthly plan: $49 per month for up to 44 analyses per UTC calendar month.
+- Single analysis: $16.99 per bill, including a dispute kit at no extra charge: a ready-to-send dispute letter, a phone script for the billing office, and a dispute checklist.
+- Monthly plan (existing subscribers only; new monthly subscriptions are no longer offered): $49 per month for up to 44 analyses per UTC calendar month.
 - The published single-analysis refund guarantee is limited to one request made within 24 hours of delivery; details and statutory rights are in the Terms.
 
 ## Authorship and editorial controls
