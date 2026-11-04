@@ -17,7 +17,7 @@ export default function ArticleCTA() {
             provider or health plan. It cannot determine that a charge is wrong.
           </p>
           <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
-            $4.99 one time, or check whether the limited free analysis is
+            $16.99 one time for the full itemized analysis, or check whether the free scan is
             available. No account is required.
           </p>
         </div>

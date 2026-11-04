@@ -5,7 +5,7 @@ test('pricing reflects the server purchase policy without exposing flags', async
   await page.setViewportSize({width:390,height:844});
   await page.goto('/pricing');
   const enabled = process.env.ENABLE_SINGLE_ANALYSIS === 'true';
-  await expect(page.getByRole('button', {name:'Buy Single Analysis',exact:true})).toHaveCount(enabled ? 1 : 0);
+  await expect(page.getByRole('button', {name:'Unlock Full Analysis',exact:true})).toHaveCount(enabled ? 1 : 0);
   await expect(page.getByText('Single analysis purchases are not available yet.', {exact:false})).toHaveCount(enabled ? 0 : 1);
   await expect(page.getByRole('button', {name:/^subscribe/i})).toHaveCount(0);
   await expect(page.getByRole('button', {name:/Existing subscriber/})).toBeVisible();

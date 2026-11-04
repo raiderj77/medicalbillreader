@@ -15,5 +15,5 @@ export default function SingleAnalysisPurchase() {
     } catch { setError("Checkout could not be started. Please try again."); }
     finally { setLoading(false); }
   }
-  return <div><button type="button" onClick={buy} disabled={loading} aria-busy={loading} className="block w-full rounded-lg bg-teal-700 py-3 font-semibold text-white hover:bg-teal-800 disabled:opacity-50">{loading ? "Loading..." : "Buy Single Analysis"}</button><p role="status">{error}</p></div>;
+  return <div><button type="button" onClick={buy} disabled={loading} aria-busy={loading} className="block w-full rounded-lg bg-teal-700 py-3 font-semibold text-white hover:bg-teal-800 disabled:opacity-50">{loading ? "Loading..." : "Unlock Full Analysis"}</button><p role="status">{error}</p></div>;
 }

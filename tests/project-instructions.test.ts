@@ -10,7 +10,7 @@ describe("current project instructions", () => {
   it("keeps product status, pricing, and attribution aligned with production", () => {
     const claude = read("CLAUDE.md");
 
-    expect(claude).toContain("Single analysis: $4.99");
+    expect(claude).toContain("Single analysis: $16.99");
     expect(claude).toContain("Subscription: $49 per month for up to 44 analyses");
     expect(claude).toContain("Vercel production hosting");
     expect(claude).toContain("Jason Ramirez may remain publicly identified");
