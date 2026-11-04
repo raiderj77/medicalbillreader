@@ -77,7 +77,7 @@ describe("POST /api/checkout", () => {
     browserAccess.discardNonce.mockResolvedValue(undefined);
   });
 
-  it("creates only the mapped $4.99 entitlement checkout on the trusted origin", async () => {
+  it("creates only the mapped $16.99 entitlement checkout on the trusted origin", async () => {
     const response = await POST(request("per-use"));
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("no-store");

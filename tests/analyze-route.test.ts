@@ -25,6 +25,8 @@ vi.mock("@/lib/stripe-browser-access", () => ({
   browserBindingCookieValue: vi.fn(() => "signed-browser-binding"),
   sealStripeAccess: vi.fn(() => "opaque-subscription-token"),
 }));
+import { BILL_SCAN_INSTRUCTIONS, buildBillScanPrompt, BILL_ANALYSIS_INSTRUCTIONS, buildBillAnalysisPrompt } from "@/lib/bill-analysis-prompt";
+import { MAX_OUTPUT_TOKENS, SCAN_MAX_OUTPUT_TOKENS } from "@/lib/analysis-cost";
 import { POST } from "@/app/api/analyze/route";
 import { RequestTimeoutError } from "@/lib/fetch-with-timeout";
 
@@ -48,6 +50,26 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     entitlement.commit.mockResolvedValue(true);
     entitlement.release.mockResolvedValue(undefined);
     rateLimit.enforce.mockResolvedValue(true);
+  });
+
+  it.each(["free", "paid", "subscription"] as const)("delivers the correct tier for %s and commits once", async (kind) => {
+    const selected = { ...reservation, kind };
+    entitlement.reserve.mockResolvedValue(selected);
+    const ai = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({
+      stop_reason: "end_turn", content: [{ type: "text", text: "Synthetic summary" }],
+    }), { status: 200 }));
+    const response = await POST(request(validBody));
+    const scan = kind === "free";
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ result: "Synthetic summary", tier: scan ? "scan" : "full" });
+    const body = JSON.parse(String(ai.mock.calls[0][1]?.body));
+    expect(body.system).toBe(scan ? BILL_SCAN_INSTRUCTIONS : BILL_ANALYSIS_INSTRUCTIONS);
+    expect(body.messages[0].content[0].text).toBe(scan ? buildBillScanPrompt() : buildBillAnalysisPrompt());
+    expect(body.max_tokens).toBe(scan ? SCAN_MAX_OUTPUT_TOKENS : MAX_OUTPUT_TOKENS);
+    expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(selected);
+    expect(entitlement.release).not.toHaveBeenCalled();
+    if (kind === "paid") expect(entitlement.claimPaidProviderAttempt).toHaveBeenCalledExactlyOnceWith(selected);
+    else expect(entitlement.claimPaidProviderAttempt).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -157,7 +179,7 @@ describe("POST /api/analyze abuse and entitlement controls", () => {
     }), { status: 200 }));
     const response = await POST(request(validBody));
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ result: "First section\n\nFinal section" });
+    expect(await response.json()).toEqual({ result: "First section\n\nFinal section", tier: "full" });
     expect(entitlement.commit).toHaveBeenCalledExactlyOnceWith(reservation);
     expect(entitlement.release).not.toHaveBeenCalled();
   });

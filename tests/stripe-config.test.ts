@@ -1,19 +1,28 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getStripe, verifiedStripePriceId } from "@/lib/stripe";
+import { getStripe, verifiedStripePriceId, PRICES, stripePriceId } from "@/lib/stripe";
 
 describe("Stripe price mapping validation", () => {
   beforeEach(() => {
+    delete process.env.STRIPE_PRICE_FULL_ANALYSIS;
     process.env.STRIPE_SECRET_KEY = "sk_test_configured";
     process.env.STRIPE_PRICE_PER_USE = "price_single";
     process.env.STRIPE_PRICE_MONTHLY = "price_monthly";
     vi.restoreAllMocks();
   });
 
-  it("accepts the active $4.99 one-time price", async () => {
+  it("uses the $16.99 mapping and prefers the full-analysis variable over the legacy alias", () => {
+    expect(PRICES.perUse).toEqual({ amount: 1699, currency: "usd", label: "$16.99 per bill" });
+    expect(stripePriceId("per-use")).toBe("price_single");
+    vi.stubEnv("STRIPE_PRICE_FULL_ANALYSIS", "price_full_analysis");
+    try { expect(stripePriceId("per-use")).toBe("price_full_analysis"); }
+    finally { vi.unstubAllEnvs(); }
+  });
+
+  it("accepts the active $16.99 one-time price", async () => {
     vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({
       id: "price_single",
       active: true,
-      unit_amount: 499,
+      unit_amount: 1699,
       currency: "usd",
       recurring: null,
     } as never);
@@ -35,11 +44,11 @@ describe("Stripe price mapping validation", () => {
     );
   });
 
-  it("fails closed when a configured price has the wrong amount", async () => {
+  it.each([999, 1900])("fails closed when a configured price has the wrong amount: %s", async (amount) => {
     vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({
       id: "price_single",
       active: true,
-      unit_amount: 999,
+      unit_amount: amount,
       currency: "usd",
       recurring: null,
     } as never);
@@ -64,7 +73,7 @@ describe("Stripe price mapping validation", () => {
 
 it.each([false, undefined, true])("enforces production livemode=%s", async (livemode) => {
   vi.stubEnv("NODE_ENV", "production");
-  vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({ active: true, unit_amount: 499, currency: "usd", recurring: null, livemode } as never);
+  vi.spyOn(getStripe().prices, "retrieve").mockResolvedValue({ active: true, unit_amount: 1699, currency: "usd", recurring: null, livemode } as never);
   try {
     if (livemode === true) await expect(verifiedStripePriceId("per-use")).resolves.toBeDefined();
     else await expect(verifiedStripePriceId("per-use")).rejects.toThrow("invalid");

@@ -14,9 +14,9 @@ export function getStripe(): Stripe {
 
 export const PRICES = {
   perUse: {
-    amount: 499,
+    amount: 1699,
     currency: "usd",
-    label: "$4.99 per bill",
+    label: "$16.99 per bill",
   },
   monthly: {
     amount: 4900,
@@ -30,7 +30,7 @@ export type PurchaseType = "per-use" | "subscription";
 export function stripePriceId(type: PurchaseType): string {
   const value =
     type === "per-use"
-      ? process.env.STRIPE_PRICE_PER_USE
+      ? (process.env.STRIPE_PRICE_FULL_ANALYSIS || process.env.STRIPE_PRICE_PER_USE)
       : process.env.STRIPE_PRICE_MONTHLY;
   if (!value?.startsWith("price_")) {
     throw new Error(`Stripe price is not configured for ${type}`);
