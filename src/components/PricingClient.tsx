@@ -47,7 +47,15 @@ const tiers = [
 
 ];
 
-export default function PricingClient({ purchaseAction }: { purchaseAction: ReactNode }) {
+type PayPerBillPolicy = "enabled" | "disabled";
+
+export default function PricingClient({
+  purchaseAction,
+  payPerBillPolicy,
+}: {
+  purchaseAction: ReactNode;
+  payPerBillPolicy: PayPerBillPolicy;
+}) {
   const [portalLoading, setPortalLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<ReactNode>(null);
 
@@ -140,6 +148,12 @@ export default function PricingClient({ purchaseAction }: { purchaseAction: Reac
           {tiers.map((tier) => (
             <div
               key={tier.name}
+              data-revenue-offer-id={
+                tier.priceType === "per-use" ? "pay-per-bill" : undefined
+              }
+              data-revenue-offer-policy={
+                tier.priceType === "per-use" ? payPerBillPolicy : undefined
+              }
               className={`rounded-2xl p-8 flex flex-col ${
                 tier.highlighted
                   ? "bg-slate-900 dark:bg-slate-950 text-white ring-2 ring-teal-500 shadow-xl scale-105"
