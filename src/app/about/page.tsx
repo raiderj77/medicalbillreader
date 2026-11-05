@@ -326,7 +326,7 @@ export default function AboutPage() {
 
         <div className="mt-10 pt-6 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300">
           <p className="font-medium text-slate-700 dark:text-slate-300">Jason Ramirez</p>
-          <p>Your Friendly Developer LLC</p>
+          <p>Medical Bill Reader</p>
         </div>
 
       </div>
