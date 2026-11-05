@@ -3,8 +3,14 @@ import SingleAnalysisPurchase from "@/components/SingleAnalysisPurchase";
 import { singleAnalysisEnabled } from "@/lib/purchase-policy";
 export const dynamic = "force-dynamic";
 export default function PricingPage() {
-  const purchaseAction = singleAnalysisEnabled()
+  const payPerBillEnabled = singleAnalysisEnabled();
+  const purchaseAction = payPerBillEnabled
     ? <SingleAnalysisPurchase />
     : <p role="status">Single analysis purchases are not available yet. You can still use your free monthly allowance.</p>;
-  return <PricingClient purchaseAction={purchaseAction} />;
+  return (
+    <PricingClient
+      purchaseAction={purchaseAction}
+      payPerBillPolicy={payPerBillEnabled ? "enabled" : "disabled"}
+    />
+  );
 }

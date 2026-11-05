@@ -6,6 +6,13 @@ const terms = readFileSync("src/app/terms/page.tsx", "utf8");
 const llmsFull = readFileSync("public/llms-full.txt", "utf8");
 
 describe("pricing evidence and checkout handoff", () => {
+  it("publishes a machine-stable pay-per-bill offer policy", () => {
+    expect(pricing).toContain('data-revenue-offer-id={');
+    expect(pricing).toContain('"pay-per-bill"');
+    expect(pricing).toContain('data-revenue-offer-policy={');
+    expect(pricing).toContain('payPerBillPolicy');
+  });
+
   it("does not make an unsupported popularity claim", () => {
     expect(pricing).not.toContain("Most Popular");
   });
