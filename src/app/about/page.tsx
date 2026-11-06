@@ -301,8 +301,7 @@ export default function AboutPage() {
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
                 <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">Who built Medical Bill Reader, and what is his scope?</h3>
                 <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-                  Medical Bill Reader was built by Jason Ramirez, Founder of Your
-                  Friendly Developer. His professional background is web and product
+                  Medical Bill Reader was built by Jason Ramirez. His professional background is web and product
                   development, not medicine, insurance, law, certified coding, or
                   medical billing. The product attempts to organize visible bill and
                   EOB fields into a plain-language report that users must verify.
@@ -332,3 +331,4 @@ export default function AboutPage() {
     </main>
   );
 }
+
