@@ -61,7 +61,6 @@ export default async function BlogPostPage({
     author: {
       "@type": "Person",
       name: "Jason Ramirez",
-      jobTitle: "Founder of Your Friendly Developer",
       url: "https://medicalbillreader.com/about",
     },
     publisher: {
@@ -164,7 +163,6 @@ export default async function BlogPostPage({
         <Link href="/about" className="hover:text-teal-800 dark:hover:text-teal-400 transition-colors">
           Jason Ramirez
         </Link>
-        <span>, Founder of Your Friendly Developer</span>
       </div>
 
       <p className="-mt-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
