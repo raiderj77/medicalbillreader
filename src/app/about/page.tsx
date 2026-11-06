@@ -6,7 +6,7 @@ import Disclaimer from "@/components/Disclaimer";
 export const metadata: Metadata = {
   title: "About Jason Ramirez | Medical Bill Reader",
   description:
-    "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
+    "Jason Ramirez built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
   keywords:
     "about medical bill reader, Jason Ramirez, understand medical bills, EOB explanation, medical billing help, CPT codes, deductible, coinsurance",
   authors: [{ name: "Jason Ramirez", url: "https://medicalbillreader.com/about" }],
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   robots: "index, follow, max-snippet:-1",
   openGraph: {
     title: "About Jason Ramirez | Medical Bill Reader",
-    description: "Jason Ramirez, Founder of Your Friendly Developer, built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
+    description: "Jason Ramirez built Medical Bill Reader to help patients understand confusing medical bills, insurance EOBs, and healthcare charges in plain language.",
     url: "https://medicalbillreader.com/about",
     siteName: "Medical Bill Reader",
     type: "website",
@@ -27,7 +27,6 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Jason Ramirez",
-  jobTitle: "Founder of Your Friendly Developer",
   worksFor: { "@type": "Organization", name: "Your Friendly Developer LLC" },
   url: "https://medicalbillreader.com/about",
 };
@@ -41,7 +40,7 @@ const aboutFaqJsonLd = {
       name: "Who built Medical Bill Reader, and what is his scope?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Medical Bill Reader was built by Jason Ramirez, Founder of Your Friendly Developer. His professional background is web and product development, not medicine, insurance, law, certified coding, or medical billing. The product attempts to organize visible bill and EOB fields into a plain-language report that users must verify.",
+        text: "Medical Bill Reader was built by Jason Ramirez. His professional background is web and product development, not medicine, insurance, law, certified coding, or medical billing. The product attempts to organize visible bill and EOB fields into a plain-language report that users must verify.",
       },
     },
     {

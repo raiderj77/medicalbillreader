@@ -89,7 +89,6 @@ const articleJsonLd = {
   author: {
     "@type": "Person",
     name: "Jason Ramirez",
-    jobTitle: "Founder of Your Friendly Developer",
     url: "https://medicalbillreader.com/about",
   },
   publisher: {

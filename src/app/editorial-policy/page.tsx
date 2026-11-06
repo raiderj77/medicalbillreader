@@ -50,8 +50,7 @@ export default function EditorialPolicyPage() {
             </h2>
             <p className="mt-3">
               Medical Bill Reader was created and is published by Jason Ramirez,
-              founder of Your Friendly Developer and an experienced web
-              professional. He is not presented as a physician, attorney,
+              an experienced web professional. He is not presented as a physician, attorney,
               insurer, financial adviser, or certified medical coder or billing
               specialist. That scope is stated because readers should not mistake
               product or source-review experience for professional health, legal,
