@@ -16,7 +16,7 @@ faqs:
   - question: "What if my bill is wrong? Should I still pay it with FSA money before the deadline?"
     answer: "Dispute first if you have time, because paying a wrong bill is hard to unwind. If the deadline is days away and the dispute is unresolved, call the provider and your plan administrator, document both calls, and ask the provider to note the account as disputed. Do not let a billing error and a forfeiture deadline take money from you twice."
   - question: "What happens to unused FSA money on January 1?"
-    answer: "It depends on your plan's design. With a carryover, up to the IRS limit rolls into the next year ($680 for amounts carried into 2026). With a grace period, you get up to two and a half extra months to incur expenses. With neither, the balance is forfeited. Your plan documents or administrator can tell you which one you have."
+    answer: "It depends on your plan's design. With a carryover, up to the IRS limit rolls into the next year ($680 for amounts carried out of a 2026 plan year into 2027; the cap was $660 for amounts carried into 2026). With a grace period, you get up to two and a half extra months to incur expenses. With neither, the balance is forfeited. Your plan documents or administrator can tell you which one you have."
   - question: "Can I use my FSA for a spouse's or child's medical bills?"
     answer: "Yes. A health FSA can reimburse eligible expenses for you, your spouse, and your tax dependents, even if they are not covered by your health insurance plan."
   - question: "Is a medical bill eligible if I have not met my deductible?"
