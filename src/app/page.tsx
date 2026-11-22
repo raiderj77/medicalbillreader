@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import BillAnalyzer from "@/components/BillAnalyzer";
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "MedicalBillReader" }],
   },
 };
 
@@ -102,7 +104,7 @@ export default function Home() {
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-3 py-3 sm:gap-3 sm:px-6 sm:py-4">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🩺</span>
+            <Image src="/logo-mark.svg" alt="" width={32} height={32} unoptimized />
             <span className="text-base font-bold tracking-tight text-slate-800 dark:text-slate-100 sm:text-lg">
               MedicalBillReader
             </span>

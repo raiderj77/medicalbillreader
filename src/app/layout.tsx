@@ -34,12 +34,20 @@ export const metadata: Metadata = {
     "msvalidate.01": "C4C9B6256BDEDED169E4DE01CA953390",
     "google-site-verification": "mcxrvS-mdjf8xOfnWYi-tTavwcBPGWaDguoY1EjIidw",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml", sizes: "any" },
+      { url: "/favicon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: { url: "/favicon-180.png", sizes: "180x180" },
+  },
   openGraph: {
     title: "How Can AI Help Explain a Medical Bill? (2026)",
     description: "See how Medical Bill Reader organizes legible bill and EOB fields into a plain-language report and questions to verify.",
     url: "https://medicalbillreader.com",
     siteName: "Medical Bill Reader",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "MedicalBillReader" }],
   },
 };
 
