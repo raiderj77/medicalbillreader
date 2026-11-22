@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { readJsonResponse } from "@/lib/read-json-response";
@@ -112,7 +113,7 @@ export default function PricingClient({
       <nav className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🩺</span>
+            <Image src="/logo-mark.svg" alt="" width={32} height={32} unoptimized />
             <span className="font-bold text-slate-800 dark:text-slate-100 text-lg tracking-tight">
               MedicalBillReader
             </span>
