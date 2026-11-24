@@ -8,7 +8,7 @@ export async function preflightUpload(upload: { mediaType: string; data: string 
   if (upload.mediaType === "application/pdf") {
     let pdf: Awaited<ReturnType<typeof getDocumentProxy>> | undefined;
     try {
-      pdf = await getDocumentProxy(new Uint8Array(bytes), { isEvalSupported: false, useSystemFonts: false, disableFontFace: true, verbosity: 0 });
+      pdf = await getDocumentProxy(new Uint8Array(bytes), { useSystemFonts: false, disableFontFace: true, verbosity: 0 });
       if (pdf.numPages < 1 || pdf.numPages > MAX_PDF_PAGES) throw new UploadValidationError(TOO_LONG);
       let characters = 0;
       for (let n = 1; n <= pdf.numPages; n++) {
