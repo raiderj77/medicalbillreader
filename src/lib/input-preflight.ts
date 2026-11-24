@@ -28,7 +28,7 @@ export async function preflightUpload(upload: { mediaType: string; data: string 
     } catch (error) {
       if (error instanceof UploadValidationError) throw error;
       throw new UploadValidationError("This PDF could not be safely inspected. Try a smaller, unlocked PDF or a clear image.");
-    } finally { await pdf?.destroy(); }
+    } finally { await pdf?.loadingTask.destroy(); }
   }
   try {
     const image = sharp(bytes, { limitInputPixels: 40_000_000, animated: false, failOn: "warning" });
